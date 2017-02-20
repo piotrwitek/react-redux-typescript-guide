@@ -1,10 +1,10 @@
 # React / Redux / TypeScript Patterns
-Results of my research while working with React / Redux / TypeScript.
+Results of my research for best-practices & patterns for working with React / Redux / TypeScript.
 I especially focused on:
 - 100% type safety
 - reduced boilerplate
 - leverage type inferrence
-- minimize type annotations maintenance costs
+- minimize types maintenance costs
 
 ### Table of Contents
 - [Actions](#actions)
@@ -17,16 +17,16 @@ I especially focused on:
 ---
 
 ## Actions
-- 100% type safety achieved
+- 100% type safety
 
 ### KISS Approach
 - more boilerplate
 - classic const based types
 - close to standard JS usage
-- more work to use in other modules (need to export both const type and action creator)
+- need to export both const type and action creator to use in multiple reducer files or redux-observable modules
 - `returntypeof` helper abstraction to harvest action types - (reference)[https://github.com/piotrwitek/react-redux-typescript/issues/1]
 
-In this case I focused on KISS, without using any abstractions and to be as close as possible to common Redux Pattern used in JS.
+In this case I focused on KISS, without introducing any abstractions to be as close as possible to common Redux Pattern used in JS.
 
 ```ts
 // Action Creators
@@ -60,10 +60,10 @@ type Action = typeof ActionTypes[keyof typeof ActionTypes];
 - less boilerplate
 - minimize repeated code
 - `ActionCreator` helper factory function to create typed instances of actions - (reference)[https://github.com/piotrwitek/react-redux-typescript]
-- easy to import in other modules (export only action creators bundle, no need for extra type constants) e.g. redux-observable epics (example)[TODO]
+- easier to use in multiple reducer files or `redux-observable` modules (action creators have type property and also create function, no extra type constant)
 - very easy to get all of action types
 
-In this case I created a helper factory function to help create typed actions and easily import and use in other places like redux-observable epics
+In this case I created a helper factory function to create typed actions, this way boilerplate and code repetition is highly reduced and it is easier to use action creators in multiple reducers or redux-observable modules.
 
 ```ts
 // Action Creators
@@ -79,11 +79,11 @@ type Action = typeof ActionCreators[keyof typeof ActionCreators];
 ---
 
 ## Reducers
-- 100% type safety achieved
+- 100% type safety
 - leveraging (Discriminated Union types)[https://www.typescriptlang.org/docs/handbook/advanced-types.html]
-  - to guard for specific Action type in each case
+  - to guard type and get intellisense of Action payload
 - using Partial from (Mapped types)[https://www.typescriptlang.org/docs/handbook/advanced-types.html]
-  - to guard partialState compatibility with State type
+  - to guard type of `partialState` and restrict superfluous or mismatched props when merging with State
 
 ### Switch Approach
 - using classic const based types
@@ -137,7 +137,7 @@ export default function reducer(state: State = initialState, action: Action): St
 ```
 
 ### If Approach
-- using ActionCreator helper types
+- using `ActionCreator` helper types
 
 ```ts
 // State
@@ -182,7 +182,7 @@ export default function reducer(state: State = initialState, action: Action): St
 
 ## Store & RootState
 
-`RootState` - should be imported in connected components to provide type safety for `connect` helper
+`RootState` - to be imported in connected components providing type safety to Redux `connect` function
 ```ts
 import {
   default as currencyRatesReducer, State as CurrencyRatesState,
@@ -197,7 +197,7 @@ export type RootState = {
 };
 ```
 
-Use `RootState` in combineReducers and rehydrated State to obtain a typed store instance
+Use `RootState` in `combineReducers` function and as rehydrated State object type guard to obtain strongly typed Store instance
 ```ts
 import { combineReducers, createStore } from 'redux';
 
