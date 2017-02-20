@@ -9,9 +9,10 @@ I especially focused on:
 ### Table of Contents
 - [Actions](#actions)
 - [Reducers](#reducers)
-- [Store & RootState](#store-rootstate)
+- [Async Flow](#async-flow)
+- [Store & RootState](#store--rootstate)
 - [React Connected Components](#react-connected-components)
-- [Projects](#projects)
+- [Project Examples](#project-examples)
 
 ---
 
@@ -170,10 +171,10 @@ export default function reducer(state: State = initialState, action: Action): St
 
 ---
 
-## React Connected Components
+## Async Flow
 ### WIP
 
-```tsx
+```ts
 
 ```
 
@@ -213,3 +214,17 @@ export const store = createStore(
   recoverState(),
 );
 ```
+
+---
+
+## React Connected Components
+### WIP
+
+```tsx
+
+```
+
+---
+
+## Project Examples
+https://github.com/piotrwitek/react-redux-typescript-starter-kit
