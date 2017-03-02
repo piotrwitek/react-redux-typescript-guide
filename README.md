@@ -1,5 +1,5 @@
 # React / Redux / TypeScript Patterns
-Results of my research for best-practices & patterns for working with React / Redux / TypeScript.
+This guidelines are results of my research for patterns working with React / Redux / TypeScript combination.
 I especially focused on:
 - 100% type safety
 - reduced boilerplate
@@ -11,6 +11,7 @@ I especially focused on:
 - [Reducers](#reducers)
 - [Async Flow](#async-flow)
 - [Store & RootState](#store--rootstate)
+- [Types Selectors](#typed-selectors)
 - [React Connected Components](#react-connected-components)
 - [Project Examples](#project-examples)
 
@@ -217,18 +218,25 @@ export const store = createStore(
 
 ---
 
+# Typed Selectors
+### WIP
+
+---
+
 ## React Connected Components
 - This solution uses type inferrence to get Props type from `mapStateToProps` function
 - No need to manually declare and maintain interface of Props injected by Redux `connect` function
-- Real project implementation example: https://github.com/piotrwitek/react-redux-typescript-starter-kit/blob/5761e50c4ba355a88c68aa808b72be1e3138b01a/src/containers/currency-converter-container/index.tsx
+- Real project implementation example: https://github.com/piotrwitek/react-redux-typescript-starter-kit/blob/d32b2f770da022d88ddd81527664491814806c3a/src/containers/currency-converter-container/index.tsx
 
 ```tsx
 import { returntypeof } from 'react-redux-typescript';
 
 import { RootState } from '../../store';
 import { ActionCreators } from '../../store/currency-converter/reducer';
+import * as CurrencyRatesSelectors from '../../store/currency-rates/selectors';
 
-const mapStateToProps = (storeState: RootState) => ({
+const mapStateToProps = (state: RootState) => ({
+  currencies: CurrencyRatesSelectors.getCurrencies(state),
   currencyRates: storeState.currencyRates,
   currencyConverter: storeState.currencyConverter,
 });
@@ -242,15 +250,18 @@ const dispatchToProps = {
 
 const stateProps = returntypeof(mapStateToProps);
 type Props = typeof stateProps & typeof dispatchToProps;
+// if needed to extend Props you can add an union with regular props (not injected) like this:
+// `type Props = typeof stateProps & typeof dispatchToProps & { className?: string, style?: object };`
 type State = {};
 
 class CurrencyConverterContainer extends React.Component<Props, State> {
   render() {
+    // every destructured property below infer correct type from RootState!
     const { baseCurrency, targetCurrency, baseValue, targetValue } = this.props.currencyConverter;
     const { rates, base } = this.props.currencyRates;
-
-    const { changeBaseCurrency, changeBaseValue, changeTargetCurrency, changeTargetValue } = this.props;
-    // every destructured property above have correct type!!
+    const {
+      currencies, changeBaseCurrency, changeBaseValue, changeTargetCurrency, changeTargetValue,
+    } = this.props;
     ...
   }
 }
