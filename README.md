@@ -218,7 +218,7 @@ export const store = createStore(
 
 ---
 
-# Typed Selectors
+## Typed Selectors
 ### WIP
 
 ---
