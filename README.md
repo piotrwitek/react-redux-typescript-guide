@@ -257,8 +257,8 @@ type State = {};
 class CurrencyConverterContainer extends React.Component<Props, State> {
   render() {
     // every destructured property below infer correct type from RootState!
-    const { baseCurrency, targetCurrency, baseValue, targetValue } = this.props.currencyConverter;
     const { rates, base } = this.props.currencyRates;
+    const { baseCurrency, targetCurrency, baseValue, targetValue } = this.props.currencyConverter;
     const {
       currencies, changeBaseCurrency, changeBaseValue, changeTargetCurrency, changeTargetValue,
     } = this.props;
