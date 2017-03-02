@@ -218,10 +218,44 @@ export const store = createStore(
 ---
 
 ## React Connected Components
-### WIP
+- This solution uses type inferrence to get Props type from `mapStateToProps` function
+- No need to manually declare and maintain interface of Props injected by Redux `connect` function
+- Real project implementation example: https://github.com/piotrwitek/react-redux-typescript-starter-kit/blob/5761e50c4ba355a88c68aa808b72be1e3138b01a/src/containers/currency-converter-container/index.tsx
 
 ```tsx
+import { returntypeof } from 'react-redux-typescript';
 
+import { RootState } from '../../store';
+import { ActionCreators } from '../../store/currency-converter/reducer';
+
+const mapStateToProps = (storeState: RootState) => ({
+  currencyRates: storeState.currencyRates,
+  currencyConverter: storeState.currencyConverter,
+});
+
+const dispatchToProps = {
+  changeBaseCurrency: ActionCreators.changeBaseCurrency,
+  changeTargetCurrency: ActionCreators.changeTargetCurrency,
+  changeBaseValue: ActionCreators.changeBaseValue,
+  changeTargetValue: ActionCreators.changeTargetValue,
+};
+
+const stateProps = returntypeof(mapStateToProps);
+type Props = typeof stateProps & typeof dispatchToProps;
+type State = {};
+
+class CurrencyConverterContainer extends React.Component<Props, State> {
+  render() {
+    const { baseCurrency, targetCurrency, baseValue, targetValue } = this.props.currencyConverter;
+    const { rates, base } = this.props.currencyRates;
+
+    const { changeBaseCurrency, changeBaseValue, changeTargetCurrency, changeTargetValue } = this.props;
+    // every destructured property above have correct type!!
+    ...
+  }
+}
+
+export default connect(mapStateToProps, dispatchToProps)(CurrencyConverterContainer);
 ```
 
 ---
