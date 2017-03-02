@@ -226,7 +226,7 @@ export const store = createStore(
 ## React Connected Components
 - This solution uses type inferrence to get Props type from `mapStateToProps` function
 - No need to manually declare and maintain interface of Props injected by Redux `connect` function
-- Real project implementation example: https://github.com/piotrwitek/react-redux-typescript-starter-kit/blob/d32b2f770da022d88ddd81527664491814806c3a/src/containers/currency-converter-container/index.tsx
+- Real project implementation example: https://github.com/piotrwitek/react-redux-typescript-starter-kit/blob/ef2cf6b5a2e71c55e18ed1e250b8f7cadea8f965/src/containers/currency-converter-container/index.tsx
 
 ```tsx
 import { returntypeof } from 'react-redux-typescript';
