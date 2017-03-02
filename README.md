@@ -1,10 +1,11 @@
 # React / Redux / TypeScript Patterns
-This guidelines are results of my research for patterns working with React / Redux / TypeScript combination.
-I especially focused on:
-- 100% type safety
-- reduced boilerplate
-- leverage type inferrence
-- minimize types maintenance costs
+Set of guidelines and patterns showing how to leverage TypeScript features when working with React & Redux ecosystem.
+
+### Goals:
+- Complete type safety
+- Reduce boilerplate
+- Leverage Smarter Type Inference (TS v2.1+)
+- Minimize types maintenance costs
 
 ### Table of Contents
 - [Actions](#actions)
@@ -18,7 +19,6 @@ I especially focused on:
 ---
 
 ## Actions
-- 100% type safety
 
 ### KISS Approach
 - more boilerplate
@@ -80,7 +80,6 @@ type Action = typeof ActionCreators[keyof typeof ActionCreators];
 ---
 
 ## Reducers
-- 100% type safety
 - leveraging (Discriminated Union types)[https://www.typescriptlang.org/docs/handbook/advanced-types.html]
   - to guard type and get intellisense of Action payload
 - using Partial from (Mapped types)[https://www.typescriptlang.org/docs/handbook/advanced-types.html]
