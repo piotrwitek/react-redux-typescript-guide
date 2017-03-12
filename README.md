@@ -1,4 +1,4 @@
-# React / Redux / TypeScript Patterns
+# React / Redux / TypeScript - Patterns
 Set of guidelines and patterns teaching how to fully leverage TypeScript features when working with React & Redux ecosystem.
 
 ### Goals:
