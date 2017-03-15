@@ -1,11 +1,13 @@
 # React / Redux / TypeScript - Patterns
 Set of guidelines and patterns teaching how to fully leverage TypeScript features when working with React & Redux ecosystem.
 
+## Relevant with TypeScript v2.2 (https://github.com/Microsoft/TypeScript/wiki/Roadmap)
+> powered by github :star:, [star it please](https://github.com/piotrwitek/react-redux-typescript-patterns/stargazers) to keep me motivated and updated with added new TypeScript features :heart:
+
 ### Goals:
-- Complete type safety
-- Reduce boilerplate
-- Leverage Smarter Type Inference (TS v2.1+)
-- Minimize types maintenance costs
+- Complete type safety, without failing to `any` type
+- Minimize amount of manually typing declarations by leveraging Type Inference (https://www.typescriptlang.org/docs/handbook/type-inference.html)
+- Reduce boilerplate using simple helper functions with generics (https://www.typescriptlang.org/docs/handbook/generics.html)
 
 ### Table of Contents
 - [Basic Rules](#basic-rules)
@@ -15,6 +17,8 @@ Set of guidelines and patterns teaching how to fully leverage TypeScript feature
 - [Store & RootState](#store--rootstate)
 - [Types Selectors](#typed-selectors)
 - [React Connected Components](#react-connected-components)
+- [Higher-Order Components](#higher-order-components)
+- [Vendor Types Augumentation](WIP)
 - [Project Examples](#project-examples)
 
 ---
@@ -229,8 +233,8 @@ export const store = createStore(
 ---
 
 ## React Connected Components
-- This solution uses type inference to get Props type from `mapStateToProps` function
-- No need to manually declare and maintain interface of Props injected by Redux `connect` function
+- This solution uses type inference to get Props types from `mapStateToProps` function
+- Minimise manual effort to declare and maintain Props types injected from `connect` helper function
 - Real project implementation example: https://github.com/piotrwitek/react-redux-typescript-starter-kit/blob/ef2cf6b5a2e71c55e18ed1e250b8f7cadea8f965/src/containers/currency-converter-container/index.tsx
 
 ```tsx
@@ -272,6 +276,110 @@ class CurrencyConverterContainer extends React.Component<Props, State> {
 }
 
 export default connect(mapStateToProps, dispatchToProps)(CurrencyConverterContainer);
+```
+---
+
+## Higher-Order Components
+- decorate or wraps a component into another component
+- using Type Inference to automatically calculate Props interface for the resulting component
+- demo application: coming soon...
+
+```tsx
+// button.tsx
+import * as React from 'react';
+import { Button } from 'antd';
+
+interface Props {
+  className?: string;
+  htmlType?: typeof Button.prototype.props.htmlType;
+  type?: typeof Button.prototype.props.type;
+  autoFocus?: boolean;
+}
+
+const ButtonControl: React.StatelessComponent<Props> = (props) => {
+  return (
+    <Button
+      className={props.className}
+      htmlType={props.htmlType}
+      type={props.type}
+      autoFocus={props.autoFocus}
+    >
+      {props.children}
+    </Button>
+  );
+};
+
+export default ButtonControl;
+```
+
+```tsx
+// with-form-item-decorator.tsx
+import * as React from 'react';
+import { Form } from 'antd';
+const FormItem = Form.Item;
+
+interface DecoratorProps {
+  className?: string;
+  label?: string;
+  labelCol?: typeof FormItem.prototype.props.labelCol;
+  wrapperCol?: typeof FormItem.prototype.props.wrapperCol;
+  hasFeedback?: boolean;
+}
+
+export function withFormItemDecorator<Props>(
+  Component: React.StatelessComponent<Props>,
+) {
+  const Decorator: React.StatelessComponent<DecoratorProps & Props> = (props) => {
+    return (
+      <FormItem
+        label={props.label}
+        labelCol={props.labelCol}
+        wrapperCol={props.wrapperCol}
+        hasFeedback={props.hasFeedback}
+      >
+        <Component {...props} />
+      </FormItem>
+    );
+  };
+  return Decorator;
+}
+
+// improve with filtering passThroughProps - type inference support coming in (v2.3), tracking issue: https://github.com/Microsoft/TypeScript/issues/10727
+const { label, labelCol, wrapperCol, hasFeedback, ...passThroughProps } = props;
+```
+
+```tsx
+// consumer-component.tsx
+...
+import Button from './button';
+import { withFormItemDecorator } from './with-form-item-decorator';
+
+// higher-order component using function composition
+const DecoratedButton = withFormItemDecorator(Button);
+...
+<DecoratedButton type="primary" htmlType="submit" wrapperCol={{ offset: 4, span: 12 }} autoFocus >
+  Next Step
+</DecoratedButton>
+...
+```
+
+---
+
+## Vendor Types Augmentation
+- Augmenting missing autoFocus Prop on `Input` and `Button` components in `antd` npm package (https://ant.design/)
+
+```ts
+declare module '../node_modules/antd/lib/input/Input' {
+  export interface InputProps {
+    autoFocus?: boolean;
+  }
+}
+
+declare module '../node_modules/antd/lib/button/Button' {
+  export interface ButtonProps {
+    autoFocus?: boolean;
+  }
+}
 ```
 
 ---
