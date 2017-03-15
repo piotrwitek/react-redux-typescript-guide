@@ -8,6 +8,7 @@ Set of guidelines and patterns teaching how to fully leverage TypeScript feature
 - Minimize types maintenance costs
 
 ### Table of Contents
+- [Basic Rules](#basic-rules)
 - [Actions](#actions)
 - [Reducers](#reducers)
 - [Async Flow](#async-flow)
@@ -15,6 +16,11 @@ Set of guidelines and patterns teaching how to fully leverage TypeScript feature
 - [Types Selectors](#typed-selectors)
 - [React Connected Components](#react-connected-components)
 - [Project Examples](#project-examples)
+
+---
+## Basic Rules
+- use `interface` or `type`?
+> Use `interface` when yourself extending particular type or when expecting consumer of type to be extending it rather than using directly. In every other case it's better to use `type` to make it clear it is a struct to be used as type annotation.
 
 ---
 
