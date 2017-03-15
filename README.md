@@ -20,7 +20,7 @@ Set of guidelines and patterns teaching how to fully leverage TypeScript feature
 ---
 ## Basic Rules
 - use `interface` or `type`?
-> Use `interface` when yourself extending particular type or when expecting consumer of type to be extending it rather than using directly. In every other case it's better to use `type` to make it clear it is a struct to be used as type annotation.
+> Use `interface` when extending particular type or when expecting consumer of type to be extending. In every other case it's better to use `type`, to make it clear it is a struct to be used directly as type annotation.
 
 ---
 
