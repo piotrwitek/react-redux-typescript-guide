@@ -210,7 +210,8 @@ const ButtonWithFormItem = withFormItemDecorator(Button);
 ## Redux Connected Component
 - This solution uses type inference to get Props types from `mapStateToProps` function
 - Minimise manual effort to declare and maintain Props types injected from `connect` helper function
-- Real project implementation example: https://github.com/piotrwitek/react-redux-typescript-starter-kit/blob/ef2cf6b5a2e71c55e18ed1e250b8f7cadea8f965/src/containers/currency-converter-container/index.tsx
+- using `returntypeof()` helper function, because TypeScript does not support this feature yet (https://github.com/piotrwitek/react-redux-typescript#returntypeof-polyfill)
+- Real project example: https://github.com/piotrwitek/react-redux-typescript-starter-kit/blob/ef2cf6b5a2e71c55e18ed1e250b8f7cadea8f965/src/containers/currency-converter-container/index.tsx
 
 ```tsx
 import { returntypeof } from 'react-redux-typescript';
@@ -287,9 +288,9 @@ class CurrencyConverterContainer extends React.Component<Props, State> {
 - classic const based types
 - close to standard JS usage
 - need to export both const type and action creator to use in multiple reducer files or redux-observable modules
-- `returntypeof` helper abstraction to harvest action types - (reference)[https://github.com/piotrwitek/react-redux-typescript/issues/1]
+- using `returntypeof()` helper function to infer Action types - (https://github.com/piotrwitek/react-redux-typescript#returntypeof-polyfill)
 
-In this case I focused on KISS, without introducing any abstractions to be as close as possible to common Redux Pattern used in JS.
+This case is focused on KISS, without introducing any abstractions to be as close as possible to common Redux Pattern used in JS.
 
 ```ts
 // Action Creators
@@ -332,11 +333,11 @@ export default function reducer(state: State = initialState, action: Action): St
 ### DRY Approach
 - less boilerplate
 - minimize repeated code
-- `ActionCreator` helper factory function to create typed instances of actions - (reference)[https://github.com/piotrwitek/react-redux-typescript]
+- `ActionCreator` helper factory function to create typed instances of actions - (https://github.com/piotrwitek/react-redux-typescript#helpers-v22)
 - easier to use in multiple reducer files or `redux-observable` modules (action creators have type property and also create function, no extra type constant)
 - very easy to get all of action types
 
-In this case I created a helper factory function to create typed actions, this way boilerplate and code repetition is highly reduced and it is easier to use action creators in multiple reducers or redux-observable modules.
+This case is using a helper factory function to create typed actions. With little abstraction we can significally reduce boilerplate and code repetition, also it is easier to re-use action creators in other reducer or redux-observable modules.
 
 ```ts
 import { ActionCreator } from 'react-redux-typescript';
