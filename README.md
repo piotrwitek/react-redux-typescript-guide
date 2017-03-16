@@ -245,7 +245,7 @@ class CurrencyConverterContainer extends React.Component<Props, State> {
         />
         <select
           value={baseCurrency}
-          onChange={handleSelectChange}>
+          onChange={handleSelectChange}
           ...
         >
           {currencies.map(currency =>
