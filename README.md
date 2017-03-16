@@ -224,14 +224,15 @@ const mapStateToProps = (state: RootState) => ({
   baseCurrency: state.baseCurrency,
   currencies: CurrencyRatesSelectors.getCurrencies(state),
 });
-
 const dispatchToProps = {
   increaseCounter: ActionCreators.IncreaseCounter.create,
   changeBaseCurrency: ActionCreators.ChangeBaseCurrency.create,
 };
+export default connect(mapStateToProps, dispatchToProps)(CurrencyConverterContainer);
 
+// Props types inferred from mapStateToProps & dispatchToProps
 const stateProps = returntypeof(mapStateToProps);
-type Props = typeof stateProps & typeof dispatchToProps; // you can extend with more props
+type Props = typeof stateProps & typeof dispatchToProps;
 type State = {};
 
 class CurrencyConverterContainer extends React.Component<Props, State> {
@@ -269,8 +270,6 @@ class CurrencyConverterContainer extends React.Component<Props, State> {
     );
   }
 }
-
-export default connect(mapStateToProps, dispatchToProps)(CurrencyConverterContainer);
 
 ```
 
