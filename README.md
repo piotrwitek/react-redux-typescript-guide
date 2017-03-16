@@ -1,8 +1,8 @@
 # React / Redux / TypeScript - Patterns
 Set of guidelines and patterns teaching how to fully leverage TypeScript features when working with React & Redux ecosystem.
 
-## Relevant with TypeScript v2.2 (https://github.com/Microsoft/TypeScript/wiki/Roadmap)
-> powered by github :star:, [star it please](https://github.com/piotrwitek/react-redux-typescript-patterns/stargazers) to keep me motivated and updated with added new TypeScript features :heart:
+### Relevant with TypeScript v2.2 (https://github.com/Microsoft/TypeScript/wiki/Roadmap)
+> powered by github :star: - [star it please](https://github.com/piotrwitek/react-redux-typescript-patterns/stargazers) to keep me motivated to maintain this repo with new TypeScript releases
 
 ### Goals:
 - Complete type safety, without failing to `any` type
@@ -10,23 +10,239 @@ Set of guidelines and patterns teaching how to fully leverage TypeScript feature
 - Reduce boilerplate using simple helper functions with generics (https://www.typescriptlang.org/docs/handbook/generics.html)
 
 ### Table of Contents
-- React
-  - [Components](#components)
-  - [Stateless Components](#stateless-components)
-  - [React Connected Components](#react-connected-components)
-  - [Higher-Order Components](#higher-order-components)
-- Redux
+- [React](#react)
+  - [Class Component](#class-component)
+  - [Stateless Component](#stateless-component)
+  - [Redux Connected Component](#redux-connected-component)
+  - [Higher-Order Component](#higher-order-component)
+- [Redux](#redux)
   - [Actions](#actions)
   - [Reducers](#reducers)
   - [Async Flow](#async-flow)
   - [Store & RootState](#store--rootstate)
   - [Types Selectors](#typed-selectors)
-- Common
+- [Common](#common)
   - [Vendor Types Augumentation](#vendor-types-augmentation)
 - [FAQ](#faq)
 - [Project Examples](#project-examples)
 
 ---
+
+# React
+- Don't use React.PropTypes! - in TypeScript ecosystem it is completely unnecessary, you can get much better type safety at compile time in your editor with automatic type inference.
+- Don't use constructor - use Property Initializers
+- Don't use instance methods and bind - use Class Fields with arrow functions
+
+## Class Component
+- class component boilerplate
+```tsx
+import * as React from 'react';
+
+interface Props {
+  className?: string;
+  style?: React.CSSProperties
+  initialCount?: number;
+}
+interface State {
+  count?: number;
+}
+
+class MyComponent extends React.Component<Props, State> {
+  // default props using Property Initializers
+  static defaultProps: Props = {
+    className: 'default-class',
+  };
+  
+  // initial state using Property Initializers
+  state: State = {
+    count: this.props.initialCount,
+  };
+  
+  // handlers using Class Fields with arrow functions
+  handleClick = () => this.setState({ count: this.state.count + 1});
+  
+  // lifecycle methods are normal instance methods
+  componentDidMount() {
+    console.log('Mounted!');
+  }
+  
+  render() {
+    const { className, style, children } = props;
+  
+    return (
+      <div
+        className={className}
+        style={style}
+        onClick={this.handleClick}
+      >
+        {children}        
+      </div>
+    );
+  }
+};
+
+export default MyComponent;
+```
+
+## Stateless Component
+- stateless component boilerplate
+```tsx
+import * as React from 'react';
+
+interface Props {
+  className?: string;
+  style?: React.CSSProperties
+}
+
+const MyComponent: React.StatelessComponent<Props> = (props) => {
+  const { className, style, children } = props;
+  return (
+    <div
+      className={className}
+      style={style}
+    >
+      {children}
+    </div>
+  );
+};
+
+export default MyComponent;
+```
+
+## Redux Connected Component
+- This solution uses type inference to get Props types from `mapStateToProps` function
+- Minimise manual effort to declare and maintain Props types injected from `connect` helper function
+- Real project implementation example: https://github.com/piotrwitek/react-redux-typescript-starter-kit/blob/ef2cf6b5a2e71c55e18ed1e250b8f7cadea8f965/src/containers/currency-converter-container/index.tsx
+
+```tsx
+import { returntypeof } from 'react-redux-typescript';
+
+import { RootState } from '../../store';
+import { ActionCreators } from '../../store/currency-converter/reducer';
+import * as CurrencyRatesSelectors from '../../store/currency-rates/selectors';
+
+const mapStateToProps = (state: RootState) => ({
+  currencies: CurrencyRatesSelectors.getCurrencies(state),
+  currencyRates: storeState.currencyRates,
+  currencyConverter: storeState.currencyConverter,
+});
+
+const dispatchToProps = {
+  changeBaseCurrency: ActionCreators.changeBaseCurrency,
+  changeTargetCurrency: ActionCreators.changeTargetCurrency,
+  changeBaseValue: ActionCreators.changeBaseValue,
+  changeTargetValue: ActionCreators.changeTargetValue,
+};
+
+const stateProps = returntypeof(mapStateToProps);
+type Props = typeof stateProps & typeof dispatchToProps;
+// if needed to extend Props you can add an union with regular props (not injected) like this:
+// `type Props = typeof stateProps & typeof dispatchToProps & { className?: string, style?: object };`
+type State = {};
+
+class CurrencyConverterContainer extends React.Component<Props, State> {
+  render() {
+    // every destructured property below infer correct type from RootState!
+    const { rates, base } = this.props.currencyRates;
+    const { baseCurrency, targetCurrency, baseValue, targetValue } = this.props.currencyConverter;
+    const {
+      currencies, changeBaseCurrency, changeBaseValue, changeTargetCurrency, changeTargetValue,
+    } = this.props;
+    ...
+  }
+}
+
+export default connect(mapStateToProps, dispatchToProps)(CurrencyConverterContainer);
+```
+---
+
+## Higher-Order Component
+- decorate or wraps a component into another component
+- using Type Inference to automatically calculate Props interface for the resulting component
+- demo application: coming soon...
+
+```tsx
+// button.tsx
+import * as React from 'react';
+import { Button } from 'antd';
+
+interface Props {
+  className?: string;
+  htmlType?: typeof Button.prototype.props.htmlType;
+  type?: typeof Button.prototype.props.type;
+  autoFocus?: boolean;
+}
+
+const ButtonControl: React.StatelessComponent<Props> = (props) => {
+  return (
+    <Button
+      className={props.className}
+      htmlType={props.htmlType}
+      type={props.type}
+      autoFocus={props.autoFocus}
+    >
+      {props.children}
+    </Button>
+  );
+};
+
+export default ButtonControl;
+```
+
+```tsx
+// with-form-item-decorator.tsx
+import * as React from 'react';
+import { Form } from 'antd';
+const FormItem = Form.Item;
+
+interface DecoratorProps {
+  className?: string;
+  label?: string;
+  labelCol?: typeof FormItem.prototype.props.labelCol;
+  wrapperCol?: typeof FormItem.prototype.props.wrapperCol;
+  hasFeedback?: boolean;
+}
+
+export function withFormItemDecorator<Props>(
+  Component: React.StatelessComponent<Props>,
+) {
+  const Decorator: React.StatelessComponent<DecoratorProps & Props> = (props) => {
+    return (
+      <FormItem
+        label={props.label}
+        labelCol={props.labelCol}
+        wrapperCol={props.wrapperCol}
+        hasFeedback={props.hasFeedback}
+      >
+        <Component {...props} />
+      </FormItem>
+    );
+  };
+  return Decorator;
+}
+
+// improve with filtering passThroughProps - type inference support coming in (v2.3), tracking issue: https://github.com/Microsoft/TypeScript/issues/10727
+const { label, labelCol, wrapperCol, hasFeedback, ...passThroughProps } = props;
+```
+
+```tsx
+// consumer-component.tsx
+...
+import Button from './button';
+import { withFormItemDecorator } from './with-form-item-decorator';
+
+// higher-order component using function composition
+const ButtonWithFormItem = withFormItemDecorator(Button);
+...
+<ButtonWithFormItem type="primary" htmlType="submit" wrapperCol={{ offset: 4, span: 12 }} autoFocus >
+  Next Step
+</ButtonWithFormItem>
+...
+```
+
+---
+
+# Redux
 
 ## Actions
 
@@ -182,7 +398,7 @@ export default function reducer(state: State = initialState, action: Action): St
 ---
 
 ## Async Flow
-### WIP
+- WIP
 
 ```ts
 
@@ -228,142 +444,11 @@ export const store = createStore(
 ---
 
 ## Typed Selectors
-### WIP
+- WIP
 
 ---
 
-## React Connected Components
-- This solution uses type inference to get Props types from `mapStateToProps` function
-- Minimise manual effort to declare and maintain Props types injected from `connect` helper function
-- Real project implementation example: https://github.com/piotrwitek/react-redux-typescript-starter-kit/blob/ef2cf6b5a2e71c55e18ed1e250b8f7cadea8f965/src/containers/currency-converter-container/index.tsx
-
-```tsx
-import { returntypeof } from 'react-redux-typescript';
-
-import { RootState } from '../../store';
-import { ActionCreators } from '../../store/currency-converter/reducer';
-import * as CurrencyRatesSelectors from '../../store/currency-rates/selectors';
-
-const mapStateToProps = (state: RootState) => ({
-  currencies: CurrencyRatesSelectors.getCurrencies(state),
-  currencyRates: storeState.currencyRates,
-  currencyConverter: storeState.currencyConverter,
-});
-
-const dispatchToProps = {
-  changeBaseCurrency: ActionCreators.changeBaseCurrency,
-  changeTargetCurrency: ActionCreators.changeTargetCurrency,
-  changeBaseValue: ActionCreators.changeBaseValue,
-  changeTargetValue: ActionCreators.changeTargetValue,
-};
-
-const stateProps = returntypeof(mapStateToProps);
-type Props = typeof stateProps & typeof dispatchToProps;
-// if needed to extend Props you can add an union with regular props (not injected) like this:
-// `type Props = typeof stateProps & typeof dispatchToProps & { className?: string, style?: object };`
-type State = {};
-
-class CurrencyConverterContainer extends React.Component<Props, State> {
-  render() {
-    // every destructured property below infer correct type from RootState!
-    const { rates, base } = this.props.currencyRates;
-    const { baseCurrency, targetCurrency, baseValue, targetValue } = this.props.currencyConverter;
-    const {
-      currencies, changeBaseCurrency, changeBaseValue, changeTargetCurrency, changeTargetValue,
-    } = this.props;
-    ...
-  }
-}
-
-export default connect(mapStateToProps, dispatchToProps)(CurrencyConverterContainer);
-```
----
-
-## Higher-Order Components
-- decorate or wraps a component into another component
-- using Type Inference to automatically calculate Props interface for the resulting component
-- demo application: coming soon...
-
-```tsx
-// button.tsx
-import * as React from 'react';
-import { Button } from 'antd';
-
-interface Props {
-  className?: string;
-  htmlType?: typeof Button.prototype.props.htmlType;
-  type?: typeof Button.prototype.props.type;
-  autoFocus?: boolean;
-}
-
-const ButtonControl: React.StatelessComponent<Props> = (props) => {
-  return (
-    <Button
-      className={props.className}
-      htmlType={props.htmlType}
-      type={props.type}
-      autoFocus={props.autoFocus}
-    >
-      {props.children}
-    </Button>
-  );
-};
-
-export default ButtonControl;
-```
-
-```tsx
-// with-form-item-decorator.tsx
-import * as React from 'react';
-import { Form } from 'antd';
-const FormItem = Form.Item;
-
-interface DecoratorProps {
-  className?: string;
-  label?: string;
-  labelCol?: typeof FormItem.prototype.props.labelCol;
-  wrapperCol?: typeof FormItem.prototype.props.wrapperCol;
-  hasFeedback?: boolean;
-}
-
-export function withFormItemDecorator<Props>(
-  Component: React.StatelessComponent<Props>,
-) {
-  const Decorator: React.StatelessComponent<DecoratorProps & Props> = (props) => {
-    return (
-      <FormItem
-        label={props.label}
-        labelCol={props.labelCol}
-        wrapperCol={props.wrapperCol}
-        hasFeedback={props.hasFeedback}
-      >
-        <Component {...props} />
-      </FormItem>
-    );
-  };
-  return Decorator;
-}
-
-// improve with filtering passThroughProps - type inference support coming in (v2.3), tracking issue: https://github.com/Microsoft/TypeScript/issues/10727
-const { label, labelCol, wrapperCol, hasFeedback, ...passThroughProps } = props;
-```
-
-```tsx
-// consumer-component.tsx
-...
-import Button from './button';
-import { withFormItemDecorator } from './with-form-item-decorator';
-
-// higher-order component using function composition
-const ButtonWithFormItem = withFormItemDecorator(Button);
-...
-<ButtonWithFormItem type="primary" htmlType="submit" wrapperCol={{ offset: 4, span: 12 }} autoFocus >
-  Next Step
-</ButtonWithFormItem>
-...
-```
-
----
+# Common
 
 ## Vendor Types Augmentation
 - Augmenting missing autoFocus Prop on `Input` and `Button` components in `antd` npm package (https://ant.design/)
@@ -384,7 +469,8 @@ declare module '../node_modules/antd/lib/button/Button' {
 
 ---
 
-## FAQ
+# FAQ
+
 - when to use `interface` and when `type`?
 > Use `interface` when extending particular type or when expecting consumer of type to be extending. In every other case it's better to use `type`, to make it clear it is a struct to be used directly as type annotation.
 
@@ -416,5 +502,6 @@ import Select from '../components/select';
 
 ---
 
-## Project Examples
+# Project Examples
+
 https://github.com/piotrwitek/react-redux-typescript-starter-kit
