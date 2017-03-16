@@ -230,7 +230,7 @@ class CurrencyConverterContainer extends React.Component<Props, State> {
   
   handleSelectChange = (ev: React.ChangeEvent<HTMLSelectElement>) => {
     this.props.changeBaseCurrency(ev.target.value); // string
-  };
+  }
   
   render() {
     const { counter, baseCurrency, currencies } = this.props; // number, string, string[]
