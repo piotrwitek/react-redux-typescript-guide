@@ -259,30 +259,39 @@ In this case I focused on KISS, without introducing any abstractions to be as cl
 
 ```ts
 // Action Creators
-export const LOAD_CURRENCY_RATES = 'currencyRates/LOAD_CURRENCY_RATES';
-export const loadCurrencyRates = () => ({
-  type: LOAD_CURRENCY_RATES as typeof LOAD_CURRENCY_RATES,
-});
-
-export const LOAD_CURRENCY_RATES_SUCCESS = 'currencyRates/LOAD_CURRENCY_RATES_SUCCESS';
-export const loadCurrencyRatesSuccess = (payload: IFixerServiceResponse) => ({
-  type: LOAD_CURRENCY_RATES_SUCCESS as typeof LOAD_CURRENCY_RATES_SUCCESS,
+export const INCREASE_COUNTER = 'INCREASE_COUNTER';
+export const increaseCounter = (payload: number) => ({
+  type: INCREASE_COUNTER as typeof INCREASE_COUNTER,
   payload,
 });
 
-export const LOAD_CURRENCY_RATES_ERROR = 'currencyRates/LOAD_CURRENCY_RATES_ERROR';
-export const loadCurrencyRatesError = (payload: string) => ({
-  type: LOAD_CURRENCY_RATES_ERROR as typeof LOAD_CURRENCY_RATES_ERROR,
+export const CHANGE_BASE_CURRENCY = 'CHANGE_BASE_CURRENCY';
+export const changeBaseCurrency = (payload: string) => ({
+  type: CHANGE_BASE_CURRENCY as typeof CHANGE_BASE_CURRENCY,
   payload,
 });
+
+store.dispatch(increaseCounter(4)); // { type: "INCREASE_COUNTER", payload: 4 }
+store.dispatch(changeBaseCurrency('USD')); // { type: "CHANGE_BASE_CURRENCY", payload: 'USD' }
 
 // Action Types
 const ActionTypes = {
-  loadCurrencyRates: returntypeof(loadCurrencyRates),
-  loadCurrencyRatesSuccess: returntypeof(loadCurrencyRatesSuccess),
-  loadCurrencyRatesError: returntypeof(loadCurrencyRatesError),
+  increaseCounter: returntypeof(increaseCounter),
+  changeBaseCurrency: returntypeof(changeBaseCurrency),
 };
 type Action = typeof ActionTypes[keyof typeof ActionTypes];
+// { type: "INCREASE_COUNTER", payload: number } | { type: "CHANGE_BASE_CURRENCY", payload: string }
+
+// Reducer                                                           vvvvvv
+export default function reducer(state: State = initialState, action: Action): State {
+  switch (action.type) {
+    case INCREASE_COUNTER:
+      state.counter = action.payload // number
+      break;
+    case CHANGE_BASE_CURRENCY:
+      state.baseCurrency = action.payload // string
+      break;
+...
 ```
 
 ### DRY Approach
@@ -295,14 +304,29 @@ type Action = typeof ActionTypes[keyof typeof ActionTypes];
 In this case I created a helper factory function to create typed actions, this way boilerplate and code repetition is highly reduced and it is easier to use action creators in multiple reducers or redux-observable modules.
 
 ```ts
-// Action Creators
+import { ActionCreator } from 'react-redux-typescript';
+
 export const ActionCreators = {
-  UpdateBaseCurrency: new ActionCreator<'UpdateBaseCurrency', string>('UpdateBaseCurrency'),
-  UpdateBaseValue: new ActionCreator<'UpdateBaseValue', string>('UpdateBaseValue'),
+  IncreaseCounter: new ActionCreator<'IncreaseCounter', number>('IncreaseCounter'),
+  ChangeBaseCurrency: new ActionCreator<'ChangeBaseCurrency', string>('ChangeBaseCurrency'),
 };
+
+store.dispatch(ActionCreators.IncreaseCounter.create(4)); // { type: "IncreaseCounter", payload: 4 }
+store.dispatch(ActionCreators.ChangeBaseCurrency.create('USD')); // { type: "ChangeBaseCurrency", payload: 'USD' }
 
 // Action Types
 type Action = typeof ActionCreators[keyof typeof ActionCreators];
+// { type: "IncreaseCounter", payload: number } | { type: "ChangeBaseCurrency", payload: string }
+
+// Reducer                                                           vvvvvv
+export default function reducer(state: State = initialState, action: Action): State {
+  if (action.type === ActionCreators.IncreaseCounter.type) {
+    state.counter = action.payload; // number
+  }
+  else if (action.type === ActionCreators.ChangeBaseCurrency.type) {
+    state.baseCurrency = action.payload; // string
+  }
+...
 ```
 
 ---
@@ -319,48 +343,26 @@ type Action = typeof ActionCreators[keyof typeof ActionCreators];
 ```ts
 // State
 export type State = {
-  readonly isLoading: boolean;
-  readonly error: string | null;
-  readonly lastUpdated: number | null;
-  readonly base: string;
-  readonly rates: any;
-  readonly date: string;
+  readonly counter: number;
+  readonly baseCurrency: string;
 };
 export const initialState: State = {
-  isLoading: false,
-  error: null,
-  lastUpdated: null,
-  base: CACHE.base,
-  rates: CACHE.rates,
-  date: CACHE.date,
+  counter: 0;
+  baseCurrency: 'EUR';
 };
 
 // Reducer
 export default function reducer(state: State = initialState, action: Action): State {
-  let partialState: Partial<State> | undefined;
-
   switch (action.type) {
-    case LOAD_CURRENCY_RATES:
-      partialState = {
-        isLoading: true, error: null,
-      };
+    case INCREASE_COUNTER:
+      state.counter = action.payload; // number
       break;
-    case LOAD_CURRENCY_RATES_SUCCESS:
-      const { base, rates, date } = action.payload;
-      partialState = {
-        isLoading: false, lastUpdated: Date.now(), base, rates, date,
-      };
-      break;
-    case LOAD_CURRENCY_RATES_ERROR:
-      partialState = {
-        isLoading: false, error: action.payload,
-      };
+    case CHANGE_BASE_CURRENCY:
+      state.baseCurrency = action.payload; // string
       break;
 
     default: return state;
   }
-
-  return { ...state, ...partialState };
 }
 ```
 
@@ -370,27 +372,23 @@ export default function reducer(state: State = initialState, action: Action): St
 ```ts
 // State
 export type State = {
+  readonly counter: number;
   readonly baseCurrency: string;
-  readonly targetCurrency: string;
-  readonly baseValue: string;
-  readonly targetValue: string;
 };
 export const initialState: State = {
-  baseCurrency: 'PLN',
-  targetCurrency: 'SEK',
-  baseValue: '0',
-  targetValue: '0',
+  counter: 0;
+  baseCurrency: 'EUR';
 };
 
 // Reducer
 export default function reducer(state: State = initialState, action: Action): State {
   let partialState: Partial<State> | undefined;
 
-  if (action.type === ActionCreators.UpdateBaseCurrency.type) {
-    partialState = { baseCurrency: action.payload };
+  if (action.type === ActionCreators.IncreaseCounter.type) {
+    partialState = { counter: action.payload }; // number
   }
-  if (action.type === ActionCreators.UpdateBaseValue.type) {
-    partialState = { baseValue: action.payload };
+  if (action.type === ActionCreators.ChangeBaseCurrency.type) {
+    partialState = { baseCurrency: action.payload }; // string
   }
 
   return partialState != null ? { ...state, ...partialState } : state;
