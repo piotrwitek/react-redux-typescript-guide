@@ -10,7 +10,6 @@ Set of guidelines and patterns teaching how to fully leverage TypeScript feature
 - Reduce boilerplate using simple helper functions with generics (https://www.typescriptlang.org/docs/handbook/generics.html)
 
 ### Table of Contents
-- [FAQ](#faq)
 - React
   - [Components](#components)
   - [Stateless Components](#stateless-components)
@@ -24,34 +23,8 @@ Set of guidelines and patterns teaching how to fully leverage TypeScript feature
   - [Types Selectors](#typed-selectors)
 - Common
   - [Vendor Types Augumentation](#vendor-types-augmentation)
+- [FAQ](#faq)
 - [Project Examples](#project-examples)
-
----
-## FAQ
-- when to use `interface` and when `type`?
-> Use `interface` when extending particular type or when expecting consumer of type to be extending. In every other case it's better to use `type`, to make it clear it is a struct to be used directly as type annotation.
-
-- should I export my components as `default` or as `named` module export?
-> Most flexible solution is to use module pattern, then you can have both approaches whenever you wish, e.g.
-- create `components/` folder with `index.ts` file inside:
-```ts
-export { default as Select } from './select';
-...
-```
-- create component file (`select.tsx`) in the same folder:
-```tsx
-...
-const Select: React.StatelessComponent<Props> = (props) => {
-...
-export default Select;
-...
-```
-- now you can import your components in both ways like this:
-```tsx
-import { Select } from '../../controls';
-or
-import Select from '../../controls/select';
-```
 
 ---
 
@@ -407,6 +380,38 @@ declare module '../node_modules/antd/lib/button/Button' {
     autoFocus?: boolean;
   }
 }
+```
+
+---
+
+## FAQ
+- when to use `interface` and when `type`?
+> Use `interface` when extending particular type or when expecting consumer of type to be extending. In every other case it's better to use `type`, to make it clear it is a struct to be used directly as type annotation.
+
+- should I export my components as `default` or as `named` module export?
+> Most flexible solution is to use module pattern, then you can have both approaches whenever you wish. Also you have better encapsulation for internal structure/naming refactoring without breaking your consumers:
+```ts
+// 1. in `components/` folder create component file (`select.tsx`) with default export:
+
+// components/select.tsx
+const Select: React.StatelessComponent<Props> = (props) => {
+...
+export default Select;
+
+// 2. in `components/` folder create `index.ts` file handling named imports:
+
+// components/index.ts
+export { default as Select } from './select';
+...
+
+
+// 3. now you can import your components in both ways like this:
+
+// containers/container.tsx
+import { Select } from '../components';
+or
+import Select from '../components/select';
+...
 ```
 
 ---
