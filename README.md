@@ -19,8 +19,8 @@ Set of guidelines and patterns teaching how to fully leverage TypeScript feature
   - [Actions](#actions)
   - [Reducers](#reducers)
   - [Async Flow](#async-flow)
+  - [Reselect Selectors](#reselect-selectors)
   - [Store & RootState](#store--rootstate)
-  - [Types Selectors](#typed-selectors)
 - [Common](#common)
   - [Vendor Types Augumentation](#vendor-types-augmentation)
 - [FAQ](#faq)
@@ -32,6 +32,8 @@ Set of guidelines and patterns teaching how to fully leverage TypeScript feature
 - Don't use React.PropTypes! - in TypeScript ecosystem it is completely unnecessary, you will get much better type checking and intellisense at compile time in your editor with automatic type inference
 - Don't use constructor - use Property Initializers
 - Don't use instance methods and bind - use Class Fields with arrow functions
+
+---
 
 ## Class Component
 - class component boilerplate
@@ -84,7 +86,10 @@ class MyComponent extends React.Component<Props, State> {
 };
 
 export default MyComponent;
+
 ```
+
+---
 
 ## Stateless Component
 - stateless component boilerplate
@@ -109,7 +114,10 @@ const MyComponent: React.StatelessComponent<Props> = (props) => {
 };
 
 export default MyComponent;
+
 ```
+
+---
 
 ## Higher-Order Component
 - decorate or wraps a component into another component
@@ -142,6 +150,7 @@ const ButtonControl: React.StatelessComponent<Props> = (props) => {
 };
 
 export default ButtonControl;
+
 ```
 
 ```tsx
@@ -193,7 +202,10 @@ const ButtonWithFormItem = withFormItemDecorator(Button);
   Next Step
 </ButtonWithFormItem>
 ...
+
 ```
+
+---
 
 ## Redux Connected Component
 - This solution uses type inference to get Props types from `mapStateToProps` function
@@ -259,11 +271,15 @@ class CurrencyConverterContainer extends React.Component<Props, State> {
 }
 
 export default connect(mapStateToProps, dispatchToProps)(CurrencyConverterContainer);
+
 ```
+
 
 ---
 
 # Redux
+
+---
 
 ## Actions
 
@@ -311,6 +327,7 @@ export default function reducer(state: State = initialState, action: Action): St
       state.baseCurrency = action.payload // string
       break;
 ...
+
 ```
 
 ### DRY Approach
@@ -346,6 +363,7 @@ export default function reducer(state: State = initialState, action: Action): St
     state.baseCurrency = action.payload; // string
   }
 ...
+
 ```
 
 ---
@@ -383,6 +401,7 @@ export default function reducer(state: State = initialState, action: Action): St
     default: return state;
   }
 }
+
 ```
 
 ### If Approach
@@ -412,11 +431,21 @@ export default function reducer(state: State = initialState, action: Action): St
 
   return partialState != null ? { ...state, ...partialState } : state;
 }
+
 ```
 
 ---
 
 ## Async Flow
+- WIP
+
+```ts
+
+```
+
+---
+
+## Reselect Selectors
 - WIP
 
 ```ts
@@ -440,6 +469,7 @@ export type RootState = {
   currencyRates: CurrencyRatesState;
   currencyConverter: CurrencyConverterState;
 };
+
 ```
 
 Use `RootState` in `combineReducers` function and as rehydrated State object type guard to obtain strongly typed Store instance
@@ -458,12 +488,8 @@ export const store = createStore(
   rootReducer,
   recoverState(),
 );
+
 ```
-
----
-
-## Typed Selectors
-- WIP
 
 ---
 
@@ -484,6 +510,7 @@ declare module '../node_modules/antd/lib/button/Button' {
     autoFocus?: boolean;
   }
 }
+
 ```
 
 ---
@@ -517,6 +544,7 @@ import { Select } from '../components';
 or
 import Select from '../components/select';
 ...
+
 ```
 
 ---
