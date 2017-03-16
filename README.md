@@ -29,7 +29,7 @@ Set of guidelines and patterns teaching how to fully leverage TypeScript feature
 ---
 
 # React
-- Don't use React.PropTypes! - in TypeScript ecosystem it is completely unnecessary, you can get much better type safety at compile time in your editor with automatic type inference.
+- Don't use React.PropTypes! - in TypeScript ecosystem it is completely unnecessary, you will get much better type checking and intellisense at compile time in your editor with automatic type inference
 - Don't use constructor - use Property Initializers
 - Don't use instance methods and bind - use Class Fields with arrow functions
 
@@ -75,7 +75,9 @@ class MyComponent extends React.Component<Props, State> {
         style={style}
         onClick={this.handleClick}
       >
-        {children}        
+        Clicks: {this.state.count}
+        <hr />
+        {children}
       </div>
     );
   }
