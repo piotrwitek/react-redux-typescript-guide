@@ -234,7 +234,27 @@ class CurrencyConverterContainer extends React.Component<Props, State> {
   
   render() {
     const { counter, baseCurrency, currencies } = this.props; // number, string, string[]
-    ...
+    
+    return (
+      <section>
+        <input
+          type="text"
+          value={counter}
+          onBlur={handleInputBlur}
+          ...
+        />
+        <select
+          value={baseCurrency}
+          onChange={handleSelectChange}>
+          ...
+        >
+          {currencies.map(currency =>
+            <option key={currency}>{currency}</option>,
+          )}
+        </select>
+        ...
+      </section>
+    );
   }
 }
 
