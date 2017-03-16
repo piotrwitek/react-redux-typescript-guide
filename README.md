@@ -382,11 +382,11 @@ import Button from './button';
 import { withFormItemDecorator } from './with-form-item-decorator';
 
 // higher-order component using function composition
-const DecoratedButton = withFormItemDecorator(Button);
+const ButtonWithFormItem = withFormItemDecorator(Button);
 ...
-<DecoratedButton type="primary" htmlType="submit" wrapperCol={{ offset: 4, span: 12 }} autoFocus >
+<ButtonWithFormItem type="primary" htmlType="submit" wrapperCol={{ offset: 4, span: 12 }} autoFocus >
   Next Step
-</DecoratedButton>
+</ButtonWithFormItem>
 ...
 ```
 
