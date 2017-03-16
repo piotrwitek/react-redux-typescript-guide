@@ -10,21 +10,48 @@ Set of guidelines and patterns teaching how to fully leverage TypeScript feature
 - Reduce boilerplate using simple helper functions with generics (https://www.typescriptlang.org/docs/handbook/generics.html)
 
 ### Table of Contents
-- [Basic Rules](#basic-rules)
-- [Actions](#actions)
-- [Reducers](#reducers)
-- [Async Flow](#async-flow)
-- [Store & RootState](#store--rootstate)
-- [Types Selectors](#typed-selectors)
-- [React Connected Components](#react-connected-components)
-- [Higher-Order Components](#higher-order-components)
-- [Vendor Types Augumentation](WIP)
+- [FAQ](#faq)
+- React
+  - [Components](#components)
+  - [Stateless Components](#stateless-components)
+  - [React Connected Components](#react-connected-components)
+  - [Higher-Order Components](#higher-order-components)
+- Redux
+  - [Actions](#actions)
+  - [Reducers](#reducers)
+  - [Async Flow](#async-flow)
+  - [Store & RootState](#store--rootstate)
+  - [Types Selectors](#typed-selectors)
+- Common
+  - [Vendor Types Augumentation](#vendor-types-augmentation)
 - [Project Examples](#project-examples)
 
 ---
-## Basic Rules
-- use `interface` or `type`?
+## FAQ
+- when to use `interface` and when `type`?
 > Use `interface` when extending particular type or when expecting consumer of type to be extending. In every other case it's better to use `type`, to make it clear it is a struct to be used directly as type annotation.
+
+- should I export my components as `default` or as `named` module export?
+> Most flexible solution is to use module pattern, then you can have both approaches whenever you wish, e.g.
+- create `components/` folder with `index.ts` file inside:
+```ts
+export { default as Select } from './select';
+...
+```
+- create component file (`select.tsx`) in the same folder:
+```tsx
+...
+const Select: React.StatelessComponent<Props> = (props) => {
+...
+export default Select;
+...
+```
+- now you can import your components in both ways like this:
+```tsx
+import { Select } from '../../controls';
+or
+import Select from '../../controls/select';
+```
 
 ---
 
