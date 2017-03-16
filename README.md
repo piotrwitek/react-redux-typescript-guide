@@ -13,8 +13,8 @@ Set of guidelines and patterns teaching how to fully leverage TypeScript feature
 - [React](#react)
   - [Class Component](#class-component)
   - [Stateless Component](#stateless-component)
-  - [Redux Connected Component](#redux-connected-component)
   - [Higher-Order Component](#higher-order-component)
+  - [Redux Connected Component](#redux-connected-component)
 - [Redux](#redux)
   - [Actions](#actions)
   - [Reducers](#reducers)
@@ -111,53 +111,6 @@ const MyComponent: React.StatelessComponent<Props> = (props) => {
 export default MyComponent;
 ```
 
-## Redux Connected Component
-- This solution uses type inference to get Props types from `mapStateToProps` function
-- Minimise manual effort to declare and maintain Props types injected from `connect` helper function
-- Real project implementation example: https://github.com/piotrwitek/react-redux-typescript-starter-kit/blob/ef2cf6b5a2e71c55e18ed1e250b8f7cadea8f965/src/containers/currency-converter-container/index.tsx
-
-```tsx
-import { returntypeof } from 'react-redux-typescript';
-
-import { RootState } from '../../store';
-import { ActionCreators } from '../../store/currency-converter/reducer';
-import * as CurrencyRatesSelectors from '../../store/currency-rates/selectors';
-
-const mapStateToProps = (state: RootState) => ({
-  currencies: CurrencyRatesSelectors.getCurrencies(state),
-  currencyRates: storeState.currencyRates,
-  currencyConverter: storeState.currencyConverter,
-});
-
-const dispatchToProps = {
-  changeBaseCurrency: ActionCreators.changeBaseCurrency,
-  changeTargetCurrency: ActionCreators.changeTargetCurrency,
-  changeBaseValue: ActionCreators.changeBaseValue,
-  changeTargetValue: ActionCreators.changeTargetValue,
-};
-
-const stateProps = returntypeof(mapStateToProps);
-type Props = typeof stateProps & typeof dispatchToProps;
-// if needed to extend Props you can add an union with regular props (not injected) like this:
-// `type Props = typeof stateProps & typeof dispatchToProps & { className?: string, style?: object };`
-type State = {};
-
-class CurrencyConverterContainer extends React.Component<Props, State> {
-  render() {
-    // every destructured property below infer correct type from RootState!
-    const { rates, base } = this.props.currencyRates;
-    const { baseCurrency, targetCurrency, baseValue, targetValue } = this.props.currencyConverter;
-    const {
-      currencies, changeBaseCurrency, changeBaseValue, changeTargetCurrency, changeTargetValue,
-    } = this.props;
-    ...
-  }
-}
-
-export default connect(mapStateToProps, dispatchToProps)(CurrencyConverterContainer);
-```
----
-
 ## Higher-Order Component
 - decorate or wraps a component into another component
 - using Type Inference to automatically calculate Props interface for the resulting component
@@ -240,6 +193,52 @@ const ButtonWithFormItem = withFormItemDecorator(Button);
   Next Step
 </ButtonWithFormItem>
 ...
+```
+
+## Redux Connected Component
+- This solution uses type inference to get Props types from `mapStateToProps` function
+- Minimise manual effort to declare and maintain Props types injected from `connect` helper function
+- Real project implementation example: https://github.com/piotrwitek/react-redux-typescript-starter-kit/blob/ef2cf6b5a2e71c55e18ed1e250b8f7cadea8f965/src/containers/currency-converter-container/index.tsx
+
+```tsx
+import { returntypeof } from 'react-redux-typescript';
+
+import { RootState } from '../../store';
+import { ActionCreators } from '../../store/currency-converter/reducer';
+import * as CurrencyRatesSelectors from '../../store/currency-rates/selectors';
+
+const mapStateToProps = (state: RootState) => ({
+  counter: state.counter,
+  baseCurrency: state.baseCurrency,
+  currencies: CurrencyRatesSelectors.getCurrencies(state),
+});
+
+const dispatchToProps = {
+  increaseCounter: ActionCreators.IncreaseCounter.create,
+  changeBaseCurrency: ActionCreators.ChangeBaseCurrency.create,
+};
+
+const stateProps = returntypeof(mapStateToProps);
+type Props = typeof stateProps & typeof dispatchToProps; // you can extend with more props
+type State = {};
+
+class CurrencyConverterContainer extends React.Component<Props, State> {
+  handleInputBlur = (ev: React.FocusEvent<HTMLInputElement>) => {
+    const parsedValue = parseInt(ev.currentTarget.value, 10); // string -> number
+    this.props.increaseCounter(parsedValue); // number
+  }
+  
+  handleSelectChange = (ev: React.ChangeEvent<HTMLSelectElement>) => {
+    this.props.changeBaseCurrency(ev.target.value); // string
+  };
+  
+  render() {
+    const { counter, baseCurrency, currencies } = this.props; // number, string, string[]
+    ...
+  }
+}
+
+export default connect(mapStateToProps, dispatchToProps)(CurrencyConverterContainer);
 ```
 
 ---
