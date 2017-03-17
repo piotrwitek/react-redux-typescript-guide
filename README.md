@@ -86,7 +86,6 @@ class MyComponent extends React.Component<Props, State> {
 };
 
 export default MyComponent;
-
 ```
 
 ---
@@ -114,7 +113,6 @@ const MyComponent: React.StatelessComponent<Props> = (props) => {
 };
 
 export default MyComponent;
-
 ```
 
 ---
@@ -150,7 +148,6 @@ const ButtonControl: React.StatelessComponent<Props> = (props) => {
 };
 
 export default ButtonControl;
-
 ```
 
 ```tsx
@@ -202,7 +199,6 @@ const ButtonWithFormItem = withFormItemDecorator(Button);
   Next Step
 </ButtonWithFormItem>
 ...
-
 ```
 
 ---
@@ -229,7 +225,6 @@ const dispatchToProps = {
   increaseCounter: ActionCreators.IncreaseCounter.create,
   changeBaseCurrency: ActionCreators.ChangeBaseCurrency.create,
 };
-export default connect(mapStateToProps, dispatchToProps)(CurrencyConverterContainer);
 
 // Props types inferred from mapStateToProps & dispatchToProps
 const stateProps = returntypeof(mapStateToProps);
@@ -272,6 +267,7 @@ class CurrencyConverterContainer extends React.Component<Props, State> {
   }
 }
 
+export default connect(mapStateToProps, dispatchToProps)(CurrencyConverterContainer);
 ```
 
 
@@ -327,7 +323,6 @@ export default function reducer(state: State = initialState, action: Action): St
       state.baseCurrency = action.payload // string
       break;
 ...
-
 ```
 
 ### DRY Approach
@@ -363,7 +358,6 @@ export default function reducer(state: State = initialState, action: Action): St
     state.baseCurrency = action.payload; // string
   }
 ...
-
 ```
 
 ---
@@ -401,7 +395,6 @@ export default function reducer(state: State = initialState, action: Action): St
     default: return state;
   }
 }
-
 ```
 
 ### If Approach
@@ -431,7 +424,6 @@ export default function reducer(state: State = initialState, action: Action): St
 
   return partialState != null ? { ...state, ...partialState } : state;
 }
-
 ```
 
 ---
@@ -469,7 +461,6 @@ export type RootState = {
   currencyRates: CurrencyRatesState;
   currencyConverter: CurrencyConverterState;
 };
-
 ```
 
 Use `RootState` in `combineReducers` function and as rehydrated State object type guard to obtain strongly typed Store instance
@@ -488,7 +479,6 @@ export const store = createStore(
   rootReducer,
   recoverState(),
 );
-
 ```
 
 ---
@@ -510,7 +500,6 @@ declare module '../node_modules/antd/lib/button/Button' {
     autoFocus?: boolean;
   }
 }
-
 ```
 
 ---
@@ -544,7 +533,6 @@ import { Select } from '../components';
 or
 import Select from '../components/select';
 ...
-
 ```
 
 ---
