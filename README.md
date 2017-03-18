@@ -118,8 +118,9 @@ export default MyComponent;
 ---
 
 ## Higher-Order Component
-- decorate or wraps a component into another component
-- using Type Inference to automatically calculate Props interface for the resulting component
+- decorate / wrap input component and returns a new component
+- new Component will inherit Props interfaces through composition from both `WrappedComponent` and `HOC`
+- using Type Inference to automatically calculate new Component Props interface
 - demo application: coming soon...
 
 ```tsx
@@ -192,7 +193,7 @@ const { label, labelCol, wrapperCol, hasFeedback, ...passThroughProps } = props;
 import Button from './button';
 import { withFormItem } from './decorators';
 
-// higher-order component using function composition
+// new component has inherited Props interfaces through composition from both Button and withFormItem HOC
 const ButtonWithFormItem = withFormItem(Button);
 ...
 <ButtonWithFormItem type="primary" htmlType="submit" wrapperCol={{ offset: 4, span: 12 }} autoFocus >
