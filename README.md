@@ -151,7 +151,7 @@ export default ButtonControl;
 ```
 
 ```tsx
-// with-form-item-decorator.tsx
+// decorators/with-form-item.tsx
 import * as React from 'react';
 import { Form } from 'antd';
 const FormItem = Form.Item;
@@ -164,8 +164,8 @@ interface DecoratorProps {
   hasFeedback?: boolean;
 }
 
-export function withFormItemDecorator<Props>(
-  Component: React.StatelessComponent<Props>,
+export default function withFormItem<Props>(
+  WrappedComponent: React.StatelessComponent<Props>,
 ) {
   const Decorator: React.StatelessComponent<DecoratorProps & Props> = (props) => {
     return (
@@ -175,7 +175,7 @@ export function withFormItemDecorator<Props>(
         wrapperCol={props.wrapperCol}
         hasFeedback={props.hasFeedback}
       >
-        <Component {...props} />
+        <WrappedComponent {...props} />
       </FormItem>
     );
   };
@@ -190,10 +190,10 @@ const { label, labelCol, wrapperCol, hasFeedback, ...passThroughProps } = props;
 // consumer-component.tsx
 ...
 import Button from './button';
-import { withFormItemDecorator } from './with-form-item-decorator';
+import { withFormItem } from './decorators';
 
 // higher-order component using function composition
-const ButtonWithFormItem = withFormItemDecorator(Button);
+const ButtonWithFormItem = withFormItem(Button);
 ...
 <ButtonWithFormItem type="primary" htmlType="submit" wrapperCol={{ offset: 4, span: 12 }} autoFocus >
   Next Step
