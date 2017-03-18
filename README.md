@@ -182,7 +182,7 @@ export default function withFormItem<Props>(
   return Decorator;
 }
 
-// improve with filtering passThroughProps - type inference support coming in (v2.3), tracking issue: https://github.com/Microsoft/TypeScript/issues/10727
+// improve further by filtering out not relevant props - type inference support coming in (v2.3), tracking issue: https://github.com/Microsoft/TypeScript/issues/10727
 const { label, labelCol, wrapperCol, hasFeedback, ...passThroughProps } = props;
 ```
 
