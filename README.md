@@ -118,9 +118,9 @@ export default MyComponent;
 ---
 
 ## Higher-Order Component
-- decorate / wrap input component and returns a new component
-- new Component will inherit Props interfaces through composition from both `WrappedComponent` and `HOC`
-- using Type Inference to automatically calculate new Component Props interface
+- wrap and decorate input Component returning a new Component
+- new Component will inherit Props interface through composition from input Component extended with Props of `HOC`
+- using Type Inference to automatically calculate resulting Props interface
 - demo application: coming soon...
 
 ```tsx
@@ -205,6 +205,9 @@ const ButtonWithFormItem = withFormItem(Button);
 ---
 
 ## Redux Connected Component
+> NOTE: type inference in `connect` function type declaration doesn't provide complete type safety and will not automatically use Type Inference to calculate resulting Props interface as in [`Higher-Order Component`](#higher-order-component) example above
+> This is something I'm trying to investigate so below solution can be improved even further, please come back later or contribute if have a better solution...
+
 - This solution uses type inference to get Props types from `mapStateToProps` function
 - Minimise manual effort to declare and maintain Props types injected from `connect` helper function
 - using `returntypeof()` helper function, because TypeScript does not support this feature yet (https://github.com/piotrwitek/react-redux-typescript#returntypeof-polyfill)
