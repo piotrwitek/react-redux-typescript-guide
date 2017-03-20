@@ -206,6 +206,7 @@ const ButtonWithFormItem = withFormItem(Button);
 
 ## Redux Connected Component
 > NOTE: type inference in `connect` function type declaration doesn't provide complete type safety and will not leverage Type Inference to automatically calculate resulting Props interface as in [`Higher-Order Component`](#higher-order-component) example above
+
 > This is something I'm trying to investigate so below solution can be improved even further, please come back later or contribute if have a better solution...
 
 - This solution uses type inference to get Props types from `mapStateToProps` function
