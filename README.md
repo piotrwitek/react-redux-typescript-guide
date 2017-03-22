@@ -375,6 +375,7 @@ export default function reducer(state: State = initialState, action: Action): St
 
 ### Switch Approach
 - using classic const based types
+- good enough for single prop updates
 
 ```ts
 // State
@@ -404,6 +405,8 @@ export default function reducer(state: State = initialState, action: Action): St
 
 ### If Approach
 - using `ActionCreator` helper types
+- much better for multiple props update as it will ensure you that `Partial State` update is compatible with reducer state contract, this will guard you from errors
+- if's "block scope" give you possibility to use local variables
 
 ```ts
 // State
