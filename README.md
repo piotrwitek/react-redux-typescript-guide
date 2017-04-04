@@ -40,19 +40,21 @@ Set of guidelines and patterns teaching how to fully leverage TypeScript feature
 ```tsx
 import * as React from 'react';
 
-interface Props {
-  className?: string;
-  style?: React.CSSProperties
-  initialCount?: number;
-}
-interface State {
-  count?: number;
-}
+type Props = {
+  className?: string,
+  style?: React.CSSProperties,
+  initialCount?: number,
+};
+
+type State = {
+  count: number,
+};
 
 class MyComponent extends React.Component<Props, State> {
   // default props using Property Initializers
   static defaultProps: Props = {
     className: 'default-class',
+    initialCount: 0,
   };
   
   // initial state using Property Initializers
@@ -69,12 +71,10 @@ class MyComponent extends React.Component<Props, State> {
   }
   
   render() {
-    const { className, style, children } = props;
+    const { children, initialCount, ...restProps } = this.props;
   
     return (
-      <div
-        className={className}
-        style={style}
+      <div {...restProps}
         onClick={this.handleClick}
       >
         Clicks: {this.state.count}
@@ -95,18 +95,15 @@ export default MyComponent;
 ```tsx
 import * as React from 'react';
 
-interface Props {
-  className?: string;
-  style?: React.CSSProperties
-}
+type Props = {
+  className?: string,
+  style?: React.CSSProperties,
+};
 
 const MyComponent: React.StatelessComponent<Props> = (props) => {
-  const { className, style, children } = props;
+  const { children, ...restProps } = props;
   return (
-    <div
-      className={className}
-      style={style}
-    >
+    <div {...restProps} >
       {children}
     </div>
   );
@@ -121,29 +118,27 @@ export default MyComponent;
 - wrap and decorate input Component returning a new Component
 - new Component will inherit Props interface through composition from input Component extended with Props of `HOC`
 - using Type Inference to automatically calculate resulting Props interface
-- demo application: coming soon...
+- filtering out decorator props and passing only the relevant props through to Wrapped Component
+- accepting stateless functional or regular component
 
 ```tsx
-// button.tsx
+// controls/button.tsx
 import * as React from 'react';
 import { Button } from 'antd';
 
-interface Props {
-  className?: string;
-  htmlType?: typeof Button.prototype.props.htmlType;
-  type?: typeof Button.prototype.props.type;
-  autoFocus?: boolean;
-}
+type Props = {
+  className?: string,
+  autoFocus?: boolean,
+  htmlType?: typeof Button.prototype.props.htmlType,
+  type?: typeof Button.prototype.props.type,
+};
 
 const ButtonControl: React.StatelessComponent<Props> = (props) => {
+  const { children, ...restProps } = props;
+
   return (
-    <Button
-      className={props.className}
-      htmlType={props.htmlType}
-      type={props.type}
-      autoFocus={props.autoFocus}
-    >
-      {props.children}
+    <Button {...restProps} >
+      {children}
     </Button>
   );
 };
@@ -157,49 +152,79 @@ import * as React from 'react';
 import { Form } from 'antd';
 const FormItem = Form.Item;
 
-interface DecoratorProps {
-  className?: string;
-  label?: string;
-  labelCol?: typeof FormItem.prototype.props.labelCol;
-  wrapperCol?: typeof FormItem.prototype.props.wrapperCol;
-  hasFeedback?: boolean;
-}
+type DecoratorProps = {
+  error?: string,
+  label?: typeof FormItem.prototype.props.label,
+  labelCol?: typeof FormItem.prototype.props.labelCol,
+  wrapperCol?: typeof FormItem.prototype.props.wrapperCol,
+  required?: typeof FormItem.prototype.props.required,
+  help?: typeof FormItem.prototype.props.help,
+  validateStatus?: typeof FormItem.prototype.props.validateStatus,
+  colon?: typeof FormItem.prototype.props.colon,
+};
 
-export default function withFormItem<Props>(
-  WrappedComponent: React.StatelessComponent<Props>,
+export function withFormItem<GenericProps>(
+  WrappedComponent: React.StatelessComponent<GenericProps> | React.ComponentClass<GenericProps>,
 ) {
-  const Decorator: React.StatelessComponent<DecoratorProps & Props> = (props) => {
-    return (
-      <FormItem
-        label={props.label}
-        labelCol={props.labelCol}
-        wrapperCol={props.wrapperCol}
-        hasFeedback={props.hasFeedback}
-      >
-        <WrappedComponent {...props} />
-      </FormItem>
-    );
-  };
+  const Decorator: React.StatelessComponent<DecoratorProps & GenericProps> =
+    (props: DecoratorProps) => {
+      const {
+       label, labelCol, wrapperCol, required, help, validateStatus, colon,
+        error, ...passThroughProps,
+      } = props;
+
+      const decoratorProps: DecoratorProps = Object.entries({
+        label, labelCol, wrapperCol, required, help, validateStatus, colon,
+      }).reduce((definedDecoratorProps: any, [key, value]) => {
+        if (value !== undefined) { definedDecoratorProps[key] = value; }
+        return definedDecoratorProps;
+      }, {});
+
+      if (error) {
+        decoratorProps.help = error;
+        decoratorProps.validateStatus = 'error';
+      }
+
+      return (
+        <FormItem {...decoratorProps} hasFeedback={true} >
+          <WrappedComponent {...passThroughProps} />
+        </FormItem>
+      );
+    };
+
   return Decorator;
 }
-
-// improve further by filtering out not relevant props - type inference support coming in (v2.3), tracking issue: https://github.com/Microsoft/TypeScript/issues/10727
-const { label, labelCol, wrapperCol, hasFeedback, ...passThroughProps } = props;
 ```
 
 ```tsx
-// consumer-component.tsx
+// components/consumer-component.tsx
 ...
-import Button from './button';
-import { withFormItem } from './decorators';
+import { Button, Input } from '../controls';
+import { withFormItem, withFieldState } from '../decorators';
 
-// new component has inherited Props interfaces through composition from both Button and withFormItem HOC
-const ButtonWithFormItem = withFormItem(Button);
-...
-<ButtonWithFormItem type="primary" htmlType="submit" wrapperCol={{ offset: 4, span: 12 }} autoFocus >
+// you can create more specialized components using decorators
+const
+  ButtonField = withFormItem(Button);
+
+// you can leverage function composition to compose multiple decorators
+const
+  InputFieldWithState = withFormItem(withFieldState(Input));
+
+// Enhanced Component will inherit Props type from Base Component with all applied HOC's
+<ButtonField type="primary" htmlType="submit" wrapperCol={{ offset: 4, span: 12 }} autoFocus={true} >
   Next Step
-</ButtonWithFormItem>
+</ButtonField>
 ...
+<InputFieldWithState {...formFieldLayout}
+  label="Type" required={true} autoFocus={true} 
+  fieldState={configurationTypeFieldState} error={configurationTypeFieldState.error}
+/>
+...
+
+// you could use functional libraries like ramda or lodash to better functional composition like:
+const
+  InputFieldWithState = compose(withFormItem, withFieldStateInput)(Input);
+// NOTE: be aware that compose function need to have sound type declaration or you'll lose type inference 
 ```
 
 ---
