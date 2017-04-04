@@ -319,40 +319,45 @@ export default connect(mapStateToProps, dispatchToProps)(CurrencyConverterContai
 This case is focused on KISS, without introducing any abstractions to be as close as possible to common Redux Pattern used in JS.
 
 ```ts
-// Action Creators
-export const INCREASE_COUNTER = 'INCREASE_COUNTER';
-export const increaseCounter = (payload: number) => ({
-  type: INCREASE_COUNTER as typeof INCREASE_COUNTER,
-  payload,
-});
-
-export const CHANGE_BASE_CURRENCY = 'CHANGE_BASE_CURRENCY';
-export const changeBaseCurrency = (payload: string) => ({
-  type: CHANGE_BASE_CURRENCY as typeof CHANGE_BASE_CURRENCY,
-  payload,
-});
-
-store.dispatch(increaseCounter(4)); // { type: "INCREASE_COUNTER", payload: 4 }
-store.dispatch(changeBaseCurrency('USD')); // { type: "CHANGE_BASE_CURRENCY", payload: 'USD' }
+import { returntypeof } from 'react-redux-typescript';
 
 // Action Types
-const ActionTypes = {
-  increaseCounter: returntypeof(increaseCounter),
-  changeBaseCurrency: returntypeof(changeBaseCurrency),
-};
-type Action = typeof ActionTypes[keyof typeof ActionTypes];
-// { type: "INCREASE_COUNTER", payload: number } | { type: "CHANGE_BASE_CURRENCY", payload: string }
+export const INCREASE_COUNTER = 'INCREASE_COUNTER';
+export const CHANGE_BASE_CURRENCY = 'CHANGE_BASE_CURRENCY';
+
+// Action Creators
+export const actionCreators = {
+  increaseCounter: () => ({
+    type: INCREASE_COUNTER as typeof INCREASE_COUNTER,
+  }),
+  changeBaseCurrency: (payload: string) => ({
+    type: CHANGE_BASE_CURRENCY as typeof CHANGE_BASE_CURRENCY,
+    payload,
+  }),
+}
+
+// Action Type
+const actions = Object.values(actionCreators).map(returntypeof);
+export type Action = typeof actions[number]; // { type: "INCREASE_COUNTER" } | { type: "CHANGE_BASE_CURRENCY", payload: string }
 
 // Reducer                                                           vvvvvv
 export default function reducer(state: State = initialState, action: Action): State {
   switch (action.type) {
     case INCREASE_COUNTER:
-      state.counter = action.payload // number
+      state.counter = state.counter + 1; // no payload
       break;
     case CHANGE_BASE_CURRENCY:
-      state.baseCurrency = action.payload // string
+      state.baseCurrency = action.payload; // payload: string
       break;
 ...
+
+// Examples
+store.dispatch(actionCreators.increaseCounter(4)); // Error: Supplied parameters do not match any signature of call target. 
+store.dispatch(actionCreators.increaseCounter()); // { type: "INCREASE_COUNTER" }
+
+store.dispatch(actionCreators.changeBaseCurrency()); // Error: Supplied parameters do not match any signature of call target. 
+store.dispatch(actionCreators.changeBaseCurrency('USD')); // { type: "CHANGE_BASE_CURRENCY", payload: 'USD' }
+
 ```
 
 ### DRY Approach
@@ -382,10 +387,10 @@ type Action = typeof ActionCreators[keyof typeof ActionCreators];
 // Reducer                                                           vvvvvv
 export default function reducer(state: State = initialState, action: Action): State {
   if (action.type === ActionCreators.IncreaseCounter.type) {
-    state.counter = action.payload; // number
+    state.counter = action.payload; // payload: number
   }
   else if (action.type === ActionCreators.ChangeBaseCurrency.type) {
-    state.baseCurrency = action.payload; // string
+    state.baseCurrency = action.payload; // payload: string
   }
 ...
 ```
@@ -417,10 +422,10 @@ export const initialState: State = {
 export default function reducer(state: State = initialState, action: Action): State {
   switch (action.type) {
     case INCREASE_COUNTER:
-      state.counter = action.payload; // number
+      state.counter = state.counter + 1; // no payload
       break;
     case CHANGE_BASE_CURRENCY:
-      state.baseCurrency = action.payload; // string
+      state.baseCurrency = action.payload; // payload: string
       break;
 
     default: return state;
