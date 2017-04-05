@@ -309,14 +309,14 @@ export default connect(mapStateToProps, dispatchToProps)(CurrencyConverterContai
 
 ## Actions
 
-### KISS Approach
-- more boilerplate
-- classic const based types
-- close to standard JS usage
-- need to export both const type and action creator to use in multiple reducer files or redux-observable modules
-- using `returntypeof()` helper function to infer Action types - (https://github.com/piotrwitek/react-redux-typescript#returntypeof-polyfill)
+### KISS Solution
+This solution is focused on KISS principle, without introducing any abstractions to be as close as possible to common Redux Pattern used in regular JavaScript solutions:
 
-This case is focused on KISS, without introducing any abstractions to be as close as possible to common Redux Pattern used in JS.
+- classic const based types
+- very close to standard JS usage
+- more boilerplate
+- need to export action types and action creators to re-use in other layers like `redux-saga` or `redux-observable` modules
+- using `returntypeof()` helper function to infer return type of Action Creators - (https://github.com/piotrwitek/react-redux-typescript#returntypeof-polyfill)
 
 ```ts
 import { returntypeof } from 'react-redux-typescript';
@@ -360,14 +360,12 @@ store.dispatch(actionCreators.changeBaseCurrency('USD')); // { type: "CHANGE_BAS
 
 ```
 
-### DRY Approach
-- less boilerplate
-- minimize repeated code
-- `ActionCreator` helper factory function to create typed instances of actions - (https://github.com/piotrwitek/react-redux-typescript#helpers-v22)
-- easier to use in multiple reducer files or `redux-observable` modules (action creators have type property and also create function, no extra type constant)
-- very easy to get all of action types
+### DRY Solution
+This solution is using a simple helper factory function to automate creation of typed action creators. With little abstraction we can  reduce boilerplate and code repetition, also it is easier to re-use action creators in other layers:
 
-This case is using a helper factory function to create typed actions. With little abstraction we can significally reduce boilerplate and code repetition, also it is easier to re-use action creators in other reducer or redux-observable modules.
+- using helper factory function to automate creation of typed action creators - recommended battle-tested `ActionCreator` from (https://github.com/piotrwitek/react-redux-typescript#helpers-v22)
+- reduced boilerplate and code repetition
+- easier to re-use in other layers like `redux-saga` or `redux-observable` modules (action creators have type property and also create function, no extra type constant)
 
 ```ts
 import { ActionCreator } from 'react-redux-typescript';
@@ -403,9 +401,9 @@ export default function reducer(state: State = initialState, action: Action): St
 - using Partial from (Mapped types)[https://www.typescriptlang.org/docs/handbook/advanced-types.html]
   - to guard type of `partialState` and restrict superfluous or mismatched props when merging with State
 
-### Switch Approach
+### Switch Style
 - using classic const based types
-- good enough for single prop updates
+- good for single prop updates or simple state objects
 
 ```ts
 // State
@@ -434,9 +432,9 @@ export default function reducer(state: State = initialState, action: Action): St
 ```
 
 ### If Approach
-- using `ActionCreator` helper types
-- much better for multiple props update as it will ensure you that `Partial State` update is compatible with reducer state contract, this will guard you from errors
-- if's "block scope" give you possibility to use local variables
+- if's "block scope" give you possibility to use local variables for more complex state update logic
+- better for more complex state objects - using partialState object spread for strongly typed multiple props update - it will ensure that action payload is compatible with reducer state contract - this will guard you from nasty bugs
+- introducing optional static `type` property on `actionCreator` - advantage is to get rid of action types constants, as you can check type on action creator itself
 
 ```ts
 // State
@@ -453,10 +451,10 @@ export const initialState: State = {
 export default function reducer(state: State = initialState, action: Action): State {
   let partialState: Partial<State> | undefined;
 
-  if (action.type === ActionCreators.IncreaseCounter.type) {
-    partialState = { counter: action.payload }; // number
+  if (action.type === actionCreators.increaseCounter.type) {
+    partialState = { counter: state.counter + 1 }; // no payload
   }
-  if (action.type === ActionCreators.ChangeBaseCurrency.type) {
+  if (action.type === actionCreators.changeBaseCurrency.type) {
     partialState = { baseCurrency: action.payload }; // string
   }
 
@@ -467,10 +465,54 @@ export default function reducer(state: State = initialState, action: Action): St
 ---
 
 ## Async Flow
-- WIP
+- `redux-observable` epics
 
 ```ts
+import 'rxjs/add/operator/map';
+import { combineEpics, Epic } from 'redux-observable';
 
+import { RootState, Action } from '../index'; // check store section
+import { actionCreators } from './reducer';
+import { convertValueWithBaseRateToTargetRate } from './utils';
+import * as currencyConverterSelectors from './selectors';
+import * as currencyRatesSelectors from '../currency-rates/selectors';
+
+// Epics - handling side effects of actions
+const changeCurrencyEpic: Epic<Action, RootState> = (action$, store) =>
+  action$.ofType(
+    actionCreators.changeBaseCurrency.type,
+    actionCreators.changeTargetCurrency.type,
+  ).map((action): Action => actionCreators.updateCurrencyConverterState({
+    targetValue: convertValueWithBaseRateToTargetRate(
+      currencyConverterSelectors.getBaseValue(store.getState()),
+      currencyRatesSelectors.getBaseCurrencyRate(store.getState()),
+      currencyRatesSelectors.getTargetCurrencyRate(store.getState()),
+    ),
+  }));
+
+const changeBaseValueEpic: Epic<Action, RootState> = (action$, store) =>
+  action$.ofType(actionCreators.changeBaseValue.type)
+    .map((action): Action => actionCreators.updateCurrencyConverterState({
+      targetValue: convertValueWithBaseRateToTargetRate(
+        action.payload,
+        currencyRatesSelectors.getBaseCurrencyRate(store.getState()),
+        currencyRatesSelectors.getTargetCurrencyRate(store.getState()),
+      ),
+    }));
+
+const changeTargetValueEpic: Epic<Action, RootState> = (action$, store) =>
+  action$.ofType(actionCreators.changeTargetValue.type)
+    .map((action): Action => actionCreators.updateCurrencyConverterState({
+      baseValue: convertValueWithBaseRateToTargetRate(
+        action.payload,
+        currencyRatesSelectors.getTargetCurrencyRate(store.getState()),
+        currencyRatesSelectors.getBaseCurrencyRate(store.getState()),
+      ),
+    }));
+
+export const epics = combineEpics(
+  changeCurrencyEpic, changeBaseValueEpic, changeTargetValueEpic,
+);
 ```
 
 ---
@@ -486,22 +528,29 @@ export default function reducer(state: State = initialState, action: Action): St
 
 ## Store & RootState
 
-`RootState` - to be imported in connected components providing type safety to Redux `connect` function
 ```ts
 import {
-  default as currencyRatesReducer, State as CurrencyRatesState,
+  default as currencyRatesReducer, State as CurrencyRatesState, Action as CurrencyRatesAction,
 } from './currency-rates/reducer';
 import {
-  default as currencyConverterReducer, State as CurrencyConverterState,
+  default as currencyConverterReducer, State as CurrencyConverterState, Action as CurrencyConverterAction,
 } from './currency-converter/reducer';
 
+// - strongly typed application global state tree - `RootState`
+// - should be imported in connected components providing type safety to Redux `connect` function
 export type RootState = {
   currencyRates: CurrencyRatesState;
   currencyConverter: CurrencyConverterState;
 };
+
+// - strongly typed application global action types - `Action`
+// - should be imported in layers dealing with redux actions like: reducers, redux-sagas, redux-observables
+export type Action =
+  CurrencyRatesAction
+  | CurrencyConverterAction;
 ```
 
-Use `RootState` in `combineReducers` function and as rehydrated State object type guard to obtain strongly typed Store instance
+- creating store - use `RootState` (in `combineReducers` or when providing preloaded state object) to set-up *state object type guard* to leverage strongly typed Store instance
 ```ts
 import { combineReducers, createStore } from 'redux';
 
@@ -516,6 +565,28 @@ const recoverState = (): RootState => ({} as RootState);
 export const store = createStore(
   rootReducer,
   recoverState(),
+);
+```
+
+- composing enhancers - example of setting up `redux-observable` middleware
+```ts
+declare var window: Window & { devToolsExtension: any, __REDUX_DEVTOOLS_EXTENSION_COMPOSE__: any };
+import { createStore, compose, applyMiddleware } from 'redux';
+import { combineEpics, createEpicMiddleware } from 'redux-observable';
+
+import { epics as currencyConverterEpics } from './currency-converter/epics';
+
+const rootEpic = combineEpics(
+  currencyConverterEpics,
+);
+const epicMiddleware = createEpicMiddleware(rootEpic);
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+
+// store singleton instance
+export const store = createStore(
+  rootReducer,
+  recoverState(),
+  composeEnhancers(applyMiddleware(epicMiddleware)),
 );
 ```
 
