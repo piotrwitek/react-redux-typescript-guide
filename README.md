@@ -1,4 +1,4 @@
-# React / Redux / TypeScript - Guidelines & Patterns
+# React & Redux in TypeScript - Guidelines & Patterns
 Set of guidelines and patterns teaching how to correctly use TypeScript to fully leverage power from static typing when working with React & Redux ecosystem.
 
 ### Relevant with TypeScript v2.2 (https://github.com/Microsoft/TypeScript/wiki/Roadmap)
@@ -17,12 +17,15 @@ Set of guidelines and patterns teaching how to correctly use TypeScript to fully
 - [Redux](#redux)
   - [Actions](#actions)
   - [Reducers](#reducers)
-  - [Store](#store)
+  - [Create Store](#create-store)
   - [Generating Action type](#generating-action-type)
   - [Generating RootState type](#generating-rootstate-type)
-  - [Async Flow](#async-flow)
-  - [Reselect Selectors](#reselect-selectors)
   - [Redux Connected Component](#redux-connected-component)
+- [Ecosystem](#ecosystem)
+  - [Async Flow with "redux-observable"](#async-flow-with-redux-observable)
+  - [State Selectors with "reselect"](#selectors-with-reselect)
+  - [Forms with "formstate"](#)
+  - [Styles with "typestyle"](#)
 - [Extras](#extras)
   - [Vendor Types Augumentation](#vendor-types-augmentation)
   - [Default and Named Module Exports](#default-and-named-module-exports)
