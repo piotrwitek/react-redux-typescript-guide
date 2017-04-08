@@ -24,8 +24,8 @@ Set of guidelines and patterns teaching how to correctly use TypeScript to fully
 - [Ecosystem](#ecosystem)
   - [Async Flow with "redux-observable"](#async-flow-with-redux-observable)
   - [Selectors with "reselect"](#selectors-with-reselect)
-  - [Forms with "formstate"](#)
-  - [Styles with "typestyle"](#)
+  - [Forms with "formstate"]
+  - [Styles with "typestyle"]
 - [Extras](#extras)
   - [tsconfig.json](#tsconfigjson)
   - [tslint.json](#tslintjson)
