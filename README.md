@@ -21,17 +21,15 @@ Set of guidelines and patterns teaching how to fully leverage TypeScript feature
   - [Async Flow](#async-flow)
   - [Reselect Selectors](#reselect-selectors)
   - [Store & RootState](#store--rootstate)
-- [Common](#common)
+- [Extras](#common)
   - [Vendor Types Augumentation](#vendor-types-augmentation)
+  - [Default and Named Module Exports](#default-and-named-module-exports)
 - [FAQ](#faq)
 - [Project Examples](#project-examples)
 
 ---
 
 # React
-- Don't use React.PropTypes! - in TypeScript ecosystem it is completely unnecessary, you will get much better type checking and intellisense at compile time in your editor with automatic type inference
-- Don't use constructor - use Property Initializers
-- Don't use instance methods and bind - use Class Fields with arrow functions
 
 ---
 
@@ -65,7 +63,7 @@ class MyComponent extends React.Component<Props, State> {
   // handlers using Class Fields with arrow functions
   handleClick = () => this.setState({ count: this.state.count + 1});
   
-  // lifecycle methods are normal instance methods
+  // lifecycle methods should be declared as normal instance methods and it's fine
   componentDidMount() {
     console.log('Mounted!');
   }
@@ -592,11 +590,10 @@ export const store = createStore(
 
 ---
 
-# Common
+# Extras
 
 ## Vendor Types Augmentation
-- Augmenting missing autoFocus Prop on `Input` and `Button` components in `antd` npm package (https://ant.design/)
-
+> Augmenting missing autoFocus Prop on `Input` and `Button` components in `antd` npm package (https://ant.design/)
 ```ts
 declare module '../node_modules/antd/lib/input/Input' {
   export interface InputProps {
@@ -611,15 +608,9 @@ declare module '../node_modules/antd/lib/button/Button' {
 }
 ```
 
----
-
-# FAQ
-
-- when to use `interface` and when `type`?
-> Use `interface` when extending particular type or when expecting consumer of type to be extending. In every other case it's better to use `type`, to make it clear it is a struct to be used directly as type annotation.
-
-- should I export my components as `default` or as `named` module export?
-> Most flexible solution is to use module pattern, then you can have both approaches whenever you wish. Also you have better encapsulation for internal structure/naming refactoring without breaking your consumers:
+## Default and Named Module Exports
+> Most flexible solution is to use module folder pattern, because you can leverage both named and default import when you see fit.
+Also you'll achieve better encapsulation for internal structure/naming refactoring without breaking your consumer code:
 ```ts
 // 1. in `components/` folder create component file (`select.tsx`) with default export:
 
@@ -634,7 +625,6 @@ export default Select;
 export { default as Select } from './select';
 ...
 
-
 // 3. now you can import your components in both ways like this:
 
 // containers/container.tsx
@@ -644,6 +634,46 @@ import Select from '../components/select';
 ...
 ```
 
+---
+
+# FAQ
+
+- when to use `interface` and when `type` to be consistent?
+> Use `type` when declaring simple object literal structs e.g. Component Props, Component State, Redux State, Redux Action.
+In other cases it's more flexible to use `interface` over `type` because interfaces can be implemented, extended and merged.
+Related `ts-lint` rule: https://palantir.github.io/tslint/rules/interface-over-type-literal/
+
+- should I use React.PropTypes?
+> No. In TypeScript it is completely unnecessary, you will get a much better free type checking and intellisense at compile time when declaring a "generic type" for component: `React.Component<{ myProp: string }, { myState: number}>`, this way you'll never get any runtime errors and get elegant way of describing component external API.
+
+- how to best declare component instance properties?
+> Don't use old-school React class constructors way, prefer to use Property Initializers (first class support in TypeScript)
+```
+class MyComponent extends React.Component<Props, State> {
+  // default props using Property Initializers
+  static defaultProps: Props = {
+    className: 'default-class',
+    initialCount: 0,
+  };
+  
+  // initial state using Property Initializers
+  state: State = {
+    count: this.props.initialCount,
+  };
+```
+
+- how to best declare component handler functions?
+> Don't use old-school class methods and function bind way, prefer to use Class Fields with arrow functions (first class support in TypeScript) 
+```
+class MyComponent extends React.Component<Props, State> {
+// handlers using Class Fields with arrow functions
+  handleClick = () => this.setState({ count: this.state.count + 1});
+
+// an exception are lifecycle methods should be declared as normal instance methods and it's fine, because we are extending React Component
+  componentDidMount() {
+    console.log('Mounted!');
+  }
+```
 ---
 
 # Project Examples
