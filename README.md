@@ -1,26 +1,28 @@
-# React / Redux / TypeScript - Patterns
-Set of guidelines and patterns teaching how to fully leverage TypeScript features when working with React & Redux ecosystem.
+# React / Redux / TypeScript - Guidelines & Patterns
+Set of guidelines and patterns teaching how to correctly use TypeScript to fully leverage power from static typing when working with React & Redux ecosystem.
 
 ### Relevant with TypeScript v2.2 (https://github.com/Microsoft/TypeScript/wiki/Roadmap)
 > powered by github :star: - [star it please](https://github.com/piotrwitek/react-redux-typescript-patterns/stargazers) to keep me motivated to maintain this repo with new TypeScript releases
 
 ### Goals:
 - Complete type safety, without failing to `any` type
-- Minimize amount of manually typing declarations by leveraging Type Inference (https://www.typescriptlang.org/docs/handbook/type-inference.html)
-- Reduce boilerplate using simple helper functions with generics (https://www.typescriptlang.org/docs/handbook/generics.html)
+- Minimize amount of manually typing annotations by leveraging [Type Inference](https://www.typescriptlang.org/docs/handbook/type-inference.html)
+- Reduce boilerplate with [simple utility functions](https://github.com/piotrwitek/react-redux-typescript) using [Generics](https://www.typescriptlang.org/docs/handbook/generics.html) and [Advanced Types](https://www.typescriptlang.org/docs/handbook/advanced-types.html) features
 
 ### Table of Contents
 - [React](#react)
   - [Class Component](#class-component)
   - [Stateless Component](#stateless-component)
   - [Higher-Order Component](#higher-order-component)
-  - [Redux Connected Component](#redux-connected-component)
 - [Redux](#redux)
   - [Actions](#actions)
   - [Reducers](#reducers)
+  - [Store](#store)
+  - [Generating Action type](#generating-action-type)
+  - [Generating RootState type](#generating-rootstate-type)
   - [Async Flow](#async-flow)
   - [Reselect Selectors](#reselect-selectors)
-  - [Store & RootState](#store--rootstate)
+  - [Redux Connected Component](#redux-connected-component)
 - [Extras](#extras)
   - [Vendor Types Augumentation](#vendor-types-augmentation)
   - [Default and Named Module Exports](#default-and-named-module-exports)
