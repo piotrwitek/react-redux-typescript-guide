@@ -21,7 +21,7 @@ Set of guidelines and patterns teaching how to fully leverage TypeScript feature
   - [Async Flow](#async-flow)
   - [Reselect Selectors](#reselect-selectors)
   - [Store & RootState](#store--rootstate)
-- [Extras](#common)
+- [Extras](#extras)
   - [Vendor Types Augumentation](#vendor-types-augmentation)
   - [Default and Named Module Exports](#default-and-named-module-exports)
 - [FAQ](#faq)
@@ -592,7 +592,7 @@ export const store = createStore(
 
 # Extras
 
-## Vendor Types Augmentation
+### Vendor Types Augmentation
 > Augmenting missing autoFocus Prop on `Input` and `Button` components in `antd` npm package (https://ant.design/)
 ```ts
 declare module '../node_modules/antd/lib/input/Input' {
@@ -608,7 +608,7 @@ declare module '../node_modules/antd/lib/button/Button' {
 }
 ```
 
-## Default and Named Module Exports
+### Default and Named Module Exports
 > Most flexible solution is to use module folder pattern, because you can leverage both named and default import when you see fit.
 Also you'll achieve better encapsulation for internal structure/naming refactoring without breaking your consumer code:
 ```ts
@@ -638,15 +638,15 @@ import Select from '../components/select';
 
 # FAQ
 
-- when to use `interface` and when `type` to be consistent?
+### - when to use `interface` and when `type` to behave consistently?
 > Use `type` when declaring simple object literal structs e.g. Component Props, Component State, Redux State, Redux Action.
 In other cases it's more flexible to use `interface` over `type` because interfaces can be implemented, extended and merged.
 Related `ts-lint` rule: https://palantir.github.io/tslint/rules/interface-over-type-literal/
 
-- should I use React.PropTypes?
+### - should I use React.PropTypes?
 > No. In TypeScript it is completely unnecessary, you will get a much better free type checking and intellisense at compile time when declaring a "generic type" for component: `React.Component<{ myProp: string }, { myState: number}>`, this way you'll never get any runtime errors and get elegant way of describing component external API.
 
-- how to best declare component instance properties?
+### - how to best declare component instance properties?
 > Don't use old-school React class constructors way, prefer to use Property Initializers (first class support in TypeScript)
 ```
 class MyComponent extends React.Component<Props, State> {
@@ -660,9 +660,11 @@ class MyComponent extends React.Component<Props, State> {
   state: State = {
     count: this.props.initialCount,
   };
+...
+}
 ```
 
-- how to best declare component handler functions?
+### - how to best declare component handler functions?
 > Don't use old-school class methods and function bind way, prefer to use Class Fields with arrow functions (first class support in TypeScript) 
 ```
 class MyComponent extends React.Component<Props, State> {
@@ -673,6 +675,8 @@ class MyComponent extends React.Component<Props, State> {
   componentDidMount() {
     console.log('Mounted!');
   }
+...
+}
 ```
 ---
 
