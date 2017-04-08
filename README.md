@@ -648,7 +648,7 @@ Related `ts-lint` rule: https://palantir.github.io/tslint/rules/interface-over-t
 
 ### - how to best declare component instance properties?
 > Don't use old-school React class constructors way, prefer to use Property Initializers (first class support in TypeScript)
-```
+```tsx
 class MyComponent extends React.Component<Props, State> {
   // default props using Property Initializers
   static defaultProps: Props = {
@@ -660,13 +660,13 @@ class MyComponent extends React.Component<Props, State> {
   state: State = {
     count: this.props.initialCount,
   };
-...
+  ...
 }
 ```
 
 ### - how to best declare component handler functions?
 > Don't use old-school class methods and function bind way, prefer to use Class Fields with arrow functions (first class support in TypeScript) 
-```
+```tsx
 class MyComponent extends React.Component<Props, State> {
 // handlers using Class Fields with arrow functions
   handleClick = () => this.setState({ count: this.state.count + 1});
@@ -675,7 +675,7 @@ class MyComponent extends React.Component<Props, State> {
   componentDidMount() {
     console.log('Mounted!');
   }
-...
+  ...
 }
 ```
 ---
