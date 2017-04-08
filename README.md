@@ -23,12 +23,14 @@ Set of guidelines and patterns teaching how to correctly use TypeScript to fully
   - [Redux Connected Component](#redux-connected-component)
 - [Ecosystem](#ecosystem)
   - [Async Flow with "redux-observable"](#async-flow-with-redux-observable)
-  - [State Selectors with "reselect"](#selectors-with-reselect)
+  - [Selectors with "reselect"](#selectors-with-reselect)
   - [Forms with "formstate"](#)
   - [Styles with "typestyle"](#)
 - [Extras](#extras)
-  - [Vendor Types Augumentation](#vendor-types-augmentation)
+  - [tsconfig.json](#tsconfigjson)
+  - [tslint.json](#tslintjson)
   - [Default and Named Module Exports](#default-and-named-module-exports)
+  - [Vendor Types Augumentation](#vendor-types-augmentation)
 - [FAQ](#faq)
 - [Project Examples](#project-examples)
 
@@ -597,20 +599,14 @@ export const store = createStore(
 
 # Extras
 
-### Vendor Types Augmentation
-> Augmenting missing autoFocus Prop on `Input` and `Button` components in `antd` npm package (https://ant.design/)
-```ts
-declare module '../node_modules/antd/lib/input/Input' {
-  export interface InputProps {
-    autoFocus?: boolean;
-  }
-}
+### tsconfig.json
+```json
+...
+```
 
-declare module '../node_modules/antd/lib/button/Button' {
-  export interface ButtonProps {
-    autoFocus?: boolean;
-  }
-}
+### tslint.json
+```json
+...
 ```
 
 ### Default and Named Module Exports
@@ -639,9 +635,33 @@ import Select from '../components/select';
 ...
 ```
 
+### Vendor Types Augmentation
+> Augmenting missing autoFocus Prop on `Input` and `Button` components in `antd` npm package (https://ant.design/)
+```ts
+declare module '../node_modules/antd/lib/input/Input' {
+  export interface InputProps {
+    autoFocus?: boolean;
+  }
+}
+
+declare module '../node_modules/antd/lib/button/Button' {
+  export interface ButtonProps {
+    autoFocus?: boolean;
+  }
+}
+```
+
 ---
 
 # FAQ
+
+### - how to install react & redux types?
+```
+// react
+npm i -D @types/react @types/react @types/react-dom @types/react-redux
+
+// redux has types included in it's own npm package, no need to install external declarations
+```
 
 ### - when to use `interface` and when `type` to behave consistently?
 > Use `type` when declaring simple object literal structs e.g. Component Props, Component State, Redux State, Redux Action.
