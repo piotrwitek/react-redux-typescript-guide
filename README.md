@@ -643,8 +643,8 @@ export const store = createStore(
 ```
 
 ### tslint.json
-> Recommended setup with all rules enabled by default (using preset: `tslint:all`).
-> Amended some options for better defaults and to align with regard to guideline requirements.
+> Recommended setup is to extend build-in preset `tslint:recommended` or `tslint:all` for more strict rules.
+> Amended some options for better defaults and to align with guideline goals.
 ```json
 {
   "extends": ["tslint:all"],
