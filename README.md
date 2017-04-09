@@ -600,7 +600,7 @@ export const store = createStore(
 # Extras
 
 ### tsconfig.json
-> Solid default setup for React with ES2016 support. Start from this as default and tweak more options if necessary.
+> Recommended setup for best benefits from type-checking, with support for JSX and ES2016 features.
 ```json
 {
   "compilerOptions": {
