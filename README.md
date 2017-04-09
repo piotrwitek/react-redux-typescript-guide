@@ -600,8 +600,45 @@ export const store = createStore(
 # Extras
 
 ### tsconfig.json
+> Solid default setup for React with ES2016 support. Start from this as default and tweak more options if necessary.
 ```json
-...
+{
+  "compilerOptions": {
+    "allowJs": false,
+    "declaration": false,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "forceConsistentCasingInFileNames": true,
+    "importHelpers": true,
+    "jsx": "react",
+    "lib": [
+      "dom",
+      "es2016",
+      "es2017.object"
+    ],
+    "module": "es2015",
+    "moduleResolution": "node",
+    "noEmit": true,
+    "noEmitHelpers": true,
+    "noEmitOnError": true,
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitAny": true,
+    "noImplicitReturns": true,
+    "noImplicitThis": true,
+    "outDir": "lib/",
+    "pretty": true,
+    "removeComments": true,
+    "sourceMap": true,
+    "strictNullChecks": true,
+    "target": "es5"
+  },
+  "include": [
+    "src/**/*"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}
 ```
 
 ### tslint.json
