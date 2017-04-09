@@ -1,5 +1,5 @@
 # React & Redux in TypeScript - Guidelines & Patterns
-Set of guidelines and patterns teaching how to correctly use TypeScript to fully leverage power from static typing when working with React & Redux ecosystem.
+Set of guidelines and patterns teaching how to correctly use TypeScript to fully leverage the power of static typing when working with React & Redux ecosystem.
 
 ### Relevant with TypeScript v2.2 (https://github.com/Microsoft/TypeScript/wiki/Roadmap)
 > powered by github :star: - [star it please](https://github.com/piotrwitek/react-redux-typescript-patterns/stargazers) to keep me motivated to maintain this repo with new TypeScript releases
@@ -601,6 +601,7 @@ export const store = createStore(
 
 ### tsconfig.json
 > Recommended setup for best benefits from type-checking, with support for JSX and ES2016 features.
+- this setup uses [`tslib`](https://www.npmjs.com/package/tslib) helpers to slim emitted modules (install with `npm i tslib` as prod dependency)
 ```json
 {
   "compilerOptions": {
@@ -616,6 +617,7 @@ export const store = createStore(
       "es2016",
       "es2017.object"
     ],
+    "target": "es5",
     "module": "es2015",
     "moduleResolution": "node",
     "noEmit": true,
@@ -625,15 +627,14 @@ export const store = createStore(
     "noImplicitAny": true,
     "noImplicitReturns": true,
     "noImplicitThis": true,
-    "outDir": "lib/",
+    "outDir": "out/",
     "pretty": true,
     "removeComments": true,
     "sourceMap": true,
-    "strictNullChecks": true,
-    "target": "es5"
+    "strictNullChecks": true
   },
   "include": [
-    "src/**/*"
+    "**/*"
   ],
   "exclude": [
     "node_modules"
