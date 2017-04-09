@@ -601,7 +601,7 @@ export const store = createStore(
 
 ### tsconfig.json
 > Recommended setup for best benefits from type-checking, with support for JSX and ES2016 features.
-> _this setup uses [`tslib`](https://www.npmjs.com/package/tslib) helpers to slim emitted modules (install with `npm i tslib` as prod dependency)_
+> - _(this setup uses [`tslib`](https://www.npmjs.com/package/tslib) to externalize ts-helpers from your modules, just add it as prod dependency with `npm i tslib`)_
 ```json
 {
   "compilerOptions": {
