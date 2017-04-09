@@ -601,7 +601,7 @@ export const store = createStore(
 
 ### tsconfig.json
 > Recommended setup for best benefits from type-checking, with support for JSX and ES2016 features.
-- this setup uses [`tslib`](https://www.npmjs.com/package/tslib) helpers to slim emitted modules (install with `npm i tslib` as prod dependency)
+> _this setup uses [`tslib`](https://www.npmjs.com/package/tslib) helpers to slim emitted modules (install with `npm i tslib` as prod dependency)_
 ```json
 {
   "compilerOptions": {
@@ -643,8 +643,40 @@ export const store = createStore(
 ```
 
 ### tslint.json
+> Recommended setup with all rules enabled by default (using preset: `tslint:all`).
+> Amended some options for better defaults and to align with regard to guideline requirements.
 ```json
-...
+{
+  "extends": ["tslint:all"],
+  "rules": {
+    "arrow-parens": false,
+    "arrow-return-shorthand": [false],
+    "comment-format": [true,"check-space"],
+    "import-blacklist": [true,"rxjs"],
+    "interface-over-type-literal": false,
+    "member-access": false,
+    "member-ordering": [true,{"order": "statics-first"}],
+    "newline-before-return": false,
+    "no-any": false,
+    "no-inferrable-types": [true],
+    "no-import-side-effect": [true,{"ignore-module": "^rxjs/"}],
+    "no-invalid-this": [true,"check-function-in-method"],
+    "no-null-keyword": false,
+    "no-require-imports": false,
+    "no-switch-case-fall-through": true,
+    "no-trailing-whitespace": true,
+    "no-unused-variable": [true,"react"],
+    "object-literal-sort-keys": false,
+    "only-arrow-functions": [true,"allow-declarations"],
+    "ordered-imports": [false],
+    "prefer-method-signature": false,
+    "prefer-template": [true,"allow-single-concat"],
+    "quotemark": [true,"single","jsx-double"],
+    "triple-equals": [true,"allow-null-check"],
+    "typedef": [true,"parameter","property-declaration","member-variable-declaration"],
+    "variable-name": [true,"ban-keywords","check-format","allow-pascal-case"]
+  }
+}
 ```
 
 ### Default and Named Module Exports
