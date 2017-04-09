@@ -695,9 +695,9 @@ declare module '../node_modules/antd/lib/button/Button' {
 ### - how to install react & redux types?
 ```
 // react
-npm i -D @types/react @types/react @types/react-dom @types/react-redux
+npm i -D @types/react @types/react-dom @types/react-redux
 
-// redux has types included in it's own npm package, no need to install external declarations
+// redux has types included in it's npm package, no need to use @types
 ```
 
 ### - when to use `interface` and when `type` to behave consistently?
