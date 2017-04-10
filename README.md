@@ -14,18 +14,17 @@ Set of guidelines and patterns teaching how to correctly use TypeScript to fully
   - [Class Component](#class-component)
   - [Stateless Component](#stateless-component)
   - [Higher-Order Component](#higher-order-component)
+  - [Redux Connected Component](#redux-connected-component)
 - [Redux](#redux)
   - [Actions](#actions)
   - [Reducers](#reducers)
+  - [Store types](#store-types)
   - [Create Store](#create-store)
-  - [Generating Action type](#generating-action-type)
-  - [Generating RootState type](#generating-rootstate-type)
-  - [Redux Connected Component](#redux-connected-component)
 - [Ecosystem](#ecosystem)
   - [Async Flow with "redux-observable"](#async-flow-with-redux-observable)
   - [Selectors with "reselect"](#selectors-with-reselect)
-  - [Forms with "formstate"]
-  - [Styles with "typestyle"]
+  - Forms with "formstate" WIP
+  - Styles with "typestyle" WIP
 - [Extras](#extras)
   - [tsconfig.json](#tsconfigjson)
   - [tslint.json](#tslintjson)
@@ -79,9 +78,7 @@ class MyComponent extends React.Component<Props, State> {
     const { children, initialCount, ...restProps } = this.props;
   
     return (
-      <div {...restProps}
-        onClick={this.handleClick}
-      >
+      <div {...restProps} onClick={this.handleClick} >
         Clicks: {this.state.count}
         <hr />
         {children}
@@ -178,13 +175,15 @@ export function withFormItem<GenericProps>(
         error, ...passThroughProps,
       } = props;
 
+      // filtering out empty decorator props in functional style
       const decoratorProps: DecoratorProps = Object.entries({
         label, labelCol, wrapperCol, required, help, validateStatus, colon,
       }).reduce((definedDecoratorProps: any, [key, value]) => {
         if (value !== undefined) { definedDecoratorProps[key] = value; }
         return definedDecoratorProps;
       }, {});
-
+      
+      // injecting additional props based on condition
       if (error) {
         decoratorProps.help = error;
         decoratorProps.validateStatus = 'error';
@@ -220,8 +219,7 @@ const
   Next Step
 </ButtonField>
 ...
-<InputFieldWithState {...formFieldLayout}
-  label="Type" required={true} autoFocus={true} 
+<InputFieldWithState {...formFieldLayout} label="Type" required={true} autoFocus={true} 
   fieldState={configurationTypeFieldState} error={configurationTypeFieldState.error}
 />
 ...
@@ -247,29 +245,28 @@ const
 ```tsx
 import { returntypeof } from 'react-redux-typescript';
 
-import { RootState } from '../../store';
-import { ActionCreators } from '../../store/currency-converter/reducer';
-import * as CurrencyRatesSelectors from '../../store/currency-rates/selectors';
+import { RootState } from '../../store/types';
+import { increaseCounter, changeBaseCurrency } from '../../store/action-creators';
+import { getCurrencies } from '../../store/state/currency-rates/selectors';
 
-const mapStateToProps = (state: RootState) => ({
-  counter: state.counter,
-  baseCurrency: state.baseCurrency,
-  currencies: CurrencyRatesSelectors.getCurrencies(state),
+const mapStateToProps = (rootState: RootState) => ({
+  counter: rootState.counter,
+  baseCurrency: rootState.baseCurrency,
+  currencies: getCurrencies(rootState),
 });
 const dispatchToProps = {
-  increaseCounter: ActionCreators.IncreaseCounter.create,
-  changeBaseCurrency: ActionCreators.ChangeBaseCurrency.create,
+  increaseCounter: increaseCounter,
+  changeBaseCurrency: changeBaseCurrency,
 };
 
 // Props types inferred from mapStateToProps & dispatchToProps
 const stateProps = returntypeof(mapStateToProps);
 type Props = typeof stateProps & typeof dispatchToProps;
-type State = {};
 
-class CurrencyConverterContainer extends React.Component<Props, State> {
+class CurrencyConverterContainer extends React.Component<Props, {}> {
   handleInputBlur = (ev: React.FocusEvent<HTMLInputElement>) => {
-    const parsedValue = parseInt(ev.currentTarget.value, 10); // string -> number
-    this.props.increaseCounter(parsedValue); // number
+    const intValue = parseInt(ev.currentTarget.value, 10);
+    this.props.increaseCounter(intValue); // number
   }
   
   handleSelectChange = (ev: React.ChangeEvent<HTMLSelectElement>) => {
@@ -281,17 +278,8 @@ class CurrencyConverterContainer extends React.Component<Props, State> {
     
     return (
       <section>
-        <input
-          type="text"
-          value={counter}
-          onBlur={handleInputBlur}
-          ...
-        />
-        <select
-          value={baseCurrency}
-          onChange={handleSelectChange}
-          ...
-        >
+        <input type="text" value={counter} onBlur={handleInputBlur} ... />
+        <select value={baseCurrency} onChange={handleSelectChange} ... >
           {currencies.map(currency =>
             <option key={currency}>{currency}</option>,
           )}
@@ -336,66 +324,48 @@ export const actionCreators = {
     type: INCREASE_COUNTER as typeof INCREASE_COUNTER,
   }),
   changeBaseCurrency: (payload: string) => ({
-    type: CHANGE_BASE_CURRENCY as typeof CHANGE_BASE_CURRENCY,
-    payload,
+    type: CHANGE_BASE_CURRENCY as typeof CHANGE_BASE_CURRENCY, payload,
   }),
 }
 
-// Action Type
-const actions = Object.values(actionCreators).map(returntypeof);
-export type Action = typeof actions[number]; // { type: "INCREASE_COUNTER" } | { type: "CHANGE_BASE_CURRENCY", payload: string }
-
-// Reducer                                                           vvvvvv
-export default function reducer(state: State = initialState, action: Action): State {
-  switch (action.type) {
-    case INCREASE_COUNTER:
-      state.counter = state.counter + 1; // no payload
-      break;
-    case CHANGE_BASE_CURRENCY:
-      state.baseCurrency = action.payload; // payload: string
-      break;
-...
-
 // Examples
 store.dispatch(actionCreators.increaseCounter(4)); // Error: Supplied parameters do not match any signature of call target. 
-store.dispatch(actionCreators.increaseCounter()); // { type: "INCREASE_COUNTER" }
+store.dispatch(actionCreators.increaseCounter()); // OK => { type: "INCREASE_COUNTER" }
 
 store.dispatch(actionCreators.changeBaseCurrency()); // Error: Supplied parameters do not match any signature of call target. 
-store.dispatch(actionCreators.changeBaseCurrency('USD')); // { type: "CHANGE_BASE_CURRENCY", payload: 'USD' }
-
+store.dispatch(actionCreators.changeBaseCurrency('USD')); // OK => { type: "CHANGE_BASE_CURRENCY", payload: 'USD' }
 ```
 
 ### DRY Solution
 This solution is using a simple helper factory function to automate creation of typed action creators. With little abstraction we can  reduce boilerplate and code repetition, also it is easier to re-use action creators in other layers:
 
-- using helper factory function to automate creation of typed action creators - recommended battle-tested `ActionCreator` from (https://github.com/piotrwitek/react-redux-typescript#helpers-v22)
+- using helper factory function to automate creation of typed action creators - recommended battle-tested `ActionCreator` from (https://github.com/piotrwitek/react-redux-typescript#helpers-v30)
 - reduced boilerplate and code repetition
 - easier to re-use in other layers like `redux-saga` or `redux-observable` modules (action creators have type property and also create function, no extra type constant)
 
 ```ts
-import { ActionCreator } from 'react-redux-typescript';
+import { createActionCreator } from 'react-redux-typescript';
 
-export const ActionCreators = {
-  IncreaseCounter: new ActionCreator<'IncreaseCounter', number>('IncreaseCounter'),
-  ChangeBaseCurrency: new ActionCreator<'ChangeBaseCurrency', string>('ChangeBaseCurrency'),
+// Action Creators
+export const actionCreators = {
+  increaseCounter: createActionCreator('INCREASE_COUNTER'), // { type: "INCREASE_COUNTER" }
+  changeBaseCurrency: createActionCreator('CHANGE_BASE_CURRENCY', (p: string) => p), // { type: "CHANGE_BASE_CURRENCY", payload: string }
+  changePersonName: createActionCreator('CHANGE_WITH_SELECTOR', (p: Person) => `${p.firstName} ${p.lastName}`),
 };
 
-store.dispatch(ActionCreators.IncreaseCounter.create(4)); // { type: "IncreaseCounter", payload: 4 }
-store.dispatch(ActionCreators.ChangeBaseCurrency.create('USD')); // { type: "ChangeBaseCurrency", payload: 'USD' }
+// Examples
+store.dispatch(actionCreators.increaseCounter(4)); // Error: Supplied parameters do not match any signature of call target. 
+store.dispatch(actionCreators.increaseCounter()); // OK => { type: "INCREASE_COUNTER" }
+actionCreators.increaseCounter.type // "INCREASE_COUNTER"
 
-// Action Types
-type Action = typeof ActionCreators[keyof typeof ActionCreators];
-// { type: "IncreaseCounter", payload: number } | { type: "ChangeBaseCurrency", payload: string }
+store.dispatch(actionCreators.changeBaseCurrency()); // Error: Supplied parameters do not match any signature of call target. 
+store.dispatch(actionCreators.changeBaseCurrency('USD')); // OK => { type: "CHANGE_BASE_CURRENCY", payload: 'USD' }
+actionCreators.changeBaseCurrency.type // "CHANGE_BASE_CURRENCY"
 
-// Reducer                                                           vvvvvv
-export default function reducer(state: State = initialState, action: Action): State {
-  if (action.type === ActionCreators.IncreaseCounter.type) {
-    state.counter = action.payload; // payload: number
-  }
-  else if (action.type === ActionCreators.ChangeBaseCurrency.type) {
-    state.baseCurrency = action.payload; // payload: string
-  }
-...
+store.dispatch(actionCreators.changeWithSelector()); // Error: Supplied parameters do not match any signature of call target. 
+const person = { id: 32, firstName: 'Piotr', lastName: 'Witek' };
+store.dispatch(actionCreators.changeWithSelector(person); // OK => { type: "CHANGE_WITH_SELECTOR", payload: 'Piotr Witek' }
+actionCreators.changeBaseCurrency.type // "CHANGE_WITH_SELECTOR"
 ```
 
 ---
@@ -412,9 +382,11 @@ export default function reducer(state: State = initialState, action: Action): St
 
 ```ts
 // State
+import { Action } from '../../types';
+
 export type State = {
-  readonly counter: number;
-  readonly baseCurrency: string;
+  readonly counter: number,
+  readonly baseCurrency: string,
 };
 export const initialState: State = {
   counter: 0;
@@ -426,10 +398,10 @@ export default function reducer(state: State = initialState, action: Action): St
   switch (action.type) {
     case INCREASE_COUNTER:
       state.counter = state.counter + 1; // no payload
-      break;
+      return state;
     case CHANGE_BASE_CURRENCY:
       state.baseCurrency = action.payload; // payload: string
-      break;
+      return state;
 
     default: return state;
   }
@@ -442,11 +414,13 @@ export default function reducer(state: State = initialState, action: Action): St
 - introducing optional static `type` property on `actionCreator` - advantage is to get rid of action types constants, as you can check type on action creator itself
 
 ```ts
+import { Action } from '../../types';
+
 // State
-export type State = {
-  readonly counter: number;
-  readonly baseCurrency: string;
-};
+export type State = Readonly<{
+  counter: number,
+  baseCurrency: string,
+}>;
 export const initialState: State = {
   counter: 0;
   baseCurrency: 'EUR';
@@ -460,7 +434,7 @@ export default function reducer(state: State = initialState, action: Action): St
     partialState = { counter: state.counter + 1 }; // no payload
   }
   if (action.type === actionCreators.changeBaseCurrency.type) {
-    partialState = { baseCurrency: action.payload }; // string
+    partialState = { baseCurrency: action.payload }; // payload: string
   }
 
   return partialState != null ? { ...state, ...partialState } : state;
@@ -469,95 +443,42 @@ export default function reducer(state: State = initialState, action: Action): St
 
 ---
 
-## Async Flow
-- `redux-observable` epics
+## Store Types
 
+- statically typed global action types - `Action`
+- should be imported in layers dealing with redux actions like: reducers, redux-sagas, redux-observables
 ```ts
-import 'rxjs/add/operator/map';
-import { combineEpics, Epic } from 'redux-observable';
+import { returntypeof } from 'react-redux-typescript';
+import * as actionCreators from './action-creators';
+const actions = Object.values(actionCreators).map(returntypeof);
 
-import { RootState, Action } from '../index'; // check store section
-import { actionCreators } from './reducer';
-import { convertValueWithBaseRateToTargetRate } from './utils';
-import * as currencyConverterSelectors from './selectors';
-import * as currencyRatesSelectors from '../currency-rates/selectors';
-
-// Epics - handling side effects of actions
-const changeCurrencyEpic: Epic<Action, RootState> = (action$, store) =>
-  action$.ofType(
-    actionCreators.changeBaseCurrency.type,
-    actionCreators.changeTargetCurrency.type,
-  ).map((action): Action => actionCreators.updateCurrencyConverterState({
-    targetValue: convertValueWithBaseRateToTargetRate(
-      currencyConverterSelectors.getBaseValue(store.getState()),
-      currencyRatesSelectors.getBaseCurrencyRate(store.getState()),
-      currencyRatesSelectors.getTargetCurrencyRate(store.getState()),
-    ),
-  }));
-
-const changeBaseValueEpic: Epic<Action, RootState> = (action$, store) =>
-  action$.ofType(actionCreators.changeBaseValue.type)
-    .map((action): Action => actionCreators.updateCurrencyConverterState({
-      targetValue: convertValueWithBaseRateToTargetRate(
-        action.payload,
-        currencyRatesSelectors.getBaseCurrencyRate(store.getState()),
-        currencyRatesSelectors.getTargetCurrencyRate(store.getState()),
-      ),
-    }));
-
-const changeTargetValueEpic: Epic<Action, RootState> = (action$, store) =>
-  action$.ofType(actionCreators.changeTargetValue.type)
-    .map((action): Action => actionCreators.updateCurrencyConverterState({
-      baseValue: convertValueWithBaseRateToTargetRate(
-        action.payload,
-        currencyRatesSelectors.getTargetCurrencyRate(store.getState()),
-        currencyRatesSelectors.getBaseCurrencyRate(store.getState()),
-      ),
-    }));
-
-export const epics = combineEpics(
-  changeCurrencyEpic, changeBaseValueEpic, changeTargetValueEpic,
-);
+export type Action = typeof actions[number];
 ```
 
----
-
-## Reselect Selectors
-- WIP
-
-```ts
-
-```
-
----
-
-## Store & RootState
-
+- statically typed global state tree - `RootState`
+- should be imported in connected components providing type safety to Redux `connect` function
 ```ts
 import {
-  default as currencyRatesReducer, State as CurrencyRatesState, Action as CurrencyRatesAction,
-} from './currency-rates/reducer';
+  reducer as currencyRatesReducer, State as CurrencyRatesState,
+} from './state/currency-rates/reducer';
 import {
-  default as currencyConverterReducer, State as CurrencyConverterState, Action as CurrencyConverterAction,
-} from './currency-converter/reducer';
+  reducer as currencyConverterReducer, State as CurrencyConverterState,
+} from './state/currency-converter/reducer';
 
-// - strongly typed application global state tree - `RootState`
-// - should be imported in connected components providing type safety to Redux `connect` function
 export type RootState = {
   currencyRates: CurrencyRatesState;
   currencyConverter: CurrencyConverterState;
 };
-
-// - strongly typed application global action types - `Action`
-// - should be imported in layers dealing with redux actions like: reducers, redux-sagas, redux-observables
-export type Action =
-  CurrencyRatesAction
-  | CurrencyConverterAction;
 ```
 
-- creating store - use `RootState` (in `combineReducers` or when providing preloaded state object) to set-up *state object type guard* to leverage strongly typed Store instance
+---
+
+## Create Store
+
+- creating store - use `RootState` (in `combineReducers` and when providing preloaded state object) to set-up **state object type guard** to leverage strongly typed Store instance
 ```ts
 import { combineReducers, createStore } from 'redux';
+import { RootState } from '../types';
 
 const rootReducer = combineReducers<RootState>({
   currencyRates: currencyRatesReducer,
@@ -592,6 +513,104 @@ export const store = createStore(
   rootReducer,
   recoverState(),
   composeEnhancers(applyMiddleware(epicMiddleware)),
+);
+```
+
+---
+
+# Ecosystem
+
+---
+
+## Async Flow with "redux-observable"
+
+```ts
+import 'rxjs/add/operator/map';
+import { combineEpics, Epic } from 'redux-observable';
+
+import { RootState, Action } from '../types'; // check store section
+import { actionCreators } from '../reducer';
+import { convertValueWithBaseRateToTargetRate } from './utils';
+import * as currencyConverterSelectors from './selectors';
+import * as currencyRatesSelectors from '../currency-rates/selectors';
+
+const changeCurrencyEpic: Epic<Action, RootState> = (action$, store) =>
+  action$.ofType(
+    actionCreators.changeBaseCurrency.type,
+    actionCreators.changeTargetCurrency.type,
+  ).map((action: any) => {
+    const value = convertValueWithBaseRateToTargetRate(
+      currencyConverterSelectors.getBaseValue(store.getState()),
+      currencyRatesSelectors.getBaseCurrencyRate(store.getState()),
+      currencyRatesSelectors.getTargetCurrencyRate(store.getState()),
+    );
+
+    return actionCreators.changeTargetValue(value);
+  });
+
+const changeBaseValueEpic: Epic<Action, RootState> = (action$, store) =>
+  action$.ofType(
+    actionCreators.changeBaseValue.type,
+  ).map((action: any) => {
+    const value = convertValueWithBaseRateToTargetRate(
+      action.payload,
+      currencyRatesSelectors.getBaseCurrencyRate(store.getState()),
+      currencyRatesSelectors.getTargetCurrencyRate(store.getState()),
+    );
+
+    return actionCreators.changeTargetValue(value);
+  });
+
+const changeTargetValueEpic: Epic<Action, RootState> = (action$, store) =>
+  action$.ofType(
+    actionCreators.changeTargetValue.type,
+  ).map((action: any) => {
+    const value = convertValueWithBaseRateToTargetRate(
+      action.payload,
+      currencyRatesSelectors.getTargetCurrencyRate(store.getState()),
+      currencyRatesSelectors.getBaseCurrencyRate(store.getState()),
+    );
+
+    return actionCreators.changeBaseValue(value);
+  });
+
+export const epics = combineEpics(
+  changeCurrencyEpic, changeBaseValueEpic, changeTargetValueEpic,
+);
+```
+
+---
+
+## Selectors with "reselect"
+
+```ts
+import { createSelector } from 'reselect';
+import { RootState } from '../types';
+
+const getCurrencyConverter = (state: RootState) => state.currencyConverter;
+const getCurrencyRates = (state: RootState) => state.currencyRates;
+
+export const getCurrencies = createSelector(
+  getCurrencyRates,
+  (currencyRates) => {
+    return Object.keys(currencyRates.rates).concat(currencyRates.base);
+  },
+);
+
+export const getBaseCurrencyRate = createSelector(
+  getCurrencyConverter, getCurrencyRates,
+  (currencyConverter, currencyRates) => {
+    const selectedBase = currencyConverter.baseCurrency;
+    return selectedBase === currencyRates.base
+      ? 1 : currencyRates.rates[selectedBase];
+  },
+);
+
+export const getTargetCurrencyRate = createSelector(
+  getCurrencyConverter, getCurrencyRates,
+  (currencyConverter, currencyRates) => {
+    return currencyRates.rates[currencyConverter.targetCurrency];
+  },
 );
 ```
 
@@ -681,7 +700,7 @@ export const store = createStore(
 
 ### Default and Named Module Exports
 > Most flexible solution is to use module folder pattern, because you can leverage both named and default import when you see fit.
-Also you'll achieve better encapsulation for internal structure/naming refactoring without breaking your consumer code:
+Using this solution you'll achieve better encapsulation for internal structure/naming refactoring without breaking your consumer code:
 ```ts
 // 1. in `components/` folder create component file (`select.tsx`) with default export:
 
