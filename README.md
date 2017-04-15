@@ -349,8 +349,8 @@ import { createActionCreator } from 'react-redux-typescript';
 // Action Creators
 export const actionCreators = {
   increaseCounter: createActionCreator('INCREASE_COUNTER'), // { type: "INCREASE_COUNTER" }
-  changeBaseCurrency: createActionCreator('CHANGE_BASE_CURRENCY', (p: string) => p), // { type: "CHANGE_BASE_CURRENCY", payload: string }
-  changePersonName: createActionCreator('CHANGE_WITH_SELECTOR', (p: Person) => `${p.firstName} ${p.lastName}`),
+  changeBaseCurrency: createActionCreator('CHANGE_BASE_CURRENCY', (payload: string) => payload), // { type: "CHANGE_BASE_CURRENCY", payload: string }
+  showNotification: createActionCreator('SHOW_NOTIFICATION', (payload: string, meta?: { type: string }) => payload),
 };
 
 // Examples
@@ -362,10 +362,10 @@ store.dispatch(actionCreators.changeBaseCurrency()); // Error: Supplied paramete
 store.dispatch(actionCreators.changeBaseCurrency('USD')); // OK => { type: "CHANGE_BASE_CURRENCY", payload: 'USD' }
 actionCreators.changeBaseCurrency.type // "CHANGE_BASE_CURRENCY"
 
-store.dispatch(actionCreators.changeWithSelector()); // Error: Supplied parameters do not match any signature of call target. 
-const person = { id: 32, firstName: 'Piotr', lastName: 'Witek' };
-store.dispatch(actionCreators.changeWithSelector(person); // OK => { type: "CHANGE_WITH_SELECTOR", payload: 'Piotr Witek' }
-actionCreators.changeBaseCurrency.type // "CHANGE_WITH_SELECTOR"
+store.dispatch(actionCreators.showNotification()); // Error: Supplied parameters do not match any signature of call target.
+store.dispatch(actionCreators.showNotification('Hello!')); // OK => { type: "SHOW_NOTIFICATION", payload: 'Hello!' }
+store.dispatch(actionCreators.showNotification('Hello!', { type: 'warning' })); // OK => { type: "SHOW_NOTIFICATION", payload: 'Hello!', meta: { type: 'warning' } }
+actionCreators.showNotification.type // "SHOW_NOTIFICATION"
 ```
 
 ---
