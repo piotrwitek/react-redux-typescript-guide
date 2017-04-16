@@ -1,5 +1,5 @@
 # React & Redux in TypeScript - Guidelines & Patterns
-Set of guidelines and patterns teaching how to correctly use TypeScript to fully leverage the power of static typing when working with React & Redux ecosystem.
+Set of guidelines and patterns showing how to leverage static typing when working with React & Redux.
 
 ### Relevant with TypeScript v2.2 (https://github.com/Microsoft/TypeScript/wiki/Roadmap)
 > powered by github :star: - [star it please](https://github.com/piotrwitek/react-redux-typescript-patterns/stargazers) to keep me motivated to maintain this repo with new TypeScript releases
@@ -371,9 +371,9 @@ actionCreators.showNotification.type // "SHOW_NOTIFICATION"
 ---
 
 ## Reducers
-- leveraging (Discriminated Union types)[https://www.typescriptlang.org/docs/handbook/advanced-types.html]
+- leveraging [Discriminated Union types](https://www.typescriptlang.org/docs/handbook/advanced-types.html)
   - to guard type and get intellisense of Action payload
-- using Partial from (Mapped types)[https://www.typescriptlang.org/docs/handbook/advanced-types.html]
+- using Partial from [Mapped types](https://www.typescriptlang.org/docs/handbook/advanced-types.html)
   - to guard type of `partialState` and restrict superfluous or mismatched props when merging with State
 
 ### Switch Style
