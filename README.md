@@ -662,11 +662,11 @@ export const getTargetCurrencyRate = createSelector(
 ```
 
 ### tslint.json
-> Recommended setup is to extend build-in preset `tslint:recommended` or `tslint:all` for more strict rules.
+> Recommended setup is to extend build-in preset `tslint:recommended` or `tslint:all` for even more strictness.
 > Amended some options for better defaults and to align with guideline goals.
 ```json
 {
-  "extends": ["tslint:all"],
+  "extends": ["tslint:recommended"],
   "rules": {
     "arrow-parens": false,
     "arrow-return-shorthand": [false],
