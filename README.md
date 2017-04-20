@@ -1,8 +1,8 @@
-# React & Redux in TypeScript - Guidelines & Patterns
-Set of guidelines and patterns showing how to leverage static typing when working with React & Redux.
+# React & Redux in TypeScript - Static Typing Guide
+A comprehensive guide to static typing "React & Redux" apps using TypeScript.
+> powered by github :star: - [star it please](https://github.com/piotrwitek/react-redux-typescript-patterns/stargazers) if you think it can be usefull and to keep me motivated to maintain this repo relevant with new TypeScript releases
 
 ### Relevant with TypeScript v2.2 (https://github.com/Microsoft/TypeScript/wiki/Roadmap)
-> powered by github :star: - [star it please](https://github.com/piotrwitek/react-redux-typescript-patterns/stargazers) to keep me motivated to maintain this repo with new TypeScript releases
 
 ### Goals:
 - Complete type safety, without failing to `any` type
