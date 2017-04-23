@@ -662,38 +662,39 @@ export const getTargetCurrencyRate = createSelector(
 ```
 
 ### tslint.json
-> Recommended setup is to extend build-in preset `tslint:recommended` or `tslint:all` for even more strictness.
-> Amended some options for better defaults and to align with guideline goals.
+> Recommended setup is to extend build-in preset `tslint:latest` (for all rules use `tslint:all`)  
+> Add tslint react rules: `npm i -D tslint-react` https://github.com/palantir/tslint-react  
+> Amended some extended defaults for more flexibility  
 ```json
 {
-  "extends": ["tslint:recommended"],
+  "extends": ["tslint:latest", "tslint-react"],
   "rules": {
     "arrow-parens": false,
     "arrow-return-shorthand": [false],
-    "comment-format": [true,"check-space"],
-    "import-blacklist": [true,"rxjs"],
+    "comment-format": [true, "check-space"],
+    "import-blacklist": [true, "rxjs"],
     "interface-over-type-literal": false,
     "member-access": false,
-    "member-ordering": [true,{"order": "statics-first"}],
+    "member-ordering": [true, {"order": "statics-first"}],
     "newline-before-return": false,
     "no-any": false,
     "no-inferrable-types": [true],
-    "no-import-side-effect": [true,{"ignore-module": "^rxjs/"}],
-    "no-invalid-this": [true,"check-function-in-method"],
+    "no-import-side-effect": [true, {"ignore-module": "^rxjs/"}],
+    "no-invalid-this": [true, "check-function-in-method"],
     "no-null-keyword": false,
     "no-require-imports": false,
     "no-switch-case-fall-through": true,
     "no-trailing-whitespace": true,
-    "no-unused-variable": [true,"react"],
+    "no-unused-variable": [true, "react"],
     "object-literal-sort-keys": false,
-    "only-arrow-functions": [true,"allow-declarations"],
+    "only-arrow-functions": [true, "allow-declarations"],
     "ordered-imports": [false],
     "prefer-method-signature": false,
-    "prefer-template": [true,"allow-single-concat"],
-    "quotemark": [true,"single","jsx-double"],
-    "triple-equals": [true,"allow-null-check"],
-    "typedef": [true,"parameter","property-declaration","member-variable-declaration"],
-    "variable-name": [true,"ban-keywords","check-format","allow-pascal-case"]
+    "prefer-template": [true, "allow-single-concat"],
+    "quotemark": [true, "single", "jsx-double"],
+    "triple-equals": [true, "allow-null-check"],
+    "typedef": [true,"parameter", "property-declaration", "member-variable-declaration"],
+    "variable-name": [true, "ban-keywords", "check-format", "allow-pascal-case"]
   }
 }
 ```
