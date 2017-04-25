@@ -534,7 +534,7 @@ import { convertValueWithBaseRateToTargetRate } from './utils';
 import * as currencyConverterSelectors from './selectors';
 import * as currencyRatesSelectors from '../currency-rates/selectors';
 
-const changeCurrencyEpic: Epic<Action, RootState> = (action$, store) =>
+const recalculateTargetValueOnCurrencyChange: Epic<Action, RootState> = (action$, store) =>
   action$.ofType(
     actionCreators.changeBaseCurrency.type,
     actionCreators.changeTargetCurrency.type,
@@ -544,11 +544,10 @@ const changeCurrencyEpic: Epic<Action, RootState> = (action$, store) =>
       currencyRatesSelectors.getBaseCurrencyRate(store.getState()),
       currencyRatesSelectors.getTargetCurrencyRate(store.getState()),
     );
-
-    return actionCreators.changeTargetValue(value);
+    return actionCreators.recalculateTargetValue(value);
   });
 
-const changeBaseValueEpic: Epic<Action, RootState> = (action$, store) =>
+const recalculateTargetValueOnBaseValueChange: Epic<Action, RootState> = (action$, store) =>
   action$.ofType(
     actionCreators.changeBaseValue.type,
   ).map((action: any) => {
@@ -557,11 +556,10 @@ const changeBaseValueEpic: Epic<Action, RootState> = (action$, store) =>
       currencyRatesSelectors.getBaseCurrencyRate(store.getState()),
       currencyRatesSelectors.getTargetCurrencyRate(store.getState()),
     );
-
-    return actionCreators.changeTargetValue(value);
+    return actionCreators.recalculateTargetValue(value);
   });
 
-const changeTargetValueEpic: Epic<Action, RootState> = (action$, store) =>
+const recalculateBaseValueOnTargetValueChange: Epic<Action, RootState> = (action$, store) =>
   action$.ofType(
     actionCreators.changeTargetValue.type,
   ).map((action: any) => {
@@ -570,12 +568,13 @@ const changeTargetValueEpic: Epic<Action, RootState> = (action$, store) =>
       currencyRatesSelectors.getTargetCurrencyRate(store.getState()),
       currencyRatesSelectors.getBaseCurrencyRate(store.getState()),
     );
-
-    return actionCreators.changeBaseValue(value);
+    return actionCreators.recalculateBaseValue(value);
   });
 
 export const epics = combineEpics(
-  changeCurrencyEpic, changeBaseValueEpic, changeTargetValueEpic,
+  recalculateTargetValueOnCurrencyChange,
+  recalculateTargetValueOnBaseValueChange,
+  recalculateBaseValueOnTargetValueChange,
 );
 ```
 
