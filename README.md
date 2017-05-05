@@ -643,7 +643,6 @@ export const getTargetCurrencyRate = createSelector(
     "target": "es5",
     "module": "es2015",
     "moduleResolution": "node",
-    "noEmit": true, // no emit in dev, only when bundling for prod, which is usually handled by bundlers like webpack / fuse-box / jspm
     "noEmitOnError": true,
     "noFallthroughCasesInSwitch": true,
     "noImplicitAny": true,
