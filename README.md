@@ -154,49 +154,56 @@ import * as React from 'react';
 import { Form } from 'antd';
 const FormItem = Form.Item;
 
-type DecoratorProps = {
-  error?: string,
-  label?: typeof FormItem.prototype.props.label,
-  labelCol?: typeof FormItem.prototype.props.labelCol,
-  wrapperCol?: typeof FormItem.prototype.props.wrapperCol,
-  required?: typeof FormItem.prototype.props.required,
-  help?: typeof FormItem.prototype.props.help,
-  validateStatus?: typeof FormItem.prototype.props.validateStatus,
-  colon?: typeof FormItem.prototype.props.colon,
+type BaseProps = {
 };
 
-export function withFormItem<GenericProps>(
-  WrappedComponent: React.StatelessComponent<GenericProps> | React.ComponentClass<GenericProps>,
+type HOCProps = FormItemProps & {
+  error?: string;
+};
+
+type FormItemProps = {
+  label?: typeof FormItem.prototype.props.label;
+  labelCol?: typeof FormItem.prototype.props.labelCol;
+  wrapperCol?: typeof FormItem.prototype.props.wrapperCol;
+  required?: typeof FormItem.prototype.props.required;
+  help?: typeof FormItem.prototype.props.help;
+  validateStatus?: typeof FormItem.prototype.props.validateStatus;
+  colon?: typeof FormItem.prototype.props.colon;
+};
+
+export function withFormItem<WrappedComponentProps extends BaseProps>(
+  WrappedComponent:
+    React.StatelessComponent<WrappedComponentProps> | React.ComponentClass<WrappedComponentProps>,
 ) {
-  const Decorator: React.StatelessComponent<DecoratorProps & GenericProps> =
-    (props: DecoratorProps) => {
+  const HOC: React.StatelessComponent<HOCProps & WrappedComponentProps> =
+    (props) => {
       const {
-       label, labelCol, wrapperCol, required, help, validateStatus, colon,
+        label, labelCol, wrapperCol, required, help, validateStatus, colon,
         error, ...passThroughProps,
-      } = props;
+      } = props as HOCProps;
 
       // filtering out empty decorator props in functional style
-      const decoratorProps: DecoratorProps = Object.entries({
+      const formItemProps: FormItemProps = Object.entries({
         label, labelCol, wrapperCol, required, help, validateStatus, colon,
-      }).reduce((definedDecoratorProps: any, [key, value]) => {
-        if (value !== undefined) { definedDecoratorProps[key] = value; }
-        return definedDecoratorProps;
+      }).reduce((definedProps: any, [key, value]) => {
+        if (value !== undefined) { definedProps[key] = value; }
+        return definedProps;
       }, {});
       
       // injecting additional props based on condition
       if (error) {
-        decoratorProps.help = error;
-        decoratorProps.validateStatus = 'error';
+        formItemProps.help = error;
+        formItemProps.validateStatus = 'error';
       }
 
       return (
-        <FormItem {...decoratorProps} hasFeedback={true} >
-          <WrappedComponent {...passThroughProps} />
+        <FormItem {...formItemProps} hasFeedback={true} >
+          <WrappedComponent {...passThroughProps as any} />
         </FormItem>
       );
     };
 
-  return Decorator;
+  return HOC;
 }
 ```
 
@@ -227,7 +234,7 @@ const
 // you could use functional libraries like ramda or lodash to better functional composition like:
 const
   InputFieldWithState = compose(withFormItem, withFieldStateInput)(Input);
-// NOTE: be aware that compose function need to have sound type declaration or you'll lose type inference 
+// NOTE: be aware that compose function need to have sound type declarations or you'll lose type inference
 ```
 
 ---
