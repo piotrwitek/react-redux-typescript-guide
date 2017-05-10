@@ -859,5 +859,5 @@ class MyComponent extends React.Component<Props, State> {
 
 # Project Examples
 
-https://github.com/piotrwitek/react-redux-typescript-starter-kit
-https://github.com/piotrwitek/react-redux-typescript-webpack-starter
+https://github.com/piotrwitek/react-redux-typescript-starter-kit  
+https://github.com/piotrwitek/react-redux-typescript-webpack-starter  
