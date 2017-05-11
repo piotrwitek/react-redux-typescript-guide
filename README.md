@@ -1,6 +1,6 @@
 # React & Redux in TypeScript - Static Typing Guide
 A comprehensive guide to static typing "React & Redux" apps using TypeScript.
-> powered by github :star: - [star it please](https://github.com/piotrwitek/react-redux-typescript-patterns/stargazers) if you think it can be usefull and to keep me motivated to maintain this repo relevant with new TypeScript releases
+> found it usefull, want some more? [give it a :star:](https://github.com/piotrwitek/react-redux-typescript-patterns/stargazers)
 
 ### Relevant with TypeScript v2.3 (https://github.com/Microsoft/TypeScript/wiki/Roadmap)
 
