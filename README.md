@@ -11,8 +11,8 @@ A comprehensive guide to static typing "React & Redux" apps using TypeScript.
 
 ### Table of Contents
 - [React](#react)
-  - [Class Component](#class-component)
   - [Stateless Component](#stateless-component)
+  - [Class Component](#class-component)
   - [Higher-Order Component](#higher-order-component)
   - [Redux Connected Component](#redux-connected-component)
 - [Redux](#redux)
@@ -39,59 +39,6 @@ A comprehensive guide to static typing "React & Redux" apps using TypeScript.
 
 ---
 
-## Class Component
-- class component boilerplate
-```tsx
-import * as React from 'react';
-
-type Props = {
-  className?: string,
-  style?: React.CSSProperties,
-  initialCount?: number,
-};
-
-type State = {
-  count: number,
-};
-
-class MyComponent extends React.Component<Props, State> {
-  // default props using Property Initializers
-  static defaultProps: Props = {
-    className: 'default-class',
-    initialCount: 0,
-  };
-  
-  // initial state using Property Initializers
-  state: State = {
-    count: this.props.initialCount,
-  };
-  
-  // handlers using Class Fields with arrow functions
-  handleClick = () => this.setState({ count: this.state.count + 1});
-  
-  // lifecycle methods should be declared as normal instance methods and it's fine
-  componentDidMount() {
-    console.log('Mounted!');
-  }
-  
-  render() {
-    const { children, initialCount, ...restProps } = this.props;
-  
-    return (
-      <div {...restProps} onClick={this.handleClick} >
-        Clicks: {this.state.count}
-        <hr />
-        {children}
-      </div>
-    );
-  }
-};
-
-export default MyComponent;
-```
-
----
-
 ## Stateless Component
 - stateless component boilerplate
 ```tsx
@@ -110,6 +57,59 @@ const MyComponent: React.StatelessComponent<Props> = (props) => {
     </div>
   );
 };
+
+export default MyComponent;
+```
+
+---
+
+## Class Component
+- class component boilerplate
+```tsx
+import * as React from 'react';
+
+type Props = {
+  className?: string,
+  style?: React.CSSProperties,
+  initialCount?: number,
+};
+
+type State = {
+  counter: number,
+};
+
+class MyComponent extends React.Component<Props, State> {
+  // default props using Property Initializers
+  static defaultProps: Partial<Props> = {
+    className: 'default-class',
+  };
+
+  // initial state using Property Initializers
+  state: State = {
+    counter: this.props.initialCount || 0,
+  };
+
+  // lifecycle methods should be declared as normal instance methods and it's fine
+  componentDidMount() {
+    // tslint:disable-next-line:no-console
+    console.log('Mounted!');
+  }
+
+  // handlers using Class Fields with arrow functions
+  increaseCounter = () => { this.setState({ counter: this.state.counter + 1 }); };
+
+  render() {
+    const { children, initialCount, ...restProps } = this.props;
+
+    return (
+      <div {...restProps} onClick={this.increaseCounter} >
+        Clicks: {this.state.counter}
+        <hr />
+        {children}
+      </div>
+    );
+  }
+}
 
 export default MyComponent;
 ```
@@ -812,19 +812,14 @@ declare module '../node_modules/antd/lib/button/Button' {
 // react
 npm i -D @types/react @types/react-dom @types/react-redux
 
-// redux has types included in it's npm package, no need to use @types
+// redux has types included in it's npm package - don't install from @types
 ```
 
-### - when to use `interface` and when `type` to behave consistently?
-> Use `type` when declaring simple object literal structs e.g. Component Props, Component State, Redux State, Redux Action.  
-In other cases it's more flexible to use `interface` over `type` because interfaces can be implemented, extended and merged.  
-Related `ts-lint` rule: https://palantir.github.io/tslint/rules/interface-over-type-literal/  
+### - should I still use React.PropTypes in TS?
+> No. In TypeScript it is unnecessary, when declaring Props and State types (refer to React components examples) you will get completely free intellisense and compile-time safety with static type checking, this way you'll be safe from runtime errors, not waste time on debugging and get an elegant way of describing component external API in your source code.  
 
-### - should I use React.PropTypes?
-> No. In TypeScript it is completely unnecessary, you will get a much better free type checking and intellisense at compile time when declaring a "generic type" for component: `React.Component<{ myProp: string }, { myState: number}>`, this way you'll never get any runtime errors and get elegant way of describing component external API.  
-
-### - how to best declare component instance properties?
-> Don't use old-school React class constructors way, prefer to use Property Initializers (first class support in TypeScript).  
+### - how to best initialize class instance or static properties?
+> Prefered modern style is to use class Property Initializers  
 ```tsx
 class MyComponent extends React.Component<Props, State> {
   // default props using Property Initializers
@@ -835,26 +830,26 @@ class MyComponent extends React.Component<Props, State> {
   
   // initial state using Property Initializers
   state: State = {
-    count: this.props.initialCount,
+    counter: this.props.initialCount,
   };
   ...
 }
 ```
 
 ### - how to best declare component handler functions?
-> Don't use old-school class methods and function bind way, prefer to use Class Fields with arrow functions (first class support in TypeScript)  
+> Prefered modern style is to use Class Fields with arrow functions  
 ```tsx
 class MyComponent extends React.Component<Props, State> {
 // handlers using Class Fields with arrow functions
-  handleClick = () => this.setState({ count: this.state.count + 1});
-
-// an exception are lifecycle methods should be declared as normal instance methods and it's fine, because we are extending React Component
-  componentDidMount() {
-    console.log('Mounted!');
-  }
+  increaseCounter = () => { this.setState({ counter: this.state.counter + 1}); };
   ...
 }
 ```
+
+### - is it better to use `interface` or `type` as convention?
+> In general this is a matter of taste, you can extend and implement type the same as an interface. The only major difference is that you will get a compiler error when extending and interface with incompatible properties, in contrary to merging types (&) operation, but otherwise they are synonymous.  
+Related `ts-lint` rule: https://palantir.github.io/tslint/rules/interface-over-type-literal/  
+
 ---
 
 # Project Examples
