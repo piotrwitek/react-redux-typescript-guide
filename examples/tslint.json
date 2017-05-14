@@ -1,0 +1,85 @@
+{
+  "extends": [
+    "tslint:latest",
+    "tslint-react"
+  ],
+  "rules": {
+    "arrow-parens": false,
+    "arrow-return-shorthand": [
+      false
+    ],
+    "comment-format": [
+      true,
+      "check-space"
+    ],
+    "import-blacklist": [
+      true,
+      "rxjs"
+    ],
+    "interface-over-type-literal": false,
+    "member-access": false,
+    "member-ordering": [
+      true,
+      {
+        "order": "statics-first"
+      }
+    ],
+    "newline-before-return": false,
+    "no-any": false,
+    "no-inferrable-types": [
+      true
+    ],
+    "no-import-side-effect": [
+      true,
+      {
+        "ignore-module": "^rxjs/"
+      }
+    ],
+    "no-invalid-this": [
+      true,
+      "check-function-in-method"
+    ],
+    "no-null-keyword": false,
+    "no-require-imports": false,
+    "no-switch-case-fall-through": true,
+    "no-trailing-whitespace": true,
+    "no-unused-variable": [
+      true,
+      "react"
+    ],
+    "object-literal-sort-keys": false,
+    "only-arrow-functions": [
+      true,
+      "allow-declarations"
+    ],
+    "ordered-imports": [
+      false
+    ],
+    "prefer-method-signature": false,
+    "prefer-template": [
+      true,
+      "allow-single-concat"
+    ],
+    "quotemark": [
+      true,
+      "single",
+      "jsx-double"
+    ],
+    "triple-equals": [
+      true,
+      "allow-null-check"
+    ],
+    "typedef": [
+      true,
+      "parameter",
+      "property-declaration",
+      "member-variable-declaration"
+    ],
+    "variable-name": [
+      true,
+      "ban-keywords",
+      "check-format",
+      "allow-pascal-case"
+    ]
+  }
+}
