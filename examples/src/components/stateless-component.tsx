@@ -5,7 +5,7 @@ export type StatelessComponentProps = {
   style?: React.CSSProperties,
   label: string,
   counter: number,
-  incrementCounter: () => void,
+  incrementCounter: () => any,
 };
 
 export const StatelessComponent: React.StatelessComponent<StatelessComponentProps> = (props) => {
@@ -21,8 +21,6 @@ export const StatelessComponent: React.StatelessComponent<StatelessComponentProp
           Increment
         </button>
       </div>
-      <hr />
-      {children}
     </div>
   );
 };

@@ -1,8 +1,8 @@
 import * as React from 'react';
-import { connect } from 'react-redux';
+import { connect, Dispatch } from 'react-redux';
 import { returntypeof } from 'react-redux-typescript';
 
-import { RootState } from '../types';
+import { RootState, RootAction } from '../types';
 import { actionCreators } from '../modules/converter';
 import { StatelessComponent, StatelessComponentProps } from '../components';
 
@@ -14,8 +14,8 @@ const mapStateToProps = (state: RootState, ownProps: ConnectedStatelessComponent
   counter: state.converter.counter,
 });
 
-const dispatchProps = {
-  increaseCounter: actionCreators.increaseCounter,
-};
+const mapDispatchToProps = (dispatch: Dispatch<RootAction>) => ({
+  incrementCounter: () => dispatch(actionCreators.increaseCounter()),
+});
 
-export const ConnectedStatelessComponent = connect(mapStateToProps, dispatchProps)(StatelessComponent);
+export const ConnectedStatelessComponent = connect(mapStateToProps, mapDispatchToProps)(StatelessComponent);

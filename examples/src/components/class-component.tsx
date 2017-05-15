@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-type Props = {
+export type ClassComponentProps = {
   className?: string,
   style?: React.CSSProperties,
   label: string,
@@ -11,9 +11,9 @@ type State = {
   counter: number,
 };
 
-export class ClassComponent extends React.Component<Props, State> {
+export class ClassComponent extends React.Component<ClassComponentProps, State> {
   // default props using Property Initializers
-  static defaultProps: Partial<Props> = {
+  static defaultProps: Partial<ClassComponentProps> = {
     className: 'default-class',
   };
 
@@ -43,8 +43,6 @@ export class ClassComponent extends React.Component<Props, State> {
             Increment
           </button>
         </div>
-        <hr />
-        {children}
       </div>
     );
   }
