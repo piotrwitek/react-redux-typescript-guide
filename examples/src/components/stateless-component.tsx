@@ -10,6 +10,7 @@ type Props = {
 
 export const StatelessComponent: React.StatelessComponent<Props> = (props) => {
   const { children, label, counter, incrementCounter, ...restProps } = props;
+
   const handleIncrement = () => { incrementCounter(); };
 
   return (
@@ -20,6 +21,7 @@ export const StatelessComponent: React.StatelessComponent<Props> = (props) => {
           Increment
         </button>
       </div>
+      <hr />
       {children}
     </div>
   );

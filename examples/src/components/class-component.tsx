@@ -3,8 +3,8 @@ import * as React from 'react';
 type Props = {
   className?: string,
   style?: React.CSSProperties,
+  label: string,
   initialCount?: number,
-  title: string,
 };
 
 type State = {
@@ -29,15 +29,20 @@ export class ClassComponent extends React.Component<Props, State> {
   }
 
   // handlers using Class Fields with arrow functions
-  increaseCounter = () => { this.setState({ counter: this.state.counter + 1 }); };
+  handleIncrement = () => { this.setState({ counter: this.state.counter + 1 }); };
 
   render() {
-    const { children, title, initialCount, ...restProps } = this.props;
+    const { children, label, initialCount, ...restProps } = this.props;
+    const { counter } = this.state;
 
     return (
-      <div {...restProps} onClick={this.increaseCounter} >
-        <h2>{title}</h2>
-        Clicks: {this.state.counter}
+      <div {...restProps} >
+        <div>
+          {label}: {counter}
+          <button type="button" onClick={this.handleIncrement}>
+            Increment
+          </button>
+        </div>
         <hr />
         {children}
       </div>

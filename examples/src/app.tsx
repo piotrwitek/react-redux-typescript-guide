@@ -1,9 +1,12 @@
 import * as React from 'react';
 import { render } from 'react-dom';
 
-import { ConnectedComponent } from './containers';
+import { StatelessComponent, ClassComponent } from './components';
+import { ConnectedStatelessComponent } from './containers';
 
-render(
-  <ConnectedComponent label="Primary" />,
-  document.getElementById('app'),
+export const App = (
+  <div>
+    <ClassComponent label="ClassComponent" initialCount={10} />
+    <ConnectedStatelessComponent label="ConnectedStatelessComponent" />
+  </div>
 );

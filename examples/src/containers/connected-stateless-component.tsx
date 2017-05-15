@@ -18,4 +18,4 @@ const dispatchProps = {
   increaseCounter: actionCreators.increaseCounter,
 };
 
-export const ConnectedComponent = connect(mapStateToProps, dispatchProps)(StatelessComponent);
+export const ConnectedStatelessComponent = connect(mapStateToProps, dispatchProps)(StatelessComponent);

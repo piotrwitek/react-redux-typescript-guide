@@ -1,8 +1,14 @@
 {
+  "name": "react-redux-typescript-guide",
+  "version": "1.0.0",
+  "author": "Piotr Witek <piotrek.witek@gmail.com> (http://piotrwitek.github.io/)",
+  "repository": "https://github.com/piotrwitek/react-redux-typescript-guide.git",
+  "license": "MIT",
   "scripts": {
     "rei": "rm -rf node_modules && yarn install",
     "clear": "rm -rf out",
     "build": "npm run clear && tsc -p ./",
+    "check": "npm run tsc & npm run lint",
     "tsc": "tsc -p ./ --noEmit",
     "lint": "tslint -p ./"
   },
