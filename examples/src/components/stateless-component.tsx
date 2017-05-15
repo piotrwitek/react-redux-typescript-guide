@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-type Props = {
+export type StatelessComponentProps = {
   className?: string,
   style?: React.CSSProperties,
   label: string,
@@ -8,7 +8,7 @@ type Props = {
   incrementCounter: () => void,
 };
 
-export const StatelessComponent: React.StatelessComponent<Props> = (props) => {
+export const StatelessComponent: React.StatelessComponent<StatelessComponentProps> = (props) => {
   const { children, label, counter, incrementCounter, ...restProps } = props;
 
   const handleIncrement = () => { incrementCounter(); };

@@ -4,13 +4,13 @@ import { returntypeof } from 'react-redux-typescript';
 
 import { RootState } from '../types';
 import { actionCreators } from '../modules/converter';
-import { StatelessComponent } from '../components';
+import { StatelessComponent, StatelessComponentProps } from '../components';
 
-type OwnProps = {
-  label: string,
+type ConnectedStatelessComponentProps = {
+  label: StatelessComponentProps['label'],
 };
 
-const mapStateToProps = (state: RootState, ownProps: OwnProps) => ({
+const mapStateToProps = (state: RootState, ownProps: ConnectedStatelessComponentProps) => ({
   counter: state.converter.counter,
 });
 
