@@ -2,19 +2,22 @@
   "scripts": {
     "rei": "rm -rf node_modules && yarn install",
     "clear": "rm -rf out",
-    "build": "npm run clean && tsc -p ./",
+    "build": "npm run clear && tsc -p ./",
     "tsc": "tsc -p ./ --noEmit",
     "lint": "tslint -p ./"
   },
   "dependencies": {
     "react": "^15.5.4",
     "react-dom": "^15.5.4",
+    "react-redux": "^5.0.4",
     "react-redux-typescript": "^2.3.0",
+    "redux": "^3.6.0",
     "tslib": "^1.7.0"
   },
   "devDependencies": {
     "@types/react": "^15.0.24",
     "@types/react-dom": "^15.5.0",
+    "@types/react-redux": "^4.4.40",
     "tslint": "^5.2.0",
     "tslint-react": "^3.0.0",
     "typescript": "^2.3.2"
