@@ -47,5 +47,3 @@ export class ClassComponent extends React.Component<ClassComponentProps, State> 
     );
   }
 }
-
-export default ClassComponent;

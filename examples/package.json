@@ -5,10 +5,12 @@
   "repository": "https://github.com/piotrwitek/react-redux-typescript-guide.git",
   "license": "MIT",
   "scripts": {
-    "rei": "rm -rf node_modules && yarn install",
-    "clear": "rm -rf out",
-    "build": "npm run clear && tsc -p ./",
-    "check": "npm run tsc & npm run lint",
+    "prereinstall": "rm -rf node_modules",
+    "reinstall": "yarn install",
+    "prebuild": "rm -rf out",
+    "build": "tsc -p ./",
+    "pretest": "npm run tsc & npm run lint",
+    "test": "echo \"Don't worry about tests yet!\"",
     "tsc": "tsc -p ./ --noEmit",
     "lint": "tslint -p ./"
   },

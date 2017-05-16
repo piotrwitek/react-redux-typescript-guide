@@ -24,5 +24,3 @@ export const StatelessComponent: React.StatelessComponent<StatelessComponentProp
     </div>
   );
 };
-
-export default StatelessComponent;
