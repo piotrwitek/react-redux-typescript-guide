@@ -846,8 +846,8 @@ class MyComponent extends React.Component<Props, State> {
 }
 ```
 
-### - is it better to use `interface` or `type` as convention?
-> In general this is a matter of taste, you can extend and implement type the same as an interface. The only major difference is that you will get a compiler error when extending and interface with incompatible properties, in contrary to merging types (&) operation, but otherwise they are synonymous.  
+### - differences between `interface` declarations and `type` aliases
+> From practical point of view `interface` types will use it's identity when showing compiler errors, while `type` aliases will be always unwinded to show all the nested types it consists of. This can be too noisy when reading compiler errors and I like to leverage this distinction to hide some not important type details in reported type errors  
 Related `ts-lint` rule: https://palantir.github.io/tslint/rules/interface-over-type-literal/  
 
 ---
