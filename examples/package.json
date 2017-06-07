@@ -12,22 +12,30 @@
     "pretest": "npm run tsc & npm run lint",
     "test": "echo \"Don't worry about tests yet!\"",
     "tsc": "tsc -p ./ --noEmit",
+    "tsc:watch": "tsc -p ./ --noEmit -w",
     "lint": "tslint -p ./"
   },
   "dependencies": {
+    "axios": "^0.16.2",
     "react": "^15.5.4",
     "react-dom": "^15.5.4",
     "react-redux": "^5.0.4",
     "react-redux-typescript": "^2.3.0",
     "redux": "^3.6.0",
-    "tslib": "^1.7.0"
+    "redux-observable": "^0.14.1",
+    "reselect": "^3.0.1",
+    "rxjs": "^5.4.0",
+    "tslib": "^1.7.0",
+    "uuid": "^3.0.1"
   },
   "devDependencies": {
-    "@types/react": "^15.0.24",
+    "@types/node": "^7.0.29",
+    "@types/react": "^15.0.27",
     "@types/react-dom": "^15.5.0",
-    "@types/react-redux": "^4.4.40",
-    "tslint": "^5.2.0",
+    "@types/react-redux": "^4.4.42",
+    "@types/uuid": "^3.0.0",
+    "tslint": "^5.4.3",
     "tslint-react": "^3.0.0",
-    "typescript": "^2.3.2"
+    "typescript": "^2.3.4"
   }
 }

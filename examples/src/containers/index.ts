@@ -1,1 +1,1 @@
-export * from './connected-stateless-component';
+export * from './home';

@@ -1,6 +1,16 @@
 import * as React from 'react';
 import { render } from 'react-dom';
+import { Provider } from 'react-redux';
 
-import { App } from './app';
+import store from './store';
+import {
+  Home,
+} from './containers';
 
-render(App, document.getElementById('app'));
+const Root = (
+  <Provider store={store}>
+    <Home />
+  </Provider>
+);
+
+render(Root, document.getElementById('root'));

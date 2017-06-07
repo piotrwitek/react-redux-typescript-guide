@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-export type ClassComponentProps = {
+export type ClassCounterProps = {
   className?: string,
   style?: React.CSSProperties,
   label: string,
@@ -11,9 +11,9 @@ type State = {
   counter: number,
 };
 
-export class ClassComponent extends React.Component<ClassComponentProps, State> {
+export class ClassCounter extends React.Component<ClassCounterProps, State> {
   // default props using Property Initializers
-  static defaultProps: Partial<ClassComponentProps> = {
+  static defaultProps: Partial<ClassCounterProps> = {
     className: 'default-class',
   };
 
@@ -23,9 +23,10 @@ export class ClassComponent extends React.Component<ClassComponentProps, State> 
   };
 
   // lifecycle methods should be declared as normal instance methods and it's fine
-  componentDidMount() {
-    // tslint:disable-next-line:no-console
-    console.log('Mounted!');
+  componentWillReceiveProps({ initialCount }: ClassCounterProps) {
+    if (initialCount && initialCount !== this.props.initialCount) {
+      this.setState({ counter: initialCount });
+    }
   }
 
   // handlers using Class Fields with arrow functions
@@ -36,13 +37,11 @@ export class ClassComponent extends React.Component<ClassComponentProps, State> 
     const { counter } = this.state;
 
     return (
-      <div {...restProps} >
-        <div>
-          {label}: {counter}
-          <button type="button" onClick={this.handleIncrement}>
-            Increment
-          </button>
-        </div>
+      <div {...restProps}>
+        {label}: {counter}
+        <button type="button" onClick={this.handleIncrement}>
+          Increment
+        </button>
       </div>
     );
   }
