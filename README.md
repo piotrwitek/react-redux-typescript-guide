@@ -4,6 +4,17 @@ A comprehensive guide to static typing "React & Redux" apps using TypeScript.
 
 ### Relevant with TypeScript v2.3 (https://github.com/Microsoft/TypeScript/wiki/Roadmap)
 
+### Introduction
+This guide is aimed for strict setup of TypeScript compiler which will provide most complete type safety and best DX.
+With a little bit of effort by adding explicit type annotations where necessary and most of the time leveraging smart [Type Inference](https://www.typescriptlang.org/docs/handbook/type-inference.html), what we will get is:
+- refactoring capabilities with the power equal to strongly typed languages (not "stringly" typed like Webstorm IDE)  
+- precise insight of the impact our changes will have on the entire codebase (by showing all the references in the codebase for any given piece of code)  
+
+This power will make the process of improving your codebase by refactoring, minimizing abstractions levels and cleaning unused code much simpler, and give you confidence that you will not break any working production code.
+
+>**NB:** This setup will give the most benefit if you are working on rapidly changing project and cannot afford writing unit tests (because of the cost of updating them constantly). I successfully benefit from this setup without any single unit-tests on a decent size React/Redux SPA Application and zero production exceptions. The only possible exception source is network, (like failed API calls) which are easily handled.  
+Furthermore by providing Interface declarations describing your API contracts you'll be safe from all possible `null` / `undefined` exceptions coming from API responses.  
+
 ### Goals:
 - Complete type safety, without failing to `any` type
 - Minimize amount of manually typing annotations by leveraging [Type Inference](https://www.typescriptlang.org/docs/handbook/type-inference.html)
