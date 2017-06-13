@@ -181,7 +181,7 @@ const users = [{
 ReactDOM.render(
   <UserList
     dataSource={users}
-    itemRenderer={item => <UserItem dataSource={item} />}
+    itemRenderer={(item) => <UserItem key={item.id} dataSource={item} />} // <- notice that "item" has inferred "IUser" type
   >    
   </UserList>
 );
