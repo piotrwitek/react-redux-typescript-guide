@@ -25,6 +25,7 @@ Furthermore by providing Interface declarations describing your API contracts yo
 - [React](#react)
   - [Stateless Component](#stateless-component)
   - [Class Component](#class-component)
+  - [Generic Component](#generic-component)
   - [Higher-Order Component](#higher-order-component)
   - [Redux Connected Component](#redux-connected-component)
 - [Redux](#redux)
@@ -124,6 +125,67 @@ class MyComponent extends React.Component<Props, State> {
 }
 
 export default MyComponent;
+```
+
+---
+
+## Generic Component
+- generic component boilerplate
+```tsx
+type GenericListProps<T> = {
+  dataSource: T[],
+  itemRenderer: (item: T) => JSX.Element,
+};
+
+class GenericList<T> extends React.Component<GenericListProps<T>, {}> {
+  render() {
+    const { dataSource, itemRenderer } = this.props;
+
+    return (
+      <div>
+        {dataSource.map(itemRenderer)}      
+      </div>
+    );
+  }
+}
+```
+
+```tsx
+interface IUser {
+  id: string,
+  name: string,
+}
+
+type UserItemProps = {
+  dataSource: IUser,
+}; 
+
+cosnt UserItem: React.StatelessComponent<UserItemProps> = ({id, name}) => {
+  return (
+    <div>
+      <b>{name}</b>
+      <small>({id})</small>
+    </div>
+  );
+}
+```
+
+```tsx
+const UserList = class extends Table<IUser> { };
+
+const users = [{
+  id: 'uuidv4',
+  name: 'Dude',
+}];
+
+ReactDOM.render(
+  <UserList
+    dataSource={users}
+    itemRenderer={item => <UserItem dataSource={item} />}
+  >    
+  </UserList>
+);
+
 ```
 
 ---
