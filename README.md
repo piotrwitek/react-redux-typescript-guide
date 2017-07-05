@@ -864,15 +864,20 @@ import Select from '../components/select';
 ### Vendor Types Augmentation
 > Augmenting missing autoFocus Prop on `Input` and `Button` components in `antd` npm package (https://ant.design/).  
 ```ts
+// using relative import resolution
 declare module '../node_modules/antd/lib/input/Input' {
   export interface InputProps {
     autoFocus?: boolean;
   }
 }
 
-declare module '../node_modules/antd/lib/button/Button' {
-  export interface ButtonProps {
-    autoFocus?: boolean;
+// using node module resolution
+import { Operator } from 'rxjs/Operator';
+import { Observable } from 'rxjs/Observable';
+
+declare module 'rxjs/Subject' {
+  interface Subject<T> {
+    lift<R>(operator: Operator<T, R>): Observable<R>;
   }
 }
 ```
