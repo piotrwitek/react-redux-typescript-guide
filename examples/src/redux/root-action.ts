@@ -1,8 +1,12 @@
 // RootActions
-import { IAction as ITodosAction } from '../modules/todos';
+import { IAction as ICountersAction } from '@src/redux/counters';
+import { IAction as ITodosAction } from '@src/redux/todos';
+import { IAction as IToastsAction } from '@src/redux/toasts';
 
 export type IRootAction =
-  ITodosAction;
+  | ICountersAction
+  | ITodosAction
+  | IToastsAction;
 
 // import { returntypeof } from 'react-redux-typescript';
 

@@ -1,10 +1,31 @@
 import * as React from 'react';
 
-import { ConnectedStatelessCounter, ClassCounter } from '../components';
+import {
+  SFCCounter,
+  SFCCounterConnected,
+  SFCCounterConnectedConcise,
+  StatefulCounter,
+} from '../components';
+
+let count = 0;
+const increment = () => { count++; };
 
 export const Home = () => (
   <section>
-    <ClassCounter label="ClassCounter" initialCount={10} />
-    <ConnectedStatelessCounter label="ConnectedStatelessCounter" />
+    <SFCCounter
+      label="StatelessCounter"
+      count={count}
+      onIncrement={increment}
+    />
+    <SFCCounterConnected
+      label="ConnectedStatelessCounter"
+    />
+    <SFCCounterConnectedConcise
+      label="ConnectedStatelessCounter" // error without -> <link>
+    />
+    <StatefulCounter
+      label="ClassCounter"
+      initialCount={10}
+    />
   </section>
 );

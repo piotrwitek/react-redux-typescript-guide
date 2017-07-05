@@ -37,7 +37,7 @@ export class User implements IUser {
   }
 
   getFullName(): string {
-    return this.firstName + ' ' + this.lastName;
+    return `${this.firstName} ${this.lastName}`;
   }
 
   toDTO(): IUserDTO {

@@ -1,7 +1,7 @@
 import { combineEpics } from 'redux-observable';
 
-import { epics as todos } from './todos/epics';
+import { epics as toasts } from './toasts/epics';
 
 export const rootEpic = combineEpics(
-  todos,
+  toasts,
 );
