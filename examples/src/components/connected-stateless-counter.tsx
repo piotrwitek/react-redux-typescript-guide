@@ -4,23 +4,27 @@ import { connect } from 'react-redux';
 import { returntypeof } from 'react-redux-typescript';
 
 import { IRootState, Dispatch } from '../modules';
-import { actionCreators } from '../modules/converter';
+import { actionCreators } from '../modules/todos';
 import { StatelessCounter, IStatelessCounterProps } from '../components';
 
-type ConnectedStatelessCounterProps =
-  Pick<IStatelessCounterProps, 'label'>;
-
-const mapStateToProps = (state: IRootState, ownProps: ConnectedStatelessCounterProps) => ({
-  counter: state.converter.counter,
+const mapStateToProps = (state: IRootState, ownProps: IStatelessCounterProps) => ({
+  counter: state.converter.records,
   label: ownProps.label,
 });
+const returnOfStateProps = returntypeof(mapStateToProps);
 
 const mapDispatchToProps = (dispatch: Dispatch) => bindActionCreators({
   incrementCounter: actionCreators.addTodo,
 }, dispatch);
+const returnOfDispatchProps = returntypeof(mapDispatchToProps);
 
-const stateProps = returntypeof(mapStateToProps);
-const dispatchProps = returntypeof(mapDispatchToProps);
-const checkProps: IStatelessCounterProps = { ...stateProps, ...dispatchProps };
+const _noOp: IStatelessCounterProps = {
+  ...returnOfStateProps,
+  ...returnOfDispatchProps,
+};
 
-export const ConnectedStatelessCounter = connect(mapStateToProps, mapDispatchToProps)(StatelessCounter);
+type RestProps =
+  Pick<IStatelessCounterProps, 'label'>;
+
+export const ConnectedStatelessCounter: React.ComponentClass<RestProps>
+  = connect(mapStateToProps, mapDispatchToProps)(StatelessCounter);

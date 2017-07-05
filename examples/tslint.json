@@ -4,6 +4,7 @@
     "tslint-react"
   ],
   "rules": {
+    "arrow-parens": false,
     "arrow-return-shorthand": [
       false
     ],
