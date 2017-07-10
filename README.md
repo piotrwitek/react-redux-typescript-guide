@@ -2,7 +2,8 @@
 A comprehensive guide to static typing "React & Redux" apps using TypeScript.
 > found it usefull, want some more? [give it a :star:](https://github.com/piotrwitek/react-redux-typescript-patterns/stargazers)
 
-### Relevant with TypeScript v2.3 (https://github.com/Microsoft/TypeScript/wiki/Roadmap)
+### Working with TypeScript v2.3 (https://github.com/Microsoft/TypeScript/wiki/Roadmap)
+### TypeScript v2.4 - Work in progress!
 
 ### Introduction
 This guide is aimed for strict setup of TypeScript compiler which will provide most complete type safety and best DX.
@@ -26,8 +27,9 @@ Furthermore by providing Interface declarations describing your API contracts yo
   - [Stateless Component](#stateless-component)
   - [Class Component](#class-component)
   - [Generic Component](#generic-component)
+  - [Connected Container with OwnProps](#connected-container-with-ownprops)
+  - [Connected Container without OwnProps using Type Inference](#connected-container-without-ownprops-using-type-inference)
   - [Higher-Order Component](#higher-order-component)
-  - [Redux Connected Component](#redux-connected-component)
 - [Redux](#redux)
   - [Actions](#actions)
   - [Reducers](#reducers)
@@ -190,6 +192,116 @@ ReactDOM.render(
 
 ---
 
+## Connected Container with OwnProps
+```tsx
+import * as React from 'react';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { returntypeof } from 'react-redux-typescript';
+
+import { RootState, Dispatch } from '../../modules/';
+import { incrementCounter } from '../../modules/counter/action-creators';
+import { getCounter } from '../../modules/counter/selectors';
+import { LABELS } from '../../dictionaries';
+
+type Props = {
+  title?: string;
+  counter: number;
+  incrementCounter: () => void;
+}
+
+class CounterContainer extends React.Component<Props, {}> {
+  handleIncrement: React.MouseEventHandler<HTMLInputElement> = (ev) => {
+    this.props.incrementCounter();
+  }
+  
+  render() {
+    const { counter, title = LABELS.COUNTER_TITLE } = this.props;
+    
+    return (
+      <section>
+        <h2>{title}</h2>
+        <input type="number" value={counter} />
+        <button onClick={this.handleIncrement}>Increment</button>
+        ...
+      </section>
+    );
+  }
+}
+
+// Connected Type
+type OwnProps =
+  Pick<Props, 'title'>;
+
+const mapStateToProps = (rootState: RootState, ownProps: OwnProps) => ({
+  counter: getCounter(rootState),
+});
+const mapDispatchToProps = (dispatch: Dispatch) => bindActionCreators({
+  incrementCounter: incrementCounter,
+}, dispatch);
+
+const Connected = connect(mapStateToProps, mapDispatchToProps)(CounterContainer);
+export default Connected;
+```
+
+---
+
+## Connected Container without OwnProps using Type Inference
+> NOTE: type inference in `connect` function from `react-redux` doesn't provide complete type safety and will not correctly infer resulting Props interface
+
+> This is something I'm trying to improve, please come back later or contribute if have a better solution...
+
+- This solution uses type inference to get Props types from `mapStateToProps` & `mapDispatchToProps` functions
+- Minimise manual effort to declare and maintain Props types injected from `connect` helper function
+- `returntypeof()` helper function - using smart type inference and generics we can to get the return type of expression (TypeScript does not yet support this feature - [read more](https://github.com/piotrwitek/react-redux-typescript#returntypeof-polyfill))
+
+```tsx
+import * as React from 'react';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { returntypeof } from 'react-redux-typescript';
+
+import { RootState, Dispatch } from '../../modules/';
+import { incrementCounter } from '../../modules/counter/action-creators';
+import { getCounter } from '../../modules/counter/selectors';
+
+const mapStateToProps = (rootState: RootState) => ({
+  counter: getCounter(rootState),
+});
+const mapDispatchToProps = (dispatch: Dispatch) => bindActionCreators({
+  incrementCounter: incrementCounter,
+}, dispatch);
+
+// Props types inferred from mapStateToProps & dispatchToProps
+const stateProps = returntypeof(mapStateToProps);
+const dispatchProps = returntypeof(mapDispatchToProps);
+
+type Props = typeof stateProps & typeof dispatchProps;
+
+class CounterContainer extends React.Component<Props, {}> {
+  handleIncrement: React.MouseEventHandler<HTMLInputElement> = (ev) => {
+    this.props.incrementCounter();
+  }
+  
+  render() {
+    const { counter } = this.props;
+    
+    return (
+      <section>
+        <input type="number" value={counter} />
+        <button onClick={this.handleIncrement}>Increment</button>
+        ...
+      </section>
+    );
+  }
+}
+
+const Connected = connect(mapStateToProps, mapDispatchToProps)(CounterContainer);
+export default Connected;
+```
+
+---
+
 ## Higher-Order Component
 - wrap and decorate input Component returning a new Component
 - new Component will inherit Props interface through composition from input Component extended with Props of `HOC`
@@ -310,70 +422,6 @@ const
   InputFieldWithState = compose(withFormItem, withFieldStateInput)(Input);
 // NOTE: be aware that compose function need to have sound type declarations or you'll lose type inference
 ```
-
----
-
-## Redux Connected Component
-> NOTE: type inference in `connect` function type declaration doesn't provide complete type safety and will not leverage Type Inference to automatically calculate resulting Props interface as in [`Higher-Order Component`](#higher-order-component) example above
-
-> This is something I'm trying to investigate so below solution can be improved even further, please come back later or contribute if have a better solution...
-
-- This solution uses type inference to get Props types from `mapStateToProps` function
-- Minimise manual effort to declare and maintain Props types injected from `connect` helper function
-- using `returntypeof()` helper function, because TypeScript does not support this feature yet (https://github.com/piotrwitek/react-redux-typescript#returntypeof-polyfill)
-- Real project example: https://github.com/piotrwitek/react-redux-typescript-starter-kit/blob/ef2cf6b5a2e71c55e18ed1e250b8f7cadea8f965/src/containers/currency-converter-container/index.tsx
-
-```tsx
-import { returntypeof } from 'react-redux-typescript';
-
-import { RootState } from '../../store/types';
-import { increaseCounter, changeBaseCurrency } from '../../store/action-creators';
-import { getCurrencies } from '../../store/state/currency-rates/selectors';
-
-const mapStateToProps = (rootState: RootState) => ({
-  counter: rootState.counter,
-  baseCurrency: rootState.baseCurrency,
-  currencies: getCurrencies(rootState),
-});
-const dispatchToProps = {
-  increaseCounter: increaseCounter,
-  changeBaseCurrency: changeBaseCurrency,
-};
-
-// Props types inferred from mapStateToProps & dispatchToProps
-const stateProps = returntypeof(mapStateToProps);
-type Props = typeof stateProps & typeof dispatchToProps;
-
-class CurrencyConverterContainer extends React.Component<Props, {}> {
-  handleInputBlur = (ev: React.FocusEvent<HTMLInputElement>) => {
-    const intValue = parseInt(ev.currentTarget.value, 10);
-    this.props.increaseCounter(intValue); // number
-  }
-  
-  handleSelectChange = (ev: React.ChangeEvent<HTMLSelectElement>) => {
-    this.props.changeBaseCurrency(ev.target.value); // string
-  }
-  
-  render() {
-    const { counter, baseCurrency, currencies } = this.props; // number, string, string[]
-    
-    return (
-      <section>
-        <input type="text" value={counter} onBlur={handleInputBlur} ... />
-        <select value={baseCurrency} onChange={handleSelectChange} ... >
-          {currencies.map(currency =>
-            <option key={currency}>{currency}</option>,
-          )}
-        </select>
-        ...
-      </section>
-    );
-  }
-}
-
-export default connect(mapStateToProps, dispatchToProps)(CurrencyConverterContainer);
-```
-
 
 ---
 
