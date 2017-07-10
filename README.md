@@ -2,8 +2,8 @@
 A comprehensive guide to static typing "React & Redux" apps using TypeScript.
 > found it usefull, want some more? [give it a :star:](https://github.com/piotrwitek/react-redux-typescript-patterns/stargazers)
 
-### Working with TypeScript v2.3 (https://github.com/Microsoft/TypeScript/wiki/Roadmap)
-### TypeScript v2.4 - Work in progress!
+- #### Working with TypeScript v2.3 - [Check the Roadmap](https://github.com/Microsoft/TypeScript/wiki/Roadmap)
+- #### (Update for TypeScript v2.4 - in progress)
 
 ### Introduction
 This guide is aimed for strict setup of TypeScript compiler which will provide most complete type safety and best DX.
