@@ -24,7 +24,7 @@ Furthermore by providing Interface declarations describing your API contracts yo
 
 ### Table of Contents
 - [React](#react)
-  - [Stateless Component - SFC](#stateless-component-sfc)
+  - [Stateless Component - SFC](#stateless-component---sfc)
   - [Class Component](#class-component)
   - [Generic List Component](#generic-list-component)
   - [Connected Container with OwnProps](#connected-container-with-ownprops)
