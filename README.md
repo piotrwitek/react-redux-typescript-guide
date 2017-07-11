@@ -24,9 +24,9 @@ Furthermore by providing Interface declarations describing your API contracts yo
 
 ### Table of Contents
 - [React](#react)
-  - [Stateless Component](#stateless-component)
+  - [Stateless Component - SFC](#stateless-component-sfc)
   - [Class Component](#class-component)
-  - [Generic Component](#generic-component)
+  - [Generic List Component](#generic-list-component)
   - [Connected Container with OwnProps](#connected-container-with-ownprops)
   - [Connected Container without OwnProps using Type Inference](#connected-container-without-ownprops-using-type-inference)
   - [Higher-Order Component](#higher-order-component)
@@ -54,8 +54,9 @@ Furthermore by providing Interface declarations describing your API contracts yo
 
 ---
 
-## Stateless Component
+## Stateless Component - SFC
 - stateless component boilerplate
+- convenient alias: `React.SFC<Props> === React.StatelessComponent<Props>`
 ```tsx
 import * as React from 'react';
 
@@ -64,7 +65,7 @@ type Props = {
   style?: React.CSSProperties,
 };
 
-const MyComponent: React.StatelessComponent<Props> = (props) => {
+const MyComponent: React.SFC<Props> = (props) => {
   const { children, ...restProps } = props;
   return (
     <div {...restProps} >
@@ -131,21 +132,21 @@ export default MyComponent;
 
 ---
 
-## Generic Component
+## Generic List Component
 - generic component boilerplate
 ```tsx
 type GenericListProps<T> = {
-  dataSource: T[],
+  items: T[],
   itemRenderer: (item: T) => JSX.Element,
 };
 
 class GenericList<T> extends React.Component<GenericListProps<T>, {}> {
   render() {
-    const { dataSource, itemRenderer } = this.props;
+    const { items, itemRenderer } = this.props;
 
     return (
       <div>
-        {dataSource.map(itemRenderer)}      
+        {items.map(itemRenderer)}      
       </div>
     );
   }
@@ -159,10 +160,12 @@ interface IUser {
 }
 
 type UserItemProps = {
-  dataSource: IUser,
+  item: IUser,
 }; 
 
-cosnt UserItem: React.StatelessComponent<UserItemProps> = ({id, name}) => {
+const UserItem: React.SFC<UserItemProps> = ({item}) => {
+  const {name, id} = item;
+  
   return (
     <div>
       <b>{name}</b>
@@ -173,7 +176,7 @@ cosnt UserItem: React.StatelessComponent<UserItemProps> = ({id, name}) => {
 ```
 
 ```tsx
-const UserList = class extends Table<IUser> { };
+const UserList = class extends GenericList<IUser> { };
 
 const users = [{
   id: 'uuidv4',
@@ -182,12 +185,11 @@ const users = [{
 
 ReactDOM.render(
   <UserList
-    dataSource={users}
-    itemRenderer={(item) => <UserItem key={item.id} dataSource={item} />} // <- notice that "item" has inferred "IUser" type
+    items={users}
+    itemRenderer={(item) => <UserItem key={item.id} item={item} />} // <- notice that "items" and "itemRenderer" has inferred "IUser" type
   >    
   </UserList>
 );
-
 ```
 
 ---
@@ -321,7 +323,7 @@ type Props = {
   type?: typeof Button.prototype.props.type,
 };
 
-const ButtonControl: React.StatelessComponent<Props> = (props) => {
+const ButtonControl: React.SFC<Props> = (props) => {
   const { children, ...restProps } = props;
 
   return (
@@ -359,9 +361,9 @@ type FormItemProps = {
 
 export function withFormItem<WrappedComponentProps extends BaseProps>(
   WrappedComponent:
-    React.StatelessComponent<WrappedComponentProps> | React.ComponentClass<WrappedComponentProps>,
+    React.SFC<WrappedComponentProps> | React.ComponentClass<WrappedComponentProps>,
 ) {
-  const HOC: React.StatelessComponent<HOCProps & WrappedComponentProps> =
+  const HOC: React.SFC<HOCProps & WrappedComponentProps> =
     (props) => {
       const {
         label, labelCol, wrapperCol, required, help, validateStatus, colon,
@@ -890,7 +892,7 @@ Using this solution you'll achieve better encapsulation for internal structure/n
 // 1. in `components/` folder create component file (`select.tsx`) with default export:
 
 // components/select.tsx
-const Select: React.StatelessComponent<Props> = (props) => {
+const Select: React.SFC<Props> = (props) => {
 ...
 export default Select;
 
