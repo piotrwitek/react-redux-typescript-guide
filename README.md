@@ -44,7 +44,7 @@ Furthermore by providing Interface declarations describing your API contracts yo
   - [tsconfig.json](#tsconfigjson)
   - [tslint.json](#tslintjson)
   - [Default and Named Module Exports](#default-and-named-module-exports)
-  - [Vendor Types Augumentation](#vendor-types-augmentation)
+  - [Fixing Vendor Type Issues](#fixing-vendor-type-issues)
 - [FAQ](#faq)
 - [Project Examples](#project-examples)
 
@@ -808,8 +808,7 @@ export const getTargetCurrencyRate = createSelector(
 ```js
 {
   "compilerOptions": {
-    "baseUrl": "src/", // enables relative imports to root
-    "outDir": "out/", // target for compiled files
+    "outDir": "dist/", // target for compiled files
     "allowSyntheticDefaultImports": true, // no errors on commonjs default import
     "allowJs": true, // include js files
     "checkJs": true, // typecheck js files
@@ -825,14 +824,15 @@ export const getTargetCurrencyRate = createSelector(
       "es2016",
       "es2017.object"
     ],
-    "target": "es5",
-    "module": "es2015",
+    "target": "es5", // "es2015" for ES6+ engines
+    "module": "commonjs", // "es2015" for tree-shaking
     "moduleResolution": "node",
     "noEmitOnError": true,
     "noFallthroughCasesInSwitch": true,
     "noImplicitAny": true,
     "noImplicitReturns": true,
     "noImplicitThis": true,
+    "noUnusedLocals": true,
     "strictNullChecks": true,
     "pretty": true,
     "removeComments": true,
@@ -842,7 +842,8 @@ export const getTargetCurrencyRate = createSelector(
     "src/**/*"
   ],
   "exclude": [
-    "node_modules"
+    "node_modules",
+    "src/**/*.spec.*"
   ]
 }
 ```
@@ -860,27 +861,36 @@ export const getTargetCurrencyRate = createSelector(
     "comment-format": [true, "check-space"],
     "import-blacklist": [true, "rxjs"],
     "interface-over-type-literal": false,
+    "max-line-length": [true, 120],
     "member-access": false,
-    "member-ordering": [true, {"order": "statics-first"}],
+    "member-ordering": [true, {
+      "order": "fields-first"
+    }],
     "newline-before-return": false,
     "no-any": false,
-    "no-inferrable-types": [true],
-    "no-import-side-effect": [true, {"ignore-module": "^rxjs/"}],
+    "no-empty-interface": false,
+    "no-inferrable-types": [true, "ignore-params", "ignore-properties"],
     "no-invalid-this": [true, "check-function-in-method"],
     "no-null-keyword": false,
     "no-require-imports": false,
     "no-switch-case-fall-through": true,
     "no-trailing-whitespace": true,
+    "no-this-assignment": [true, {
+      "allow-destructuring": true
+    }],
     "no-unused-variable": [true, "react"],
     "object-literal-sort-keys": false,
+    "object-literal-shorthand": false,
+    "one-variable-per-declaration": [false],
     "only-arrow-functions": [true, "allow-declarations"],
     "ordered-imports": [false],
     "prefer-method-signature": false,
     "prefer-template": [true, "allow-single-concat"],
+    "semicolon": [true, "ignore-interfaces"],
     "quotemark": [true, "single", "jsx-double"],
     "triple-equals": [true, "allow-null-check"],
-    "typedef": [true,"parameter", "property-declaration", "member-variable-declaration"],
-    "variable-name": [true, "ban-keywords", "check-format", "allow-pascal-case"]
+    "typedef": [true,"parameter", "property-declaration"],
+    "variable-name": [true, "ban-keywords", "check-format", "allow-pascal-case", "allow-leading-underscore"]
   }
 }
 ```
@@ -902,7 +912,7 @@ export default Select;
 export { default as Select } from './select';
 ...
 
-// 3. now you can import your components in both ways like this:
+// 3. now you can import your components in both ways named (internal) or default (public):
 
 // containers/container.tsx
 import { Select } from '../components';
@@ -911,17 +921,22 @@ import Select from '../components/select';
 ...
 ```
 
-### Vendor Types Augmentation
-> Augmenting missing autoFocus Prop on `Input` and `Button` components in `antd` npm package (https://ant.design/).  
+### Fixing Vendor Type Issues
+> Strategies to fix various issues coming from broken vendor type declaration files (*.d.ts)
+
+- Augumenting library internal type declarations - using relative import resolution 
 ```ts
-// using relative import resolution
+// added missing autoFocus Prop on Input component in "antd@2.10.0" npm package
 declare module '../node_modules/antd/lib/input/Input' {
   export interface InputProps {
     autoFocus?: boolean;
   }
 }
+```
 
-// using node module resolution
+- Augumenting library public type declarations - using node module import resolution
+```ts
+// fixed broken public type declaration in "rxjs@5.4.1" npm package 
 import { Operator } from 'rxjs/Operator';
 import { Observable } from 'rxjs/Observable';
 
