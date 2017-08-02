@@ -65,7 +65,7 @@ type Props = {
   style?: React.CSSProperties,
 };
 
-const MyComponent: React.SFC<Props> = (props) => {
+const StatelessComponent: React.SFC<Props> = (props) => {
   const { children, ...restProps } = props;
   return (
     <div {...restProps} >
@@ -74,7 +74,7 @@ const MyComponent: React.SFC<Props> = (props) => {
   );
 };
 
-export default MyComponent;
+export default StatelessComponent;
 ```
 
 ---
@@ -85,49 +85,44 @@ export default MyComponent;
 import * as React from 'react';
 
 type Props = {
-  className?: string,
-  style?: React.CSSProperties,
   initialCount?: number,
 };
 
 type State = {
-  counter: number,
+  count: number,
 };
 
-class MyComponent extends React.Component<Props, State> {
-  // default props using Property Initializers
+class ClassComponent extends React.Component<Props, State> {
   static defaultProps: Partial<Props> = {
-    className: 'default-class',
+    initialCount: 0,
   };
 
-  // initial state using Property Initializers
   state: State = {
-    counter: this.props.initialCount || 0,
+    count: this.props.initialCount!,
   };
 
-  // lifecycle methods should be declared as normal instance methods and it's fine
+  // declare lifecycle methods as normal instance methods
   componentDidMount() {
     // tslint:disable-next-line:no-console
     console.log('Mounted!');
   }
 
-  // handlers using Class Fields with arrow functions
-  increaseCounter = () => { this.setState({ counter: this.state.counter + 1 }); };
+  // declare handlers as Class Fields arrow functions
+  handleIncrement = () => { this.setState({ count: this.state.count + 1 }); };
 
   render() {
-    const { children, initialCount, ...restProps } = this.props;
+    const { count } = this.state;
 
     return (
-      <div {...restProps} onClick={this.increaseCounter} >
-        Clicks: {this.state.counter}
-        <hr />
-        {children}
-      </div>
+      <section>
+        <div>{count}</div>
+        <button onClick={this.handleIncrement}>Increment</button>
+      </section>
     );
   }
 }
 
-export default MyComponent;
+export default ClassComponent;
 ```
 
 ---
@@ -159,35 +154,19 @@ interface IUser {
   name: string,
 }
 
-type UserItemProps = {
-  item: IUser,
-}; 
-
-const UserItem: React.SFC<UserItemProps> = ({item}) => {
-  const {name, id} = item;
-  
-  return (
-    <div>
-      <b>{name}</b>
-      <small>({id})</small>
-    </div>
-  );
-}
-```
-
-```tsx
-const UserList = class extends GenericList<IUser> { };
-
-const users = [{
+const users: IUser[] = [{
   id: 'uuidv4',
   name: 'Dude',
 }];
 
+const UserList = class extends GenericList<IUser> { };
+
+// notice that "items" and "itemRenderer" will infer "IUser" type and guard type errors
 ReactDOM.render(
   <UserList
     items={users}
-    itemRenderer={(item) => <UserItem key={item.id} item={item} />} // <- notice that "items" and "itemRenderer" has inferred "IUser" type
-  >    
+    itemRenderer={(item) => <div key={item.id}>{item.name}</div>} 
+  >
   </UserList>
 );
 ```
@@ -223,9 +202,8 @@ class CounterContainer extends React.Component<Props, {}> {
     return (
       <section>
         <h2>{title}</h2>
-        <input type="number" value={counter} />
+        <div>{counter}</div>
         <button onClick={this.handleIncrement}>Increment</button>
-        ...
       </section>
     );
   }
