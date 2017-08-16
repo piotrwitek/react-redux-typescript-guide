@@ -789,7 +789,7 @@ export const getTargetCurrencyRate = createSelector(
   "compilerOptions": {
     "baseUrl": "./", // enables absolute path imports
     "paths": { // define absolute path mappings
-      "@src/*": ["src/*"] // enable -> import { ... } from '@src/components' (add to webpack -> alias: { '@src': PATH_TO_SRC },)
+      "@src/*": ["src/*"] // will enable -> import { ... } from '@src/components' (need add to webpack -> resolve: { alias: { '@src': PATH_TO_SRC } })
     },
     "outDir": "dist/", // target for compiled files
     "allowSyntheticDefaultImports": true, // no errors on commonjs default import
