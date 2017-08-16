@@ -834,9 +834,10 @@ export const getTargetCurrencyRate = createSelector(
 ```
 
 ### tslint.json
-> Recommended setup is to extend build-in preset `tslint:latest` (for all rules use `tslint:all`).  
-> Add tslint react rules: `npm i -D tslint-react` https://github.com/palantir/tslint-react  
-> Amended some extended defaults for more flexibility.  
+> - Recommended setup is to extend build-in preset `tslint:latest` (for all rules use `tslint:all`)  
+> - Add tslint react rules: `npm i -D tslint-react` https://github.com/palantir/tslint-react  
+> - Amended some extended defaults for more flexibility  
+
 ```json
 {
   "extends": ["tslint:latest", "tslint-react"],
