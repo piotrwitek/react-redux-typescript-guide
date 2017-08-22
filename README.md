@@ -12,7 +12,7 @@ This guide is about **_"How to write type declarations to only the minimum neces
 - #### (Update for TypeScript v2.4 + v2.5 - fat PR on the way, lot of changes, almost there!)
 
 ### Introduction
-This guide is aimed to use `strict` configuration of TypeScript compiler to provide the best static-typing experience with strict null checking. We want to spent a minimal amount of effort to write explicit type annotations and most of the time to leverage smart [Type Inference](https://www.typescriptlang.org/docs/handbook/type-inference.html).
+This guide is aimed to use [`--strict`](https://www.typescriptlang.org/docs/handbook/compiler-options.html) flag of TypeScript compiler to provide the best static-typing experience. Additionally we want to spent a minimal amount of effort to write explicit type annotations to our JavaScript code and whenever possible leverage smart [Type Inference](https://www.typescriptlang.org/docs/handbook/type-inference.html).
 
 Benefits of this setup and static-typing in general:
 - refactoring capabilities with the power equal to strongly typed languages (not "stringly" typed like Webstorm IDE)  
