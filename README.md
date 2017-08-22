@@ -4,12 +4,10 @@ This guide is about **_"How to write type declarations to only the minimum neces
 
 > found it usefull, want some more? [give it a :star:](https://github.com/piotrwitek/react-redux-typescript-patterns/stargazers)
 
----
+#### Announcements
+- Currently working with TypeScript v2.3 - [Check the Roadmap](https://github.com/Microsoft/TypeScript/wiki/Roadmap)  
+- Update for TypeScript v2.4 + v2.5 - PR is on the way with lots of improvements, almost there!  
 
-### Announcements
-
-- #### Working with TypeScript v2.3 - [Check the Roadmap](https://github.com/Microsoft/TypeScript/wiki/Roadmap)
-- #### (Update for TypeScript v2.4 + v2.5 - fat PR on the way, lot of changes, almost there!)
 
 ### Introduction
 This guide is aimed to use [`--strict`](https://www.typescriptlang.org/docs/handbook/compiler-options.html) flag of TypeScript compiler to provide the best static-typing experience. Additionally we want to spent a minimal amount of effort to write explicit type annotations to our JavaScript code and whenever possible leverage smart [Type Inference](https://www.typescriptlang.org/docs/handbook/type-inference.html).
@@ -21,11 +19,14 @@ Benefits of this setup and static-typing in general:
 
 The power of static-typing will make processes of improving your codebase, refactorings, and cleaning dead code much simpler, and give you a confidence that you will not break your working production code.
 
->**NB:** This setup is very beneficial for rapidly changing projects, expecting a lot of refactorings, who is mostly skipping writing unit tests (because of the additinal costs of updating them). This setup ensure zero production exceptions, with only possible source of exception coming from network and I/O operations, but you can handle them in a typed manner as well (e.g. by providing `interface` declarations describing your API contracts you'll be safe from all possible `null` / `undefined` exceptions coming from API responses).  
+>**NB:** This setup is very beneficial for rapidly changing projects, expecting a lot of refactorings, who is mostly skipping writing unit tests (because of the additinal costs of updating them). This setup ensure zero production exceptions, with only possible source of exception coming from network and I/O operations, but you can handle them in a typed manner as well (e.g. by providing `interface` declarations describing your API contracts you'll be safe from all possible `null` / `undefined` exceptions coming from API responses). 
+
+
 ### Goals:
 - Complete type safety with strict null checking, without failing to `any` type
 - Minimize amount of manually writing type declarations by leveraging [Type Inference](https://www.typescriptlang.org/docs/handbook/type-inference.html)
 - Reduce boilerplate with [simple utility functions](https://github.com/piotrwitek/react-redux-typescript) using [Generics](https://www.typescriptlang.org/docs/handbook/generics.html) and [Advanced Types](https://www.typescriptlang.org/docs/handbook/advanced-types.html) features
+
 
 ### Table of Contents
 - [React](#react)
