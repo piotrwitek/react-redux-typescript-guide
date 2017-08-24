@@ -1,0 +1,10 @@
+{
+  "dependencies": {
+    "@types/node": "6",
+    "ts-node": "^3.3.0",
+    "typescript": "^2.4.2"
+  },
+  "scripts": {
+    "gen": "ts-node src/generate-readme"
+  }
+}
