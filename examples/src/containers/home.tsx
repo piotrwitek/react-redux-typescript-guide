@@ -1,10 +1,30 @@
 import * as React from 'react';
 
-import { ConnectedStatelessCounter, ClassCounter } from '../components';
+import {
+  SFCCounter,
+  StatefulCounter,
+  StatefulCounterWithInitialCount
+} from '../components';
 
-export const Home = () => (
-  <section>
-    <ClassCounter label="ClassCounter" initialCount={10} />
-    <ConnectedStatelessCounter label="ConnectedStatelessCounter" />
-  </section>
-);
+export const Home = () => {
+  let count = 0;
+  const increment = () => { count++; };
+
+  return (
+    <section>
+      <SFCCounter
+        label="StatelessCounter"
+        count={count}
+        onIncrement={increment}
+      />
+
+      <StatefulCounter
+        label="ClassCounter"
+      />
+
+      <StatefulCounterWithInitialCount
+        label="ClassCounter"
+      />
+    </section>
+  );
+}

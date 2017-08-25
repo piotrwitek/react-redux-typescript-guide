@@ -1,10 +1,5 @@
 {
   "compilerOptions": {
-    "baseUrl": "./", // enables absolute path imports
-    "paths": { // define absolute path mappings
-      "@src/*": ["src/*"] // will enable -> import { ... } from '@src/components'
-      // in webpack you need to add -> resolve: { alias: { '@src': PATH_TO_SRC } }
-    },
     "outDir": "dist/", // target for compiled files
     "allowSyntheticDefaultImports": true, // no errors on commonjs default import
     "allowJs": true, // include js files
@@ -22,14 +17,13 @@
       "es2017.object"
     ],
     "target": "es2015",
-    "module": "es2015",
+    "module": "commonjs",
     "moduleResolution": "node",
     "noEmitOnError": true,
     "noFallthroughCasesInSwitch": true,
     "noImplicitAny": true,
     "noImplicitReturns": true,
     "noImplicitThis": true,
-    "noUnusedLocals": true,
     "strictNullChecks": true,
     "pretty": true,
     "removeComments": true,

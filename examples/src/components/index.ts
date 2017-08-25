@@ -1,3 +1,4 @@
-export * from './class-counter';
-export * from './stateless-counter';
-export * from './connected-stateless-counter';
+export * from './sfc-counter';
+export * from './statefull-counter';
+export * from './statefull-counter-with-initial-count';
+

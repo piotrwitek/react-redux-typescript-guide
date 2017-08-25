@@ -4,6 +4,7 @@
     "tslint-react"
   ],
   "rules": {
+    "arrow-parens": false,
     "arrow-return-shorthand": [
       false
     ],
@@ -33,6 +34,7 @@
     ],
     "newline-before-return": false,
     "no-any": false,
+    "no-empty-interface": false,
     "no-inferrable-types": [
       true,
       "ignore-params",
