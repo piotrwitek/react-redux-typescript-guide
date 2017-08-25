@@ -2,14 +2,14 @@ import { v4 } from 'uuid';
 import { Observable } from 'rxjs/Observable';
 import { combineEpics, Epic } from 'redux-observable';
 
-import { IRootAction, IRootState } from '@src/redux';
+import { IRootAction, RootState } from '@src/redux';
 import { ADD_TODO, IActions } from '@src/redux/todos';
 import { actionCreators } from './';
 
 const TOAST_LIFETIME = 2000;
 
 // Epics - handling side effects of actions
-const addTodoToast: Epic<IRootAction, IRootState> =
+const addTodoToast: Epic<IRootAction, RootState> =
   (action$, store) => action$
     .ofType(ADD_TODO)
     .concatMap((action: IActions[typeof ADD_TODO]) => {

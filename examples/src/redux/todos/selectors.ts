@@ -1,12 +1,12 @@
 import { createSelector } from 'reselect';
 
-import { IRootState } from '@src/redux';
+import { RootState } from '@src/redux';
 
 export const getTodos =
-  (state: IRootState) => state.todos.todos;
+  (state: RootState) => state.todos.todos;
 
 export const getTodosFilter =
-  (state: IRootState) => state.todos.todosFilter;
+  (state: RootState) => state.todos.todosFilter;
 
 export const getFilteredTodos = createSelector(
   getTodos, getTodosFilter,

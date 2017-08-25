@@ -8,13 +8,13 @@ import { IRootAction } from './';
 
 interface IStoreEnhancerState { }
 
-export interface IRootState extends IStoreEnhancerState {
+export interface RootState extends IStoreEnhancerState {
   router: RouterState,
   counters: CountersState,
   todos: TodosState,
 }
 
-export const rootReducer = combineReducers<IRootState, IRootAction>({
+export const rootReducer = combineReducers<RootState, IRootAction>({
   router,
   counters,
   todos,

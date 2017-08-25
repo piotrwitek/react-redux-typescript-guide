@@ -2,13 +2,12 @@
 This guide is **NOT** about _"How to write type declarations for every possible variable and expression to have 100% type covered code and waste a lot of time"_.  
 This guide is about **_"How to write type declarations to only the minimum necessary amount of JavaScript code and still get all the benefits of Static Typing"_**.
 
-> found it usefull, want some more? [give it a :star:](https://github.com/piotrwitek/react-redux-typescript-patterns/stargazers)
+> found it usefull, want some more? [give it a :star:](https://github.com/piotrwitek/react-redux-typescript-patterns/stargazers)  
 
+> Code examples are generated from the source code in `examples` folder, and they are tested with TypeScript compiler with the most recent version of TypeScript and `react`/`react-redux` type definitions to ensure they are still working with updated definitions  
 
 #### Announcements
-- Currently working with TypeScript v2.3 - [Check the Roadmap](https://github.com/Microsoft/TypeScript/wiki/Roadmap)  
-- Update for TypeScript v2.4 + v2.5 - PR is on the way with lots of improvements, almost there!  
-
+- Examples from react section already updated to TypeScript v2.5 - working on the remaining sections!  [TypeScript Changelog](https://github.com/Microsoft/TypeScript/wiki/Roadmap)  
 
 ### Introduction
 This guide is aimed to use [`--strict`](https://www.typescriptlang.org/docs/handbook/compiler-options.html) flag of TypeScript compiler to provide the best static-typing experience. Additionally we want to spent a minimal amount of effort to write explicit type annotations to our JavaScript code and whenever possible leverage smart [Type Inference](https://www.typescriptlang.org/docs/handbook/type-inference.html).

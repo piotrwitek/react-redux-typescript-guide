@@ -2,9 +2,8 @@ import * as React from 'react';
 
 import {
   SFCCounter,
-  SFCCounterConnected,
-  SFCCounterConnectedConcise,
   StatefulCounter,
+  StatefulCounterWithInitialCount
 } from '../components';
 
 export const Home = () => {
@@ -18,15 +17,13 @@ export const Home = () => {
         count={count}
         onIncrement={increment}
       />
-      <SFCCounterConnected
-        label="ConnectedStatelessCounter"
-      />
-      <SFCCounterConnectedConcise
-        label="ConnectedStatelessCounter"
-      />
+
       <StatefulCounter
         label="ClassCounter"
-        initialCount={10}
+      />
+
+      <StatefulCounterWithInitialCount
+        label="ClassCounter"
       />
     </section>
   );

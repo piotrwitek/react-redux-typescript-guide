@@ -21,6 +21,7 @@ declare module 'redux' {
 
 import { Omit } from 'typical/src';
 
+export { Omit };
 /**
  * Returns a version of type T where all properties which are also in U are optionalized.
  * Useful for making props with defaults optional in React components.

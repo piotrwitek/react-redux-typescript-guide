@@ -2,334 +2,84 @@
 
 ---
 
-## Stateless Component - SFC
-- stateless component boilerplate
+## Stateless Components - SFC
 - convenient alias: `React.SFC<Props> === React.StatelessComponent<Props>`
 
-::includes='../../examples/src/components/sfc-counter.tsx'::
+### Examples:
+
+- stateless counter example
+
+::example='../../examples/src/components/sfc-counter.tsx'::
+
+- spread attributes example [ref](https://facebook.github.io/react/docs/jsx-in-depth.html#spread-attributes)
+
+::example='../../examples/src/components/sfc-spread-attributes.tsx'::
 
 ---
 
-## Class Component
-- class component boilerplate
-```tsx
-import * as React from 'react';
+## Stateful Components - Class
 
-type Props = {
-  initialCount?: number,
-};
+### Examples:
 
-type State = {
-  count: number,
-};
+- stateful counter example
 
-class ClassComponent extends React.Component<Props, State> {
-  static defaultProps: Partial<Props> = {
-    initialCount: 0,
-  };
+::example='../../examples/src/components/statefull-counter.tsx'::
 
-  state: State = {
-    count: this.props.initialCount!,
-  };
+- stateful counter with default props example
 
-  // declare lifecycle methods as normal instance methods
-  componentDidMount() {
-    // tslint:disable-next-line:no-console
-    console.log('Mounted!');
-  }
-
-  // declare handlers as Class Fields arrow functions
-  handleIncrement = () => { this.setState({ count: this.state.count + 1 }); };
-
-  render() {
-    const { count } = this.state;
-
-    return (
-      <section>
-        <div>{count}</div>
-        <button onClick={this.handleIncrement}>Increment</button>
-      </section>
-    );
-  }
-}
-
-export default ClassComponent;
-```
+::example='../../examples/src/components/statefull-counter-with-initial-count.tsx'::
 
 ---
 
-## Generic List Component
-- generic component boilerplate
-```tsx
-type GenericListProps<T> = {
-  items: T[],
-  itemRenderer: (item: T) => JSX.Element,
-};
+## Generic List Components
 
-class GenericList<T> extends React.Component<GenericListProps<T>, {}> {
-  render() {
-    const { items, itemRenderer } = this.props;
+### Examples:
 
-    return (
-      <div>
-        {items.map(itemRenderer)}      
-      </div>
-    );
-  }
-}
-```
+- generic list component example
 
-```tsx
-interface IUser {
-  id: string,
-  name: string,
-}
+::example='../../examples/src/components/generic-list.tsx'::
 
-const users: IUser[] = [{
-  id: 'uuidv4',
-  name: 'Dude',
-}];
+- user list component extending generic list
 
-const UserList = class extends GenericList<IUser> { };
-
-// notice that "items" and "itemRenderer" will infer "IUser" type and guard type errors
-ReactDOM.render(
-  <UserList
-    items={users}
-    itemRenderer={(item) => <div key={item.id}>{item.name}</div>} 
-  >
-  </UserList>
-);
-```
+::example='../../examples/src/components/user-list.tsx'::
+::usage='../../examples/src/components/user-list.usage.tsx'::
 
 ---
 
-## Connected Container with OwnProps
-```tsx
-import * as React from 'react';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
-import { returntypeof } from 'react-redux-typescript';
+## Connected Components
 
-import { RootState, Dispatch } from '../../modules/';
-import { incrementCounter } from '../../modules/counter/action-creators';
-import { getCounter } from '../../modules/counter/selectors';
-import { LABELS } from '../../dictionaries';
+### Examples:
 
-type Props = {
-  title?: string;
-  counter: number;
-  incrementCounter: () => void;
-}
+- connected counter example - concise
 
-class CounterContainer extends React.Component<Props, {}> {
-  handleIncrement: React.MouseEventHandler<HTMLInputElement> = (ev) => {
-    this.props.incrementCounter();
-  }
-  
-  render() {
-    const { counter, title = LABELS.COUNTER_TITLE } = this.props;
-    
-    return (
-      <section>
-        <h2>{title}</h2>
-        <div>{counter}</div>
-        <button onClick={this.handleIncrement}>Increment</button>
-      </section>
-    );
-  }
-}
+::example='../../examples/src/connected/sfc-counter-connected.tsx'::
+::usage='../../examples/src/connected/sfc-counter-connected.tsx'::
 
-// Connected Type
-type OwnProps =
-  Pick<Props, 'title'>;
+- connected counter example - verbose
 
-const mapStateToProps = (rootState: RootState, ownProps: OwnProps) => ({
-  counter: getCounter(rootState),
-});
-const mapDispatchToProps = (dispatch: Dispatch) => bindActionCreators({
-  incrementCounter: incrementCounter,
-}, dispatch);
+::example='../../examples/src/connected/sfc-counter-connected-verbose.tsx'::
+::usage='../../examples/src/connected/sfc-counter-connected-verbose.usage.tsx'::
 
-const Connected = connect(mapStateToProps, mapDispatchToProps)(CounterContainer);
-export default Connected;
-```
+- connected counter example - with own props
 
----
-
-## Connected Container without OwnProps using Type Inference
-> NOTE: type inference in `connect` function from `react-redux` doesn't provide complete type safety and will not correctly infer resulting Props interface
-
-> This is something I'm trying to improve, please come back later or contribute if have a better solution...
-
-- This solution uses type inference to get Props types from `mapStateToProps` & `mapDispatchToProps` functions
-- Minimise manual effort to declare and maintain Props types injected from `connect` helper function
-- `returntypeof()` helper function - using smart type inference and generics we can to get the return type of expression (TypeScript does not yet support this feature - [read more](https://github.com/piotrwitek/react-redux-typescript#returntypeof-polyfill))
-
-```tsx
-import * as React from 'react';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
-import { returntypeof } from 'react-redux-typescript';
-
-import { RootState, Dispatch } from '../../modules/';
-import { incrementCounter } from '../../modules/counter/action-creators';
-import { getCounter } from '../../modules/counter/selectors';
-
-const mapStateToProps = (rootState: RootState) => ({
-  counter: getCounter(rootState),
-});
-const mapDispatchToProps = (dispatch: Dispatch) => bindActionCreators({
-  incrementCounter: incrementCounter,
-}, dispatch);
-
-// Props types inferred from mapStateToProps & dispatchToProps
-const stateProps = returntypeof(mapStateToProps);
-const dispatchProps = returntypeof(mapDispatchToProps);
-
-type Props = typeof stateProps & typeof dispatchProps;
-
-class CounterContainer extends React.Component<Props, {}> {
-  handleIncrement: React.MouseEventHandler<HTMLInputElement> = (ev) => {
-    this.props.incrementCounter();
-  }
-  
-  render() {
-    const { counter } = this.props;
-    
-    return (
-      <section>
-        <input type="number" value={counter} />
-        <button onClick={this.handleIncrement}>Increment</button>
-        ...
-      </section>
-    );
-  }
-}
-
-const Connected = connect(mapStateToProps, mapDispatchToProps)(CounterContainer);
-export default Connected;
-```
+::example='../../examples/src/connected/sfc-counter-connected-extended.tsx'::
+::usage='../../examples/src/connected/sfc-counter-connected-extended.usage.tsx'::
 
 ---
 
 ## Higher-Order Component
-- wrap and decorate input Component returning a new Component
-- new Component will inherit Props interface through composition from input Component extended with Props of `HOC`
-- using Type Inference to automatically calculate resulting Props interface
-- filtering out decorator props and passing only the relevant props through to Wrapped Component
-- accepting stateless functional or regular component
+- function that takes a component and returns a new component
+- a new component will infer Props interface from wrapped Component extended with Props of HOC
+- will filter out props specific to HOC, and the rest will be passed through to wrapped component
 
-```tsx
-// controls/button.tsx
-import * as React from 'react';
-import { Button } from 'antd';
+### Examples:
 
-type Props = {
-  className?: string,
-  autoFocus?: boolean,
-  htmlType?: typeof Button.prototype.props.htmlType,
-  type?: typeof Button.prototype.props.type,
-};
+- basic hoc: enhance stateless counter with state
 
-const ButtonControl: React.SFC<Props> = (props) => {
-  const { children, ...restProps } = props;
+::example='../../examples/src/hoc/with-state.tsx'::
+::usage='../../examples/src/hoc/with-state.usage.tsx'::
 
-  return (
-    <Button {...restProps} >
-      {children}
-    </Button>
-  );
-};
+- advanced hoc: add error handling with componentDidCatch to view component
 
-export default ButtonControl;
-```
-
-```tsx
-// decorators/with-form-item.tsx
-import * as React from 'react';
-import { Form } from 'antd';
-const FormItem = Form.Item;
-
-type BaseProps = {
-};
-
-type HOCProps = FormItemProps & {
-  error?: string;
-};
-
-type FormItemProps = {
-  label?: typeof FormItem.prototype.props.label;
-  labelCol?: typeof FormItem.prototype.props.labelCol;
-  wrapperCol?: typeof FormItem.prototype.props.wrapperCol;
-  required?: typeof FormItem.prototype.props.required;
-  help?: typeof FormItem.prototype.props.help;
-  validateStatus?: typeof FormItem.prototype.props.validateStatus;
-  colon?: typeof FormItem.prototype.props.colon;
-};
-
-export function withFormItem<WrappedComponentProps extends BaseProps>(
-  WrappedComponent:
-    React.SFC<WrappedComponentProps> | React.ComponentClass<WrappedComponentProps>,
-) {
-  const HOC: React.SFC<HOCProps & WrappedComponentProps> =
-    (props) => {
-      const {
-        label, labelCol, wrapperCol, required, help, validateStatus, colon,
-        error, ...passThroughProps,
-      } = props as HOCProps;
-
-      // filtering out empty decorator props in functional style
-      const formItemProps: FormItemProps = Object.entries({
-        label, labelCol, wrapperCol, required, help, validateStatus, colon,
-      }).reduce((definedProps: any, [key, value]) => {
-        if (value !== undefined) { definedProps[key] = value; }
-        return definedProps;
-      }, {});
-      
-      // injecting additional props based on condition
-      if (error) {
-        formItemProps.help = error;
-        formItemProps.validateStatus = 'error';
-      }
-
-      return (
-        <FormItem {...formItemProps} hasFeedback={true} >
-          <WrappedComponent {...passThroughProps as any} />
-        </FormItem>
-      );
-    };
-
-  return HOC;
-}
-```
-
-```tsx
-// components/consumer-component.tsx
-...
-import { Button, Input } from '../controls';
-import { withFormItem, withFieldState } from '../decorators';
-
-// you can create more specialized components using decorators
-const
-  ButtonField = withFormItem(Button);
-
-// you can leverage function composition to compose multiple decorators
-const
-  InputFieldWithState = withFormItem(withFieldState(Input));
-
-// Enhanced Component will inherit Props type from Base Component with all applied HOC's
-<ButtonField type="primary" htmlType="submit" wrapperCol={{ offset: 4, span: 12 }} autoFocus={true} >
-  Next Step
-</ButtonField>
-...
-<InputFieldWithState {...formFieldLayout} label="Type" required={true} autoFocus={true} 
-  fieldState={configurationTypeFieldState} error={configurationTypeFieldState.error}
-/>
-...
-
-// you could use functional libraries like ramda or lodash to better functional composition like:
-const
-  InputFieldWithState = compose(withFormItem, withFieldStateInput)(Input);
-// NOTE: be aware that compose function need to have sound type declarations or you'll lose type inference
-```
+::example='../../examples/src/hoc/with-error-boundary.tsx'::
+::usage='../../examples/src/hoc/with-error-boundary.usage.tsx'::

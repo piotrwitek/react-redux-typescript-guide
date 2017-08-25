@@ -28,20 +28,24 @@ fs.writeFileSync(outputFile, result, 'utf8');
 // FUNCS
 
 function includeExamples(text: string): string {
-  const INCLUDE_PATTERN = /::example='(.+?)'::/;
+  const INCLUDE_PATTERN = /::example='(.+?)'::/g;
   return text.replace(INCLUDE_PATTERN, getReplacerWithWrapper(withCodeWrapper));
 }
 
 function includeUsages(text: string): string {
-  const INCLUDE_PATTERN = /::usage='(.+?)'::/;
+  const INCLUDE_PATTERN = /::usage='(.+?)'::/g;
   return text.replace(INCLUDE_PATTERN, getReplacerWithWrapper(withDetailsWrapper));
 }
 
-const getReplacerWithWrapper = (wrapper: (str: string) => string) =>
-  (match: string, filePath: string): string => {
+function getReplacerWithWrapper(wrapper: Wrapper) {
+  return (match: string, filePath: string): string => {
+    console.log(RELATIVE_ROOT + filePath)
     const buffer = fs.readFileSync(RELATIVE_ROOT + filePath, 'utf8');
     return wrapper(buffer);
   };
+}
+
+type Wrapper = typeof withCodeWrapper | typeof withDetailsWrapper;
 
 function withCodeWrapper(text: string) {
   return `
@@ -54,7 +58,7 @@ ${'```'}
 function withDetailsWrapper(text: string) {
   return `
 <details>
-  <summary>Show Example Code</summary>
+  <summary>Show Usage</summary>
   ${'```tsx'}
   ${text}
   ${'```'}

@@ -1,4 +1,4 @@
-import { IRootState } from '@src/redux';
+import { RootState } from '@src/redux';
 
 export const getSfcCounter =
-  (state: IRootState) => state.counters.sfcCounter;
+  (state: RootState) => state.counters.sfcCounter;

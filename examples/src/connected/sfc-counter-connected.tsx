@@ -1,13 +1,13 @@
 import { connect } from 'react-redux';
 
-import { IRootState } from '@src/redux';
+import { RootState } from '@src/redux';
 import { actionCreators } from '@src/redux/counters';
 import { SFCCounter } from '../components';
 
-const mapStateToProps = (state: IRootState) => ({
+const mapStateToProps = (state: RootState) => ({
   count: state.counters.sfcCounter,
 });
 
-export const SFCCounterConnectedConcise = connect(mapStateToProps, {
+export const SFCCounterConnected = connect(mapStateToProps, {
   onIncrement: actionCreators.incrementSfc,
 })(SFCCounter);

@@ -1,9 +1,9 @@
-import { IRootState } from '@src/redux';
+import { RootState } from '@src/redux';
 
 const version = process.env.APP_VERSION;
 const STORAGE_KEY = `__SERIALIZED_STATE_TREE_v${version}__`;
 
-export function saveState(storeState: IRootState): boolean {
+export function saveState(storeState: RootState): boolean {
   if (!localStorage) { return false; }
 
   try {
@@ -15,7 +15,7 @@ export function saveState(storeState: IRootState): boolean {
   }
 }
 
-export function loadState(): IRootState | undefined {
+export function loadState(): RootState | undefined {
   if (!localStorage) { return; }
 
   try {
