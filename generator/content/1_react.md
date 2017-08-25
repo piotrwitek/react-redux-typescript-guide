@@ -5,9 +5,8 @@
 ## Stateless Component - SFC
 - stateless component boilerplate
 - convenient alias: `React.SFC<Props> === React.StatelessComponent<Props>`
-```tsx
+
 ::includes='../../examples/src/components/sfc-counter.tsx'::
-```
 
 ---
 

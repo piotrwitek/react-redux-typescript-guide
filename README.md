@@ -4,6 +4,7 @@ This guide is about **_"How to write type declarations to only the minimum neces
 
 > found it usefull, want some more? [give it a :star:](https://github.com/piotrwitek/react-redux-typescript-patterns/stargazers)
 
+
 #### Announcements
 - Currently working with TypeScript v2.3 - [Check the Roadmap](https://github.com/Microsoft/TypeScript/wiki/Roadmap)  
 - Update for TypeScript v2.4 + v2.5 - PR is on the way with lots of improvements, almost there!  
@@ -64,24 +65,31 @@ The power of static-typing will make processes of improving your codebase, refac
 ## Stateless Component - SFC
 - stateless component boilerplate
 - convenient alias: `React.SFC<Props> === React.StatelessComponent<Props>`
+
 ```tsx
 import * as React from 'react';
 
-type Props = {
-  className?: string,
-  style?: React.CSSProperties,
-};
+export interface ISFCCounterProps {
+  label: string,
+  count: number,
+  onIncrement: () => any,
+}
 
-const StatelessComponent: React.SFC<Props> = (props) => {
-  const { children, ...restProps } = props;
+export const SFCCounter: React.SFC<ISFCCounterProps> = (props) => {
+  const { label, count, onIncrement } = props;
+
+  const handleIncrement = () => { onIncrement(); };
+
   return (
-    <div {...restProps} >
-      {children}
+    <div>
+      {label}: {count}
+      <button type="button" onClick={handleIncrement}>
+        Increment
+      </button>
     </div>
   );
 };
 
-export default StatelessComponent;
 ```
 
 ---

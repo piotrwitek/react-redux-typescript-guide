@@ -26,14 +26,31 @@ fs.writeFileSync(outputFile, result, 'utf8');
 
 // FUNCS
 
-const INCLUDES_PATTERN = /::includes='(.+?)'::/;
-
 function replaceSourceCodeIncludes(markdown: string): string {
+  const INCLUDES_PATTERN = /::includes='(.+?)'::/;
+
   return markdown.replace(INCLUDES_PATTERN, replacer);
 }
 
-function replacer(match: string, filePath: string) {
+function replacer(match: string, filePath: string): string {
   const sourceCode = fs.readFileSync(RELATIVE_ROOT + filePath, 'utf8');
 
-  return sourceCode;
+  const withWrapper = `
+\`\`\`tsx
+${sourceCode}
+\`\`\`
+`;
+
+  return withWrapper.trim();
 }
+
+// const withWrapper = `
+// <details>
+//   <summary>Show Example Code</summary>
+//   \`\`\`tsx
+//   ${sourceCode}
+//   \`\`\`
+// </details>
+//   `;
+
+

@@ -4,6 +4,7 @@ This guide is about **_"How to write type declarations to only the minimum neces
 
 > found it usefull, want some more? [give it a :star:](https://github.com/piotrwitek/react-redux-typescript-patterns/stargazers)
 
+
 #### Announcements
 - Currently working with TypeScript v2.3 - [Check the Roadmap](https://github.com/Microsoft/TypeScript/wiki/Roadmap)  
 - Update for TypeScript v2.4 + v2.5 - PR is on the way with lots of improvements, almost there!  
