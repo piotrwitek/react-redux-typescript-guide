@@ -19,38 +19,46 @@ const outputFile = ROOT_PATH + 'README.md';
 
 const result = inputFiles
   .map(filePath => fs.readFileSync(filePath, 'utf8'))
-  .map(fileContent => replaceSourceCodeIncludes(fileContent))
+  .map(includeExamples)
+  .map(includeUsages)
   .join('\n---\n\n');
 
 fs.writeFileSync(outputFile, result, 'utf8');
 
 // FUNCS
 
-function replaceSourceCodeIncludes(markdown: string): string {
-  const INCLUDES_PATTERN = /::includes='(.+?)'::/;
-
-  return markdown.replace(INCLUDES_PATTERN, replacer);
+function includeExamples(text: string): string {
+  const INCLUDE_PATTERN = /::example='(.+?)'::/;
+  return text.replace(INCLUDE_PATTERN, getReplacerWithWrapper(withCodeWrapper));
 }
 
-function replacer(match: string, filePath: string): string {
-  const sourceCode = fs.readFileSync(RELATIVE_ROOT + filePath, 'utf8');
-
-  const withWrapper = `
-\`\`\`tsx
-${sourceCode}
-\`\`\`
-`;
-
-  return withWrapper.trim();
+function includeUsages(text: string): string {
+  const INCLUDE_PATTERN = /::usage='(.+?)'::/;
+  return text.replace(INCLUDE_PATTERN, getReplacerWithWrapper(withDetailsWrapper));
 }
 
-// const withWrapper = `
-// <details>
-//   <summary>Show Example Code</summary>
-//   \`\`\`tsx
-//   ${sourceCode}
-//   \`\`\`
-// </details>
-//   `;
+const getReplacerWithWrapper = (wrapper: (str: string) => string) =>
+  (match: string, filePath: string): string => {
+    const buffer = fs.readFileSync(RELATIVE_ROOT + filePath, 'utf8');
+    return wrapper(buffer);
+  };
 
+function withCodeWrapper(text: string) {
+  return `
+${'```tsx'}
+${text}
+${'```'}
+  `.trim();
+}
+
+function withDetailsWrapper(text: string) {
+  return `
+<details>
+  <summary>Show Example Code</summary>
+  ${'```tsx'}
+  ${text}
+  ${'```'}
+</details>
+  `.trim();
+}
 
