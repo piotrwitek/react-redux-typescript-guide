@@ -57,12 +57,12 @@ ${'```'}
 
 function withDetailsWrapper(text: string) {
   return `
-<details>
-  <summary>Show Usage</summary>
-  ${'```tsx'}
-  ${text}
-  ${'```'}
-</details>
+<details><summary>Show Usage</summary><p>
+
+${'```tsx'}
+${text}
+${'```'}
+</p></details><br />
   `.trim();
 }
 

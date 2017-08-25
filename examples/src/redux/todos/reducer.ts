@@ -1,7 +1,7 @@
 import { v4 } from 'uuid';
 import { combineReducers } from 'redux';
 
-import { IRootAction } from '@src/redux';
+import { RootAction } from '@src/redux';
 
 import {
   ADD_TODO,
@@ -11,14 +11,14 @@ import {
   ITodosFilter,
 } from './';
 
-export type IState = {
+export type State = {
   readonly isFetching: boolean,
   readonly errorMessage: string | null,
   readonly todos: ITodo[],
   readonly todosFilter: ITodosFilter,
 };
 
-export const reducer = combineReducers<IState, IRootAction>({
+export const reducer = combineReducers<State, RootAction>({
   isFetching: (state = false, action) => {
     switch (action.type) {
       default:

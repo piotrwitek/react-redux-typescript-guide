@@ -1,20 +1,20 @@
 import { combineReducers } from 'redux';
 import { routerReducer as router, RouterState } from 'react-router-redux';
 
-import { reducer as counters, IState as CountersState } from './counters';
-import { reducer as todos, IState as TodosState } from './todos';
+import { reducer as counters, State as CountersState } from './counters';
+import { reducer as todos, State as TodosState } from './todos';
 
-import { IRootAction } from './';
+import { RootAction } from './';
 
-interface IStoreEnhancerState { }
+interface StoreEnhancerState { }
 
-export interface RootState extends IStoreEnhancerState {
+export interface RootState extends StoreEnhancerState {
   router: RouterState,
   counters: CountersState,
   todos: TodosState,
 }
 
-export const rootReducer = combineReducers<RootState, IRootAction>({
+export const rootReducer = combineReducers<RootState, RootAction>({
   router,
   counters,
   todos,

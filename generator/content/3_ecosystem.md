@@ -5,56 +5,25 @@
 ## Async Flow with "redux-observable"
 
 ```ts
-import 'rxjs/add/operator/map';
+// import rxjs operators somewhere...
 import { combineEpics, Epic } from 'redux-observable';
 
-import { RootState, Action } from '../types'; // check store section
-import { actionCreators } from '../reducer';
-import { convertValueWithBaseRateToTargetRate } from './utils';
-import * as currencyConverterSelectors from './selectors';
-import * as currencyRatesSelectors from '../currency-rates/selectors';
+import { RootAction, RootState } from '@src/redux';
+import { saveState } from '@src/services/local-storage-service';
 
-const recalculateTargetValueOnCurrencyChange: Epic<Action, RootState> = (action$, store) =>
-  action$.ofType(
-    actionCreators.changeBaseCurrency.type,
-    actionCreators.changeTargetCurrency.type,
-  ).map((action: any) => {
-    const value = convertValueWithBaseRateToTargetRate(
-      currencyConverterSelectors.getBaseValue(store.getState()),
-      currencyRatesSelectors.getBaseCurrencyRate(store.getState()),
-      currencyRatesSelectors.getTargetCurrencyRate(store.getState()),
-    );
-    return actionCreators.recalculateTargetValue(value);
-  });
+const SAVING_DELAY = 1000;
 
-const recalculateTargetValueOnBaseValueChange: Epic<Action, RootState> = (action$, store) =>
-  action$.ofType(
-    actionCreators.changeBaseValue.type,
-  ).map((action: any) => {
-    const value = convertValueWithBaseRateToTargetRate(
-      action.payload,
-      currencyRatesSelectors.getBaseCurrencyRate(store.getState()),
-      currencyRatesSelectors.getTargetCurrencyRate(store.getState()),
-    );
-    return actionCreators.recalculateTargetValue(value);
-  });
-
-const recalculateBaseValueOnTargetValueChange: Epic<Action, RootState> = (action$, store) =>
-  action$.ofType(
-    actionCreators.changeTargetValue.type,
-  ).map((action: any) => {
-    const value = convertValueWithBaseRateToTargetRate(
-      action.payload,
-      currencyRatesSelectors.getTargetCurrencyRate(store.getState()),
-      currencyRatesSelectors.getBaseCurrencyRate(store.getState()),
-    );
-    return actionCreators.recalculateBaseValue(value);
-  });
+// persist state in local storage every 1s
+const saveStateInLocalStorage: Epic<RootAction, RootState> = (action$, store) => action$
+  .debounceTime(SAVING_DELAY)
+  .do((action: RootAction) => {
+    // handle side-effects
+    saveState(store.getState());
+  })
+  .ignoreElements();
 
 export const epics = combineEpics(
-  recalculateTargetValueOnCurrencyChange,
-  recalculateTargetValueOnBaseValueChange,
-  recalculateBaseValueOnTargetValueChange,
+  saveStateInLocalStorage,
 );
 ```
 
@@ -64,31 +33,27 @@ export const epics = combineEpics(
 
 ```ts
 import { createSelector } from 'reselect';
-import { RootState } from '../types';
 
-const getCurrencyConverter = (state: RootState) => state.currencyConverter;
-const getCurrencyRates = (state: RootState) => state.currencyRates;
+import { RootState } from '@src/redux';
 
-export const getCurrencies = createSelector(
-  getCurrencyRates,
-  (currencyRates) => {
-    return Object.keys(currencyRates.rates).concat(currencyRates.base);
-  },
-);
+export const getTodos =
+  (state: RootState) => state.todos.todos;
 
-export const getBaseCurrencyRate = createSelector(
-  getCurrencyConverter, getCurrencyRates,
-  (currencyConverter, currencyRates) => {
-    const selectedBase = currencyConverter.baseCurrency;
-    return selectedBase === currencyRates.base
-      ? 1 : currencyRates.rates[selectedBase];
-  },
-);
+export const getTodosFilter =
+  (state: RootState) => state.todos.todosFilter;
 
-export const getTargetCurrencyRate = createSelector(
-  getCurrencyConverter, getCurrencyRates,
-  (currencyConverter, currencyRates) => {
-    return currencyRates.rates[currencyConverter.targetCurrency];
+export const getFilteredTodos = createSelector(
+  getTodos, getTodosFilter,
+  (todos, todosFilter) => {
+    switch (todosFilter) {
+      case 'completed':
+        return todos.filter((t) => t.completed);
+      case 'active':
+        return todos.filter((t) => !t.completed);
+
+      default:
+        return todos;
+    }
   },
 );
 ```

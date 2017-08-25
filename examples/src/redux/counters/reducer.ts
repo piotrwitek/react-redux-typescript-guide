@@ -1,17 +1,17 @@
 import { combineReducers } from 'redux';
 
-import { IRootAction } from '@src/redux';
+import { RootAction } from '@src/redux';
 
 import {
   INCREMENT_SFC,
   DECREMENT_SFC,
 } from './';
 
-export type IState = {
+export type State = {
   readonly sfcCounter: number,
 };
 
-export const reducer = combineReducers<IState, IRootAction>({
+export const reducer = combineReducers<State, RootAction>({
   sfcCounter: (state = 0, action) => {
     switch (action.type) {
       case INCREMENT_SFC:

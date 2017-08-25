@@ -1,7 +1,5 @@
 # Redux
 
----
-
 ## Actions
 
 - ### KISS Style

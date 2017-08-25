@@ -31,12 +31,11 @@ The power of static-typing will make processes of improving your codebase, refac
 
 ### Table of Contents
 - [React](#react)
-  - [Stateless Component - SFC](#stateless-component---sfc)
-  - [Class Component](#class-component)
-  - [Generic List Component](#generic-list-component)
-  - [Connected Container with OwnProps](#connected-container-with-ownprops)
-  - [Connected Container without OwnProps using Type Inference](#connected-container-without-ownprops-using-type-inference)
-  - [Higher-Order Component](#higher-order-component)
+  - [Stateless Components - SFC](#stateless-components---sfc)
+  - [Stateful Components](#stateful-components---class)
+  - [Generic Components](#generic-components)
+  - [Connected Components](#connected-Components)
+  - [Higher-Order Components](#higher-order-components)
 - [Redux](#redux)
   - [Actions](#actions)
   - [Reducers](#reducers)
@@ -59,14 +58,10 @@ The power of static-typing will make processes of improving your codebase, refac
 
 # React
 
----
-
 ## Stateless Components - SFC
 - convenient alias: `React.SFC<Props> === React.StatelessComponent<Props>`
 
-### Examples:
-
-- stateless counter example
+### stateless counter example
 
 ```tsx
 import * as React from 'react';
@@ -94,7 +89,9 @@ export const SFCCounter: React.SFC<SFCCounterProps> = (props) => {
 
 ```
 
-- spread attributes example [ref](https://facebook.github.io/react/docs/jsx-in-depth.html#spread-attributes)
+---
+
+### [spread attributes](https://facebook.github.io/react/docs/jsx-in-depth.html#spread-attributes) example
 
 ```tsx
 import * as React from 'react';
@@ -120,9 +117,7 @@ export const SFCSpreadAttributes: React.SFC<SFCSpreadAttributesProps> = (props) 
 
 ## Stateful Components - Class
 
-### Examples:
-
-- stateful counter example
+### stateful counter example
 
 ```tsx
 import * as React from 'react';
@@ -162,7 +157,9 @@ export class StatefulCounter extends React.Component<StatefulCounterProps, State
 
 ```
 
-- stateful counter with default props example
+---
+
+### stateful counter with default props example
 
 ```tsx
 import * as React from 'react';
@@ -224,11 +221,9 @@ export const StatefulCounterWithInitialCount: React.ComponentClass<StatefulCount
 
 ---
 
-## Generic List Components
+## Generic Components
 
-### Examples:
-
-- generic list component example
+### generic list component example
 
 ```tsx
 import * as React from 'react';
@@ -252,7 +247,9 @@ export class GenericList<T> extends React.Component<GenericListProps<T>, {}> {
 
 ```
 
-- user list component extending generic list
+---
+
+### user list component extending generic list
 
 ```tsx
 import * as React from 'react';
@@ -271,10 +268,10 @@ export const UserListItem: React.SFC<{ item: IUser }> = ({ item }) => (
 );
 
 ```
-<details>
-  <summary>Show Usage</summary>
-  ```tsx
-  import * as React from 'react';
+<details><summary>Show Usage</summary><p>
+
+```tsx
+import * as React from 'react';
 
 import { IUser, UserList, UserListItem } from './user-list';
 
@@ -290,16 +287,14 @@ export default ({ users }: Props) => (
   />
 );
 
-  ```
-</details>
+```
+</p></details><br />
 
 ---
 
 ## Connected Components
 
-### Examples:
-
-- connected counter example - concise
+### connected counter example - concise
 
 ```tsx
 import { connect } from 'react-redux';
@@ -317,10 +312,10 @@ export const SFCCounterConnected = connect(mapStateToProps, {
 })(SFCCounter);
 
 ```
-<details>
-  <summary>Show Usage</summary>
-  ```tsx
-  import { connect } from 'react-redux';
+<details><summary>Show Usage</summary><p>
+
+```tsx
+import { connect } from 'react-redux';
 
 import { RootState } from '@src/redux';
 import { actionCreators } from '@src/redux/counters';
@@ -334,10 +329,12 @@ export const SFCCounterConnected = connect(mapStateToProps, {
   onIncrement: actionCreators.incrementSfc,
 })(SFCCounter);
 
-  ```
-</details>
+```
+</p></details><br />
 
-- connected counter example - verbose
+---
+
+### connected counter example - verbose
 
 ```tsx
 import { bindActionCreators } from 'redux';
@@ -359,10 +356,10 @@ export const SFCCounterConnectedVerbose =
   connect(mapStateToProps, mapDispatchToProps)(SFCCounter);
 
 ```
-<details>
-  <summary>Show Usage</summary>
-  ```tsx
-  import * as React from 'react';
+<details><summary>Show Usage</summary><p>
+
+```tsx
+import * as React from 'react';
 
 import { SFCCounterConnectedVerbose } from '../connected';
 
@@ -372,10 +369,12 @@ export default () => (
   />
 );
 
-  ```
-</details>
+```
+</p></details><br />
 
-- connected counter example - with own props
+---
+
+### connected counter example - with own props
 
 ```tsx
 import { connect } from 'react-redux';
@@ -397,10 +396,10 @@ export const SFCCounterConnectedExtended = connect(mapStateToProps, {
 })(SFCCounter);
 
 ```
-<details>
-  <summary>Show Usage</summary>
-  ```tsx
-  import * as React from 'react';
+<details><summary>Show Usage</summary><p>
+
+```tsx
+import * as React from 'react';
 
 import { SFCCounterConnectedExtended } from '../connected';
 
@@ -411,19 +410,17 @@ export default () => (
   />
 );
 
-  ```
-</details>
+```
+</p></details><br />
 
 ---
 
-## Higher-Order Component
+## Higher-Order Components
 - function that takes a component and returns a new component
 - a new component will infer Props interface from wrapped Component extended with Props of HOC
 - will filter out props specific to HOC, and the rest will be passed through to wrapped component
 
-### Examples:
-
-- basic hoc: enhance stateless counter with state
+### basic hoc: enhance stateless counter with state
 
 ```tsx
 import * as React from 'react';
@@ -470,10 +467,10 @@ export function withState<WrappedComponentProps extends RequiredProps>(
 }
 
 ```
-<details>
-  <summary>Show Usage</summary>
-  ```tsx
-  import * as React from 'react';
+<details><summary>Show Usage</summary><p>
+
+```tsx
+import * as React from 'react';
 
 import { withState } from '../hoc';
 import { SFCCounter } from '../components';
@@ -487,10 +484,12 @@ export default (
   )
 ) as React.SFC<{}>;
 
-  ```
-</details>
+```
+</p></details><br />
 
-- advanced hoc: add error handling with componentDidCatch to view component
+---
+
+### advanced hoc: add error handling with componentDidCatch to view component
 
 ```tsx
 import * as React from 'react';
@@ -548,10 +547,10 @@ export function withErrorBoundary(
 }
 
 ```
-<details>
-  <summary>Show Usage</summary>
-  ```tsx
-  import * as React from 'react';
+<details><summary>Show Usage</summary><p>
+
+```tsx
+import * as React from 'react';
 
 import { withErrorBoundary } from './with-error-boundary';
 
@@ -583,14 +582,14 @@ export default (
   )
 ) as React.SFC<{}>;
 
-  ```
-</details>
+```
+</p></details><br />
+
+---
 
 ---
 
 # Redux
-
----
 
 ## Actions
 
@@ -871,56 +870,25 @@ export const store = createStore(
 ## Async Flow with "redux-observable"
 
 ```ts
-import 'rxjs/add/operator/map';
+// import rxjs operators somewhere...
 import { combineEpics, Epic } from 'redux-observable';
 
-import { RootState, Action } from '../types'; // check store section
-import { actionCreators } from '../reducer';
-import { convertValueWithBaseRateToTargetRate } from './utils';
-import * as currencyConverterSelectors from './selectors';
-import * as currencyRatesSelectors from '../currency-rates/selectors';
+import { RootAction, RootState } from '@src/redux';
+import { saveState } from '@src/services/local-storage-service';
 
-const recalculateTargetValueOnCurrencyChange: Epic<Action, RootState> = (action$, store) =>
-  action$.ofType(
-    actionCreators.changeBaseCurrency.type,
-    actionCreators.changeTargetCurrency.type,
-  ).map((action: any) => {
-    const value = convertValueWithBaseRateToTargetRate(
-      currencyConverterSelectors.getBaseValue(store.getState()),
-      currencyRatesSelectors.getBaseCurrencyRate(store.getState()),
-      currencyRatesSelectors.getTargetCurrencyRate(store.getState()),
-    );
-    return actionCreators.recalculateTargetValue(value);
-  });
+const SAVING_DELAY = 1000;
 
-const recalculateTargetValueOnBaseValueChange: Epic<Action, RootState> = (action$, store) =>
-  action$.ofType(
-    actionCreators.changeBaseValue.type,
-  ).map((action: any) => {
-    const value = convertValueWithBaseRateToTargetRate(
-      action.payload,
-      currencyRatesSelectors.getBaseCurrencyRate(store.getState()),
-      currencyRatesSelectors.getTargetCurrencyRate(store.getState()),
-    );
-    return actionCreators.recalculateTargetValue(value);
-  });
-
-const recalculateBaseValueOnTargetValueChange: Epic<Action, RootState> = (action$, store) =>
-  action$.ofType(
-    actionCreators.changeTargetValue.type,
-  ).map((action: any) => {
-    const value = convertValueWithBaseRateToTargetRate(
-      action.payload,
-      currencyRatesSelectors.getTargetCurrencyRate(store.getState()),
-      currencyRatesSelectors.getBaseCurrencyRate(store.getState()),
-    );
-    return actionCreators.recalculateBaseValue(value);
-  });
+// persist state in local storage every 1s
+const saveStateInLocalStorage: Epic<RootAction, RootState> = (action$, store) => action$
+  .debounceTime(SAVING_DELAY)
+  .do((action: RootAction) => {
+    // handle side-effects
+    saveState(store.getState());
+  })
+  .ignoreElements();
 
 export const epics = combineEpics(
-  recalculateTargetValueOnCurrencyChange,
-  recalculateTargetValueOnBaseValueChange,
-  recalculateBaseValueOnTargetValueChange,
+  saveStateInLocalStorage,
 );
 ```
 
@@ -930,31 +898,27 @@ export const epics = combineEpics(
 
 ```ts
 import { createSelector } from 'reselect';
-import { RootState } from '../types';
 
-const getCurrencyConverter = (state: RootState) => state.currencyConverter;
-const getCurrencyRates = (state: RootState) => state.currencyRates;
+import { RootState } from '@src/redux';
 
-export const getCurrencies = createSelector(
-  getCurrencyRates,
-  (currencyRates) => {
-    return Object.keys(currencyRates.rates).concat(currencyRates.base);
-  },
-);
+export const getTodos =
+  (state: RootState) => state.todos.todos;
 
-export const getBaseCurrencyRate = createSelector(
-  getCurrencyConverter, getCurrencyRates,
-  (currencyConverter, currencyRates) => {
-    const selectedBase = currencyConverter.baseCurrency;
-    return selectedBase === currencyRates.base
-      ? 1 : currencyRates.rates[selectedBase];
-  },
-);
+export const getTodosFilter =
+  (state: RootState) => state.todos.todosFilter;
 
-export const getTargetCurrencyRate = createSelector(
-  getCurrencyConverter, getCurrencyRates,
-  (currencyConverter, currencyRates) => {
-    return currencyRates.rates[currencyConverter.targetCurrency];
+export const getFilteredTodos = createSelector(
+  getTodos, getTodosFilter,
+  (todos, todosFilter) => {
+    switch (todosFilter) {
+      case 'completed':
+        return todos.filter((t) => t.completed);
+      case 'active':
+        return todos.filter((t) => !t.completed);
+
+      default:
+        return todos;
+    }
   },
 );
 ```
