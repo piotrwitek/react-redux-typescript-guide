@@ -83,5 +83,3 @@
 
 ::example='../../examples/src/hoc/with-error-boundary.tsx'::
 ::usage='../../examples/src/hoc/with-error-boundary.usage.tsx'::
-
----

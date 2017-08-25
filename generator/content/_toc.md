@@ -1,7 +1,7 @@
 ### Table of Contents
 - [React](#react)
   - [Stateless Components - SFC](#stateless-components---sfc)
-  - [Stateful Components](#stateful-components---class)
+  - [Stateful Components - Class](#stateful-components---class)
   - [Generic Components](#generic-components)
   - [Connected Components](#connected-Components)
   - [Higher-Order Components](#higher-order-components)
