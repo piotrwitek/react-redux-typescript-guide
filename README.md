@@ -254,7 +254,7 @@ export class GenericList<T> extends React.Component<GenericListProps<T>, {}> {
 ```tsx
 import * as React from 'react';
 
-import { GenericList } from './generic-list';
+import { GenericList } from '@src/components';
 
 export interface IUser {
   id: string,
@@ -273,7 +273,7 @@ export const UserListItem: React.SFC<{ item: IUser }> = ({ item }) => (
 ```tsx
 import * as React from 'react';
 
-import { IUser, UserList, UserListItem } from './user-list';
+import { IUser, UserList, UserListItem } from '@src/components';
 
 interface Props {
   users: IUser[],
@@ -301,7 +301,7 @@ import { connect } from 'react-redux';
 
 import { RootState } from '@src/redux';
 import { actionCreators } from '@src/redux/counters';
-import { SFCCounter } from '../components';
+import { SFCCounter } from '@src/components';
 
 const mapStateToProps = (state: RootState) => ({
   count: state.counters.sfcCounter,
@@ -319,7 +319,7 @@ import { connect } from 'react-redux';
 
 import { RootState } from '@src/redux';
 import { actionCreators } from '@src/redux/counters';
-import { SFCCounter } from '../components';
+import { SFCCounter } from '@src/components';
 
 const mapStateToProps = (state: RootState) => ({
   count: state.counters.sfcCounter,
@@ -342,7 +342,7 @@ import { connect } from 'react-redux';
 
 import { RootState, Dispatch } from '@src/redux';
 import { actionCreators } from '@src/redux/counters';
-import { SFCCounter } from '../components';
+import { SFCCounter } from '@src/components';
 
 const mapStateToProps = (state: RootState) => ({
   count: state.counters.sfcCounter,
@@ -361,7 +361,7 @@ export const SFCCounterConnectedVerbose =
 ```tsx
 import * as React from 'react';
 
-import { SFCCounterConnectedVerbose } from '../connected';
+import { SFCCounterConnectedVerbose } from '@src/connected';
 
 export default () => (
   <SFCCounterConnectedVerbose
@@ -381,7 +381,7 @@ import { connect } from 'react-redux';
 
 import { RootState } from '@src/redux';
 import { actionCreators } from '@src/redux/counters';
-import { SFCCounter } from '../components';
+import { SFCCounter } from '@src/components';
 
 export interface SFCCounterConnectedExtended {
   initialCount: number,
@@ -401,7 +401,7 @@ export const SFCCounterConnectedExtended = connect(mapStateToProps, {
 ```tsx
 import * as React from 'react';
 
-import { SFCCounterConnectedExtended } from '../connected';
+import { SFCCounterConnectedExtended } from '@src/connected';
 
 export default () => (
   <SFCCounterConnectedExtended
@@ -424,7 +424,8 @@ export default () => (
 
 ```tsx
 import * as React from 'react';
-import { Omit } from '../types/augmentations.d';
+
+import { Omit } from '@src/types/react-redux-typescript';
 
 interface RequiredProps {
   count: number,
@@ -472,8 +473,8 @@ export function withState<WrappedComponentProps extends RequiredProps>(
 ```tsx
 import * as React from 'react';
 
-import { withState } from '../hoc';
-import { SFCCounter } from '../components';
+import { withState } from '@src/hoc';
+import { SFCCounter } from '@src/components';
 
 const SFCCounterWithState =
   withState(SFCCounter);
@@ -552,8 +553,8 @@ export function withErrorBoundary(
 ```tsx
 import * as React from 'react';
 
-import { withErrorBoundary } from './with-error-boundary';
-import { ErrorMessage } from '../components';
+import { withErrorBoundary } from '@src/hoc';
+import { ErrorMessage } from '@src/components';
 
 const ErrorMessageWithErrorBoundary =
   withErrorBoundary(ErrorMessage);

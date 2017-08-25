@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { GenericList } from './generic-list';
+import { GenericList } from '@src/components';
 
 export interface IUser {
   id: string,

@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { SFCCounterConnected } from '../connected';
+import { SFCCounterConnected } from '@src/connected';
 
 export default () => (
   <SFCCounterConnected

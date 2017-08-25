@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { IUser, UserList, UserListItem } from './user-list';
+import { IUser, UserList, UserListItem } from '@src/components';
 
 interface Props {
   users: IUser[],

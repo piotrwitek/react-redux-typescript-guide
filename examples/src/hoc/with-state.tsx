@@ -1,5 +1,6 @@
 import * as React from 'react';
-import { Omit } from '../types/augmentations.d';
+
+import { Omit } from '@src/types/react-redux-typescript';
 
 interface RequiredProps {
   count: number,

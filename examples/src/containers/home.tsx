@@ -1,30 +1,11 @@
 import * as React from 'react';
 
-import {
-  SFCCounter,
-  StatefulCounter,
-  StatefulCounterWithInitialCount
-} from '../components';
+import UserListUsage from '@src/components/user-list.usage';
 
 export const Home = () => {
-  let count = 0;
-  const increment = () => { count++; };
-
   return (
     <section>
-      <SFCCounter
-        label="StatelessCounter"
-        count={count}
-        onIncrement={increment}
-      />
-
-      <StatefulCounter
-        label="ClassCounter"
-      />
-
-      <StatefulCounterWithInitialCount
-        label="ClassCounter"
-      />
+      <UserListUsage users={[{ id: 'fake_id', name: 'Piotr' }]} />
     </section>
   );
 }

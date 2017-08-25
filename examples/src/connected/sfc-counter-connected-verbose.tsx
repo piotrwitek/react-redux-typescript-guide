@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 
 import { RootState, Dispatch } from '@src/redux';
 import { actionCreators } from '@src/redux/counters';
-import { SFCCounter } from '../components';
+import { SFCCounter } from '@src/components';
 
 const mapStateToProps = (state: RootState) => ({
   count: state.counters.sfcCounter,

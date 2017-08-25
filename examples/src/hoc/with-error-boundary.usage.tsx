@@ -1,7 +1,7 @@
 import * as React from 'react';
 
-import { withErrorBoundary } from './with-error-boundary';
-import { ErrorMessage } from '../components';
+import { withErrorBoundary } from '@src/hoc';
+import { ErrorMessage } from '@src/components';
 
 const ErrorMessageWithErrorBoundary =
   withErrorBoundary(ErrorMessage);
