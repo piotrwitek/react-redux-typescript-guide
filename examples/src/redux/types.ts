@@ -1,10 +1,10 @@
 import { Dispatch as ReduxDispatch } from 'redux';
-import { ThunkAction as ReduxThunkAction } from 'redux-thunk';
+// import { ThunkAction as ReduxThunkAction } from 'redux-thunk';
 
 import { IRootState, IRootAction } from '@src/redux';
 
-export type Dispatch = ReduxDispatch<IRootState>;
-export type Reducer<S> = (state: S, action: IRootAction) => S;
+export type IDispatch = ReduxDispatch<IRootState>;
+export type IReducer<S> = (state: S, action: IRootAction) => S;
 
-export type Api = {};
-export type ThunkAction<T> = ReduxThunkAction<T, IRootState, Api>;
+export type IApi = {};
+// export type IThunkAction<T> = ReduxThunkAction<T, IRootState, IApi>;

@@ -1,10 +1,9 @@
 import * as React from 'react';
-import { Action } from 'redux';
 
 export interface ISFCCounterProps {
   label: string,
   count: number,
-  onIncrement: () => Action,
+  onIncrement: () => any,
 }
 
 export const SFCCounter: React.SFC<ISFCCounterProps> = (props) => {

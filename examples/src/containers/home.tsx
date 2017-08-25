@@ -7,25 +7,27 @@ import {
   StatefulCounter,
 } from '../components';
 
-let count = 0;
-const increment = () => { count++; };
+export const Home = () => {
+  let count = 0;
+  const increment = () => { count++; };
 
-export const Home = () => (
-  <section>
-    <SFCCounter
-      label="StatelessCounter"
-      count={count}
-      onIncrement={increment}
-    />
-    <SFCCounterConnected
-      label="ConnectedStatelessCounter"
-    />
-    <SFCCounterConnectedConcise
-      label="ConnectedStatelessCounter" // error without -> <link>
-    />
-    <StatefulCounter
-      label="ClassCounter"
-      initialCount={10}
-    />
-  </section>
-);
+  return (
+    <section>
+      <SFCCounter
+        label="StatelessCounter"
+        count={count}
+        onIncrement={increment}
+      />
+      <SFCCounterConnected
+        label="ConnectedStatelessCounter"
+      />
+      <SFCCounterConnectedConcise
+        label="ConnectedStatelessCounter"
+      />
+      <StatefulCounter
+        label="ClassCounter"
+        initialCount={10}
+      />
+    </section>
+  );
+}
