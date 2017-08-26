@@ -4,6 +4,6 @@ import { SFCCounterConnected } from '@src/connected';
 
 export default () => (
   <SFCCounterConnected
-    label="ConnectedStatelessCounter"
+    label="SFCCounterConnected"
   />
 );

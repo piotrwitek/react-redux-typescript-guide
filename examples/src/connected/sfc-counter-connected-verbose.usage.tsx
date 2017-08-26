@@ -4,6 +4,6 @@ import { SFCCounterConnectedVerbose } from '@src/connected';
 
 export default () => (
   <SFCCounterConnectedVerbose
-    label="ConnectedStatelessCounter"
+    label="SFCCounterConnectedVerbose"
   />
 );

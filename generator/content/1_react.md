@@ -55,7 +55,7 @@
 
 ::example='../../examples/src/connected/sfc-counter-connected.tsx'::
 
-::usage='../../examples/src/connected/sfc-counter-connected.tsx'::
+::usage='../../examples/src/connected/sfc-counter-connected.usage.tsx'::
 
 ---
 

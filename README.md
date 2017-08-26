@@ -361,19 +361,15 @@ export const SFCCounterConnected = connect(mapStateToProps, {
 <details><summary>SHOW USAGE</summary><p>
 
 ```tsx
-import { connect } from 'react-redux';
+import * as React from 'react';
 
-import { RootState } from '@src/redux';
-import { actionCreators } from '@src/redux/counters';
-import { SFCCounter } from '@src/components';
+import { SFCCounterConnected } from '@src/connected';
 
-const mapStateToProps = (state: RootState) => ({
-  count: state.counters.sfcCounter,
-});
-
-export const SFCCounterConnected = connect(mapStateToProps, {
-  onIncrement: actionCreators.incrementSfc,
-})(SFCCounter);
+export default () => (
+  <SFCCounterConnected
+    label="SFCCounterConnected"
+  />
+);
 
 ```
 </p></details>
@@ -412,7 +408,7 @@ import { SFCCounterConnectedVerbose } from '@src/connected';
 
 export default () => (
   <SFCCounterConnectedVerbose
-    label="ConnectedStatelessCounter"
+    label="SFCCounterConnectedVerbose"
   />
 );
 
@@ -453,7 +449,7 @@ import { SFCCounterConnectedExtended } from '@src/connected';
 
 export default () => (
   <SFCCounterConnectedExtended
-    label="ConnectedStatelessCounter"
+    label="SFCCounterConnectedExtended"
     initialCount={10}
   />
 );
