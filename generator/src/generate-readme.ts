@@ -62,7 +62,7 @@ function withDetailsWrapper(text: string) {
 ${'```tsx'}
 ${text}
 ${'```'}
-</p></details><br />
+</p></details>
   `.trim();
 }
 

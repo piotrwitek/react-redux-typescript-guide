@@ -30,17 +30,14 @@
 ---
 
 ## Generic Components
+- easily create typed component variations and reuse common logic
+- especially useful to create typed list components
 
 ### generic list component example
 
 ::example='../../examples/src/components/generic-list.tsx'::
 
----
-
-### user list component extending generic list
-
-::example='../../examples/src/components/user-list.tsx'::
-::usage='../../examples/src/components/user-list.usage.tsx'::
+::usage='../../examples/src/components/generic-list.usage.tsx'::
 
 ---
 
@@ -49,6 +46,7 @@
 ### connected counter example - concise
 
 ::example='../../examples/src/connected/sfc-counter-connected.tsx'::
+
 ::usage='../../examples/src/connected/sfc-counter-connected.tsx'::
 
 ---
@@ -56,6 +54,7 @@
 ### connected counter example - verbose
 
 ::example='../../examples/src/connected/sfc-counter-connected-verbose.tsx'::
+
 ::usage='../../examples/src/connected/sfc-counter-connected-verbose.usage.tsx'::
 
 ---
@@ -63,6 +62,7 @@
 ### connected counter example - with own props
 
 ::example='../../examples/src/connected/sfc-counter-connected-extended.tsx'::
+
 ::usage='../../examples/src/connected/sfc-counter-connected-extended.usage.tsx'::
 
 ---
@@ -75,6 +75,7 @@
 ### basic hoc: enhance stateless counter with state
 
 ::example='../../examples/src/hoc/with-state.tsx'::
+
 ::usage='../../examples/src/hoc/with-state.usage.tsx'::
 
 ---
@@ -82,4 +83,5 @@
 ### advanced hoc: add error handling with componentDidCatch to view component
 
 ::example='../../examples/src/hoc/with-error-boundary.tsx'::
+
 ::usage='../../examples/src/hoc/with-error-boundary.usage.tsx'::

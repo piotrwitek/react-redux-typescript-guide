@@ -217,6 +217,8 @@ export const StatefulCounterWithInitialCount: React.ComponentClass<StatefulCount
 ---
 
 ## Generic Components
+- easily create typed component variations and reuse common logic
+- especially useful to create typed list components
 
 ### generic list component example
 
@@ -242,26 +244,16 @@ export class GenericList<T> extends React.Component<GenericListProps<T>, {}> {
 
 ```
 
----
-
-### user list component extending generic list
-
-```tsx
-import { IUser } from '@src/models';
-import { GenericList } from '@src/components';
-
-export const UserList = class extends GenericList<IUser> { };
-
-```
 <details><summary>Show Usage</summary><p>
 
 ```tsx
 import * as React from 'react';
 
 import { IUser } from '@src/models'
-import { UserList } from '@src/components';
+import { GenericList } from '@src/components';
 
-// "items" and "itemRenderer" will check for type errors with "IUser" type
+export const UserList = class extends GenericList<IUser> { };
+
 export default ({ users }: { users: IUser[] }) => (
   <UserList
     items={users}
@@ -270,7 +262,7 @@ export default ({ users }: { users: IUser[] }) => (
 );
 
 ```
-</p></details><br />
+</p></details>
 
 ---
 
@@ -294,6 +286,7 @@ export const SFCCounterConnected = connect(mapStateToProps, {
 })(SFCCounter);
 
 ```
+
 <details><summary>Show Usage</summary><p>
 
 ```tsx
@@ -312,7 +305,7 @@ export const SFCCounterConnected = connect(mapStateToProps, {
 })(SFCCounter);
 
 ```
-</p></details><br />
+</p></details>
 
 ---
 
@@ -338,6 +331,7 @@ export const SFCCounterConnectedVerbose =
   connect(mapStateToProps, mapDispatchToProps)(SFCCounter);
 
 ```
+
 <details><summary>Show Usage</summary><p>
 
 ```tsx
@@ -352,7 +346,7 @@ export default () => (
 );
 
 ```
-</p></details><br />
+</p></details>
 
 ---
 
@@ -378,6 +372,7 @@ export const SFCCounterConnectedExtended = connect(mapStateToProps, {
 })(SFCCounter);
 
 ```
+
 <details><summary>Show Usage</summary><p>
 
 ```tsx
@@ -393,7 +388,7 @@ export default () => (
 );
 
 ```
-</p></details><br />
+</p></details>
 
 ---
 
@@ -450,6 +445,7 @@ export function withState<WrappedComponentProps extends RequiredProps>(
 }
 
 ```
+
 <details><summary>Show Usage</summary><p>
 
 ```tsx
@@ -468,7 +464,7 @@ export default (
 ) as React.SFC<{}>;
 
 ```
-</p></details><br />
+</p></details>
 
 ---
 
@@ -530,6 +526,7 @@ export function withErrorBoundary(
 }
 
 ```
+
 <details><summary>Show Usage</summary><p>
 
 ```tsx
@@ -550,7 +547,7 @@ export default (
 ) as React.SFC<{}>;
 
 ```
-</p></details><br />
+</p></details>
 
 ---
 
