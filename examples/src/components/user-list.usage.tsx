@@ -1,15 +1,12 @@
 import * as React from 'react';
 
-import { IUser, UserList, UserListItem } from '@src/components';
-
-interface Props {
-  users: IUser[],
-}
+import { IUser } from '@src/models'
+import { UserList } from '@src/components';
 
 // "items" and "itemRenderer" will check for type errors with "IUser" type
-export default ({ users }: Props) => (
+export default ({ users }: { users: IUser[] }) => (
   <UserList
     items={users}
-    itemRenderer={(item) => <UserListItem key={item.id} item={item} />}
+    itemRenderer={(item) => <div key={item.id}>{item.fullName}</div>}
   />
 );

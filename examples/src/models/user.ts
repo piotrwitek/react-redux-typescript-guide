@@ -1,3 +1,5 @@
+import { v4 } from 'uuid';
+
 export interface IUserDTO {
   id: string;
   first_name: string;
@@ -8,24 +10,19 @@ export interface IUser {
   constructor: {
     fromDTO(user: IUserDTO): IUser;
   }
+  toDTO(): IUserDTO;
 
   id: string;
   firstName: string;
   lastName: string;
-  getFullName(): string;
-
-  toDTO(): IUserDTO;
+  fullName: string;
 }
 
 export class User implements IUser {
   'constructor': typeof User;
 
-  id: string;
-  firstName: string = 'Default';
-  lastName: string = 'Name';
-
-  constructor(id: string) {
-    this.id = id;
+  constructor(id?: string) {
+    this.id = id || v4();
   }
 
   static fromDTO(dto: IUserDTO): IUser {
@@ -36,15 +33,18 @@ export class User implements IUser {
     return model;
   }
 
-  getFullName(): string {
-    return `${this.firstName} ${this.lastName}`;
-  }
-
   toDTO(): IUserDTO {
     return {
       id: this.id,
       first_name: this.firstName,
       last_name: this.lastName,
     }
+  }
+
+  id: string;
+  firstName: string = 'Default';
+  lastName: string = 'Name';
+  get fullName(): string {
+    return `${this.firstName} ${this.lastName}`;
   }
 }
