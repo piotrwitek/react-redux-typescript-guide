@@ -244,7 +244,7 @@ export class GenericList<T> extends React.Component<GenericListProps<T>, {}> {
 
 ```
 
-<details><summary>Show Usage</summary><p>
+<details><summary>SHOW USAGE</summary><p>
 
 ```tsx
 import * as React from 'react';
@@ -287,7 +287,7 @@ export const SFCCounterConnected = connect(mapStateToProps, {
 
 ```
 
-<details><summary>Show Usage</summary><p>
+<details><summary>SHOW USAGE</summary><p>
 
 ```tsx
 import { connect } from 'react-redux';
@@ -332,7 +332,7 @@ export const SFCCounterConnectedVerbose =
 
 ```
 
-<details><summary>Show Usage</summary><p>
+<details><summary>SHOW USAGE</summary><p>
 
 ```tsx
 import * as React from 'react';
@@ -373,7 +373,7 @@ export const SFCCounterConnectedExtended = connect(mapStateToProps, {
 
 ```
 
-<details><summary>Show Usage</summary><p>
+<details><summary>SHOW USAGE</summary><p>
 
 ```tsx
 import * as React from 'react';
@@ -446,7 +446,7 @@ export function withState<WrappedComponentProps extends RequiredProps>(
 
 ```
 
-<details><summary>Show Usage</summary><p>
+<details><summary>SHOW USAGE</summary><p>
 
 ```tsx
 import * as React from 'react';
@@ -527,7 +527,7 @@ export function withErrorBoundary(
 
 ```
 
-<details><summary>Show Usage</summary><p>
+<details><summary>SHOW USAGE</summary><p>
 
 ```tsx
 import * as React from 'react';
