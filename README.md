@@ -84,6 +84,27 @@ export const SFCCounter: React.SFC<SFCCounterProps> = (props) => {
 
 ```
 
+<details><summary>SHOW USAGE</summary><p>
+
+```tsx
+import * as React from 'react';
+
+import { SFCCounter } from '@src/components';
+
+let count = 0;
+const incrementCount = () => count++;
+
+export default () => (
+  <SFCCounter
+    label='SFCCounter'
+    count={count}
+    onIncrement={incrementCount}
+  />
+);
+
+```
+</p></details>
+
 ---
 
 ### [spread attributes](https://facebook.github.io/react/docs/jsx-in-depth.html#spread-attributes) example
@@ -107,6 +128,23 @@ export const SFCSpreadAttributes: React.SFC<SFCSpreadAttributesProps> = (props) 
 };
 
 ```
+
+<details><summary>SHOW USAGE</summary><p>
+
+```tsx
+import * as React from 'react';
+
+import { SFCSpreadAttributes } from '@src/components';
+
+export default () => (
+  <SFCSpreadAttributes
+    style={{ backgroundColor: 'lightcyan' }}
+  />
+);
+
+
+```
+</p></details>
 
 ---
 
@@ -151,6 +189,22 @@ export class StatefulCounter extends React.Component<StatefulCounterProps, State
 }
 
 ```
+
+<details><summary>SHOW USAGE</summary><p>
+
+```tsx
+import * as React from 'react';
+
+import { StatefulCounter } from '@src/components';
+
+export default () => (
+  <StatefulCounter
+    label={'StatefulCounter'}
+  />
+);
+
+```
+</p></details>
 
 ---
 
@@ -213,6 +267,23 @@ export const StatefulCounterWithInitialCount: React.ComponentClass<StatefulCount
   }
 
 ```
+
+<details><summary>SHOW USAGE</summary><p>
+
+```tsx
+import * as React from 'react';
+
+import { StatefulCounterWithInitialCount } from '@src/components';
+
+export default () => (
+  <StatefulCounterWithInitialCount
+    label={'StatefulCounter'}
+    initialCount={10}
+  />
+);
+
+```
+</p></details>
 
 ---
 

@@ -7,11 +7,15 @@
 
 ::example='../../examples/src/components/sfc-counter.tsx'::
 
+::usage='../../examples/src/components/sfc-counter.usage.tsx'::
+
 ---
 
 ### [spread attributes](https://facebook.github.io/react/docs/jsx-in-depth.html#spread-attributes) example
 
 ::example='../../examples/src/components/sfc-spread-attributes.tsx'::
+
+::usage='../../examples/src/components/sfc-spread-attributes.usage.tsx'::
 
 ---
 
@@ -19,13 +23,17 @@
 
 ### stateful counter example
 
-::example='../../examples/src/components/statefull-counter.tsx'::
+::example='../../examples/src/components/stateful-counter.tsx'::
+
+::usage='../../examples/src/components/stateful-counter.usage.tsx'::
 
 ---
 
 ### stateful counter with default props example
 
-::example='../../examples/src/components/statefull-counter-with-initial-count.tsx'::
+::example='../../examples/src/components/stateful-counter-with-initial-count.tsx'::
+
+::usage='../../examples/src/components/stateful-counter-with-initial-count.usage.tsx'::
 
 ---
 
