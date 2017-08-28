@@ -1,7 +1,7 @@
 import { createStore, applyMiddleware, compose } from 'redux';
 import { createEpicMiddleware } from 'redux-observable';
-import { rootReducer, rootEpic } from './redux';
-import { RootState } from './redux';
+import { rootReducer, rootEpic } from '@src/redux';
+import { RootState } from '@src/redux';
 
 const composeEnhancers = (
   process.env.NODE_ENV === 'development' &&
@@ -18,7 +18,6 @@ function configureStore(initialState?: RootState) {
     applyMiddleware(...middlewares),
   );
   // create store
-
   return createStore<RootState>(
     rootReducer,
     initialState!,
@@ -26,7 +25,8 @@ function configureStore(initialState?: RootState) {
   );
 }
 
-
+// pass an optional param to rehydrate state on app start
 const store = configureStore();
 
+// export store singleton instance
 export default store;

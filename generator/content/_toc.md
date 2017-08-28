@@ -3,7 +3,7 @@
   - [Stateless Components - SFC](#stateless-components---sfc)
   - [Stateful Components - Class](#stateful-components---class)
   - [Generic Components](#generic-components)
-  - [Connected Components](#connected-Components)
+  - [Connected Components](#connected-components)
   - [Higher-Order Components](#higher-order-components)
 - [Redux](#redux)
   - [Actions](#actions)
