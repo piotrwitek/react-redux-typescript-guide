@@ -18,16 +18,16 @@ Related `ts-lint` rule: https://palantir.github.io/tslint/rules/interface-over-t
 ### - how to best initialize class instance or static properties?
 > Prefered modern style is to use class Property Initializers  
 ```tsx
-class MyComponent extends React.Component<Props, State> {
+class StatefulCounterWithInitialCount extends React.Component<Props, State> {
   // default props using Property Initializers
-  static defaultProps: Props = {
+  static defaultProps: DefaultProps = {
     className: 'default-class',
     initialCount: 0,
   };
   
   // initial state using Property Initializers
   state: State = {
-    counter: this.props.initialCount,
+    count: this.props.initialCount,
   };
   ...
 }
@@ -36,9 +36,11 @@ class MyComponent extends React.Component<Props, State> {
 ### - how to best declare component handler functions?
 > Prefered modern style is to use Class Fields with arrow functions  
 ```tsx
-class MyComponent extends React.Component<Props, State> {
+class StatefulCounter extends React.Component<Props, State> {
 // handlers using Class Fields with arrow functions
-  increaseCounter = () => { this.setState({ counter: this.state.counter + 1}); };
+  handleIncrement = () => {
+    this.setState({ count: this.state.count + 1 }); 
+  };
   ...
 }
 ```
