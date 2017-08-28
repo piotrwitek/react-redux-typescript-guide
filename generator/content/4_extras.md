@@ -121,9 +121,9 @@ export { default as Select } from './select';
 // 3. now you can import your components in both ways named (internal) or default (public):
 
 // containers/container.tsx
-import { Select } from '../components';
+import { Select } from '@src/components';
 or
-import Select from '../components/select';
+import Select from '@src/components/select';
 ...
 ```
 
