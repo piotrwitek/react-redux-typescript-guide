@@ -10,8 +10,8 @@ This pattern is focused on a KISS principle - to stay clear of complex proprieta
 - standard amount of boilerplate
 - need to export action types and action creators to re-use in other places, e.g. `redux-saga` or `redux-observable`
 
-::example='../../examples/src/redux/counters/actions.ts'::
-::usage='../../examples/src/redux/counters/actions.usage.ts'::
+::example='../../playground/src/redux/counters/actions.ts'::
+::usage='../../playground/src/redux/counters/actions.usage.ts'::
 
 ### DRY Style
 A more DRY approach, introducing a simple factory function to automate the creation of typed action creators. The advantage here is that we can reduce boilerplate and code repetition. It is also easier to re-use action creators in other places because of `type` property on action creator containing type constant:
@@ -103,7 +103,7 @@ type State = Readonly<{
 
 ### Reducer with classic `const types`
 
-::example='../../examples/src/redux/counters/reducer.ts'::
+::example='../../playground/src/redux/counters/reducer.ts'::
 
 ### Reducer with static `type` property from helper factory function - `createActionCreator`
 ```ts
@@ -126,12 +126,12 @@ export default function reducer(state = 0, action: RootAction): State {
 - ### `RootAction` - statically typed global action types
 - should be imported in layers dealing with redux actions like: reducers, redux-sagas, redux-observables
 
-::example='../../examples/src/redux/root-action.ts'::
+::example='../../playground/src/redux/root-action.ts'::
 
 - ### `RootState` - statically typed global state tree
 - should be imported in connected components providing type safety to Redux `connect` function
 
-::example='../../examples/src/redux/root-reducer.ts'::
+::example='../../playground/src/redux/root-reducer.ts'::
 
 ---
 
@@ -139,4 +139,4 @@ export default function reducer(state = 0, action: RootAction): State {
 
 - creating store - use `RootState` (in `combineReducers` and when providing preloaded state object) to set-up **state object type guard** to leverage strongly typed Store instance
 
-::example='../../examples/src/store.ts'::
+::example='../../playground/src/store.ts'::
