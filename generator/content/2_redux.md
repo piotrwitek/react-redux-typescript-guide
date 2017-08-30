@@ -65,41 +65,38 @@ initialState.counter = 3; // Error, cannot be mutated
 ```
 
 #### Caveat: Readonly does not provide recursive immutability on objects
-> This means that readonly modifier will not be propagated on nested properties of objects or arrays of objects.
+> This means that readonly modifier does not propagate immutability on nested properties of objects or arrays of objects. You'll need to set it explicitly on each nested property.
 
 ```ts
 export type State = {
-  readonly counterContainer: { mutableCounter: number }
+  readonly counterContainer: {
+    readonly readonlyCounter: number,
+    mutableCounter: number,
+  }
 };
 
-const state: State = {
-  counterContainer: { mutableCounter: 0 },
-};
+state.counterContainer = { mutableCounter: 1 }; // Error, cannot be mutated
+state.counterContainer.readonlyCounter = 1; // Error, cannot be mutated
 
 state.counterContainer.mutableCounter = 1; // No error, can be mutated
 ```
 
-> You can still achieve nested immutability but you'll need to explicitly mark every nested property as readonly. You can do this quite easily by using convenient `Readonly` or `ReadonlyArray` mapped types.
+> There are few utilities to help you achieve nested immutability. e.g. you can do it quite easily by using convenient `Readonly` or `ReadonlyArray` mapped types.
 
 ```ts
-type State = Readonly<{
-    countersCollection: ReadonlyArray<Readonly<{
-      readonlyCounter1: number,
-      readonlyCounter2: number,
-    }>>,
-  }>;
+export type State = Readonly<{
+  countersCollection: ReadonlyArray<Readonly<{
+    readonlyCounter1: number,
+    readonlyCounter2: number,
+  }>>,
+}>;
 
-  const state: State = {
-    countersCollection: [{
-      readonlyCounter1: 0,
-      readonlyCounter2: 0,
-    }],
-  };
-
-  state.countersCollection[0] = { readonlyCounter1: 0, readonlyCounter2: 0 }; // Error, cannot be mutated
-  state.countersCollection[0].readonlyCounter1 = 1; // Error, cannot be mutated
-  state.countersCollection[0].readonlyCounter2 = 1; // Error, cannot be mutated
+state.countersCollection[0] = { readonlyCounter1: 1, readonlyCounter2: 1 }; // Error, cannot be mutated
+state.countersCollection[0].readonlyCounter1 = 1; // Error, cannot be mutated
+state.countersCollection[0].readonlyCounter2 = 1; // Error, cannot be mutated
 ```
+
+> _There are some experiments in the community to make a `ReadonlyRecursive` mapped type, but I'll need to investigate if they really works_
 
 ### Reducer with classic `const types`
 
