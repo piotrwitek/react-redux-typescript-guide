@@ -10,8 +10,6 @@ export type Actions = {
   CHANGE_TODOS_FILTER: { type: typeof CHANGE_TODOS_FILTER, payload: ITodosFilter },
 };
 
-export type Action = Actions[keyof Actions];
-
 // Action Creators
 export const actionCreators = {
   addTodo: (payload: string): Actions[typeof ADD_TODO] => ({

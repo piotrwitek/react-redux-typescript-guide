@@ -8,8 +8,6 @@ export type Actions = {
   REMOVE_TOAST: { type: typeof REMOVE_TOAST, payload: string },
 };
 
-export type Action = Actions[keyof Actions];
-
 // Action Creators
 export const actionCreators = {
   addToast: (payload: IToast): Actions[typeof ADD_TOAST] => ({

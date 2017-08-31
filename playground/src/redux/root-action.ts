@@ -1,14 +1,14 @@
 // RootActions
 import { RouterAction, LocationChangeAction } from 'react-router-redux';
 
-import { Action as CountersAction } from '@src/redux/counters';
-import { Action as TodosAction } from '@src/redux/todos';
-import { Action as ToastsAction } from '@src/redux/toasts';
+import { Actions as CountersActions } from '@src/redux/counters';
+import { Actions as TodosActions } from '@src/redux/todos';
+import { Actions as ToastsActions } from '@src/redux/toasts';
 
 type ReactRouterAction = RouterAction | LocationChangeAction;
 
 export type RootAction =
   | ReactRouterAction
-  | CountersAction
-  | TodosAction
-  | ToastsAction;
+  | CountersActions[keyof CountersActions]
+  | TodosActions[keyof TodosActions]
+  | ToastsActions[keyof ToastsActions];

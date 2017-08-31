@@ -23,20 +23,24 @@ A more DRY approach, introducing a simple factory function to automate the creat
 ```ts
 import { createActionCreator } from 'react-redux-typescript';
 
+type Severity = 'info' | 'success' | 'warning' | 'error';
+
 // Action Creators
 export const actionCreators = {
-  increaseCounter: createActionCreator('INCREASE_COUNTER'), // { type: "INCREASE_COUNTER" }
-  showNotification: createActionCreator('SHOW_NOTIFICATION', (payload: string, meta?: { severity: string }) => payload),
+  incrementCounter: createActionCreator('INCREMENT_COUNTER'),
+  showNotification: createActionCreator(
+    'SHOW_NOTIFICATION', (message: string, severity?: Severity) => ({ message, severity }),
+  ),
 };
 
 // Examples
-store.dispatch(actionCreators.increaseCounter(4)); // Error: Expected 0 arguments, but got 1.
-store.dispatch(actionCreators.increaseCounter()); // OK: { type: "INCREASE_COUNTER" }
-actionCreators.increaseCounter.type === "INCREASE_COUNTER" // true
+store.dispatch(actionCreators.incrementCounter(4)); // Error: Expected 0 arguments, but got 1.
+store.dispatch(actionCreators.incrementCounter()); // OK: { type: "INCREMENT_COUNTER" }
+actionCreators.incrementCounter.type === "INCREMENT_COUNTER" // true
 
 store.dispatch(actionCreators.showNotification()); // Error: Supplied parameters do not match any signature of call target.
-store.dispatch(actionCreators.showNotification('Hello!')); // OK: { type: "SHOW_NOTIFICATION", payload: 'Hello!' }
-store.dispatch(actionCreators.showNotification('Hello!', { severity: 'warning' })); // OK: { type: "SHOW_NOTIFICATION", payload: 'Hello!', meta: { type: 'warning' } }
+store.dispatch(actionCreators.showNotification('Hello!')); // OK: { type: "SHOW_NOTIFICATION", payload: { message: 'Hello!' } }
+store.dispatch(actionCreators.showNotification('Hello!', 'info')); // OK: { type: "SHOW_NOTIFICATION", payload: { message: 'Hello!', severity: 'info } }
 actionCreators.showNotification.type === "SHOW_NOTIFICATION" // true
 ```
 
