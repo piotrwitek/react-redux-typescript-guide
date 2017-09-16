@@ -650,7 +650,7 @@ export type Actions = {
 };
 
 // Action Creators
-export const actionCreatorss = {
+export const actionCreators = {
   incrementSfc: (): Actions[typeof INCREMENT_SFC] => ({
     type: INCREMENT_SFC,
   }),
