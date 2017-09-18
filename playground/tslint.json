@@ -17,6 +17,7 @@
       "rxjs"
     ],
     "interface-over-type-literal": false,
+    "interface-name": false,
     "jsx-no-lambda": false,
     "max-classes-per-file": [
       false
@@ -48,6 +49,7 @@
     "no-object-literal-type-assertion": false,
     "no-require-imports": false,
     "no-switch-case-fall-through": true,
+    "no-this-assignment": [true, {"allow-destructuring": true}],
     "no-trailing-whitespace": true,
     "no-unused-variable": [
       true,

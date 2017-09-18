@@ -4,7 +4,7 @@ export const ErrorMessage: React.SFC<{ onReset: () => any }> = ({ onReset }) => 
   const handleReset = () => {
     onReset();
     // TODO: switch location with router
-  }
+  };
 
   return (
     <div>

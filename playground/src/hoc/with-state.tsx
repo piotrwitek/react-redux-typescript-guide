@@ -20,7 +20,7 @@ export function withState<WrappedComponentProps extends RequiredProps>(
 
     state: State = {
       count: 0,
-    }
+    };
 
     handleIncrement = () => {
       this.setState({ count: this.state.count + 1 });

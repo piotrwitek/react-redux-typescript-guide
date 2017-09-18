@@ -8,43 +8,41 @@ export interface IUserDTO {
 
 export interface IUser {
   constructor: {
-    fromDTO(user: IUserDTO): IUser;
+    create(user: IUserDTO): IUser;
   }
-  toDTO(): IUserDTO;
 
   id: string;
   firstName: string;
   lastName: string;
   fullName: string;
+
+  serialize(): IUserDTO;
 }
 
 export class User implements IUser {
   'constructor': typeof User;
 
-  constructor(id?: string) {
-    this.id = id || v4();
+  id: string = v4();
+  firstName: string = 'Default';
+  lastName: string = 'Name';
+  get fullName(): string {
+    return `${this.firstName} ${this.lastName}`;
   }
 
-  static fromDTO(dto: IUserDTO): IUser {
-    const model = new User(dto.id);
+  static create(dto: IUserDTO): IUser {
+    const model = new User();
+    model.id = dto.id;
     model.firstName = dto.first_name;
     model.lastName = dto.last_name;
 
     return model;
   }
 
-  toDTO(): IUserDTO {
+  serialize(): IUserDTO {
     return {
       id: this.id,
       first_name: this.firstName,
       last_name: this.lastName,
-    }
-  }
-
-  id: string;
-  firstName: string = 'Default';
-  lastName: string = 'Name';
-  get fullName(): string {
-    return `${this.firstName} ${this.lastName}`;
+    };
   }
 }

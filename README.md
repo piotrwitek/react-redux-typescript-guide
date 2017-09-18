@@ -102,7 +102,7 @@ const incrementCount = () => count++;
 
 export default () => (
   <SFCCounter
-    label='SFCCounter'
+    label={'SFCCounter'}
     count={count}
     onIncrement={incrementCount}
   />
@@ -147,7 +147,6 @@ export default () => (
     style={{ backgroundColor: 'lightcyan' }}
   />
 );
-
 
 ```
 </p></details>
@@ -270,7 +269,7 @@ export const StatefulCounterWithInitialCount: React.ComponentClass<StatefulCount
         </div>
       );
     }
-  }
+  };
 
 ```
 
@@ -305,7 +304,7 @@ import * as React from 'react';
 export interface GenericListProps<T> {
   items: T[],
   itemRenderer: (item: T) => JSX.Element,
-};
+}
 
 export class GenericList<T> extends React.Component<GenericListProps<T>, {}> {
   render() {
@@ -326,7 +325,7 @@ export class GenericList<T> extends React.Component<GenericListProps<T>, {}> {
 ```tsx
 import * as React from 'react';
 
-import { IUser } from '@src/models'
+import { IUser } from '@src/models';
 import { GenericList } from '@src/components';
 
 export const UserList = class extends GenericList<IUser> { };
@@ -373,7 +372,7 @@ import { SFCCounterConnected } from '@src/connected';
 
 export default () => (
   <SFCCounterConnected
-    label="SFCCounterConnected"
+    label={'SFCCounterConnected'}
   />
 );
 
@@ -414,7 +413,7 @@ import { SFCCounterConnectedVerbose } from '@src/connected';
 
 export default () => (
   <SFCCounterConnectedVerbose
-    label="SFCCounterConnectedVerbose"
+    label={'SFCCounterConnectedVerbose'}
   />
 );
 
@@ -455,7 +454,7 @@ import { SFCCounterConnectedExtended } from '@src/connected';
 
 export default () => (
   <SFCCounterConnectedExtended
-    label="SFCCounterConnectedExtended"
+    label={'SFCCounterConnectedExtended'}
     initialCount={10}
   />
 );
@@ -495,7 +494,7 @@ export function withState<WrappedComponentProps extends RequiredProps>(
 
     state: State = {
       count: 0,
-    }
+    };
 
     handleIncrement = () => {
       this.setState({ count: this.state.count + 1 });
@@ -650,7 +649,7 @@ export type Actions = {
 };
 
 // Action Creators
-export const actionCreatorss = {
+export const actionCreators = {
   incrementSfc: (): Actions[typeof INCREMENT_SFC] => ({
     type: INCREMENT_SFC,
   }),
@@ -666,7 +665,7 @@ export const actionCreatorss = {
 import store from '@src/store';
 import { actionCreators } from '@src/redux/counters';
 
-store.dispatch(actionCreators.incrementSfc(1)); // Error: Expected 0 arguments, but got 1.
+// store.dispatch(actionCreators.incrementSfc(1)); // Error: Expected 0 arguments, but got 1.
 store.dispatch(actionCreators.incrementSfc()); // OK => { type: "INCREMENT_SFC" }
 
 ```
@@ -710,7 +709,7 @@ Relevant TypeScript Docs references:
 - [Discriminated Union types](https://www.typescriptlang.org/docs/handbook/advanced-types.html)
 - [Mapped types](https://www.typescriptlang.org/docs/handbook/advanced-types.html) e.g. `Readonly` & `Partial`  
 
-### Typing Reducer State
+### Reducer State
 Declare reducer `State` type definition with readonly modifier for `type level` immutability
 ```ts
 export type State = {
@@ -796,16 +795,18 @@ export const reducer = combineReducers<State, RootAction>({
 
 ### Reducer with static `type` property from helper factory function - `createActionCreator`
 ```ts
-export default function reducer(state = 0, action: RootAction): State {
-  switch (action.type) {
-    case actionCreators.increment.type:
-      return state.counter + 1;
-    case actionCreators.decrement.type:
-      return state.counter - 1;
+export const reducer: Reducer<State> =
+  (state = 0, action: RootAction) => {
+    switch (action.type) {
+      case actionCreators.increment.type:
+        return state + 1;
+        
+      case actionCreators.decrement.type:
+        return state - 1;
 
-    default: return state;
-  }
-}
+      default: return state;
+    }
+  };
 ```
 
 ---
@@ -869,8 +870,7 @@ export const rootReducer = combineReducers<RootState, RootAction>({
 ```tsx
 import { createStore, applyMiddleware, compose } from 'redux';
 import { createEpicMiddleware } from 'redux-observable';
-import { rootReducer, rootEpic } from '@src/redux';
-import { RootState } from '@src/redux';
+import { rootReducer, rootEpic, RootState } from '@src/redux';
 
 const composeEnhancers = (
   process.env.NODE_ENV === 'development' &&

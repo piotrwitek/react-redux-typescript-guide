@@ -4,7 +4,7 @@ import { SFCCounterConnectedExtended } from '@src/connected';
 
 export default () => (
   <SFCCounterConnectedExtended
-    label="SFCCounterConnectedExtended"
+    label={'SFCCounterConnectedExtended'}
     initialCount={10}
   />
 );

@@ -7,7 +7,7 @@ const incrementCount = () => count++;
 
 export default () => (
   <SFCCounter
-    label='SFCCounter'
+    label={'SFCCounter'}
     count={count}
     onIncrement={incrementCount}
   />

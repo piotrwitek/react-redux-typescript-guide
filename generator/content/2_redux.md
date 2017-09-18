@@ -51,7 +51,7 @@ Relevant TypeScript Docs references:
 - [Discriminated Union types](https://www.typescriptlang.org/docs/handbook/advanced-types.html)
 - [Mapped types](https://www.typescriptlang.org/docs/handbook/advanced-types.html) e.g. `Readonly` & `Partial`  
 
-### Typing Reducer State
+### Reducer State
 Declare reducer `State` type definition with readonly modifier for `type level` immutability
 ```ts
 export type State = {
@@ -108,16 +108,18 @@ state.countersCollection[0].readonlyCounter2 = 1; // Error, cannot be mutated
 
 ### Reducer with static `type` property from helper factory function - `createActionCreator`
 ```ts
-export default function reducer(state = 0, action: RootAction): State {
-  switch (action.type) {
-    case actionCreators.increment.type:
-      return state.counter + 1;
-    case actionCreators.decrement.type:
-      return state.counter - 1;
+export const reducer: Reducer<State> =
+  (state = 0, action: RootAction) => {
+    switch (action.type) {
+      case actionCreators.increment.type:
+        return state + 1;
+        
+      case actionCreators.decrement.type:
+        return state - 1;
 
-    default: return state;
-  }
-}
+      default: return state;
+    }
+  };
 ```
 
 ---

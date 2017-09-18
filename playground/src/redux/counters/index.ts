@@ -2,5 +2,6 @@
 export * from './actions';
 // export * from './epics';
 export * from './reducer';
-export * from './selectors';
+import * as CountersSelectors from './selectors';
+export { CountersSelectors };
 // export * from './types';

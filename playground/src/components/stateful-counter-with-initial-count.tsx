@@ -51,4 +51,4 @@ export const StatefulCounterWithInitialCount: React.ComponentClass<StatefulCount
         </div>
       );
     }
-  }
+  };

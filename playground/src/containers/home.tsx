@@ -16,4 +16,4 @@ export const Home = () => {
       <UserListUsage users={[]} />
     </section>
   );
-}
+};

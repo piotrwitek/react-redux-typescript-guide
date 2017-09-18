@@ -9,7 +9,7 @@
 //   }
 // }
 
-// import { Reducer } from 'redux';
+import { Reducer } from 'redux';
 
 declare module 'redux' {
   export type TypedReducer<S, A = any> = (state: S, action: A) => S;
