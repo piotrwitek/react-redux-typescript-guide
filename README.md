@@ -1106,6 +1106,12 @@ import Select from '@src/components/select';
 ### Fixing Vendor Type Issues
 > Strategies to fix various issues coming from broken vendor type declaration files (*.d.ts)
 
+- The quote from the docs: _"If you don’t want to take the time to write out declarations before using a new module, you can use a shorthand declaration to get started quickly. [...] All imports from a shorthand module will have the any type."_ - [Shorthand Ambient Modules](https://git.io/v5hMA)
+
+```ts
+declare module "webpack-merge";
+```
+
 - Augumenting library internal type declarations - using relative import resolution 
 ```ts
 // added missing autoFocus Prop on Input component in "antd@2.10.0" npm package
