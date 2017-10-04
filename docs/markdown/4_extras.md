@@ -153,8 +153,8 @@ declare module 'rxjs/Subject' {
 }
 ```
 
-- When missing declarations for some vendor modules you can fallback to any type using [Shorthand Ambient Modules](https://github.com/Microsoft/TypeScript-Handbook/blob/master/pages/Modules.md#shorthand-ambient-modules)
+- When missing declarations for vendor modules you can "patch" a module with `any` type using [Shorthand Ambient Modules](https://github.com/Microsoft/TypeScript-Handbook/blob/master/pages/Modules.md#shorthand-ambient-modules)
 
 ::example='../../playground/src/types/modules.d.ts'::
 
-> More advanced tips for working with vendor modules declarations can be found here in [Official TypeScript Docs](https://github.com/Microsoft/TypeScript-Handbook/blob/master/pages/Modules.md#working-with-other-javascript-libraries)
+> More advanced tips for working with vendor modules declarations can be found here [Official TypeScript Docs](https://github.com/Microsoft/TypeScript-Handbook/blob/master/pages/Modules.md#working-with-other-javascript-libraries)
