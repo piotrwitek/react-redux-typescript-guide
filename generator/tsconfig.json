@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "outDir": "dist/", // target for compiled files
+    "outDir": "bin/", // target for compiled files
     "allowSyntheticDefaultImports": true, // no errors on commonjs default import
     "allowJs": true, // include js files
     "checkJs": true, // typecheck js files
