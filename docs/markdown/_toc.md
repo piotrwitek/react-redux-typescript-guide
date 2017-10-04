@@ -19,6 +19,6 @@
   - [tsconfig.json](#tsconfigjson)
   - [tslint.json](#tslintjson)
   - [Default and Named Module Exports](#default-and-named-module-exports)
-  - [Fixing Vendor Type Issues](#fixing-vendor-type-issues)
+  - [Vendor Types Augmentation](#vendor-types-augmentation)
 - [FAQ](#faq)
 - [Project Examples](#project-examples)
