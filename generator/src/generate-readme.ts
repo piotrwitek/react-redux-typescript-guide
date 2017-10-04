@@ -2,7 +2,7 @@ import * as fs from 'fs';
 
 const CWD_PATH = `${__dirname}/`;
 const TOP_LEVEL_PATH = CWD_PATH + '../../'
-const DOCS_PATH = TOP_LEVEL_PATH + 'docs/'
+const DOCS_PATH = TOP_LEVEL_PATH + 'docs/markdown/'
 
 const inputFiles = [
   DOCS_PATH + '_intro.md',

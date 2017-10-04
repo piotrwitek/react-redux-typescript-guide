@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const fs = require("fs");
 const CWD_PATH = `${__dirname}/`;
 const TOP_LEVEL_PATH = CWD_PATH + '../../';
-const DOCS_PATH = TOP_LEVEL_PATH + 'docs/';
+const DOCS_PATH = TOP_LEVEL_PATH + 'docs/markdown/';
 const inputFiles = [
     DOCS_PATH + '_intro.md',
     DOCS_PATH + '_toc.md',
