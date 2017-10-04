@@ -127,10 +127,10 @@ import Select from '@src/components/select';
 ...
 ```
 
-### Fixing Vendor Type Issues
-> Strategies to fix various issues coming from broken vendor type declaration files (*.d.ts)
+### Vendor Types Augmentation
+> Strategies to fix issues coming from broken "vendor type declarations" files (*.d.ts)
 
-- Augumenting library internal type declarations - using relative import resolution 
+- Augmenting library internal type declarations - using relative import resolution 
 ```ts
 // added missing autoFocus Prop on Input component in "antd@2.10.0" npm package
 declare module '../node_modules/antd/lib/input/Input' {
@@ -140,7 +140,7 @@ declare module '../node_modules/antd/lib/input/Input' {
 }
 ```
 
-- Augumenting library public type declarations - using node module import resolution
+- Augmenting library public type declarations - using node module import resolution
 ```ts
 // fixed broken public type declaration in "rxjs@5.4.1" npm package 
 import { Operator } from 'rxjs/Operator';
@@ -152,3 +152,9 @@ declare module 'rxjs/Subject' {
   }
 }
 ```
+
+- When missing declarations for some vendor modules you can fallback to any type using [Shorthand Ambient Modules](https://github.com/Microsoft/TypeScript-Handbook/blob/master/pages/Modules.md#shorthand-ambient-modules)
+
+::example='../../playground/src/types/modules.d.ts'::
+
+> More advanced tips for working with vendor modules declarations can be found here in [Official TypeScript Docs](https://github.com/Microsoft/TypeScript-Handbook/blob/master/pages/Modules.md#working-with-other-javascript-libraries)
