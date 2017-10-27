@@ -4,11 +4,11 @@ This guide is about **_"How to write type declarations to only the minimum neces
 
 > found it usefull, want some more? [give it a :star:](https://github.com/piotrwitek/react-redux-typescript-patterns/stargazers)  
 
-#### Announcements
-- All the examples ported to TypeScript v2.5 and using recent type definitions for `react` & `redux`  [TypeScript Changelog](https://github.com/Microsoft/TypeScript/wiki/Roadmap)  
-- create more strict type definitions for redux  
+### [> Changelog](/blob/master/CHANGELOG.md)  
+
+### Roadmap
 - extend HOC section with more advanced examples [#5](/issues/5)  
-- investigate typing patterns for component children [#7](/issues/7)  
+- investigate typing patterns for generic component children [#7](/issues/7)  
 
 ### Introduction
 This guide is aimed to use [`--strict`](https://www.typescriptlang.org/docs/handbook/compiler-options.html) flag of TypeScript compiler to provide the best static-typing experience.  
@@ -32,6 +32,8 @@ Moreover playground is created is such way, that you can easily clone repository
 - `README.md` is auto-generated using `generator script` - to make changes please edit `markdown` files located in `/docs` folder
 - Source Code snippets are injected with `generator script` - to make changes please edit their original sources located in playground folder (include directives are used in `markdown` files located in `/docs` folder e.g. `::example='../../playground/src/components/...`)
 - Before making PR please re-generate final `README.md` using command:
-```
+```bash
+sh generate.sh
+// or 
 node generator/bin/generate-readme.js
 ```

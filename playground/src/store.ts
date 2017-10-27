@@ -17,7 +17,7 @@ function configureStore(initialState?: RootState) {
     applyMiddleware(...middlewares),
   );
   // create store
-  return createStore<RootState>(
+  return createStore(
     rootReducer,
     initialState!,
     enhancer,

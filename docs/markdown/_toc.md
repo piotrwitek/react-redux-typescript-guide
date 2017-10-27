@@ -1,4 +1,5 @@
 ### Table of Contents
+- [Setup](#setup)
 - [React](#react)
   - [Stateless Components - SFC](#stateless-components---sfc)
   - [Stateful Components - Class](#stateful-components---class)
@@ -13,11 +14,10 @@
 - [Ecosystem](#ecosystem)
   - [Async Flow with "redux-observable"](#async-flow-with-redux-observable)
   - [Selectors with "reselect"](#selectors-with-reselect)
-  - Forms with "formstate" WIP
-  - Styles with "typestyle" WIP
 - [Extras](#extras)
   - [tsconfig.json](#tsconfigjson)
   - [tslint.json](#tslintjson)
+  - [jest.config.json](#jestconfigjson)  
   - [Default and Named Module Exports](#default-and-named-module-exports)
   - [Vendor Types Augmentation](#vendor-types-augmentation)
 - [FAQ](#faq)
