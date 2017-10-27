@@ -1,6 +1,6 @@
 {
   "extends": [
-    "tslint:latest",
+    "tslint:recommended",
     "tslint-react"
   ],
   "rules": {
@@ -36,6 +36,7 @@
     "newline-before-return": false,
     "no-any": false,
     "no-empty-interface": false,
+    "no-import-side-effect": [true],
     "no-inferrable-types": [
       true,
       "ignore-params",
@@ -49,6 +50,7 @@
     "no-object-literal-type-assertion": false,
     "no-require-imports": false,
     "no-switch-case-fall-through": true,
+    "no-submodule-imports": [true, "rxjs", "@src"],
     "no-this-assignment": [true, {"allow-destructuring": true}],
     "no-trailing-whitespace": true,
     "no-unused-variable": [
