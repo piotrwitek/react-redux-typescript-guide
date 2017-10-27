@@ -54,13 +54,13 @@
 ```
 
 ### tslint.json
-> - Recommended setup is to extend build-in preset `tslint:latest` (for all rules use `tslint:all`)  
+> - Recommended setup is to extend build-in preset `tslint:recommended` (for all rules use `tslint:all`)  
 > - Add tslint react rules: `npm i -D tslint-react` https://github.com/palantir/tslint-react  
 > - Amended some extended defaults for more flexibility  
 
 ```json
 {
-  "extends": ["tslint:latest", "tslint-react"],
+  "extends": ["tslint:recommended", "tslint-react"],
   "rules": {
     "arrow-parens": false,
     "arrow-return-shorthand": [false],
@@ -75,11 +75,13 @@
     "newline-before-return": false,
     "no-any": false,
     "no-empty-interface": false,
+    "no-import-side-effect": [true],
     "no-inferrable-types": [true, "ignore-params", "ignore-properties"],
     "no-invalid-this": [true, "check-function-in-method"],
     "no-null-keyword": false,
     "no-require-imports": false,
     "no-switch-case-fall-through": true,
+    "no-submodule-imports": [true, "rxjs", "@src"],
     "no-trailing-whitespace": true,
     "no-this-assignment": [true, {
       "allow-destructuring": true
@@ -98,6 +100,35 @@
     "typedef": [true,"parameter", "property-declaration"],
     "variable-name": [true, "ban-keywords", "check-format", "allow-pascal-case", "allow-leading-underscore"]
   }
+}
+```
+
+### jest.config.json
+> - Recommended setup for Jest with TypeScript  
+> - Install with `npm i -D jest-cli ts-jest`  
+
+```json
+{
+  "verbose": true,
+  "transform": {
+    ".(ts|tsx)": "./node_modules/ts-jest/preprocessor.js"
+  },
+  "testRegex": "(/spec/.*|\\.(test|spec))\\.(ts|tsx|js)$",
+  "moduleFileExtensions": [
+    "ts",
+    "tsx",
+    "js"
+  ],
+  "globals": {
+    "window": {},
+    "ts-jest": {
+      "tsConfigFile": "./tsconfig.json"
+    }
+  },
+  "setupFiles": [
+    "./jest.stubs.js",
+    "./src/rxjs-imports.tsx"
+  ]
 }
 ```
 
