@@ -4,11 +4,11 @@ This guide is about **_"How to write type declarations to only the minimum neces
 
 > found it usefull, want some more? [give it a :star:](https://github.com/piotrwitek/react-redux-typescript-patterns/stargazers)  
 
-#### Announcements
-- All the examples ported to TypeScript v2.5 and using recent type definitions for `react` & `redux`  [TypeScript Changelog](https://github.com/Microsoft/TypeScript/wiki/Roadmap)  
-- create more strict type definitions for redux  
+### [> Changelog](/blob/master/CHANGELOG.md)  
+
+### Roadmap
 - extend HOC section with more advanced examples [#5](/issues/5)  
-- investigate typing patterns for component children [#7](/issues/7)  
+- investigate typing patterns for generic component children [#7](/issues/7)  
 
 ### Introduction
 This guide is aimed to use [`--strict`](https://www.typescriptlang.org/docs/handbook/compiler-options.html) flag of TypeScript compiler to provide the best static-typing experience.  
@@ -32,13 +32,16 @@ Moreover playground is created is such way, that you can easily clone repository
 - `README.md` is auto-generated using `generator script` - to make changes please edit `markdown` files located in `/docs` folder
 - Source Code snippets are injected with `generator script` - to make changes please edit their original sources located in playground folder (include directives are used in `markdown` files located in `/docs` folder e.g. `::example='../../playground/src/components/...`)
 - Before making PR please re-generate final `README.md` using command:
-```
+```bash
+sh generate.sh
+// or 
 node generator/bin/generate-readme.js
 ```
 
 ---
 
 ### Table of Contents
+- [Setup](#setup)
 - [React](#react)
   - [Stateless Components - SFC](#stateless-components---sfc)
   - [Stateful Components - Class](#stateful-components---class)
@@ -53,15 +56,34 @@ node generator/bin/generate-readme.js
 - [Ecosystem](#ecosystem)
   - [Async Flow with "redux-observable"](#async-flow-with-redux-observable)
   - [Selectors with "reselect"](#selectors-with-reselect)
-  - Forms with "formstate" WIP
-  - Styles with "typestyle" WIP
 - [Extras](#extras)
   - [tsconfig.json](#tsconfigjson)
   - [tslint.json](#tslintjson)
+  - [jest.config.json](#jestconfigjson)  
   - [Default and Named Module Exports](#default-and-named-module-exports)
   - [Vendor Types Augmentation](#vendor-types-augmentation)
 - [FAQ](#faq)
 - [Project Examples](#project-examples)
+
+---
+
+# Setup
+
+## Installing types
+```
+npm i -D @types/react @types/react-dom @types/react-redux
+```
+
+"react" - `@types/react`  
+"react-dom" - `@types/react-dom`  
+"redux" - (included in npm package)*  
+"react-redux" - `@types/react-redux`  
+
+> *There are improved redux types on a `next` branch in the official redux github repo, use below instructions to add it to your project:
+- in `package.json > devDependencies` add:  
+  `"redux-next": "reactjs/redux#next"`  
+- in `tsconfig.json > compilerOptions > paths` add:  
+  `"redux": ["node_modules/redux-next"]`  
 
 ---
 
@@ -895,7 +917,7 @@ function configureStore(initialState?: RootState) {
     applyMiddleware(...middlewares),
   );
   // create store
-  return createStore<RootState>(
+  return createStore(
     rootReducer,
     initialState!,
     enhancer,
@@ -1030,13 +1052,13 @@ export const getFilteredTodos = createSelector(
 ```
 
 ### tslint.json
-> - Recommended setup is to extend build-in preset `tslint:latest` (for all rules use `tslint:all`)  
+> - Recommended setup is to extend build-in preset `tslint:recommended` (for all rules use `tslint:all`)  
 > - Add tslint react rules: `npm i -D tslint-react` https://github.com/palantir/tslint-react  
 > - Amended some extended defaults for more flexibility  
 
 ```json
 {
-  "extends": ["tslint:latest", "tslint-react"],
+  "extends": ["tslint:recommended", "tslint-react"],
   "rules": {
     "arrow-parens": false,
     "arrow-return-shorthand": [false],
@@ -1051,11 +1073,13 @@ export const getFilteredTodos = createSelector(
     "newline-before-return": false,
     "no-any": false,
     "no-empty-interface": false,
+    "no-import-side-effect": [true],
     "no-inferrable-types": [true, "ignore-params", "ignore-properties"],
     "no-invalid-this": [true, "check-function-in-method"],
     "no-null-keyword": false,
     "no-require-imports": false,
     "no-switch-case-fall-through": true,
+    "no-submodule-imports": [true, "rxjs", "@src"],
     "no-trailing-whitespace": true,
     "no-this-assignment": [true, {
       "allow-destructuring": true
@@ -1074,6 +1098,35 @@ export const getFilteredTodos = createSelector(
     "typedef": [true,"parameter", "property-declaration"],
     "variable-name": [true, "ban-keywords", "check-format", "allow-pascal-case", "allow-leading-underscore"]
   }
+}
+```
+
+### jest.config.json
+> - Recommended setup for Jest with TypeScript  
+> - Install with `npm i -D jest-cli ts-jest`  
+
+```json
+{
+  "verbose": true,
+  "transform": {
+    ".(ts|tsx)": "./node_modules/ts-jest/preprocessor.js"
+  },
+  "testRegex": "(/spec/.*|\\.(test|spec))\\.(ts|tsx|js)$",
+  "moduleFileExtensions": [
+    "ts",
+    "tsx",
+    "js"
+  ],
+  "globals": {
+    "window": {},
+    "ts-jest": {
+      "tsConfigFile": "./tsconfig.json"
+    }
+  },
+  "setupFiles": [
+    "./jest.stubs.js",
+    "./src/rxjs-imports.tsx"
+  ]
 }
 ```
 
@@ -1143,14 +1196,6 @@ declare module 'enzyme';
 ---
 
 # FAQ
-
-### - how to install react & redux types?
-```
-// react
-npm i -D @types/react @types/react-dom @types/react-redux
-
-// redux has types included in it's npm package - don't install from @types
-```
 
 ### - should I still use React.PropTypes in TS?
 > No. When using TypeScript it is an unnecessary overhead, when declaring IProps and IState interfaces, you will get complete intellisense and compile-time safety with static type checking, this way you'll be safe from runtime errors and you will save a lot of time on debugging. Additional benefit is an elegant and standarized method of documenting your component external API in the source code.  

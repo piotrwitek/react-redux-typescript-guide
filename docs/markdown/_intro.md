@@ -32,6 +32,8 @@ Moreover playground is created is such way, that you can easily clone repository
 - `README.md` is auto-generated using `generator script` - to make changes please edit `markdown` files located in `/docs` folder
 - Source Code snippets are injected with `generator script` - to make changes please edit their original sources located in playground folder (include directives are used in `markdown` files located in `/docs` folder e.g. `::example='../../playground/src/components/...`)
 - Before making PR please re-generate final `README.md` using command:
-```
+```bash
+sh generate.sh
+// or 
 node generator/bin/generate-readme.js
 ```
