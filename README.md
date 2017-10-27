@@ -4,11 +4,11 @@ This guide is about **_"How to write type declarations to only the minimum neces
 
 > found it usefull, want some more? [give it a :star:](https://github.com/piotrwitek/react-redux-typescript-patterns/stargazers)  
 
-### [> Changelog](/blob/master/CHANGELOG.md)  
+### [> Changelog](/CHANGELOG.md)  
 
 ### Roadmap
-- extend HOC section with more advanced examples [#5](/issues/5)  
-- investigate typing patterns for generic component children [#7](/issues/7)  
+- extend HOC section with more advanced examples [#5](../../issues/5)  
+- investigate typing patterns for generic component children [#7](../../issues/7)  
 
 ### Introduction
 This guide is aimed to use [`--strict`](https://www.typescriptlang.org/docs/handbook/compiler-options.html) flag of TypeScript compiler to provide the best static-typing experience.  
