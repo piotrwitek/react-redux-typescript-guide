@@ -7,6 +7,7 @@ const DOCS_PATH = TOP_LEVEL_PATH + 'docs/markdown/';
 const inputFiles = [
     DOCS_PATH + '_intro.md',
     DOCS_PATH + '_toc.md',
+    DOCS_PATH + '0_setup.md',
     DOCS_PATH + '1_react.md',
     DOCS_PATH + '2_redux.md',
     DOCS_PATH + '3_ecosystem.md',
