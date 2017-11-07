@@ -3,7 +3,9 @@
 ## Stateless Components - SFC
 - convenient alias: `React.SFC<Props> === React.StatelessComponent<Props>`
 
-### stateless counter example
+### SFC Counter
+
+#### - basic
 
 ::example='../../playground/src/components/sfc-counter.tsx'::
 
@@ -11,7 +13,7 @@
 
 ---
 
-### [spread attributes](https://facebook.github.io/react/docs/jsx-in-depth.html#spread-attributes) example
+#### - [spread attributes](https://facebook.github.io/react/docs/jsx-in-depth.html#spread-attributes)
 
 ::example='../../playground/src/components/sfc-spread-attributes.tsx'::
 
@@ -21,7 +23,9 @@
 
 ## Stateful Components - Class
 
-### stateful counter example
+### Stateful Counter
+
+#### - basic
 
 ::example='../../playground/src/components/stateful-counter.tsx'::
 
@@ -29,7 +33,7 @@
 
 ---
 
-### stateful counter with default props example
+#### - with default props
 
 ::example='../../playground/src/components/stateful-counter-with-initial-count.tsx'::
 
@@ -41,7 +45,9 @@
 - easily create typed component variations and reuse common logic
 - especially useful to create typed list components
 
-### generic list component example
+### Generic List
+
+#### - basic
 
 ::example='../../playground/src/components/generic-list.tsx'::
 
@@ -51,7 +57,9 @@
 
 ## Connected Components
 
-### connected counter example - concise
+### Connected Counter
+
+#### - basic
 
 ::example='../../playground/src/connected/sfc-counter-connected.tsx'::
 
@@ -59,7 +67,7 @@
 
 ---
 
-### connected counter example - verbose
+#### - verbose
 
 ::example='../../playground/src/connected/sfc-counter-connected-verbose.tsx'::
 
@@ -67,7 +75,7 @@
 
 ---
 
-### connected counter example - with own props
+#### - with own props
 
 ::example='../../playground/src/connected/sfc-counter-connected-extended.tsx'::
 
@@ -80,7 +88,10 @@
 - a new component will infer Props interface from wrapped Component extended with Props of HOC
 - will filter out props specific to HOC, and the rest will be passed through to wrapped component
 
-### basic hoc: enhance stateless counter with state
+### Basic HOC Examples
+
+#### - withState
+> enhance stateless counter with state
 
 ::example='../../playground/src/hoc/with-state.tsx'::
 
@@ -88,7 +99,10 @@
 
 ---
 
-### advanced hoc: add error handling with componentDidCatch to view component
+### Advanced HOC Examples
+
+#### - withErrorBoundary
+> add error handling with componentDidCatch to view component
 
 ::example='../../playground/src/hoc/with-error-boundary.tsx'::
 

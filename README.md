@@ -92,7 +92,9 @@ npm i -D @types/react @types/react-dom @types/react-redux
 ## Stateless Components - SFC
 - convenient alias: `React.SFC<Props> === React.StatelessComponent<Props>`
 
-### stateless counter example
+### SFC Counter
+
+#### - basic
 
 ```tsx
 import * as React from 'react';
@@ -143,7 +145,7 @@ export default () => (
 
 ---
 
-### [spread attributes](https://facebook.github.io/react/docs/jsx-in-depth.html#spread-attributes) example
+#### - [spread attributes](https://facebook.github.io/react/docs/jsx-in-depth.html#spread-attributes)
 
 ```tsx
 import * as React from 'react';
@@ -185,7 +187,9 @@ export default () => (
 
 ## Stateful Components - Class
 
-### stateful counter example
+### Stateful Counter
+
+#### - basic
 
 ```tsx
 import * as React from 'react';
@@ -243,7 +247,7 @@ export default () => (
 
 ---
 
-### stateful counter with default props example
+#### - with default props
 
 ```tsx
 import * as React from 'react';
@@ -326,7 +330,9 @@ export default () => (
 - easily create typed component variations and reuse common logic
 - especially useful to create typed list components
 
-### generic list component example
+### Generic List
+
+#### - basic
 
 ```tsx
 import * as React from 'react';
@@ -374,7 +380,9 @@ export default ({ users }: { users: IUser[] }) => (
 
 ## Connected Components
 
-### connected counter example - concise
+### Connected Counter
+
+#### - basic
 
 ```tsx
 import { connect } from 'react-redux';
@@ -411,7 +419,7 @@ export default () => (
 
 ---
 
-### connected counter example - verbose
+#### - verbose
 
 ```tsx
 import { bindActionCreators } from 'redux';
@@ -452,7 +460,7 @@ export default () => (
 
 ---
 
-### connected counter example - with own props
+#### - with own props
 
 ```tsx
 import { connect } from 'react-redux';
@@ -499,7 +507,10 @@ export default () => (
 - a new component will infer Props interface from wrapped Component extended with Props of HOC
 - will filter out props specific to HOC, and the rest will be passed through to wrapped component
 
-### basic hoc: enhance stateless counter with state
+### Basic HOC Examples
+
+#### - withState
+> enhance stateless counter with state
 
 ```tsx
 import * as React from 'react';
@@ -570,7 +581,10 @@ export default (
 
 ---
 
-### advanced hoc: add error handling with componentDidCatch to view component
+### Advanced HOC Examples
+
+#### - withErrorBoundary
+> add error handling with componentDidCatch to view component
 
 ```tsx
 import * as React from 'react';
