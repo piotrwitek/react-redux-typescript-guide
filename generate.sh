@@ -1,2 +1,2 @@
 #!/bin/bash
-node generator/bin/generate-readme.js
+node ${0%/*}/generator/bin/generate-readme.js
