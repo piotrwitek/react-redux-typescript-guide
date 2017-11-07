@@ -466,7 +466,7 @@ export interface SFCCounterConnectedExtended {
 }
 
 const mapStateToProps = (state: RootState, ownProps: SFCCounterConnectedExtended) => ({
-  count: state.counters.sfcCounter || ownProps.initialCount,
+  count: state.counters.sfcCounter + ownProps.initialCount,
 });
 
 export const SFCCounterConnectedExtended = connect(mapStateToProps, {
