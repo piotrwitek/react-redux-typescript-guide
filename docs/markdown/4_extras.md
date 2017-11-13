@@ -189,3 +189,14 @@ declare module 'rxjs/Subject' {
 ::example='../../playground/src/types/modules.d.ts'::
 
 > More advanced scenarios for working with vendor module declarations can be found here [Official TypeScript Docs](https://github.com/Microsoft/TypeScript-Handbook/blob/master/pages/Modules.md#working-with-other-javascript-libraries)
+
+### Npm Scripts
+> Common TS-related npm scripts shared across projects
+```
+"check": "npm run lint & npm run tsc",
+"lint": "tslint --project './tsconfig.json'",
+"tsc": "tsc -p . --noEmit",
+"tsc:watch": "tsc -p . --noEmit -w",
+"test": "jest --config jest.config.json",
+"test:watch": "jest --config jest.config.json -w",
+```

@@ -62,6 +62,7 @@ node generator/bin/generate-readme.js
   - [jest.config.json](#jestconfigjson)  
   - [Default and Named Module Exports](#default-and-named-module-exports)
   - [Vendor Types Augmentation](#vendor-types-augmentation)
+  - [Npm Scripts](#npm-scripts)
 - [FAQ](#faq)
 - [Project Examples](#project-examples)
 
@@ -1206,6 +1207,17 @@ declare module 'enzyme';
 ```
 
 > More advanced scenarios for working with vendor module declarations can be found here [Official TypeScript Docs](https://github.com/Microsoft/TypeScript-Handbook/blob/master/pages/Modules.md#working-with-other-javascript-libraries)
+
+### Npm Scripts
+> Common TS-related npm scripts shared across projects
+```
+"check": "npm run lint & npm run tsc",
+"lint": "tslint --project './tsconfig.json'",
+"tsc": "tsc -p . --noEmit",
+"tsc:watch": "tsc -p . --noEmit -w",
+"test": "jest --config jest.config.json",
+"test:watch": "jest --config jest.config.json -w",
+```
 
 ---
 
