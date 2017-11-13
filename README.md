@@ -1118,7 +1118,7 @@ export const getFilteredTodos = createSelector(
 
 ### jest.config.json
 > - Recommended setup for Jest with TypeScript  
-> - Install with `npm i -D jest-cli ts-jest`  
+> - Install with `npm i -D jest-cli ts-jest @types/jest`  
 
 ```json
 {
@@ -1216,7 +1216,7 @@ declare module 'enzyme';
 "tsc": "tsc -p . --noEmit",
 "tsc:watch": "tsc -p . --noEmit -w",
 "test": "jest --config jest.config.json",
-"test:watch": "jest --config jest.config.json -w",
+"test:watch": "jest --config jest.config.json --watch",
 ```
 
 ---
