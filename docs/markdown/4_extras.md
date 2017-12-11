@@ -69,9 +69,7 @@
     "interface-over-type-literal": false,
     "max-line-length": [true, 120],
     "member-access": false,
-    "member-ordering": [true, {
-      "order": "fields-first"
-    }],
+    "member-ordering": [true, { "order": "fields-first" }],
     "newline-before-return": false,
     "no-any": false,
     "no-empty-interface": false,
@@ -80,12 +78,9 @@
     "no-invalid-this": [true, "check-function-in-method"],
     "no-null-keyword": false,
     "no-require-imports": false,
-    "no-switch-case-fall-through": true,
-    "no-submodule-imports": [true, "rxjs", "@src"],
+    "no-submodule-imports": [true, "@src", "rxjs"],
     "no-trailing-whitespace": true,
-    "no-this-assignment": [true, {
-      "allow-destructuring": true
-    }],
+    "no-this-assignment": [true, { "allow-destructuring": true }],
     "no-unused-variable": [true, "react"],
     "object-literal-sort-keys": false,
     "object-literal-shorthand": false,
@@ -94,8 +89,9 @@
     "ordered-imports": [false],
     "prefer-method-signature": false,
     "prefer-template": [true, "allow-single-concat"],
-    "semicolon": [true, "ignore-interfaces"],
     "quotemark": [true, "single", "jsx-double"],
+    "semicolon": [true, "ignore-interfaces"],
+    "trailing-comma": [true, { "esSpecCompliant": true }],
     "triple-equals": [true, "allow-null-check"],
     "typedef": [true,"parameter", "property-declaration"],
     "variable-name": [true, "ban-keywords", "check-format", "allow-pascal-case", "allow-leading-underscore"]
