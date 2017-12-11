@@ -90,9 +90,19 @@
     "prefer-method-signature": false,
     "prefer-template": [true, "allow-single-concat"],
     "quotemark": [true, "single", "jsx-double"],
-    "semicolon": [true, "ignore-interfaces"],
-    "trailing-comma": [true, { "esSpecCompliant": true }],
+    "semicolon": [true, "always"],
+    "trailing-comma": [true, {
+      "singleline": "never",
+      "multiline": {
+        "objects": "always",
+        "arrays": "always",
+        "functions": "never",
+        "typeLiterals": "ignore"
+      },
+      "esSpecCompliant": true
+    }],
     "triple-equals": [true, "allow-null-check"],
+    "type-literal-delimiter": true,    
     "typedef": [true,"parameter", "property-declaration"],
     "variable-name": [true, "ban-keywords", "check-format", "allow-pascal-case", "allow-leading-underscore"]
   }
