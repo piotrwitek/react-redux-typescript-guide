@@ -3,7 +3,7 @@ import * as React from 'react';
 import { IUser } from '@src/models';
 import { GenericList } from '@src/components';
 
-export const UserList = class extends GenericList<IUser> { };
+export class UserList extends GenericList<IUser> { }
 
 export default ({ users }: { users: IUser[] }) => (
   <UserList
