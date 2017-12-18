@@ -7,7 +7,7 @@ const SFCCounterWithState =
   withState(SFCCounter);
 
 export default (
-  ({ children }) => (
+  () => (
     <SFCCounterWithState label={'SFCCounterWithState'} />
   )
 ) as React.SFC<{}>;

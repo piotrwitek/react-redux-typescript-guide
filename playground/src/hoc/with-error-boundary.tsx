@@ -1,24 +1,24 @@
 import * as React from 'react';
 
+import { Omit } from '@src/types/react-redux-typescript';
+
 const MISSING_ERROR = 'Error was swallowed during propagation.';
 
-interface Props {
-}
-
-interface State {
-  error: Error | null | undefined,
-}
-
-interface WrappedComponentProps {
+interface HOCProps {
   onReset: () => any,
 }
 
-export function withErrorBoundary(
-  WrappedComponent: React.ComponentType<WrappedComponentProps>,
-) {
-  const HOC = class extends React.Component<Props, State> {
+interface HOCState {
+  error: Error | null | undefined,
+}
 
-    state: State = {
+export const withErrorBoundary = <WrappedComponentProps extends HOCProps>(
+  WrappedComponent: React.ComponentType<WrappedComponentProps>,
+) => {
+  return class extends React.Component<Omit<WrappedComponentProps, keyof HOCProps>, HOCState> {
+    static displayName = `withErrorBoundary(${WrappedComponent.name})`;
+
+    state: HOCState = {
       error: undefined,
     };
 
@@ -36,18 +36,19 @@ export function withErrorBoundary(
     }
 
     render() {
-      const { children } = this.props;
+      const { children, ...remainingProps } = this.props as any;
       const { error } = this.state;
 
       if (error) {
         return (
-          <WrappedComponent onReset={this.handleReset} />
+          <WrappedComponent
+            {...remainingProps}
+            onReset={this.handleReset}
+          />
         );
       }
 
-      return children as any;
+      return children;
     }
   };
-
-  return HOC;
-}
+};

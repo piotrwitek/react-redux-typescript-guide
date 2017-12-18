@@ -2,23 +2,22 @@ import * as React from 'react';
 
 import { Omit } from '@src/types/react-redux-typescript';
 
-interface RequiredProps {
+interface HOCProps {
   count: number,
   onIncrement: () => any,
 }
 
-type Props<T extends RequiredProps> = Omit<T, keyof RequiredProps>;
-
-interface State {
+interface HOCState {
   count: number,
 }
 
-export function withState<WrappedComponentProps extends RequiredProps>(
+export const withState = <WrappedComponentProps extends HOCProps>(
   WrappedComponent: React.ComponentType<WrappedComponentProps>,
-) {
-  const HOC = class extends React.Component<Props<WrappedComponentProps>, State> {
+) => {
+  return class extends React.Component<Omit<WrappedComponentProps, keyof HOCProps>, HOCState> {
+    static displayName = `withState(${WrappedComponent.name})`;
 
-    state: State = {
+    state: HOCState = {
       count: 0,
     };
 
@@ -27,17 +26,16 @@ export function withState<WrappedComponentProps extends RequiredProps>(
     };
 
     render() {
-      const { handleIncrement } = this;
+      const { ...remainingProps } = this.props as any;
       const { count } = this.state;
 
       return (
         <WrappedComponent
+          {...remainingProps}
           count={count}
-          onIncrement={handleIncrement}
+          onIncrement={this.handleIncrement}
         />
       );
     }
   };
-
-  return HOC;
-}
+};
