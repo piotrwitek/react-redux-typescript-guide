@@ -5,5 +5,7 @@ import { SFCSpreadAttributes } from '@src/components';
 export default () => (
   <SFCSpreadAttributes
     style={{ backgroundColor: 'lightcyan' }}
-  />
+  >
+    {'Nice background color.'}
+  </SFCSpreadAttributes>
 );

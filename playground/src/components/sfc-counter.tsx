@@ -13,7 +13,7 @@ export const SFCCounter: React.SFC<SFCCounterProps> = (props) => {
 
   return (
     <div>
-      {label}: {count}
+      <span>{label}: {count} </span>
       <button type="button" onClick={handleIncrement}>
         {`Increment`}
       </button>
