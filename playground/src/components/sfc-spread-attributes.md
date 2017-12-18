@@ -3,7 +3,7 @@ Usage:
 ```
 
 Demo:
-```jsx 
+```jsx
 const Demo = require('./sfc-spread-attributes.usage').default;
 <Demo />
 ```

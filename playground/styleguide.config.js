@@ -6,6 +6,9 @@ const webpackConfig = createConfig([typescript()]);
 webpackConfig.resolve.alias = { '@src': path.join(__dirname, 'src') };
 
 module.exports = {
+  showUsage: true,
+  title: 'React-Redux-Typescript Guide',
+  ignore: ['**/*.usage.tsx'],
   sections: [
     {
       name: 'Introduction',
@@ -14,10 +17,15 @@ module.exports = {
     {
       name: 'Components',
       content: './docs/components.md',
-      components: './src/components/*.tsx',
+      components: () => ([
+        './src/components/sfc-spread-attributes.tsx',
+        './src/components/sfc-counter.tsx',
+        './src/components/stateful-counter.tsx',
+        './src/components/stateful-counter-with-initial-count.tsx',
+        './src/components/generic-list.tsx'
+      ]),
     }
   ],
-  ignore: ['**/*.usage.tsx'],
   propsParser: require('react-docgen-typescript').parse,
   webpackConfig: webpackConfig,
   updateExample: function (props, exampleFilePath) {

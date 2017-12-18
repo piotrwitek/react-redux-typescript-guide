@@ -4,8 +4,9 @@ import { SFCSpreadAttributes } from '@src/components';
 
 export default () => (
   <SFCSpreadAttributes
+    className={'classy'}
     style={{ backgroundColor: 'lightcyan' }}
   >
-    {'Nice background color.'}
+    {`I'll spread every property you give me!`}
   </SFCSpreadAttributes>
 );
