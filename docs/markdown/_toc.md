@@ -4,17 +4,16 @@
   - [Stateless Components - SFC](#stateless-components---sfc)
   - [Stateful Components - Class](#stateful-components---class)
   - [Generic Components](#generic-components)
-  - [Connected Components](#connected-components)
+  - [Connected Components](#connected-components) __\*UPDATED\*__
   - [Higher-Order Components](#higher-order-components)
 - [Redux](#redux)
-  - [Actions](#actions)
+  - [Action Creators](#action-creators)
   - [Reducers](#reducers)
-  - [Store types](#store-types)
-  - [Create Store](#create-store)
-- [Ecosystem](#ecosystem)
-  - [Async Flow with "redux-observable"](#async-flow-with-redux-observable)
-  - [Selectors with "reselect"](#selectors-with-reselect)
-  - [](#)
+  - [Store Configuration](#store-configuration)
+  - [Async Flow](#async-flow) _("redux-observable")_
+  - [Selectors](#selectors) _("reselect")_
+- [Tools](#tools)
+  - [Living Style Guide](#living-style-guide) _("react-styleguidist")_ __\*NEW\*__
 - [Extras](#extras)
   - [tsconfig.json](#tsconfigjson)
   - [tslint.json](#tslintjson)
@@ -23,4 +22,5 @@
   - [Vendor Types Augmentation](#vendor-types-augmentation)
   - [Npm Scripts](#npm-scripts)
 - [FAQ](#faq)
+- [Contribution Guide](#contribution-guide)
 - [Project Examples](#project-examples)

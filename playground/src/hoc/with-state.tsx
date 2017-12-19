@@ -1,24 +1,29 @@
 import * as React from 'react';
+import { Diff as Subtract } from 'react-redux-typescript';
 
-import { Omit } from '@src/types/react-redux-typescript';
-
-interface HOCProps {
+// These props will be subtracted from original component type
+interface WrappedComponentProps {
   count: number,
   onIncrement: () => any,
 }
 
-interface HOCState {
-  count: number,
-}
-
-export const withState = <WrappedComponentProps extends HOCProps>(
-  WrappedComponent: React.ComponentType<WrappedComponentProps>,
+export const withState = <P extends WrappedComponentProps>(
+  WrappedComponent: React.ComponentType<P>,
 ) => {
-  return class extends React.Component<Omit<WrappedComponentProps, keyof HOCProps>, HOCState> {
+  // These props will be added to original component type
+  interface Props {
+    initialCount?: number,
+  }
+  interface State {
+    count: number,
+  }
+
+  return class WithState extends React.Component<Subtract<P, WrappedComponentProps> & Props, State> {
+    // Enhance component name for debugging and React-Dev-Tools
     static displayName = `withState(${WrappedComponent.name})`;
 
-    state: HOCState = {
-      count: 0,
+    state: State = {
+      count: (this.props.initialCount || 0)!,
     };
 
     handleIncrement = () => {
@@ -26,7 +31,7 @@ export const withState = <WrappedComponentProps extends HOCProps>(
     };
 
     render() {
-      const { ...remainingProps } = this.props as any;
+      const { ...remainingProps } = this.props;
       const { count } = this.state;
 
       return (

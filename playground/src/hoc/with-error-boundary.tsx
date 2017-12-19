@@ -1,24 +1,24 @@
 import * as React from 'react';
-
-import { Omit } from '@src/types/react-redux-typescript';
+import { Diff as Subtract } from 'react-redux-typescript';
 
 const MISSING_ERROR = 'Error was swallowed during propagation.';
 
-interface HOCProps {
-  onReset: () => any,
+interface WrappedComponentProps {
+  onReset?: () => any,
 }
 
-interface HOCState {
-  error: Error | null | undefined,
-}
-
-export const withErrorBoundary = <WrappedComponentProps extends HOCProps>(
-  WrappedComponent: React.ComponentType<WrappedComponentProps>,
+export const withErrorBoundary = <P extends WrappedComponentProps>(
+  WrappedComponent: React.ComponentType<P>,
 ) => {
-  return class extends React.Component<Omit<WrappedComponentProps, keyof HOCProps>, HOCState> {
+  interface Props { }
+  interface State {
+    error: Error | null | undefined,
+  }
+
+  return class WithErrorBoundary extends React.Component<Subtract<P, WrappedComponentProps> & Props, State> {
     static displayName = `withErrorBoundary(${WrappedComponent.name})`;
 
-    state: HOCState = {
+    state: State = {
       error: undefined,
     };
 
@@ -36,7 +36,7 @@ export const withErrorBoundary = <WrappedComponentProps extends HOCProps>(
     }
 
     render() {
-      const { children, ...remainingProps } = this.props as any;
+      const { children, ...remainingProps } = this.props;
       const { error } = this.state;
 
       if (error) {

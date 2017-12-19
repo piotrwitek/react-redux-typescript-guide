@@ -1,13 +1,13 @@
 import * as React from 'react';
 
-import { IUser } from '@src/models';
+import { IUser, User } from '@src/models';
 import { GenericList } from '@src/components';
 
 export class UserList extends GenericList<IUser> { }
 
-export default ({ users }: { users: IUser[] }) => (
+export default (() => (
   <UserList
-    items={users}
+    items={[new User('Piotr', 'Witek')]}
     itemRenderer={(item) => <div key={item.id}>{item.fullName}</div>}
   />
-);
+)) as React.SFC<{}>;

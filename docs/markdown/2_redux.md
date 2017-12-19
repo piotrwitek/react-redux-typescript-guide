@@ -1,6 +1,6 @@
 # Redux
 
-## Actions
+## Action Creators
 
 ### KISS Style
 This pattern is focused on a KISS principle - to stay clear of complex proprietary abstractions and follow simple and familiar JavaScript const based types:
@@ -124,22 +124,85 @@ export const reducer: Reducer<State> =
 
 ---
 
-## Store Types
+## Store Configuration
 
-- ### `RootAction` - statically typed global action types
-- should be imported in layers dealing with redux actions like: reducers, redux-sagas, redux-observables
+### Create Root State and Root Action Types
 
-::example='../../playground/src/redux/root-action.ts'::
-
-- ### `RootState` - statically typed global state tree
-- should be imported in connected components providing type safety to Redux `connect` function
+#### `RootState` - interface representing redux state tree
+Can be imported in connected components to provide type-safety to Redux `connect` function
 
 ::example='../../playground/src/redux/root-reducer.ts'::
 
----
+#### `RootAction` - union type of all action objects
+Can be imported in various layers receiving or sending redux actions like: reducers, sagas or redux-observables epics
 
-## Create Store
+::example='../../playground/src/redux/root-action.ts'::
 
-- creating store - use `RootState` (in `combineReducers` and when providing preloaded state object) to set-up **state object type guard** to leverage strongly typed Store instance
+### Create Store
+
+When creating store use rootReducer instance, this alone will to set-up **strongly typed Store instance** with type inference.
+> The resulting store instance methods like `getState` or `dispatch` will be typed checked and expose type errors
 
 ::example='../../playground/src/store.ts'::
+
+---
+
+## Async Flow
+
+### "redux-observable"
+
+```ts
+// import rxjs operators somewhere...
+import { combineEpics, Epic } from 'redux-observable';
+
+import { RootAction, RootState } from '@src/redux';
+import { saveState } from '@src/services/local-storage-service';
+
+const SAVING_DELAY = 1000;
+
+// persist state in local storage every 1s
+const saveStateInLocalStorage: Epic<RootAction, RootState> = (action$, store) => action$
+  .debounceTime(SAVING_DELAY)
+  .do((action: RootAction) => {
+    // handle side-effects
+    saveState(store.getState());
+  })
+  .ignoreElements();
+
+export const epics = combineEpics(
+  saveStateInLocalStorage,
+);
+```
+
+---
+
+## Selectors 
+
+### "reselect"
+
+```ts
+import { createSelector } from 'reselect';
+
+import { RootState } from '@src/redux';
+
+export const getTodos =
+  (state: RootState) => state.todos.todos;
+
+export const getTodosFilter =
+  (state: RootState) => state.todos.todosFilter;
+
+export const getFilteredTodos = createSelector(
+  getTodos, getTodosFilter,
+  (todos, todosFilter) => {
+    switch (todosFilter) {
+      case 'completed':
+        return todos.filter((t) => t.completed);
+      case 'active':
+        return todos.filter((t) => !t.completed);
+
+      default:
+        return todos;
+    }
+  },
+);
+```

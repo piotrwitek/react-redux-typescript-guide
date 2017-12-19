@@ -23,17 +23,15 @@ export class User implements IUser {
   'constructor': typeof User;
 
   id: string = v4();
-  firstName: string = 'Default';
-  lastName: string = 'Name';
   get fullName(): string {
     return `${this.firstName} ${this.lastName}`;
   }
 
+  constructor(public firstName: string, public lastName: string) { }
+
   static create(dto: IUserDTO): IUser {
-    const model = new User();
+    const model = new User(dto.first_name, dto.last_name);
     model.id = dto.id;
-    model.firstName = dto.first_name;
-    model.lastName = dto.last_name;
 
     return model;
   }

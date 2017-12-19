@@ -1,8 +1,7 @@
 # React & Redux in TypeScript - Static Typing Guide
-This guide is **NOT** about _"How to write type declarations for every possible variable and expression to have 100% type covered code and waste a lot of time"_.  
-This guide is about **_"How to write type declarations to only the minimum necessary amount of JavaScript code and still get all the benefits of Static Typing"_**.
+**_"This guide is about to teach you how to leverage [Type Inference](https://www.typescriptlang.org/docs/handbook/type-inference.html), [Generics](https://www.typescriptlang.org/docs/handbook/generics.html) and other [Advanced Types](https://www.typescriptlang.org/docs/handbook/advanced-types.html) as much as possible to write the minimal amount of type annotations needed for your JavaScript code to be completely Type Safe"_** - this will make sure you get all the benefits of Static Typing and won't slow down your productivity by adding unnecessary typings.
 
-> found it usefull, want some more? [give it a :star:](https://github.com/piotrwitek/react-redux-typescript-patterns/stargazers)  
+> found it usefull and want some more updates? [give it a :star:](https://github.com/piotrwitek/react-redux-typescript-patterns/stargazers)  
 
 ### [> Changelog](/CHANGELOG.md)  
 
@@ -10,33 +9,14 @@ This guide is about **_"How to write type declarations to only the minimum neces
 - extend HOC section with more advanced examples [#5](../../issues/5)  
 - investigate typing patterns for generic component children [#7](../../issues/7)  
 
-### Introduction
-This guide is aimed to use [`--strict`](https://www.typescriptlang.org/docs/handbook/compiler-options.html) flag of TypeScript compiler to provide the best static-typing experience.  
-
-Benefits of this setup and static-typing in general include:
-- when making changes in your code, precise insight of the impact on the entire codebase (by showing all the references in the codebase for any given piece of code)  
-- when implementing new features compiler validate all props passed to components or injected by connect from redux store, validation of action creator params, payload objects structure and state/action objects passed to a reducer - showing all possible JavaScript errors)  
-
-Additionally static-typing will make processes of improving your codebase and refactoring much easier and give you a confidence that you will not break your production code.
-
 ### Goals
-- Complete type safety with strict null checking, without failing to `any` type
+- Complete type safety with [`--strict`](https://www.typescriptlang.org/docs/handbook/compiler-options.html) flag without failing to `any` type for the best static-typing experience
 - Minimize amount of manually writing type declarations by leveraging [Type Inference](https://www.typescriptlang.org/docs/handbook/type-inference.html)
-- Reduce redux boilerplate code with [simple utility functions](https://github.com/piotrwitek/react-redux-typescript) using [Generics](https://www.typescriptlang.org/docs/handbook/generics.html) and [Advanced Types](https://www.typescriptlang.org/docs/handbook/advanced-types.html) features
+- Reduce redux boilerplate and complexity of it's type annotations to a minimum with [simple utility functions](https://github.com/piotrwitek/react-redux-typescript) by extensive use of [Generics](https://www.typescriptlang.org/docs/handbook/generics.html) and [Advanced Types](https://www.typescriptlang.org/docs/handbook/advanced-types.html) features
 
-### Playground
-Code examples are generated from the source code in `playground` folder. They are tested with TypeScript compiler with the most recent version of TypeScript and relevant type definitions (like `@types/react` or `@types/react-redux`) to ensure they are still working with recent definitions.
-Moreover playground is created is such way, that you can easily clone repository, install `npm` dependencies and play around with all the examples from this guide in real project environment without any extra setup.
-
-### Contribution Guide
-- `README.md` is auto-generated using `generator script` - to make changes please edit `markdown` files located in `/docs` folder
-- Source Code snippets are injected with `generator script` - to make changes please edit their original sources located in playground folder (include directives are used in `markdown` files located in `/docs` folder e.g. `::example='../../playground/src/components/...`)
-- Before making PR please re-generate final `README.md` using command:
-```bash
-sh generate.sh
-// or 
-node generator/bin/generate-readme.js
-```
+### Playground Project
+You should check Playground Project located in the `/playground` folder. It is a source of all the code examples found in the guide. They are all tested with the most recent version of TypeScript and 3rd party type definitions (like `@types/react` or `@types/react-redux`) to ensure the examples are up-to-date and not broken with updated definitions.
+> Playground was created is such ą way, that you can easily clone repository locally and immediately play around on your own to learn all the examples from this guide in a real project environment without complicated setup.
 
 ---
 
@@ -46,16 +26,17 @@ node generator/bin/generate-readme.js
   - [Stateless Components - SFC](#stateless-components---sfc)
   - [Stateful Components - Class](#stateful-components---class)
   - [Generic Components](#generic-components)
-  - [Connected Components](#connected-components)
+  - [Connected Components](#connected-components) (*UPDATED)
   - [Higher-Order Components](#higher-order-components)
 - [Redux](#redux)
-  - [Actions](#actions)
+  - [Configuration](#configuration)
+  - [Action creators](#action-creators)
   - [Reducers](#reducers)
-  - [Store types](#store-types)
-  - [Create Store](#create-store)
-- [Ecosystem](#ecosystem)
-  - [Async Flow with "redux-observable"](#async-flow-with-redux-observable)
-  - [Selectors with "reselect"](#selectors-with-reselect)
+  - [Store](#store)
+  - [Async Flow](#async-flow-with-redux-observable) ("redux-observable")
+  - [Selectors](#selectors-with-reselect) ("reselect")
+- [Tools](#tools)
+  - [Living Style Guide](#living-style-guide) (*NEW)("react-styleguidist")
 - [Extras](#extras)
   - [tsconfig.json](#tsconfigjson)
   - [tslint.json](#tslintjson)
@@ -64,6 +45,7 @@ node generator/bin/generate-readme.js
   - [Vendor Types Augmentation](#vendor-types-augmentation)
   - [Npm Scripts](#npm-scripts)
 - [FAQ](#faq)
+- [Contribution Guide](#contribution-guide)
 - [Project Examples](#project-examples)
 
 ---
@@ -113,7 +95,7 @@ export const SFCCounter: React.SFC<SFCCounterProps> = (props) => {
 
   return (
     <div>
-      {label}: {count}
+      <span>{label}: {count} </span>
       <button type="button" onClick={handleIncrement}>
         {`Increment`}
       </button>
@@ -130,16 +112,19 @@ import * as React from 'react';
 
 import { SFCCounter } from '@src/components';
 
-let count = 0;
-const incrementCount = () => count++;
+export default class extends React.Component<{}, { count: number }> {
+  state = { count: 0 };
 
-export default () => (
-  <SFCCounter
-    label={'SFCCounter'}
-    count={count}
-    onIncrement={incrementCount}
-  />
-);
+  render() {
+    return (
+      <SFCCounter
+        label={'SFCCounter'}
+        count={this.state.count}
+        onIncrement={() => { this.setState({ count: this.state.count + 1 }); }}
+      />
+    );
+  }
+}
 
 ```
 </p></details>
@@ -175,11 +160,14 @@ import * as React from 'react';
 
 import { SFCSpreadAttributes } from '@src/components';
 
-export default () => (
+export default (() => (
   <SFCSpreadAttributes
+    className={'classy'}
     style={{ backgroundColor: 'lightcyan' }}
-  />
-);
+  >
+    {`I'll spread every property you give me!`}
+  </SFCSpreadAttributes>
+)) as React.SFC<{}>;
 
 ```
 </p></details>
@@ -362,17 +350,17 @@ export class GenericList<T> extends React.Component<GenericListProps<T>, {}> {
 ```tsx
 import * as React from 'react';
 
-import { IUser } from '@src/models';
+import { IUser, User } from '@src/models';
 import { GenericList } from '@src/components';
 
 export class UserList extends GenericList<IUser> { }
 
-export default ({ users }: { users: IUser[] }) => (
+export default (() => (
   <UserList
-    items={users}
+    items={[new User('Piotr', 'Witek')]}
     itemRenderer={(item) => <div key={item.id}>{item.fullName}</div>}
   />
-);
+)) as React.SFC<{}>;
 
 ```
 </p></details>
@@ -515,27 +503,31 @@ export default () => (
 
 ```tsx
 import * as React from 'react';
+import { Diff as Subtract } from 'react-redux-typescript';
 
-import { Omit } from '@src/types/react-redux-typescript';
-
-interface RequiredProps {
+// These props will be subtracted from original component type
+interface WrappedComponentProps {
   count: number,
   onIncrement: () => any,
 }
 
-type Props<T extends RequiredProps> = Omit<T, keyof RequiredProps>;
+export const withState = <P extends WrappedComponentProps>(
+  WrappedComponent: React.ComponentType<P>,
+) => {
+  // These props will be added to original component type
+  interface Props {
+    initialCount?: number,
+  }
+  interface State {
+    count: number,
+  }
 
-interface State {
-  count: number,
-}
-
-export function withState<WrappedComponentProps extends RequiredProps>(
-  WrappedComponent: React.ComponentType<WrappedComponentProps>,
-) {
-  const HOC = class extends React.Component<Props<WrappedComponentProps>, State> {
+  return class WithState extends React.Component<Subtract<P, WrappedComponentProps> & Props, State> {
+    // Enhance component name for debugging and React-Dev-Tools
+    static displayName = `withState(${WrappedComponent.name})`;
 
     state: State = {
-      count: 0,
+      count: (this.props.initialCount || 0)!,
     };
 
     handleIncrement = () => {
@@ -543,20 +535,19 @@ export function withState<WrappedComponentProps extends RequiredProps>(
     };
 
     render() {
-      const { handleIncrement } = this;
+      const { ...remainingProps } = this.props;
       const { count } = this.state;
 
       return (
         <WrappedComponent
+          {...remainingProps}
           count={count}
-          onIncrement={handleIncrement}
+          onIncrement={this.handleIncrement}
         />
       );
     }
   };
-
-  return HOC;
-}
+};
 
 ```
 
@@ -571,11 +562,9 @@ import { SFCCounter } from '@src/components';
 const SFCCounterWithState =
   withState(SFCCounter);
 
-export default (
-  ({ children }) => (
-    <SFCCounterWithState label={'SFCCounterWithState'} />
-  )
-) as React.SFC<{}>;
+export default (() => (
+  <SFCCounterWithState label={'SFCCounterWithState'} />
+)) as React.SFC<{}>;
 
 ```
 </p></details>
@@ -589,24 +578,24 @@ export default (
 
 ```tsx
 import * as React from 'react';
+import { Diff as Subtract } from 'react-redux-typescript';
 
 const MISSING_ERROR = 'Error was swallowed during propagation.';
 
-interface Props {
-}
-
-interface State {
-  error: Error | null | undefined,
-}
-
 interface WrappedComponentProps {
-  onReset: () => any,
+  onReset?: () => any,
 }
 
-export function withErrorBoundary(
-  WrappedComponent: React.ComponentType<WrappedComponentProps>,
-) {
-  const HOC = class extends React.Component<Props, State> {
+export const withErrorBoundary = <P extends WrappedComponentProps>(
+  WrappedComponent: React.ComponentType<P>,
+) => {
+  interface Props { }
+  interface State {
+    error: Error | null | undefined,
+  }
+
+  return class WithErrorBoundary extends React.Component<Subtract<P, WrappedComponentProps> & Props, State> {
+    static displayName = `withErrorBoundary(${WrappedComponent.name})`;
 
     state: State = {
       error: undefined,
@@ -626,21 +615,22 @@ export function withErrorBoundary(
     }
 
     render() {
-      const { children } = this.props;
+      const { children, ...remainingProps } = this.props;
       const { error } = this.state;
 
       if (error) {
         return (
-          <WrappedComponent onReset={this.handleReset} />
+          <WrappedComponent
+            {...remainingProps}
+            onReset={this.handleReset}
+          />
         );
       }
 
-      return children as any;
+      return children;
     }
   };
-
-  return HOC;
-}
+};
 
 ```
 
@@ -655,13 +645,17 @@ import { ErrorMessage } from '@src/components';
 const ErrorMessageWithErrorBoundary =
   withErrorBoundary(ErrorMessage);
 
-export default (
-  ({ children }) => (
-    <ErrorMessageWithErrorBoundary>
-      {children}
-    </ErrorMessageWithErrorBoundary>
-  )
-) as React.SFC<{}>;
+const ErrorThrower = () => (
+  <button type="button" onClick={() => { throw new Error(`Catch this!`); }}>
+    {`Throw nasty error`}
+  </button >
+);
+
+export default (() => (
+  <ErrorMessageWithErrorBoundary>
+    <ErrorThrower />
+  </ErrorMessageWithErrorBoundary>
+)) as React.SFC<{}>;
 
 ```
 </p></details>
@@ -949,10 +943,6 @@ export default store;
 
 ---
 
-# Ecosystem
-
----
-
 ## Async Flow with "redux-observable"
 
 ```ts
@@ -1008,6 +998,9 @@ export const getFilteredTodos = createSelector(
   },
 );
 ```
+
+---
+
 
 ---
 
@@ -1261,6 +1254,25 @@ class StatefulCounter extends React.Component<Props, State> {
 ```
 
 ---
+
+# Contribution Guide
+- Don't edit `README.md` - it is built with `generator` script from  separate `.md` files located in the `/docs/markdown` folder, edit them instead
+- For code snippets, they are also injected by `generator` script from the source files located in the playground folder (this step make sure all examples are type-checked and linted), edit them instead
+> look for include directives in `.md` files that look like this: `::[example|usage]='../../playground/src/components/sfc-counter.tsx'::`
+
+Before opening PR please make sure to check:
+```bash
+# run linter in playground
+yarn run lint
+
+# run type-checking in playground
+yarn run tsc
+  
+# re-generate `README.md` from repo root
+sh ./generate.sh
+# or 
+node ./generator/bin/generate-readme.js
+```
 
 # Project Examples
 
