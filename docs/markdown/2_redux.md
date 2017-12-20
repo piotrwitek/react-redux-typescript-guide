@@ -5,43 +5,46 @@
 ### KISS Style
 This pattern is focused on a KISS principle - to stay clear of complex proprietary abstractions and follow simple and familiar JavaScript const based types:
 
-- classic const based types
-- very close to standard JS usage
-- standard amount of boilerplate
-- need to export action types and action creators to re-use in other places, e.g. `redux-saga` or `redux-observable`
+Advantages:
+- simple "const" based types
+- familiar to standard JS usage
+Disadvantages:
+- significant amount of boilerplate and duplication
+- necessary to export both action types and action creators to re-use in other places, e.g. `redux-saga` or `redux-observable`
 
 ::example='../../playground/src/redux/counters/actions.ts'::
 ::usage='../../playground/src/redux/counters/actions.usage.ts'::
 
 ### DRY Style
-A more DRY approach, introducing a simple factory function to automate the creation of typed action creators. The advantage here is that we can reduce boilerplate and code repetition. It is also easier to re-use action creators in other places because of `type` property on action creator containing type constant:
+In a DRY approach, we're introducing a simple factory function to automate the creation process of type-safe action creators. The advantage here is that we can reduce boilerplate and repetition significantly. It is also easier to re-use action creators in other layers thanks to `getType` helper function returning "type constant".
 
-- using factory function to automate creation of typed action creators - (source code to be revealed)
+Advantages:
+- using factory function to automate creation of type-safe action creators
 - less boilerplate and code repetition than KISS Style
-- action creators have readonly `type` property (this make using `type constants` redundant and easier to re-use in other places e.g. `redux-saga` or `redux-observable`)
+- getType helper to obtain action creator type (this makes using "type constants" unnecessary)
 
 ```ts
-import { createActionCreator } from 'react-redux-typescript';
-
-type Severity = 'info' | 'success' | 'warning' | 'error';
+import { createAction, getType } from 'react-redux-typescript';
 
 // Action Creators
 export const actionCreators = {
-  incrementCounter: createActionCreator('INCREMENT_COUNTER'),
-  showNotification: createActionCreator(
-    'SHOW_NOTIFICATION', (message: string, severity?: Severity) => ({ message, severity }),
+  incrementCounter: createAction('INCREMENT_COUNTER'),
+  showNotification: createAction('SHOW_NOTIFICATION', 
+    (message: string, severity: Severity = 'default') => ({
+      type: 'SHOW_NOTIFICATION', payload: { message, severity },
+    })
   ),
 };
 
-// Examples
+// Usage
 store.dispatch(actionCreators.incrementCounter(4)); // Error: Expected 0 arguments, but got 1.
 store.dispatch(actionCreators.incrementCounter()); // OK: { type: "INCREMENT_COUNTER" }
-actionCreators.incrementCounter.type === "INCREMENT_COUNTER" // true
+getType(actionCreators.incrementCounter) === "INCREMENT_COUNTER" // true
 
 store.dispatch(actionCreators.showNotification()); // Error: Supplied parameters do not match any signature of call target.
-store.dispatch(actionCreators.showNotification('Hello!')); // OK: { type: "SHOW_NOTIFICATION", payload: { message: 'Hello!' } }
-store.dispatch(actionCreators.showNotification('Hello!', 'info')); // OK: { type: "SHOW_NOTIFICATION", payload: { message: 'Hello!', severity: 'info } }
-actionCreators.showNotification.type === "SHOW_NOTIFICATION" // true
+store.dispatch(actionCreators.showNotification('Hello!')); // OK: { type: "SHOW_NOTIFICATION", payload: { message: 'Hello!', severity: 'default' } }
+store.dispatch(actionCreators.showNotification('Hello!', 'info')); // OK: { type: "SHOW_NOTIFICATION", payload: { message: 'Hello!', severity: 'info' } }
+getType(actionCreators.showNotification) === "SHOW_NOTIFICATION" // true
 ```
 
 ---
