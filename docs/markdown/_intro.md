@@ -1,7 +1,7 @@
 # React & Redux in TypeScript - Static Typing Guide
 **_"This guide is about to teach you how to leverage [Type Inference](https://www.typescriptlang.org/docs/handbook/type-inference.html), [Generics](https://www.typescriptlang.org/docs/handbook/generics.html) and other [Advanced Types](https://www.typescriptlang.org/docs/handbook/advanced-types.html) as much as possible to write the minimal amount of type annotations needed for your JavaScript code to be completely Type Safe"_** - this will make sure you get all the benefits of Static Typing and won't slow down your productivity by adding unnecessary typings.
 
-> found it usefull and want some more updates? [give it a :star:](https://github.com/piotrwitek/react-redux-typescript-patterns/stargazers)  
+> #### _Found it usefull? Want more updates?_ [**Give it a :star2:**](https://github.com/piotrwitek/react-redux-typescript-patterns/stargazers)  
 
 ### [> Changelog](/CHANGELOG.md)  
 

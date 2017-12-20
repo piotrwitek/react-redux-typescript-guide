@@ -1,85 +1,106 @@
-# React
+# React Types Cheatsheet
 
-## Stateless Components - SFC
-- convenient alias: `React.SFC<Props> === React.StatelessComponent<Props>`
+#### `React.StatelessComponent<P>` or alias `React.SFC<P>` 
+Stateless functional components
+```tsx
+const MyComponent: React.SFC<MyComponentProps> = ...
+```
+[⬆ back to top](#table-of-contents)
 
-### SFC Counter
+#### `React.Component<P, S>`
+Statefull class component
+```tsx
+class MyComponent extends React.Component<MyComponentProps, State> { ...
+```
+[⬆ back to top](#table-of-contents)
 
-#### - basic
+#### `React.ComponentType<P>`
+Accepts sfc or class components with Generic Props Type
+```tsx
+const withState = <P extends WrappedComponentProps>(
+  WrappedComponent: React.ComponentType<P>,
+) => { ...
+```
+[⬆ back to top](#table-of-contents)
 
-::example='../../playground/src/components/sfc-counter.tsx'::
+#### `React.ReactNode`
+Accepts any react elements (component instances) and also primitive types
+```tsx
+const elementOrPrimitive: React.ReactNode = '' || 0 || false || null || <div /> || <MyComponent />;
+```
+[⬆ back to top](#table-of-contents)
 
-::usage='../../playground/src/components/sfc-counter.usage.tsx'::
+#### `JSX.Element`
+Similar in usage to ReactNode but limited to accept only react elements (and not primitive types)
+```tsx
+const elementOnly: JSX.Element =  <div /> || <MyComponent />;
+```
+[⬆ back to top](#table-of-contents)
+
+#### `React.CSSProperties`
+Type-safety for styles using css-in-js 
+```tsx
+const styles: React.CSSProperties = { flexDirection: 'row', ...
+```
+[⬆ back to top](#table-of-contents)
+
+#### `React.ReactEventHandler<E>`
+Type-safe event handlers for JSX
+```tsx
+const handleChange: React.ReactEventHandler<HTMLInputElement> = (ev) => { ...
+```
+[⬆ back to top](#table-of-contents)
 
 ---
 
-#### - [spread attributes](https://facebook.github.io/react/docs/jsx-in-depth.html#spread-attributes)
+# Component Typing Patterns
+
+## Stateless Components - SFC
+
+#### - stateless counter
+
+::example='../../playground/src/components/sfc-counter.tsx'::
+::usage='../../playground/src/components/sfc-counter.usage.tsx'::
+
+[⬆ back to top](#table-of-contents)
+
+#### - [spreading attributes](https://facebook.github.io/react/docs/jsx-in-depth.html#spread-attributes)
 
 ::example='../../playground/src/components/sfc-spread-attributes.tsx'::
-
 ::usage='../../playground/src/components/sfc-spread-attributes.usage.tsx'::
+
+[⬆ back to top](#table-of-contents)
 
 ---
 
 ## Stateful Components - Class
 
-### Stateful Counter
-
-#### - basic
+#### - stateful counter
 
 ::example='../../playground/src/components/stateful-counter.tsx'::
-
 ::usage='../../playground/src/components/stateful-counter.usage.tsx'::
 
----
+[⬆ back to top](#table-of-contents)
 
 #### - with default props
 
 ::example='../../playground/src/components/stateful-counter-with-initial-count.tsx'::
-
 ::usage='../../playground/src/components/stateful-counter-with-initial-count.usage.tsx'::
+
+[⬆ back to top](#table-of-contents)
 
 ---
 
 ## Generic Components
 - easily create typed component variations and reuse common logic
-- especially useful to create typed list components
+- common use case is a generic list components
 
-### Generic List
-
-#### - basic
+#### - generic list
 
 ::example='../../playground/src/components/generic-list.tsx'::
-
 ::usage='../../playground/src/components/generic-list.usage.tsx'::
 
----
-
-## Connected Components
-
-### Connected Counter
-
-#### - basic
-
-::example='../../playground/src/connected/sfc-counter-connected.tsx'::
-
-::usage='../../playground/src/connected/sfc-counter-connected.usage.tsx'::
-
----
-
-#### - verbose
-
-::example='../../playground/src/connected/sfc-counter-connected-verbose.tsx'::
-
-::usage='../../playground/src/connected/sfc-counter-connected-verbose.usage.tsx'::
-
----
-
-#### - with own props
-
-::example='../../playground/src/connected/sfc-counter-connected-extended.tsx'::
-
-::usage='../../playground/src/connected/sfc-counter-connected-extended.usage.tsx'::
+[⬆ back to top](#table-of-contents)
 
 ---
 
@@ -88,22 +109,43 @@
 - a new component will infer Props interface from wrapped Component extended with Props of HOC
 - will filter out props specific to HOC, and the rest will be passed through to wrapped component
 
-### Basic HOC Examples
-
 #### - withState
-> enhance stateless counter with state
+Adds state to a stateless counter
 
 ::example='../../playground/src/hoc/with-state.tsx'::
-
 ::usage='../../playground/src/hoc/with-state.usage.tsx'::
+
+[⬆ back to top](#table-of-contents)
+
+#### - withErrorBoundary
+Adds error handling using componentDidCatch to any component
+
+::example='../../playground/src/hoc/with-error-boundary.tsx'::
+::usage='../../playground/src/hoc/with-error-boundary.usage.tsx'::
+
+[⬆ back to top](#table-of-contents)
 
 ---
 
-### Advanced HOC Examples
+## Redux Connected Components
 
-#### - withErrorBoundary
-> add error handling with componentDidCatch to view component
+#### - redux connected counter
 
-::example='../../playground/src/hoc/with-error-boundary.tsx'::
+::example='../../playground/src/connected/sfc-counter-connected.tsx'::
+::usage='../../playground/src/connected/sfc-counter-connected.usage.tsx'::
 
-::usage='../../playground/src/hoc/with-error-boundary.usage.tsx'::
+[⬆ back to top](#table-of-contents)
+
+#### - redux connected counter (verbose)
+
+::example='../../playground/src/connected/sfc-counter-connected-verbose.tsx'::
+::usage='../../playground/src/connected/sfc-counter-connected-verbose.usage.tsx'::
+
+[⬆ back to top](#table-of-contents)
+
+#### - with own props
+
+::example='../../playground/src/connected/sfc-counter-connected-extended.tsx'::
+::usage='../../playground/src/connected/sfc-counter-connected-extended.usage.tsx'::
+
+[⬆ back to top](#table-of-contents)

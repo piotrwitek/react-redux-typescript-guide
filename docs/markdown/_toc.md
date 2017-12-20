@@ -1,11 +1,12 @@
-### Table of Contents
+## Table of Contents
 - [Setup](#setup)
-- [React](#react)
+- [React Types Cheatsheet](#react-types-cheatsheet) __\*NEW\*__
+- [Component Typing Patterns](#component-typing-patterns)
   - [Stateless Components - SFC](#stateless-components---sfc)
   - [Stateful Components - Class](#stateful-components---class)
   - [Generic Components](#generic-components)
-  - [Connected Components](#connected-components) __\*UPDATED\*__
-  - [Higher-Order Components](#higher-order-components)
+  - [Higher-Order Components](#higher-order-components) __\*UPDATED\*__
+  - [Redux Connected Components](#connected-components)
 - [Redux](#redux)
   - [Action Creators](#action-creators)
   - [Reducers](#reducers)
