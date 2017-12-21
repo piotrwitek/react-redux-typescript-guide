@@ -61,7 +61,7 @@ const handleChange: React.ReactEventHandler<HTMLInputElement> = (ev) => { ...
 
 ::example='../../playground/src/components/sfc-counter.tsx'::
 
-[⟩⟩⟩ demo](https://piotrwitek.github.io/react-redux-typescript-guide/styleguide/#sfccounter)
+[⟩⟩⟩ demo](https://piotrwitek.github.io/react-redux-typescript-guide/#sfccounter)
 
 [⇧ back to top](#table-of-contents)
 
@@ -69,7 +69,7 @@ const handleChange: React.ReactEventHandler<HTMLInputElement> = (ev) => { ...
 
 ::example='../../playground/src/components/sfc-spread-attributes.tsx'::
 
-[⟩⟩⟩ demo](https://piotrwitek.github.io/react-redux-typescript-guide/styleguide/#sfcspreadattributes)
+[⟩⟩⟩ demo](https://piotrwitek.github.io/react-redux-typescript-guide/#sfcspreadattributes)
 
 [⇧ back to top](#table-of-contents)
 
@@ -81,7 +81,7 @@ const handleChange: React.ReactEventHandler<HTMLInputElement> = (ev) => { ...
 
 ::example='../../playground/src/components/stateful-counter.tsx'::
 
-[⟩⟩⟩ demo](https://piotrwitek.github.io/react-redux-typescript-guide/styleguide/#statefulcounter)
+[⟩⟩⟩ demo](https://piotrwitek.github.io/react-redux-typescript-guide/#statefulcounter)
 
 [⇧ back to top](#table-of-contents)
 
@@ -89,7 +89,7 @@ const handleChange: React.ReactEventHandler<HTMLInputElement> = (ev) => { ...
 
 ::example='../../playground/src/components/stateful-counter-with-initial-count.tsx'::
 
-[⟩⟩⟩ demo](https://piotrwitek.github.io/react-redux-typescript-guide/styleguide/#statefulcounterwithinitialcount)
+[⟩⟩⟩ demo](https://piotrwitek.github.io/react-redux-typescript-guide/#statefulcounterwithinitialcount)
 
 [⇧ back to top](#table-of-contents)
 
@@ -103,7 +103,7 @@ const handleChange: React.ReactEventHandler<HTMLInputElement> = (ev) => { ...
 
 ::example='../../playground/src/components/generic-list.tsx'::
 
-[⟩⟩⟩ demo](https://piotrwitek.github.io/react-redux-typescript-guide/styleguide/##genericlist)
+[⟩⟩⟩ demo](https://piotrwitek.github.io/react-redux-typescript-guide/##genericlist)
 
 [⇧ back to top](#table-of-contents)
 

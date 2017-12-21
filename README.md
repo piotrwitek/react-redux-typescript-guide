@@ -154,7 +154,7 @@ export const SFCCounter: React.SFC<SFCCounterProps> = (props) => {
 
 ```
 
-[⟩⟩⟩ demo](https://piotrwitek.github.io/react-redux-typescript-guide/styleguide/#sfccounter)
+[⟩⟩⟩ demo](https://piotrwitek.github.io/react-redux-typescript-guide/#sfccounter)
 
 [⇧ back to top](#table-of-contents)
 
@@ -180,7 +180,7 @@ export const SFCSpreadAttributes: React.SFC<SFCSpreadAttributesProps> = (props) 
 
 ```
 
-[⟩⟩⟩ demo](https://piotrwitek.github.io/react-redux-typescript-guide/styleguide/#sfcspreadattributes)
+[⟩⟩⟩ demo](https://piotrwitek.github.io/react-redux-typescript-guide/#sfcspreadattributes)
 
 [⇧ back to top](#table-of-contents)
 
@@ -228,7 +228,7 @@ export class StatefulCounter extends React.Component<StatefulCounterProps, State
 
 ```
 
-[⟩⟩⟩ demo](https://piotrwitek.github.io/react-redux-typescript-guide/styleguide/#statefulcounter)
+[⟩⟩⟩ demo](https://piotrwitek.github.io/react-redux-typescript-guide/#statefulcounter)
 
 [⇧ back to top](#table-of-contents)
 
@@ -292,7 +292,7 @@ export const StatefulCounterWithInitialCount: React.ComponentClass<StatefulCount
 
 ```
 
-[⟩⟩⟩ demo](https://piotrwitek.github.io/react-redux-typescript-guide/styleguide/#statefulcounterwithinitialcount)
+[⟩⟩⟩ demo](https://piotrwitek.github.io/react-redux-typescript-guide/#statefulcounterwithinitialcount)
 
 [⇧ back to top](#table-of-contents)
 
@@ -326,7 +326,7 @@ export class GenericList<T> extends React.Component<GenericListProps<T>, {}> {
 
 ```
 
-[⟩⟩⟩ demo](https://piotrwitek.github.io/react-redux-typescript-guide/styleguide/##genericlist)
+[⟩⟩⟩ demo](https://piotrwitek.github.io/react-redux-typescript-guide/##genericlist)
 
 [⇧ back to top](#table-of-contents)
 
@@ -997,7 +997,7 @@ export const getFilteredTodos = createSelector(
 
 [⟩⟩⟩ styleguide.config.js](/playground/src/styleguide.config.js)  
 
-[⟩⟩⟩ demo](https://piotrwitek.github.io/react-redux-typescript-guide/styleguide/)
+[⟩⟩⟩ demo](https://piotrwitek.github.io/react-redux-typescript-guide/)
 
 [⇧ back to top](#table-of-contents)
 

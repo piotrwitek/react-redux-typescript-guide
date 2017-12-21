@@ -5,6 +5,6 @@
 
 [⟩⟩⟩ styleguide.config.js](/playground/src/styleguide.config.js)  
 
-[⟩⟩⟩ demo](https://piotrwitek.github.io/react-redux-typescript-guide/styleguide/)
+[⟩⟩⟩ demo](https://piotrwitek.github.io/react-redux-typescript-guide/)
 
 [⇧ back to top](#table-of-contents)

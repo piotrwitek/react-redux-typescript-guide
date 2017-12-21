@@ -7,8 +7,8 @@ webpackConfig.resolve.alias = { '@src': path.join(__dirname, 'src') };
 
 module.exports = {
   showUsage: false,
-  styleguideDir: '../docs/styleguide',
-  title: 'Component Typing Patterns in React + TypeScript',
+  styleguideDir: '../docs/',
+  title: 'React & Redux in TypeScript - Component Typing Patterns',
   ignore: ['**/*.usage.tsx'],
   sections: [
     {
