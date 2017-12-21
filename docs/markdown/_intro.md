@@ -3,12 +3,6 @@
 
 > #### _Found it usefull? Want more updates?_ [**Give it a :star2:**](https://github.com/piotrwitek/react-redux-typescript-patterns/stargazers)  
 
-### [> Changelog](/CHANGELOG.md)  
-
-### Roadmap
-- extend HOC section with more advanced examples [#5](../../issues/5)  
-- investigate typing patterns for generic component children [#7](../../issues/7)  
-
 ### Goals
 - Complete type safety with [`--strict`](https://www.typescriptlang.org/docs/handbook/compiler-options.html) flag without failing to `any` type for the best static-typing experience
 - Minimize amount of manually writing type declarations by leveraging [Type Inference](https://www.typescriptlang.org/docs/handbook/type-inference.html)

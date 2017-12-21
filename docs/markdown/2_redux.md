@@ -15,6 +15,8 @@ Disadvantages:
 ::example='../../playground/src/redux/counters/actions.ts'::
 ::usage='../../playground/src/redux/counters/actions.usage.ts'::
 
+[⇧ back to top](#table-of-contents)
+
 ### DRY Style
 In a DRY approach, we're introducing a simple factory function to automate the creation process of type-safe action creators. The advantage here is that we can reduce boilerplate and repetition significantly. It is also easier to re-use action creators in other layers thanks to `getType` helper function returning "type constant".
 
@@ -47,6 +49,8 @@ store.dispatch(actionCreators.showNotification('Hello!', 'info')); // OK: { type
 getType(actionCreators.showNotification) === "SHOW_NOTIFICATION" // true
 ```
 
+[⇧ back to top](#table-of-contents)
+
 ---
 
 ## Reducers
@@ -54,7 +58,7 @@ Relevant TypeScript Docs references:
 - [Discriminated Union types](https://www.typescriptlang.org/docs/handbook/advanced-types.html)
 - [Mapped types](https://www.typescriptlang.org/docs/handbook/advanced-types.html) e.g. `Readonly` & `Partial`  
 
-### Reducer State
+### Tutorial
 Declare reducer `State` type definition with readonly modifier for `type level` immutability
 ```ts
 export type State = {
@@ -105,25 +109,34 @@ state.countersCollection[0].readonlyCounter2 = 1; // Error, cannot be mutated
 
 > _There are some experiments in the community to make a `ReadonlyRecursive` mapped type, but I'll need to investigate if they really works_
 
-### Reducer with classic `const types`
+[⇧ back to top](#table-of-contents)
+
+### Examples
+
+#### Reducer with classic `const types`
 
 ::example='../../playground/src/redux/counters/reducer.ts'::
 
-### Reducer with static `type` property from helper factory function - `createActionCreator`
-```ts
-export const reducer: Reducer<State> =
-  (state = 0, action: RootAction) => {
-    switch (action.type) {
-      case actionCreators.increment.type:
-        return state + 1;
-        
-      case actionCreators.decrement.type:
-        return state - 1;
+[⇧ back to top](#table-of-contents)
 
-      default: return state;
-    }
-  };
+#### Reducer with getType helper from `react-redux-typescript`
+```ts
+import { getType } from 'react-redux-typescript';
+
+export const reducer: Reducer<State> = (state = 0, action: RootAction) => {
+  switch (action.type) {
+    case getType(actionCreators.increment):
+      return state + 1;
+      
+    case getType(actionCreators.decrement):
+      return state - 1;
+
+    default: return state;
+  }
+};
 ```
+
+[⇧ back to top](#table-of-contents)
 
 ---
 
@@ -136,10 +149,14 @@ Can be imported in connected components to provide type-safety to Redux `connect
 
 ::example='../../playground/src/redux/root-reducer.ts'::
 
+[⇧ back to top](#table-of-contents)
+
 #### `RootAction` - union type of all action objects
 Can be imported in various layers receiving or sending redux actions like: reducers, sagas or redux-observables epics
 
 ::example='../../playground/src/redux/root-action.ts'::
+
+[⇧ back to top](#table-of-contents)
 
 ### Create Store
 
@@ -147,6 +164,8 @@ When creating store use rootReducer instance, this alone will to set-up **strong
 > The resulting store instance methods like `getState` or `dispatch` will be typed checked and expose type errors
 
 ::example='../../playground/src/store.ts'::
+
+[⇧ back to top](#table-of-contents)
 
 ---
 
@@ -176,6 +195,8 @@ export const epics = combineEpics(
   saveStateInLocalStorage,
 );
 ```
+
+[⇧ back to top](#table-of-contents)
 
 ---
 
@@ -209,3 +230,5 @@ export const getFilteredTodos = createSelector(
   },
 );
 ```
+
+[⇧ back to top](#table-of-contents)

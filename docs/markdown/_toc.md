@@ -1,11 +1,11 @@
 ## Table of Contents
 - [Setup](#setup)
-- [React Types Cheatsheet](#react-types-cheatsheet) __\*NEW\*__
+- [React Types Cheatsheet](#react-types-cheatsheet) 🌟 __NEW__
 - [Component Typing Patterns](#component-typing-patterns)
   - [Stateless Components - SFC](#stateless-components---sfc)
   - [Stateful Components - Class](#stateful-components---class)
   - [Generic Components](#generic-components)
-  - [Higher-Order Components](#higher-order-components) __\*UPDATED\*__
+  - [Higher-Order Components](#higher-order-components) 📝 __UPDATED__
   - [Redux Connected Components](#connected-components)
 - [Redux](#redux)
   - [Action Creators](#action-creators)
@@ -14,7 +14,7 @@
   - [Async Flow](#async-flow) _("redux-observable")_
   - [Selectors](#selectors) _("reselect")_
 - [Tools](#tools)
-  - [Living Style Guide](#living-style-guide) _("react-styleguidist")_ __\*NEW\*__
+  - [Living Style Guide](#living-style-guide) _("react-styleguidist")_ 🌟 __NEW__
 - [Extras](#extras)
   - [tsconfig.json](#tsconfigjson)
   - [tslint.json](#tslintjson)
@@ -23,5 +23,6 @@
   - [Vendor Types Augmentation](#vendor-types-augmentation)
   - [Npm Scripts](#npm-scripts)
 - [FAQ](#faq)
+- [Roadmap](#roadmap)
 - [Contribution Guide](#contribution-guide)
 - [Project Examples](#project-examples)

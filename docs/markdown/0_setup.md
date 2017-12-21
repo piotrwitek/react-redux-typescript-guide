@@ -16,4 +16,4 @@ npm i -D @types/react @types/react-dom @types/react-redux
 - in `tsconfig.json > compilerOptions > paths` add:  
   `"redux": ["node_modules/redux-next"]`  
 
-[⬆ back to top](#table-of-contents)
+[⇧ back to top](#table-of-contents)
