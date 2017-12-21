@@ -44,7 +44,7 @@ export const StatefulCounterWithInitialCount: React.ComponentClass<StatefulCount
 
       return (
         <div>
-          {label}: {count}
+          <span>{label}: {count} </span>
           <button type="button" onClick={handleIncrement}>
             {`Increment`}
           </button>

@@ -24,7 +24,7 @@ export class StatefulCounter extends React.Component<StatefulCounterProps, State
 
     return (
       <div>
-        {label}: {count}
+        <span>{label}: {count} </span>
         <button type="button" onClick={handleIncrement}>
           {`Increment`}
         </button>
