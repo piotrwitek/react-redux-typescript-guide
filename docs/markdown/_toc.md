@@ -6,7 +6,7 @@
   - [Stateful Components - Class](#stateful-components---class)
   - [Generic Components](#generic-components)
   - [Higher-Order Components](#higher-order-components) 📝 __UPDATED__
-  - [Redux Connected Components](#connected-components)
+  - [Redux Connected Components](#redux-connected-components)
 - [Redux](#redux)
   - [Action Creators](#action-creators)
   - [Reducers](#reducers)
