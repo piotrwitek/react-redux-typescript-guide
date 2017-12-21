@@ -6,8 +6,9 @@ const webpackConfig = createConfig([typescript()]);
 webpackConfig.resolve.alias = { '@src': path.join(__dirname, 'src') };
 
 module.exports = {
-  showUsage: true,
-  title: 'React-Redux-Typescript Guide',
+  showUsage: false,
+  styleguideDir: '../docs/styleguide',
+  title: 'Component Typing Patterns in React + TypeScript',
   ignore: ['**/*.usage.tsx'],
   sections: [
     {
@@ -15,17 +16,29 @@ module.exports = {
       content: './docs/intro.md'
     },
     {
-      name: 'Components',
-      content: './docs/components.md',
+      name: 'Stateless Components - SFC',
       components: () => ([
-        './src/components/sfc-spread-attributes.tsx',
         './src/components/sfc-counter.tsx',
+        './src/components/sfc-spread-attributes.tsx',
+      ]),
+    },
+    {
+      name: 'Stateful Components - Class',
+      components: () => ([
         './src/components/stateful-counter.tsx',
         './src/components/stateful-counter-with-initial-count.tsx',
+      ]),
+    },
+    {
+      name: 'Generic Components',
+      components: () => ([
         './src/components/generic-list.tsx'
       ]),
-    }
+    },
   ],
+  theme: {
+    sidebarWidth: 300,
+  },
   propsParser: require('react-docgen-typescript').parse,
   webpackConfig: webpackConfig,
   updateExample: function (props, exampleFilePath) {
