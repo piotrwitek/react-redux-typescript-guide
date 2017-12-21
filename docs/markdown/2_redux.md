@@ -1,48 +1,55 @@
 # Redux
 
-## Actions
+## Action Creators
 
 ### KISS Style
 This pattern is focused on a KISS principle - to stay clear of complex proprietary abstractions and follow simple and familiar JavaScript const based types:
 
-- classic const based types
-- very close to standard JS usage
-- standard amount of boilerplate
-- need to export action types and action creators to re-use in other places, e.g. `redux-saga` or `redux-observable`
+Advantages:
+- simple "const" based types
+- familiar to standard JS usage
+Disadvantages:
+- significant amount of boilerplate and duplication
+- necessary to export both action types and action creators to re-use in other places, e.g. `redux-saga` or `redux-observable`
 
 ::example='../../playground/src/redux/counters/actions.ts'::
 ::usage='../../playground/src/redux/counters/actions.usage.ts'::
 
-### DRY Style
-A more DRY approach, introducing a simple factory function to automate the creation of typed action creators. The advantage here is that we can reduce boilerplate and code repetition. It is also easier to re-use action creators in other places because of `type` property on action creator containing type constant:
+[⇧ back to top](#table-of-contents)
 
-- using factory function to automate creation of typed action creators - (source code to be revealed)
+### DRY Style
+In a DRY approach, we're introducing a simple factory function to automate the creation process of type-safe action creators. The advantage here is that we can reduce boilerplate and repetition significantly. It is also easier to re-use action creators in other layers thanks to `getType` helper function returning "type constant".
+
+Advantages:
+- using factory function to automate creation of type-safe action creators
 - less boilerplate and code repetition than KISS Style
-- action creators have readonly `type` property (this make using `type constants` redundant and easier to re-use in other places e.g. `redux-saga` or `redux-observable`)
+- getType helper to obtain action creator type (this makes using "type constants" unnecessary)
 
 ```ts
-import { createActionCreator } from 'react-redux-typescript';
-
-type Severity = 'info' | 'success' | 'warning' | 'error';
+import { createAction, getType } from 'react-redux-typescript';
 
 // Action Creators
 export const actionCreators = {
-  incrementCounter: createActionCreator('INCREMENT_COUNTER'),
-  showNotification: createActionCreator(
-    'SHOW_NOTIFICATION', (message: string, severity?: Severity) => ({ message, severity }),
+  incrementCounter: createAction('INCREMENT_COUNTER'),
+  showNotification: createAction('SHOW_NOTIFICATION', 
+    (message: string, severity: Severity = 'default') => ({
+      type: 'SHOW_NOTIFICATION', payload: { message, severity },
+    })
   ),
 };
 
-// Examples
+// Usage
 store.dispatch(actionCreators.incrementCounter(4)); // Error: Expected 0 arguments, but got 1.
 store.dispatch(actionCreators.incrementCounter()); // OK: { type: "INCREMENT_COUNTER" }
-actionCreators.incrementCounter.type === "INCREMENT_COUNTER" // true
+getType(actionCreators.incrementCounter) === "INCREMENT_COUNTER" // true
 
 store.dispatch(actionCreators.showNotification()); // Error: Supplied parameters do not match any signature of call target.
-store.dispatch(actionCreators.showNotification('Hello!')); // OK: { type: "SHOW_NOTIFICATION", payload: { message: 'Hello!' } }
-store.dispatch(actionCreators.showNotification('Hello!', 'info')); // OK: { type: "SHOW_NOTIFICATION", payload: { message: 'Hello!', severity: 'info } }
-actionCreators.showNotification.type === "SHOW_NOTIFICATION" // true
+store.dispatch(actionCreators.showNotification('Hello!')); // OK: { type: "SHOW_NOTIFICATION", payload: { message: 'Hello!', severity: 'default' } }
+store.dispatch(actionCreators.showNotification('Hello!', 'info')); // OK: { type: "SHOW_NOTIFICATION", payload: { message: 'Hello!', severity: 'info' } }
+getType(actionCreators.showNotification) === "SHOW_NOTIFICATION" // true
 ```
+
+[⇧ back to top](#table-of-contents)
 
 ---
 
@@ -51,7 +58,7 @@ Relevant TypeScript Docs references:
 - [Discriminated Union types](https://www.typescriptlang.org/docs/handbook/advanced-types.html)
 - [Mapped types](https://www.typescriptlang.org/docs/handbook/advanced-types.html) e.g. `Readonly` & `Partial`  
 
-### Reducer State
+### Tutorial
 Declare reducer `State` type definition with readonly modifier for `type level` immutability
 ```ts
 export type State = {
@@ -102,44 +109,126 @@ state.countersCollection[0].readonlyCounter2 = 1; // Error, cannot be mutated
 
 > _There are some experiments in the community to make a `ReadonlyRecursive` mapped type, but I'll need to investigate if they really works_
 
-### Reducer with classic `const types`
+[⇧ back to top](#table-of-contents)
+
+### Examples
+
+#### Reducer with classic `const types`
 
 ::example='../../playground/src/redux/counters/reducer.ts'::
 
-### Reducer with static `type` property from helper factory function - `createActionCreator`
-```ts
-export const reducer: Reducer<State> =
-  (state = 0, action: RootAction) => {
-    switch (action.type) {
-      case actionCreators.increment.type:
-        return state + 1;
-        
-      case actionCreators.decrement.type:
-        return state - 1;
+[⇧ back to top](#table-of-contents)
 
-      default: return state;
-    }
-  };
+#### Reducer with getType helper from `react-redux-typescript`
+```ts
+import { getType } from 'react-redux-typescript';
+
+export const reducer: Reducer<State> = (state = 0, action: RootAction) => {
+  switch (action.type) {
+    case getType(actionCreators.increment):
+      return state + 1;
+      
+    case getType(actionCreators.decrement):
+      return state - 1;
+
+    default: return state;
+  }
+};
 ```
+
+[⇧ back to top](#table-of-contents)
 
 ---
 
-## Store Types
+## Store Configuration
 
-- ### `RootAction` - statically typed global action types
-- should be imported in layers dealing with redux actions like: reducers, redux-sagas, redux-observables
+### Create Root State and Root Action Types
 
-::example='../../playground/src/redux/root-action.ts'::
-
-- ### `RootState` - statically typed global state tree
-- should be imported in connected components providing type safety to Redux `connect` function
+#### `RootState` - interface representing redux state tree
+Can be imported in connected components to provide type-safety to Redux `connect` function
 
 ::example='../../playground/src/redux/root-reducer.ts'::
 
----
+[⇧ back to top](#table-of-contents)
 
-## Create Store
+#### `RootAction` - union type of all action objects
+Can be imported in various layers receiving or sending redux actions like: reducers, sagas or redux-observables epics
 
-- creating store - use `RootState` (in `combineReducers` and when providing preloaded state object) to set-up **state object type guard** to leverage strongly typed Store instance
+::example='../../playground/src/redux/root-action.ts'::
+
+[⇧ back to top](#table-of-contents)
+
+### Create Store
+
+When creating store use rootReducer instance, this alone will to set-up **strongly typed Store instance** with type inference.
+> The resulting store instance methods like `getState` or `dispatch` will be typed checked and expose type errors
 
 ::example='../../playground/src/store.ts'::
+
+[⇧ back to top](#table-of-contents)
+
+---
+
+## Async Flow
+
+### "redux-observable"
+
+```ts
+// import rxjs operators somewhere...
+import { combineEpics, Epic } from 'redux-observable';
+
+import { RootAction, RootState } from '@src/redux';
+import { saveState } from '@src/services/local-storage-service';
+
+const SAVING_DELAY = 1000;
+
+// persist state in local storage every 1s
+const saveStateInLocalStorage: Epic<RootAction, RootState> = (action$, store) => action$
+  .debounceTime(SAVING_DELAY)
+  .do((action: RootAction) => {
+    // handle side-effects
+    saveState(store.getState());
+  })
+  .ignoreElements();
+
+export const epics = combineEpics(
+  saveStateInLocalStorage,
+);
+```
+
+[⇧ back to top](#table-of-contents)
+
+---
+
+## Selectors 
+
+### "reselect"
+
+```ts
+import { createSelector } from 'reselect';
+
+import { RootState } from '@src/redux';
+
+export const getTodos =
+  (state: RootState) => state.todos.todos;
+
+export const getTodosFilter =
+  (state: RootState) => state.todos.todosFilter;
+
+export const getFilteredTodos = createSelector(
+  getTodos, getTodosFilter,
+  (todos, todosFilter) => {
+    switch (todosFilter) {
+      case 'completed':
+        return todos.filter((t) => t.completed);
+      case 'active':
+        return todos.filter((t) => !t.completed);
+
+      default:
+        return todos;
+    }
+  },
+);
+```
+
+[⇧ back to top](#table-of-contents)

@@ -1,25 +1,29 @@
 import * as React from 'react';
+import { Diff as Subtract } from 'react-redux-typescript';
 
-import { Omit } from '@src/types/react-redux-typescript';
-
-interface RequiredProps {
+// These props will be subtracted from original component type
+interface WrappedComponentProps {
   count: number,
   onIncrement: () => any,
 }
 
-type Props<T extends RequiredProps> = Omit<T, keyof RequiredProps>;
+export const withState = <P extends WrappedComponentProps>(
+  WrappedComponent: React.ComponentType<P>,
+) => {
+  // These props will be added to original component type
+  interface Props {
+    initialCount?: number,
+  }
+  interface State {
+    count: number,
+  }
 
-interface State {
-  count: number,
-}
-
-export function withState<WrappedComponentProps extends RequiredProps>(
-  WrappedComponent: React.ComponentType<WrappedComponentProps>,
-) {
-  const HOC = class extends React.Component<Props<WrappedComponentProps>, State> {
+  return class WithState extends React.Component<Subtract<P, WrappedComponentProps> & Props, State> {
+    // Enhance component name for debugging and React-Dev-Tools
+    static displayName = `withState(${WrappedComponent.name})`;
 
     state: State = {
-      count: 0,
+      count: (this.props.initialCount || 0)!,
     };
 
     handleIncrement = () => {
@@ -27,17 +31,16 @@ export function withState<WrappedComponentProps extends RequiredProps>(
     };
 
     render() {
-      const { handleIncrement } = this;
+      const { ...remainingProps } = this.props;
       const { count } = this.state;
 
       return (
         <WrappedComponent
+          {...remainingProps}
           count={count}
-          onIncrement={handleIncrement}
+          onIncrement={this.handleIncrement}
         />
       );
     }
   };
-
-  return HOC;
-}
+};

@@ -1,9 +1,9 @@
 {
   "bin": "bin/generate-readme.js",
-  "dependencies": {
-    "@types/node": "6",
-    "ts-node": "^3.3.0",
-    "typescript": "^2.4.2"
+  "devDependencies": {
+    "@types/node": "8.5.1",
+    "ts-node": "4.0.2",
+    "typescript": "2.6.2"
   },
   "scripts": {
     "build": "tsc -p .",

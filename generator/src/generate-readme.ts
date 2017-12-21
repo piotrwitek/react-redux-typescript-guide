@@ -10,10 +10,10 @@ const inputFiles = [
   DOCS_PATH + '0_setup.md',
   DOCS_PATH + '1_react.md',
   DOCS_PATH + '2_redux.md',
-  DOCS_PATH + '3_ecosystem.md',
+  DOCS_PATH + '3_tools.md',
   DOCS_PATH + '4_extras.md',
   DOCS_PATH + '5_faq.md',
-  DOCS_PATH + '_end.md'
+  DOCS_PATH + '6_end.md'
 ];
 
 const outputFile = TOP_LEVEL_PATH + 'README.md';
@@ -58,7 +58,7 @@ ${'```'}
 
 function withDetailsWrapper(text: string) {
   return `
-<details><summary>SHOW USAGE</summary><p>
+<details><summary>show usage</summary><p>
 
 ${'```tsx'}
 ${text}

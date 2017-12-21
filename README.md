@@ -1,61 +1,36 @@
 # React & Redux in TypeScript - Static Typing Guide
-This guide is **NOT** about _"How to write type declarations for every possible variable and expression to have 100% type covered code and waste a lot of time"_.  
-This guide is about **_"How to write type declarations to only the minimum necessary amount of JavaScript code and still get all the benefits of Static Typing"_**.
+**_"This guide is about to teach you how to leverage [Type Inference](https://www.typescriptlang.org/docs/handbook/type-inference.html), [Generics](https://www.typescriptlang.org/docs/handbook/generics.html) and other [Advanced Types](https://www.typescriptlang.org/docs/handbook/advanced-types.html) as much as possible to write the minimal amount of type annotations needed for your JavaScript code to be completely Type Safe"_** - this will make sure you get all the benefits of Static Typing and won't slow down your productivity by adding unnecessary typings.
 
-> found it usefull, want some more? [give it a :star:](https://github.com/piotrwitek/react-redux-typescript-patterns/stargazers)  
-
-### [> Changelog](/CHANGELOG.md)  
-
-### Roadmap
-- extend HOC section with more advanced examples [#5](../../issues/5)  
-- investigate typing patterns for generic component children [#7](../../issues/7)  
-
-### Introduction
-This guide is aimed to use [`--strict`](https://www.typescriptlang.org/docs/handbook/compiler-options.html) flag of TypeScript compiler to provide the best static-typing experience.  
-
-Benefits of this setup and static-typing in general include:
-- when making changes in your code, precise insight of the impact on the entire codebase (by showing all the references in the codebase for any given piece of code)  
-- when implementing new features compiler validate all props passed to components or injected by connect from redux store, validation of action creator params, payload objects structure and state/action objects passed to a reducer - showing all possible JavaScript errors)  
-
-Additionally static-typing will make processes of improving your codebase and refactoring much easier and give you a confidence that you will not break your production code.
+> #### _Found it usefull? Want more updates?_ [**Give it a :star2:**](https://github.com/piotrwitek/react-redux-typescript-patterns/stargazers)  
 
 ### Goals
-- Complete type safety with strict null checking, without failing to `any` type
+- Complete type safety with [`--strict`](https://www.typescriptlang.org/docs/handbook/compiler-options.html) flag without failing to `any` type for the best static-typing experience
 - Minimize amount of manually writing type declarations by leveraging [Type Inference](https://www.typescriptlang.org/docs/handbook/type-inference.html)
-- Reduce redux boilerplate code with [simple utility functions](https://github.com/piotrwitek/react-redux-typescript) using [Generics](https://www.typescriptlang.org/docs/handbook/generics.html) and [Advanced Types](https://www.typescriptlang.org/docs/handbook/advanced-types.html) features
+- Reduce redux boilerplate and complexity of it's type annotations to a minimum with [simple utility functions](https://github.com/piotrwitek/react-redux-typescript) by extensive use of [Generics](https://www.typescriptlang.org/docs/handbook/generics.html) and [Advanced Types](https://www.typescriptlang.org/docs/handbook/advanced-types.html) features
 
-### Playground
-Code examples are generated from the source code in `playground` folder. They are tested with TypeScript compiler with the most recent version of TypeScript and relevant type definitions (like `@types/react` or `@types/react-redux`) to ensure they are still working with recent definitions.
-Moreover playground is created is such way, that you can easily clone repository, install `npm` dependencies and play around with all the examples from this guide in real project environment without any extra setup.
-
-### Contribution Guide
-- `README.md` is auto-generated using `generator script` - to make changes please edit `markdown` files located in `/docs` folder
-- Source Code snippets are injected with `generator script` - to make changes please edit their original sources located in playground folder (include directives are used in `markdown` files located in `/docs` folder e.g. `::example='../../playground/src/components/...`)
-- Before making PR please re-generate final `README.md` using command:
-```bash
-sh generate.sh
-// or 
-node generator/bin/generate-readme.js
-```
+### Playground Project
+You should check Playground Project located in the `/playground` folder. It is a source of all the code examples found in the guide. They are all tested with the most recent version of TypeScript and 3rd party type definitions (like `@types/react` or `@types/react-redux`) to ensure the examples are up-to-date and not broken with updated definitions.
+> Playground was created is such ą way, that you can easily clone repository locally and immediately play around on your own to learn all the examples from this guide in a real project environment without complicated setup.
 
 ---
 
-### Table of Contents
+## Table of Contents
 - [Setup](#setup)
-- [React](#react)
+- [React Types Cheatsheet](#react-types-cheatsheet) 🌟 __NEW__
+- [Component Typing Patterns](#component-typing-patterns)
   - [Stateless Components - SFC](#stateless-components---sfc)
   - [Stateful Components - Class](#stateful-components---class)
   - [Generic Components](#generic-components)
-  - [Connected Components](#connected-components)
-  - [Higher-Order Components](#higher-order-components)
+  - [Higher-Order Components](#higher-order-components) 📝 __UPDATED__
+  - [Redux Connected Components](#connected-components)
 - [Redux](#redux)
-  - [Actions](#actions)
+  - [Action Creators](#action-creators)
   - [Reducers](#reducers)
-  - [Store types](#store-types)
-  - [Create Store](#create-store)
-- [Ecosystem](#ecosystem)
-  - [Async Flow with "redux-observable"](#async-flow-with-redux-observable)
-  - [Selectors with "reselect"](#selectors-with-reselect)
+  - [Store Configuration](#store-configuration)
+  - [Async Flow](#async-flow) _("redux-observable")_
+  - [Selectors](#selectors) _("reselect")_
+- [Tools](#tools)
+  - [Living Style Guide](#living-style-guide) _("react-styleguidist")_ 🌟 __NEW__
 - [Extras](#extras)
   - [tsconfig.json](#tsconfigjson)
   - [tslint.json](#tslintjson)
@@ -64,38 +39,94 @@ node generator/bin/generate-readme.js
   - [Vendor Types Augmentation](#vendor-types-augmentation)
   - [Npm Scripts](#npm-scripts)
 - [FAQ](#faq)
+- [Roadmap](#roadmap)
+- [Contribution Guide](#contribution-guide)
 - [Project Examples](#project-examples)
 
 ---
 
 # Setup
 
-## Installing types
+### Installing types
 ```
 npm i -D @types/react @types/react-dom @types/react-redux
 ```
 
 "react" - `@types/react`  
 "react-dom" - `@types/react-dom`  
-"redux" - (included in npm package)*  
+"redux" - (types included with npm package)*  
 "react-redux" - `@types/react-redux`  
 
-> *There are improved redux types on a `next` branch in the official redux github repo, use below instructions to add it to your project:
+> `redux` has improved types on a `next` branch in it's official github repo, use below instructions to add it to your project:
 - in `package.json > devDependencies` add:  
   `"redux-next": "reactjs/redux#next"`  
 - in `tsconfig.json > compilerOptions > paths` add:  
   `"redux": ["node_modules/redux-next"]`  
 
+[⇧ back to top](#table-of-contents)
+
 ---
 
-# React
+# React Types Cheatsheet
+
+#### `React.StatelessComponent<P>` or alias `React.SFC<P>` 
+Stateless functional components
+```tsx
+const MyComponent: React.SFC<MyComponentProps> = ...
+```
+[⇧ back to top](#table-of-contents)
+
+#### `React.Component<P, S>`
+Statefull class component
+```tsx
+class MyComponent extends React.Component<MyComponentProps, State> { ...
+```
+[⇧ back to top](#table-of-contents)
+
+#### `React.ComponentType<P>`
+Accepts sfc or class components with Generic Props Type
+```tsx
+const withState = <P extends WrappedComponentProps>(
+  WrappedComponent: React.ComponentType<P>,
+) => { ...
+```
+[⇧ back to top](#table-of-contents)
+
+#### `React.ReactNode`
+Accepts any react elements (component instances) and also primitive types
+```tsx
+const elementOrPrimitive: React.ReactNode = '' || 0 || false || null || <div /> || <MyComponent />;
+```
+[⇧ back to top](#table-of-contents)
+
+#### `JSX.Element`
+Similar in usage to ReactNode but limited to accept only react elements (and not primitive types)
+```tsx
+const elementOnly: JSX.Element =  <div /> || <MyComponent />;
+```
+[⇧ back to top](#table-of-contents)
+
+#### `React.CSSProperties`
+Type-safety for styles using css-in-js 
+```tsx
+const styles: React.CSSProperties = { flexDirection: 'row', ...
+```
+[⇧ back to top](#table-of-contents)
+
+#### `React.ReactEventHandler<E>`
+Type-safe event handlers for JSX
+```tsx
+const handleChange: React.ReactEventHandler<HTMLInputElement> = (ev) => { ...
+```
+[⇧ back to top](#table-of-contents)
+
+---
+
+# Component Typing Patterns
 
 ## Stateless Components - SFC
-- convenient alias: `React.SFC<Props> === React.StatelessComponent<Props>`
 
-### SFC Counter
-
-#### - basic
+#### - stateless counter
 
 ```tsx
 import * as React from 'react';
@@ -113,7 +144,7 @@ export const SFCCounter: React.SFC<SFCCounterProps> = (props) => {
 
   return (
     <div>
-      {label}: {count}
+      <span>{label}: {count} </span>
       <button type="button" onClick={handleIncrement}>
         {`Increment`}
       </button>
@@ -123,30 +154,11 @@ export const SFCCounter: React.SFC<SFCCounterProps> = (props) => {
 
 ```
 
-<details><summary>SHOW USAGE</summary><p>
+[⟩⟩⟩ demo](https://piotrwitek.github.io/react-redux-typescript-guide/styleguide/#sfccounter)
 
-```tsx
-import * as React from 'react';
+[⇧ back to top](#table-of-contents)
 
-import { SFCCounter } from '@src/components';
-
-let count = 0;
-const incrementCount = () => count++;
-
-export default () => (
-  <SFCCounter
-    label={'SFCCounter'}
-    count={count}
-    onIncrement={incrementCount}
-  />
-);
-
-```
-</p></details>
-
----
-
-#### - [spread attributes](https://facebook.github.io/react/docs/jsx-in-depth.html#spread-attributes)
+#### - spreading attributes [link](https://facebook.github.io/react/docs/jsx-in-depth.html#spread-attributes)
 
 ```tsx
 import * as React from 'react';
@@ -168,29 +180,15 @@ export const SFCSpreadAttributes: React.SFC<SFCSpreadAttributesProps> = (props) 
 
 ```
 
-<details><summary>SHOW USAGE</summary><p>
+[⟩⟩⟩ demo](https://piotrwitek.github.io/react-redux-typescript-guide/styleguide/#sfcspreadattributes)
 
-```tsx
-import * as React from 'react';
-
-import { SFCSpreadAttributes } from '@src/components';
-
-export default () => (
-  <SFCSpreadAttributes
-    style={{ backgroundColor: 'lightcyan' }}
-  />
-);
-
-```
-</p></details>
+[⇧ back to top](#table-of-contents)
 
 ---
 
 ## Stateful Components - Class
 
-### Stateful Counter
-
-#### - basic
+#### - stateful counter
 
 ```tsx
 import * as React from 'react';
@@ -219,7 +217,7 @@ export class StatefulCounter extends React.Component<StatefulCounterProps, State
 
     return (
       <div>
-        {label}: {count}
+        <span>{label}: {count} </span>
         <button type="button" onClick={handleIncrement}>
           {`Increment`}
         </button>
@@ -230,23 +228,9 @@ export class StatefulCounter extends React.Component<StatefulCounterProps, State
 
 ```
 
-<details><summary>SHOW USAGE</summary><p>
+[⟩⟩⟩ demo](https://piotrwitek.github.io/react-redux-typescript-guide/styleguide/#statefulcounter)
 
-```tsx
-import * as React from 'react';
-
-import { StatefulCounter } from '@src/components';
-
-export default () => (
-  <StatefulCounter
-    label={'StatefulCounter'}
-  />
-);
-
-```
-</p></details>
-
----
+[⇧ back to top](#table-of-contents)
 
 #### - with default props
 
@@ -297,7 +281,7 @@ export const StatefulCounterWithInitialCount: React.ComponentClass<StatefulCount
 
       return (
         <div>
-          {label}: {count}
+          <span>{label}: {count} </span>
           <button type="button" onClick={handleIncrement}>
             {`Increment`}
           </button>
@@ -308,32 +292,17 @@ export const StatefulCounterWithInitialCount: React.ComponentClass<StatefulCount
 
 ```
 
-<details><summary>SHOW USAGE</summary><p>
+[⟩⟩⟩ demo](https://piotrwitek.github.io/react-redux-typescript-guide/styleguide/#statefulcounterwithinitialcount)
 
-```tsx
-import * as React from 'react';
-
-import { StatefulCounterWithInitialCount } from '@src/components';
-
-export default () => (
-  <StatefulCounterWithInitialCount
-    label={'StatefulCounter'}
-    initialCount={10}
-  />
-);
-
-```
-</p></details>
+[⇧ back to top](#table-of-contents)
 
 ---
 
 ## Generic Components
 - easily create typed component variations and reuse common logic
-- especially useful to create typed list components
+- common use case is a generic list components
 
-### Generic List
-
-#### - basic
+#### - generic list
 
 ```tsx
 import * as React from 'react';
@@ -357,33 +326,182 @@ export class GenericList<T> extends React.Component<GenericListProps<T>, {}> {
 
 ```
 
-<details><summary>SHOW USAGE</summary><p>
+[⟩⟩⟩ demo](https://piotrwitek.github.io/react-redux-typescript-guide/styleguide/##genericlist)
+
+[⇧ back to top](#table-of-contents)
+
+---
+
+## Higher-Order Components
+- function that takes a component and returns a new component
+- a new component will infer Props interface from wrapped Component extended with Props of HOC
+- will filter out props specific to HOC, and the rest will be passed through to wrapped component
+
+#### - withState
+Adds state to a stateless counter
+
+```tsx
+import * as React from 'react';
+import { Diff as Subtract } from 'react-redux-typescript';
+
+// These props will be subtracted from original component type
+interface WrappedComponentProps {
+  count: number,
+  onIncrement: () => any,
+}
+
+export const withState = <P extends WrappedComponentProps>(
+  WrappedComponent: React.ComponentType<P>,
+) => {
+  // These props will be added to original component type
+  interface Props {
+    initialCount?: number,
+  }
+  interface State {
+    count: number,
+  }
+
+  return class WithState extends React.Component<Subtract<P, WrappedComponentProps> & Props, State> {
+    // Enhance component name for debugging and React-Dev-Tools
+    static displayName = `withState(${WrappedComponent.name})`;
+
+    state: State = {
+      count: (this.props.initialCount || 0)!,
+    };
+
+    handleIncrement = () => {
+      this.setState({ count: this.state.count + 1 });
+    };
+
+    render() {
+      const { ...remainingProps } = this.props;
+      const { count } = this.state;
+
+      return (
+        <WrappedComponent
+          {...remainingProps}
+          count={count}
+          onIncrement={this.handleIncrement}
+        />
+      );
+    }
+  };
+};
+
+```
+<details><summary>show usage</summary><p>
 
 ```tsx
 import * as React from 'react';
 
-import { IUser } from '@src/models';
-import { GenericList } from '@src/components';
+import { withState } from '@src/hoc';
+import { SFCCounter } from '@src/components';
 
-export class UserList extends GenericList<IUser> { }
+const SFCCounterWithState =
+  withState(SFCCounter);
 
-export default ({ users }: { users: IUser[] }) => (
-  <UserList
-    items={users}
-    itemRenderer={(item) => <div key={item.id}>{item.fullName}</div>}
-  />
-);
+export default (() => (
+  <SFCCounterWithState label={'SFCCounterWithState'} />
+)) as React.SFC<{}>;
 
 ```
 </p></details>
 
+[⇧ back to top](#table-of-contents)
+
+#### - withErrorBoundary
+Adds error handling using componentDidCatch to any component
+
+```tsx
+import * as React from 'react';
+import { Diff as Subtract } from 'react-redux-typescript';
+
+const MISSING_ERROR = 'Error was swallowed during propagation.';
+
+interface WrappedComponentProps {
+  onReset?: () => any,
+}
+
+export const withErrorBoundary = <P extends WrappedComponentProps>(
+  WrappedComponent: React.ComponentType<P>,
+) => {
+  interface Props { }
+  interface State {
+    error: Error | null | undefined,
+  }
+
+  return class WithErrorBoundary extends React.Component<Subtract<P, WrappedComponentProps> & Props, State> {
+    static displayName = `withErrorBoundary(${WrappedComponent.name})`;
+
+    state: State = {
+      error: undefined,
+    };
+
+    componentDidCatch(error: Error | null, info: object) {
+      this.setState({ error: error || new Error(MISSING_ERROR) });
+      this.logErrorToCloud(error, info);
+    }
+
+    logErrorToCloud = (error: Error | null, info: object) => {
+      // TODO: send error report to cloud
+    }
+
+    handleReset = () => {
+      this.setState({ error: undefined });
+    }
+
+    render() {
+      const { children, ...remainingProps } = this.props;
+      const { error } = this.state;
+
+      if (error) {
+        return (
+          <WrappedComponent
+            {...remainingProps}
+            onReset={this.handleReset}
+          />
+        );
+      }
+
+      return children;
+    }
+  };
+};
+
+```
+<details><summary>show usage</summary><p>
+
+```tsx
+import * as React from 'react';
+
+import { withErrorBoundary } from '@src/hoc';
+import { ErrorMessage } from '@src/components';
+
+const ErrorMessageWithErrorBoundary =
+  withErrorBoundary(ErrorMessage);
+
+const ErrorThrower = () => (
+  <button type="button" onClick={() => { throw new Error(`Catch this!`); }}>
+    {`Throw nasty error`}
+  </button >
+);
+
+export default (() => (
+  <ErrorMessageWithErrorBoundary>
+    <ErrorThrower />
+  </ErrorMessageWithErrorBoundary>
+)) as React.SFC<{}>;
+
+```
+</p></details>
+
+[⇧ back to top](#table-of-contents)
+
 ---
 
-## Connected Components
+## Redux Connected Components
 
-### Connected Counter
-
-#### - basic
+#### - redux connected counter
 
 ```tsx
 import { connect } from 'react-redux';
@@ -401,8 +519,7 @@ export const SFCCounterConnected = connect(mapStateToProps, {
 })(SFCCounter);
 
 ```
-
-<details><summary>SHOW USAGE</summary><p>
+<details><summary>show usage</summary><p>
 
 ```tsx
 import * as React from 'react';
@@ -418,9 +535,9 @@ export default () => (
 ```
 </p></details>
 
----
+[⇧ back to top](#table-of-contents)
 
-#### - verbose
+#### - redux connected counter (verbose)
 
 ```tsx
 import { bindActionCreators } from 'redux';
@@ -442,8 +559,7 @@ export const SFCCounterConnectedVerbose =
   connect(mapStateToProps, mapDispatchToProps)(SFCCounter);
 
 ```
-
-<details><summary>SHOW USAGE</summary><p>
+<details><summary>show usage</summary><p>
 
 ```tsx
 import * as React from 'react';
@@ -459,7 +575,7 @@ export default () => (
 ```
 </p></details>
 
----
+[⇧ back to top](#table-of-contents)
 
 #### - with own props
 
@@ -483,8 +599,7 @@ export const SFCCounterConnectedExtended = connect(mapStateToProps, {
 })(SFCCounter);
 
 ```
-
-<details><summary>SHOW USAGE</summary><p>
+<details><summary>show usage</summary><p>
 
 ```tsx
 import * as React from 'react';
@@ -501,184 +616,23 @@ export default () => (
 ```
 </p></details>
 
----
-
-## Higher-Order Components
-- function that takes a component and returns a new component
-- a new component will infer Props interface from wrapped Component extended with Props of HOC
-- will filter out props specific to HOC, and the rest will be passed through to wrapped component
-
-### Basic HOC Examples
-
-#### - withState
-> enhance stateless counter with state
-
-```tsx
-import * as React from 'react';
-
-import { Omit } from '@src/types/react-redux-typescript';
-
-interface RequiredProps {
-  count: number,
-  onIncrement: () => any,
-}
-
-type Props<T extends RequiredProps> = Omit<T, keyof RequiredProps>;
-
-interface State {
-  count: number,
-}
-
-export function withState<WrappedComponentProps extends RequiredProps>(
-  WrappedComponent: React.ComponentType<WrappedComponentProps>,
-) {
-  const HOC = class extends React.Component<Props<WrappedComponentProps>, State> {
-
-    state: State = {
-      count: 0,
-    };
-
-    handleIncrement = () => {
-      this.setState({ count: this.state.count + 1 });
-    };
-
-    render() {
-      const { handleIncrement } = this;
-      const { count } = this.state;
-
-      return (
-        <WrappedComponent
-          count={count}
-          onIncrement={handleIncrement}
-        />
-      );
-    }
-  };
-
-  return HOC;
-}
-
-```
-
-<details><summary>SHOW USAGE</summary><p>
-
-```tsx
-import * as React from 'react';
-
-import { withState } from '@src/hoc';
-import { SFCCounter } from '@src/components';
-
-const SFCCounterWithState =
-  withState(SFCCounter);
-
-export default (
-  ({ children }) => (
-    <SFCCounterWithState label={'SFCCounterWithState'} />
-  )
-) as React.SFC<{}>;
-
-```
-</p></details>
-
----
-
-### Advanced HOC Examples
-
-#### - withErrorBoundary
-> add error handling with componentDidCatch to view component
-
-```tsx
-import * as React from 'react';
-
-const MISSING_ERROR = 'Error was swallowed during propagation.';
-
-interface Props {
-}
-
-interface State {
-  error: Error | null | undefined,
-}
-
-interface WrappedComponentProps {
-  onReset: () => any,
-}
-
-export function withErrorBoundary(
-  WrappedComponent: React.ComponentType<WrappedComponentProps>,
-) {
-  const HOC = class extends React.Component<Props, State> {
-
-    state: State = {
-      error: undefined,
-    };
-
-    componentDidCatch(error: Error | null, info: object) {
-      this.setState({ error: error || new Error(MISSING_ERROR) });
-      this.logErrorToCloud(error, info);
-    }
-
-    logErrorToCloud = (error: Error | null, info: object) => {
-      // TODO: send error report to cloud
-    }
-
-    handleReset = () => {
-      this.setState({ error: undefined });
-    }
-
-    render() {
-      const { children } = this.props;
-      const { error } = this.state;
-
-      if (error) {
-        return (
-          <WrappedComponent onReset={this.handleReset} />
-        );
-      }
-
-      return children as any;
-    }
-  };
-
-  return HOC;
-}
-
-```
-
-<details><summary>SHOW USAGE</summary><p>
-
-```tsx
-import * as React from 'react';
-
-import { withErrorBoundary } from '@src/hoc';
-import { ErrorMessage } from '@src/components';
-
-const ErrorMessageWithErrorBoundary =
-  withErrorBoundary(ErrorMessage);
-
-export default (
-  ({ children }) => (
-    <ErrorMessageWithErrorBoundary>
-      {children}
-    </ErrorMessageWithErrorBoundary>
-  )
-) as React.SFC<{}>;
-
-```
-</p></details>
+[⇧ back to top](#table-of-contents)
 
 ---
 
 # Redux
 
-## Actions
+## Action Creators
 
 ### KISS Style
 This pattern is focused on a KISS principle - to stay clear of complex proprietary abstractions and follow simple and familiar JavaScript const based types:
 
-- classic const based types
-- very close to standard JS usage
-- standard amount of boilerplate
-- need to export action types and action creators to re-use in other places, e.g. `redux-saga` or `redux-observable`
+Advantages:
+- simple "const" based types
+- familiar to standard JS usage
+Disadvantages:
+- significant amount of boilerplate and duplication
+- necessary to export both action types and action creators to re-use in other places, e.g. `redux-saga` or `redux-observable`
 
 ```tsx
 export const INCREMENT_SFC = 'INCREMENT_SFC';
@@ -704,7 +658,7 @@ export const actionCreators = {
 };
 
 ```
-<details><summary>SHOW USAGE</summary><p>
+<details><summary>show usage</summary><p>
 
 ```tsx
 import store from '@src/store';
@@ -716,36 +670,41 @@ store.dispatch(actionCreators.incrementSfc()); // OK => { type: "INCREMENT_SFC" 
 ```
 </p></details>
 
-### DRY Style
-A more DRY approach, introducing a simple factory function to automate the creation of typed action creators. The advantage here is that we can reduce boilerplate and code repetition. It is also easier to re-use action creators in other places because of `type` property on action creator containing type constant:
+[⇧ back to top](#table-of-contents)
 
-- using factory function to automate creation of typed action creators - (source code to be revealed)
+### DRY Style
+In a DRY approach, we're introducing a simple factory function to automate the creation process of type-safe action creators. The advantage here is that we can reduce boilerplate and repetition significantly. It is also easier to re-use action creators in other layers thanks to `getType` helper function returning "type constant".
+
+Advantages:
+- using factory function to automate creation of type-safe action creators
 - less boilerplate and code repetition than KISS Style
-- action creators have readonly `type` property (this make using `type constants` redundant and easier to re-use in other places e.g. `redux-saga` or `redux-observable`)
+- getType helper to obtain action creator type (this makes using "type constants" unnecessary)
 
 ```ts
-import { createActionCreator } from 'react-redux-typescript';
-
-type Severity = 'info' | 'success' | 'warning' | 'error';
+import { createAction, getType } from 'react-redux-typescript';
 
 // Action Creators
 export const actionCreators = {
-  incrementCounter: createActionCreator('INCREMENT_COUNTER'),
-  showNotification: createActionCreator(
-    'SHOW_NOTIFICATION', (message: string, severity?: Severity) => ({ message, severity }),
+  incrementCounter: createAction('INCREMENT_COUNTER'),
+  showNotification: createAction('SHOW_NOTIFICATION', 
+    (message: string, severity: Severity = 'default') => ({
+      type: 'SHOW_NOTIFICATION', payload: { message, severity },
+    })
   ),
 };
 
-// Examples
+// Usage
 store.dispatch(actionCreators.incrementCounter(4)); // Error: Expected 0 arguments, but got 1.
 store.dispatch(actionCreators.incrementCounter()); // OK: { type: "INCREMENT_COUNTER" }
-actionCreators.incrementCounter.type === "INCREMENT_COUNTER" // true
+getType(actionCreators.incrementCounter) === "INCREMENT_COUNTER" // true
 
 store.dispatch(actionCreators.showNotification()); // Error: Supplied parameters do not match any signature of call target.
-store.dispatch(actionCreators.showNotification('Hello!')); // OK: { type: "SHOW_NOTIFICATION", payload: { message: 'Hello!' } }
-store.dispatch(actionCreators.showNotification('Hello!', 'info')); // OK: { type: "SHOW_NOTIFICATION", payload: { message: 'Hello!', severity: 'info } }
-actionCreators.showNotification.type === "SHOW_NOTIFICATION" // true
+store.dispatch(actionCreators.showNotification('Hello!')); // OK: { type: "SHOW_NOTIFICATION", payload: { message: 'Hello!', severity: 'default' } }
+store.dispatch(actionCreators.showNotification('Hello!', 'info')); // OK: { type: "SHOW_NOTIFICATION", payload: { message: 'Hello!', severity: 'info' } }
+getType(actionCreators.showNotification) === "SHOW_NOTIFICATION" // true
 ```
+
+[⇧ back to top](#table-of-contents)
 
 ---
 
@@ -754,7 +713,7 @@ Relevant TypeScript Docs references:
 - [Discriminated Union types](https://www.typescriptlang.org/docs/handbook/advanced-types.html)
 - [Mapped types](https://www.typescriptlang.org/docs/handbook/advanced-types.html) e.g. `Readonly` & `Partial`  
 
-### Reducer State
+### Tutorial
 Declare reducer `State` type definition with readonly modifier for `type level` immutability
 ```ts
 export type State = {
@@ -805,7 +764,11 @@ state.countersCollection[0].readonlyCounter2 = 1; // Error, cannot be mutated
 
 > _There are some experiments in the community to make a `ReadonlyRecursive` mapped type, but I'll need to investigate if they really works_
 
-### Reducer with classic `const types`
+[⇧ back to top](#table-of-contents)
+
+### Examples
+
+#### Reducer with classic `const types`
 
 ```tsx
 import { combineReducers } from 'redux';
@@ -838,49 +801,35 @@ export const reducer = combineReducers<State, RootAction>({
 
 ```
 
-### Reducer with static `type` property from helper factory function - `createActionCreator`
-```ts
-export const reducer: Reducer<State> =
-  (state = 0, action: RootAction) => {
-    switch (action.type) {
-      case actionCreators.increment.type:
-        return state + 1;
-        
-      case actionCreators.decrement.type:
-        return state - 1;
+[⇧ back to top](#table-of-contents)
 
-      default: return state;
-    }
-  };
+#### Reducer with getType helper from `react-redux-typescript`
+```ts
+import { getType } from 'react-redux-typescript';
+
+export const reducer: Reducer<State> = (state = 0, action: RootAction) => {
+  switch (action.type) {
+    case getType(actionCreators.increment):
+      return state + 1;
+      
+    case getType(actionCreators.decrement):
+      return state - 1;
+
+    default: return state;
+  }
+};
 ```
+
+[⇧ back to top](#table-of-contents)
 
 ---
 
-## Store Types
+## Store Configuration
 
-- ### `RootAction` - statically typed global action types
-- should be imported in layers dealing with redux actions like: reducers, redux-sagas, redux-observables
+### Create Root State and Root Action Types
 
-```tsx
-// RootActions
-import { RouterAction, LocationChangeAction } from 'react-router-redux';
-
-import { Actions as CountersActions } from '@src/redux/counters';
-import { Actions as TodosActions } from '@src/redux/todos';
-import { Actions as ToastsActions } from '@src/redux/toasts';
-
-type ReactRouterAction = RouterAction | LocationChangeAction;
-
-export type RootAction =
-  | ReactRouterAction
-  | CountersActions[keyof CountersActions]
-  | TodosActions[keyof TodosActions]
-  | ToastsActions[keyof ToastsActions];
-
-```
-
-- ### `RootState` - statically typed global state tree
-- should be imported in connected components providing type safety to Redux `connect` function
+#### `RootState` - interface representing redux state tree
+Can be imported in connected components to provide type-safety to Redux `connect` function
 
 ```tsx
 import { combineReducers } from 'redux';
@@ -906,11 +855,35 @@ export const rootReducer = combineReducers<RootState, RootAction>({
 
 ```
 
----
+[⇧ back to top](#table-of-contents)
 
-## Create Store
+#### `RootAction` - union type of all action objects
+Can be imported in various layers receiving or sending redux actions like: reducers, sagas or redux-observables epics
 
-- creating store - use `RootState` (in `combineReducers` and when providing preloaded state object) to set-up **state object type guard** to leverage strongly typed Store instance
+```tsx
+// RootActions
+import { RouterAction, LocationChangeAction } from 'react-router-redux';
+
+import { Actions as CountersActions } from '@src/redux/counters';
+import { Actions as TodosActions } from '@src/redux/todos';
+import { Actions as ToastsActions } from '@src/redux/toasts';
+
+type ReactRouterAction = RouterAction | LocationChangeAction;
+
+export type RootAction =
+  | ReactRouterAction
+  | CountersActions[keyof CountersActions]
+  | TodosActions[keyof TodosActions]
+  | ToastsActions[keyof ToastsActions];
+
+```
+
+[⇧ back to top](#table-of-contents)
+
+### Create Store
+
+When creating store use rootReducer instance, this alone will to set-up **strongly typed Store instance** with type inference.
+> The resulting store instance methods like `getState` or `dispatch` will be typed checked and expose type errors
 
 ```tsx
 import { createStore, applyMiddleware, compose } from 'redux';
@@ -947,13 +920,13 @@ export default store;
 
 ```
 
----
-
-# Ecosystem
+[⇧ back to top](#table-of-contents)
 
 ---
 
-## Async Flow with "redux-observable"
+## Async Flow
+
+### "redux-observable"
 
 ```ts
 // import rxjs operators somewhere...
@@ -978,9 +951,13 @@ export const epics = combineEpics(
 );
 ```
 
+[⇧ back to top](#table-of-contents)
+
 ---
 
-## Selectors with "reselect"
+## Selectors 
+
+### "reselect"
 
 ```ts
 import { createSelector } from 'reselect';
@@ -1008,6 +985,21 @@ export const getFilteredTodos = createSelector(
   },
 );
 ```
+
+[⇧ back to top](#table-of-contents)
+
+---
+
+# Tools
+
+## Living Style Guide
+### ["react-styleguidist"](https://github.com/styleguidist/react-styleguidist)
+
+[⟩⟩⟩ styleguide.config.js](/playground/src/styleguide.config.js)  
+
+[⟩⟩⟩ demo](https://piotrwitek.github.io/react-redux-typescript-guide/styleguide/)
+
+[⇧ back to top](#table-of-contents)
 
 ---
 
@@ -1066,6 +1058,8 @@ export const getFilteredTodos = createSelector(
 }
 ```
 
+[⇧ back to top](#table-of-contents)
+
 ### tslint.json
 > - Recommended setup is to extend build-in preset `tslint:recommended` (for all rules use `tslint:all`)  
 > - Add tslint react rules: `npm i -D tslint-react` https://github.com/palantir/tslint-react  
@@ -1116,6 +1110,8 @@ export const getFilteredTodos = createSelector(
 }
 ```
 
+[⇧ back to top](#table-of-contents)
+
 ### jest.config.json
 > - Recommended setup for Jest with TypeScript  
 > - Install with `npm i -D jest-cli ts-jest @types/jest`  
@@ -1145,6 +1141,8 @@ export const getFilteredTodos = createSelector(
 }
 ```
 
+[⇧ back to top](#table-of-contents)
+
 ### Default and Named Module Exports
 > Most flexible solution is to use module folder pattern, because you can leverage both named and default import when you see fit.  
 Using this solution you'll achieve better encapsulation for internal structure/naming refactoring without breaking your consumer code:  
@@ -1162,7 +1160,7 @@ export default Select;
 export { default as Select } from './select';
 ...
 
-// 3. now you can import your components in both ways named (internal) or default (public):
+// 3. now you can import your components in both ways, with named export (better encapsulation) or using default export (internal access):
 
 // containers/container.tsx
 import { Select } from '@src/components';
@@ -1171,10 +1169,12 @@ import Select from '@src/components/select';
 ...
 ```
 
+[⇧ back to top](#table-of-contents)
+
 ### Vendor Types Augmentation
 > Strategies to fix issues coming from broken "vendor type declarations" files (*.d.ts)
 
-- Augmenting library internal type declarations - using relative import resolution 
+#### Augmenting library internal type declarations - using relative import resolution 
 ```ts
 // added missing autoFocus Prop on Input component in "antd@2.10.0" npm package
 declare module '../node_modules/antd/lib/input/Input' {
@@ -1184,7 +1184,9 @@ declare module '../node_modules/antd/lib/input/Input' {
 }
 ```
 
-- Augmenting library public type declarations - using node module import resolution
+[⇧ back to top](#table-of-contents)
+
+#### Augmenting library public type declarations - using node module import resolution
 ```ts
 // fixed broken public type declaration in "rxjs@5.4.1" npm package 
 import { Operator } from 'rxjs/Operator';
@@ -1197,7 +1199,9 @@ declare module 'rxjs/Subject' {
 }
 ```
 
-- When missing type declarations for vendor modules you can "assert" a module type with `any` using [Shorthand Ambient Modules](https://github.com/Microsoft/TypeScript-Handbook/blob/master/pages/Modules.md#shorthand-ambient-modules)
+[⇧ back to top](#table-of-contents)
+
+#### To quick-fix missing type declarations for vendor modules you can "assert" a module type with `any` using [Shorthand Ambient Modules](https://github.com/Microsoft/TypeScript-Handbook/blob/master/pages/Modules.md#shorthand-ambient-modules)
 
 ```tsx
 // @src/types/modules.d.ts
@@ -1207,6 +1211,8 @@ declare module 'enzyme';
 ```
 
 > More advanced scenarios for working with vendor module declarations can be found here [Official TypeScript Docs](https://github.com/Microsoft/TypeScript-Handbook/blob/master/pages/Modules.md#working-with-other-javascript-libraries)
+
+[⇧ back to top](#table-of-contents)
 
 ### Npm Scripts
 > Common TS-related npm scripts shared across projects
@@ -1219,6 +1225,8 @@ declare module 'enzyme';
 "test:watch": "jest --config jest.config.json --watch",
 ```
 
+[⇧ back to top](#table-of-contents)
+
 ---
 
 # FAQ
@@ -1226,9 +1234,13 @@ declare module 'enzyme';
 ### - should I still use React.PropTypes in TS?
 > No. When using TypeScript it is an unnecessary overhead, when declaring IProps and IState interfaces, you will get complete intellisense and compile-time safety with static type checking, this way you'll be safe from runtime errors and you will save a lot of time on debugging. Additional benefit is an elegant and standarized method of documenting your component external API in the source code.  
 
+[⇧ back to top](#table-of-contents)
+
 ### - when to use `interface` declarations and when `type` aliases?
 > From practical side, using `interface` declaration will display identity (interface name) in compiler errors, on the contrary `type` aliases will be unwinded to show all the properties and nested types it consists of. This can be a bit noisy when reading compiler errors and I like to leverage this distinction to hide some of not so important type details in errors  
 Related `ts-lint` rule: https://palantir.github.io/tslint/rules/interface-over-type-literal/  
+
+[⇧ back to top](#table-of-contents)
 
 ### - how to best initialize class instance or static properties?
 > Prefered modern style is to use class Property Initializers  
@@ -1248,6 +1260,8 @@ class StatefulCounterWithInitialCount extends React.Component<Props, State> {
 }
 ```
 
+[⇧ back to top](#table-of-contents)
+
 ### - how to best declare component handler functions?
 > Prefered modern style is to use Class Fields with arrow functions  
 ```tsx
@@ -1260,9 +1274,40 @@ class StatefulCounter extends React.Component<Props, State> {
 }
 ```
 
+[⇧ back to top](#table-of-contents)
+
 ---
+
+# Roadmap
+- extend HOC section with more advanced examples [#5](../../issues/5)  
+- investigate typing patterns for generic component children [#7](../../issues/7)
+
+[⇧ back to top](#table-of-contents)
+
+# Contribution Guide
+- Don't edit `README.md` - it is built with `generator` script from  separate `.md` files located in the `/docs/markdown` folder, edit them instead
+- For code snippets, they are also injected by `generator` script from the source files located in the playground folder (this step make sure all examples are type-checked and linted), edit them instead
+> look for include directives in `.md` files that look like this: `::[example|usage]='../../playground/src/components/sfc-counter.tsx'::`
+
+Before opening PR please make sure to check:
+```bash
+# run linter in playground
+yarn run lint
+
+# run type-checking in playground
+yarn run tsc
+  
+# re-generate `README.md` from repo root
+sh ./generate.sh
+# or 
+node ./generator/bin/generate-readme.js
+```
+
+[⇧ back to top](#table-of-contents)
 
 # Project Examples
 
 https://github.com/piotrwitek/react-redux-typescript-starter-kit  
 https://github.com/piotrwitek/react-redux-typescript-webpack-starter  
+
+[⇧ back to top](#table-of-contents)

@@ -13,7 +13,7 @@ export const Home = () => {
       <SFCSpreadAttributes />
       <StatefulCounter />
       <StatefulCounterWithInitialCount />
-      <UserListUsage users={[]} />
+      <UserListUsage />
     </section>
   );
 };
