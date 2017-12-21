@@ -158,7 +158,7 @@ export const SFCCounter: React.SFC<SFCCounterProps> = (props) => {
 
 [⇧ back to top](#table-of-contents)
 
-#### - [spreading attributes](https://facebook.github.io/react/docs/jsx-in-depth.html#spread-attributes)
+#### - spreading attributes [link](https://facebook.github.io/react/docs/jsx-in-depth.html#spread-attributes)
 
 ```tsx
 import * as React from 'react';
@@ -389,7 +389,7 @@ export const withState = <P extends WrappedComponentProps>(
 };
 
 ```
-<details><summary>SHOW USAGE</summary><p>
+<details><summary>show usage</summary><p>
 
 ```tsx
 import * as React from 'react';
@@ -469,7 +469,7 @@ export const withErrorBoundary = <P extends WrappedComponentProps>(
 };
 
 ```
-<details><summary>SHOW USAGE</summary><p>
+<details><summary>show usage</summary><p>
 
 ```tsx
 import * as React from 'react';
@@ -519,7 +519,7 @@ export const SFCCounterConnected = connect(mapStateToProps, {
 })(SFCCounter);
 
 ```
-<details><summary>SHOW USAGE</summary><p>
+<details><summary>show usage</summary><p>
 
 ```tsx
 import * as React from 'react';
@@ -559,7 +559,7 @@ export const SFCCounterConnectedVerbose =
   connect(mapStateToProps, mapDispatchToProps)(SFCCounter);
 
 ```
-<details><summary>SHOW USAGE</summary><p>
+<details><summary>show usage</summary><p>
 
 ```tsx
 import * as React from 'react';
@@ -599,7 +599,7 @@ export const SFCCounterConnectedExtended = connect(mapStateToProps, {
 })(SFCCounter);
 
 ```
-<details><summary>SHOW USAGE</summary><p>
+<details><summary>show usage</summary><p>
 
 ```tsx
 import * as React from 'react';
@@ -658,7 +658,7 @@ export const actionCreators = {
 };
 
 ```
-<details><summary>SHOW USAGE</summary><p>
+<details><summary>show usage</summary><p>
 
 ```tsx
 import store from '@src/store';
@@ -1000,6 +1000,7 @@ export const getFilteredTodos = createSelector(
 [⟩⟩⟩ demo](https://piotrwitek.github.io/react-redux-typescript-guide/styleguide/)
 
 [⇧ back to top](#table-of-contents)
+
 ---
 
 # Extras

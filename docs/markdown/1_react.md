@@ -65,7 +65,7 @@ const handleChange: React.ReactEventHandler<HTMLInputElement> = (ev) => { ...
 
 [⇧ back to top](#table-of-contents)
 
-#### - [spreading attributes](https://facebook.github.io/react/docs/jsx-in-depth.html#spread-attributes)
+#### - spreading attributes [link](https://facebook.github.io/react/docs/jsx-in-depth.html#spread-attributes)
 
 ::example='../../playground/src/components/sfc-spread-attributes.tsx'::
 

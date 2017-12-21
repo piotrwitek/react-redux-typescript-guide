@@ -46,7 +46,7 @@ ${'```'}
 }
 function withDetailsWrapper(text) {
     return `
-<details><summary>SHOW USAGE</summary><p>
+<details><summary>show usage</summary><p>
 
 ${'```tsx'}
 ${text}
