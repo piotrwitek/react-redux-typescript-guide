@@ -67,6 +67,7 @@
     "comment-format": [true, "check-space"],
     "import-blacklist": [true, "rxjs"],
     "interface-over-type-literal": false,
+    "interface-name": false,
     "max-line-length": [true, 120],
     "member-access": false,
     "member-ordering": [true, { "order": "fields-first" }],
@@ -79,8 +80,8 @@
     "no-null-keyword": false,
     "no-require-imports": false,
     "no-submodule-imports": [true, "@src", "rxjs"],
-    "no-trailing-whitespace": true,
     "no-this-assignment": [true, { "allow-destructuring": true }],
+    "no-trailing-whitespace": true,
     "no-unused-variable": [true, "react"],
     "object-literal-sort-keys": false,
     "object-literal-shorthand": false,
@@ -104,7 +105,9 @@
     "triple-equals": [true, "allow-null-check"],
     "type-literal-delimiter": true,    
     "typedef": [true,"parameter", "property-declaration"],
-    "variable-name": [true, "ban-keywords", "check-format", "allow-pascal-case", "allow-leading-underscore"]
+    "variable-name": [true, "ban-keywords", "check-format", "allow-pascal-case", "allow-leading-underscore"],
+    // tslint-react
+    "jsx-no-lambda": false
   }
 }
 ```
