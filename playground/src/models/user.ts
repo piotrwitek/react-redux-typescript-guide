@@ -9,7 +9,7 @@ export interface IUserDTO {
 export interface IUser {
   constructor: {
     create(user: IUserDTO): IUser;
-  }
+  };
 
   id: string;
   firstName: string;

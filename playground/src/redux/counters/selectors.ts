@@ -1,4 +1,4 @@
 import { RootState } from '@src/redux';
 
-export const getSfcCounter =
-  (state: RootState) => state.counters.sfcCounter;
+export const getReduxCounter =
+  (state: RootState) => state.counters.reduxCounter;

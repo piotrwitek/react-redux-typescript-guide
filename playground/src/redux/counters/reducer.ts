@@ -1,24 +1,22 @@
 import { combineReducers } from 'redux';
+import { getType } from 'typesafe-actions';
 
 import { RootAction } from '@src/redux';
 
-import {
-  INCREMENT_SFC,
-  DECREMENT_SFC,
-} from './';
+import { actions } from './';
 
 export type State = {
-  readonly sfcCounter: number,
+  readonly reduxCounter: number;
 };
 
 export const reducer = combineReducers<State, RootAction>({
-  sfcCounter: (state = 0, action) => {
+  reduxCounter: (state = 0, action) => {
     switch (action.type) {
-      case INCREMENT_SFC:
+      case getType(actions.increment):
         return state + 1;
 
-      case DECREMENT_SFC:
-        return state + 1;
+      case getType(actions.add):
+        return state + action.payload;
 
       default:
         return state;

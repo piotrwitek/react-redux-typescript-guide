@@ -6,7 +6,7 @@
 ### Goals
 - Complete type safety with [`--strict`](https://www.typescriptlang.org/docs/handbook/compiler-options.html) flag without failing to `any` type for the best static-typing experience
 - Minimize amount of manually writing type declarations by leveraging [Type Inference](https://www.typescriptlang.org/docs/handbook/type-inference.html)
-- Reduce redux boilerplate and complexity of it's type annotations to a minimum with [simple utility functions](https://github.com/piotrwitek/react-redux-typescript) by extensive use of [Generics](https://www.typescriptlang.org/docs/handbook/generics.html) and [Advanced Types](https://www.typescriptlang.org/docs/handbook/advanced-types.html) features
+- Reduce redux boilerplate code with [simple utility functions](https://github.com/piotrwitek/typesafe-actions) using [Generics](https://www.typescriptlang.org/docs/handbook/generics.html) and [Advanced Types](https://www.typescriptlang.org/docs/handbook/advanced-types.html) features
 
 ### Playground Project
 You should check Playground Project located in the `/playground` folder. It is a source of all the code examples found in the guide. They are all tested with the most recent version of TypeScript and 3rd party type definitions (like `@types/react` or `@types/react-redux`) to ensure the examples are up-to-date and not broken with updated definitions.
@@ -617,6 +617,82 @@ export default () => (
 </p></details>
 
 [⇧ back to top](#table-of-contents)
+
+## Higher-Order Components
+- function that takes a component and returns a new component
+- a new component will infer Props interface from wrapped Component extended with Props of HOC
+- will filter out props specific to HOC, and the rest will be passed through to wrapped component
+
+### Basic HOC Examples
+
+#### - withState
+> enhance stateless counter with state
+
+```tsx
+import * as React from 'react';
+import { Omit } from 'react-redux-typescript';
+
+interface RequiredProps {
+  count: number,
+  onIncrement: () => any,
+}
+
+type Props<T extends RequiredProps> = Omit<T, keyof RequiredProps>;
+
+interface State {
+  count: number,
+}
+
+export function withState<WrappedComponentProps extends RequiredProps>(
+  WrappedComponent: React.ComponentType<WrappedComponentProps>,
+) {
+  const HOC = class extends React.Component<Props<WrappedComponentProps>, State> {
+
+    state: State = {
+      count: 0,
+    };
+
+    handleIncrement = () => {
+      this.setState({ count: this.state.count + 1 });
+    };
+
+    render() {
+      const { handleIncrement } = this;
+      const { count } = this.state;
+
+      return (
+        <WrappedComponent
+          count={count}
+          onIncrement={handleIncrement}
+        />
+      );
+    }
+  };
+
+  return HOC;
+}
+
+```
+
+<details><summary>SHOW USAGE</summary><p>
+
+```tsx
+import * as React from 'react';
+
+import { withState } from '@src/hoc';
+import { SFCCounter } from '@src/components';
+
+const SFCCounterWithState =
+  withState(SFCCounter);
+
+export default (
+  ({ children }) => (
+    <SFCCounterWithState label={'SFCCounterWithState'} />
+  )
+) as React.SFC<{}>;
+
+```
+</p></details>
 
 ---
 

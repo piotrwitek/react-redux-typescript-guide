@@ -1,22 +1,21 @@
-import { v4 } from 'uuid';
-import { Observable } from 'rxjs/Observable';
 import { combineEpics, Epic } from 'redux-observable';
+import { isActionOf } from 'typesafe-actions';
+import { Observable } from 'rxjs/Observable';
+import { v4 } from 'uuid';
 
-import { RootAction, RootState } from '@src/redux';
-import { ADD_TODO, Actions } from '@src/redux/todos';
-import { actionCreators } from './';
+import { RootAction, RootState, allActions } from '@src/redux';
+import { actions } from './';
 
 const TOAST_LIFETIME = 2000;
 
-// Epics - handling side effects of actions
 const addTodoToast: Epic<RootAction, RootState> =
   (action$, store) => action$
-    .ofType(ADD_TODO)
-    .concatMap((action: Actions[typeof ADD_TODO]) => {
+    .filter(isActionOf(allActions.addTodo))
+    .concatMap((action) => {
       const toast = { id: v4(), text: action.payload };
 
-      const addToast$ = Observable.of(actionCreators.addToast(toast));
-      const removeToast$ = Observable.of(actionCreators.removeToast(toast.id))
+      const addToast$ = Observable.of(actions.addToast(toast));
+      const removeToast$ = Observable.of(actions.removeToast(toast.id))
         .delay(TOAST_LIFETIME);
 
       return addToast$.concat(removeToast$);

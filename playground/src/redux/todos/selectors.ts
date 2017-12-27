@@ -20,5 +20,5 @@ export const getFilteredTodos = createSelector(
       default:
         return todos;
     }
-  },
+  }
 );

@@ -14,13 +14,13 @@ function configureStore(initialState?: RootState) {
   ];
   // compose enhancers
   const enhancer = composeEnhancers(
-    applyMiddleware(...middlewares),
+    applyMiddleware(...middlewares)
   );
   // create store
   return createStore(
     rootReducer,
     initialState!,
-    enhancer,
+    enhancer
   );
 }
 

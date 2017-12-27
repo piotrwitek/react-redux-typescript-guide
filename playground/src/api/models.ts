@@ -1,5 +1,5 @@
 export interface ITodoModel {
-  id: string,
-  text: string,
-  completed: false,
+  id: string;
+  text: string;
+  completed: false;
 }

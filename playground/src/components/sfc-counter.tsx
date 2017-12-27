@@ -1,9 +1,9 @@
 import * as React from 'react';
 
 export interface SFCCounterProps {
-  label: string,
-  count: number,
-  onIncrement: () => any,
+  label: string;
+  count: number;
+  onIncrement: () => any;
 }
 
 export const SFCCounter: React.SFC<SFCCounterProps> = (props) => {
