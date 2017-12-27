@@ -8,6 +8,7 @@ This pattern is focused on a KISS principle - to stay clear of complex proprieta
 Advantages:
 - simple "const" based types
 - familiar to standard JS usage
+
 Disadvantages:
 - significant amount of boilerplate and duplication
 - necessary to export both action types and action creators to re-use in other places, e.g. `redux-saga` or `redux-observable`
@@ -160,8 +161,8 @@ Can be imported in various layers receiving or sending redux actions like: reduc
 
 ### Create Store
 
-When creating store use rootReducer instance, this alone will to set-up **strongly typed Store instance** with type inference.
-> The resulting store instance methods like `getState` or `dispatch` will be typed checked and expose type errors
+When creating the store, use rootReducer. This will set-up a **strongly typed Store instance** with type inference.
+> The resulting store instance methods like `getState` or `dispatch` will be type checked and expose type errors
 
 ::example='../../playground/src/store.ts'::
 
