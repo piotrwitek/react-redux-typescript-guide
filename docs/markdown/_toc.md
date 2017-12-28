@@ -8,10 +8,10 @@
   - [Higher-Order Components](#higher-order-components) 📝 __UPDATED__
   - [Redux Connected Components](#redux-connected-components)
 - [Redux](#redux)
-  - [Action Creators](#action-creators)
-  - [Reducers](#reducers)
+  - [Action Creators](#action-creators) 📝 __UPDATED__
+  - [Reducers](#reducers) 📝 __UPDATED__
   - [Store Configuration](#store-configuration)
-  - [Async Flow](#async-flow) _("redux-observable")_
+  - [Async Flow](#async-flow) _("redux-observable")_ 📝 __UPDATED__
   - [Selectors](#selectors) _("reselect")_
 - [Tools](#tools)
   - [Living Style Guide](#living-style-guide) _("react-styleguidist")_ 🌟 __NEW__
