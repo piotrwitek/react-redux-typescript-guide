@@ -2,10 +2,10 @@
 
 ## Action Creators
 
-> Using Typesafe Action Creators for Redux [`typesafe-actions`](https://github.com/piotrwitek/typesafe-actions)
+> Using Typesafe Action Creators helpers for Redux [`typesafe-actions`](https://github.com/piotrwitek/typesafe-actions)
 
-A recommended approach is to use a simple factory function to automate the creation of type-safe action creators. The advantage is that we can reduce a lot of code repetition and also minimize surface of errors by using type-checked API.
-> There are more functional helpers available that will help you to further reduce tedious boilerplate and type-annotations in common scenarios like reducers (`getType`) or epics (`isActionOf`). All that without losing type-safety! Please check very short [Tutorial](https://github.com/piotrwitek/typesafe-actions#tutorial)
+A recommended approach is to use a simple functional helper to automate the creation of type-safe action creators. The advantage is that we can reduce a lot of code repetition and also minimize surface of errors by using type-checked API.
+> There are more specialized functional helpers available that will help you to further reduce tedious boilerplate and type-annotations in common scenarios like reducers (`getType`) or epics (`isActionOf`). All that without losing type-safety! Please check very short [Tutorial](https://github.com/piotrwitek/typesafe-actions#tutorial)
 
 ::example='../../playground/src/redux/counters/actions.ts'::
 ::usage='../../playground/src/redux/counters/actions.usage.ts'::
@@ -20,14 +20,14 @@ Relevant TypeScript Docs references:
 - [Mapped types](https://www.typescriptlang.org/docs/handbook/advanced-types.html) e.g. `Readonly` & `Partial`  
 
 ### State with Type-level Immutability
-Declare reducer `State` type with `readonly` modifier for "type level" immutability
+Declare reducer `State` type with `readonly` modifier to get "type level" immutability
 ```ts
 export type State = {
   readonly counter: number,
 };
 ```
 
-Readonly modifier allow initialization, but will not allow rassignment by highlighting a compiler error
+Readonly modifier allow initialization, but will not allow rassignment by highlighting compiler errors
 ```ts
 export const initialState: State = {
   counter: 0,
@@ -37,21 +37,21 @@ initialState.counter = 3; // Error, cannot be mutated
 ```
 
 #### Caveat: Readonly does not provide a recursive immutability on objects
-This means that the `readonly` modifier doesn't propagate immutability on "properties" of objects. You'll need to set it explicitly on each nested property that you want.
+This means that the `readonly` modifier doesn't propagate immutability down to "properties" of objects. You'll need to set it explicitly on each nested property that you want.
 
 Check the example below:
 ```ts
 export type State = {
-  readonly counterContainer: {
-    readonly immutableCounter: number,
-    mutableCounter: number,
+  readonly containerObject: {
+    readonly immutableProp: number,
+    mutableProp: number,
   }
 };
 
-state.counterContainer = { mutableCounter: 1 }; // Error, cannot be mutated
-state.counterContainer.immutableCounter = 1; // Error, cannot be mutated
+state.containerObject = { mutableProp: 1 }; // Error, cannot be mutated
+state.containerObject.immutableProp = 1; // Error, cannot be mutated
 
-state.counterContainer.mutableCounter = 1; // No error, can be mutated
+state.containerObject.mutableProp = 1; // OK! No error, can be mutated
 ```
 
 #### Best-practices for nested immutability
@@ -74,7 +74,7 @@ state.counterPairs[0].immutableCounter2 = 1; // Error, cannot be mutated
 
 [⇧ back to top](#table-of-contents)
 
-### Finished reducer example using `getType` helper on action creators
+### Finished reducer example using `getType` helper
 
 ::example='../../playground/src/redux/counters/reducer.ts'::
 

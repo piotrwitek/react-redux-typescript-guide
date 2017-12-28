@@ -6,7 +6,7 @@
 ### Goals
 - Complete type safety with [`--strict`](https://www.typescriptlang.org/docs/handbook/compiler-options.html) flag without failing to `any` type for the best static-typing experience
 - Minimize amount of manually writing type declarations by leveraging [Type Inference](https://www.typescriptlang.org/docs/handbook/type-inference.html)
-- Reduce redux boilerplate code with [simple utility functions](https://github.com/piotrwitek/typesafe-actions) using [Generics](https://www.typescriptlang.org/docs/handbook/generics.html) and [Advanced Types](https://www.typescriptlang.org/docs/handbook/advanced-types.html) features
+- Reduce redux boilerplate and complexity of it's type annotations to a minimum with [simple utility functions](https://github.com/piotrwitek/react-redux-typescript) by extensive use of [Generics](https://www.typescriptlang.org/docs/handbook/generics.html) and [Advanced Types](https://www.typescriptlang.org/docs/handbook/advanced-types.html) features
 
 ### Playground Project
 You should check Playground Project located in the `/playground` folder. It is a source of all the code examples found in the guide. They are all tested with the most recent version of TypeScript and 3rd party type definitions (like `@types/react` or `@types/react-redux`) to ensure the examples are up-to-date and not broken with updated definitions.
@@ -132,9 +132,9 @@ const handleChange: React.ReactEventHandler<HTMLInputElement> = (ev) => { ...
 import * as React from 'react';
 
 export interface SFCCounterProps {
-  label: string,
-  count: number,
-  onIncrement: () => any,
+  label: string;
+  count: number;
+  onIncrement: () => any;
 }
 
 export const SFCCounter: React.SFC<SFCCounterProps> = (props) => {
@@ -164,8 +164,8 @@ export const SFCCounter: React.SFC<SFCCounterProps> = (props) => {
 import * as React from 'react';
 
 export interface SFCSpreadAttributesProps {
-  className?: string,
-  style?: React.CSSProperties,
+  className?: string;
+  style?: React.CSSProperties;
 }
 
 export const SFCSpreadAttributes: React.SFC<SFCSpreadAttributesProps> = (props) => {
@@ -194,11 +194,11 @@ export const SFCSpreadAttributes: React.SFC<SFCSpreadAttributesProps> = (props) 
 import * as React from 'react';
 
 export interface StatefulCounterProps {
-  label: string,
+  label: string;
 }
 
 type State = {
-  count: number,
+  count: number;
 };
 
 export class StatefulCounter extends React.Component<StatefulCounterProps, State> {
@@ -208,7 +208,7 @@ export class StatefulCounter extends React.Component<StatefulCounterProps, State
 
   handleIncrement = () => {
     this.setState({ count: this.state.count + 1 });
-  };
+  }
 
   render() {
     const { handleIncrement } = this;
@@ -238,18 +238,18 @@ export class StatefulCounter extends React.Component<StatefulCounterProps, State
 import * as React from 'react';
 
 export interface StatefulCounterWithInitialCountProps {
-  label: string,
-  initialCount?: number,
+  label: string;
+  initialCount?: number;
 }
 
 interface DefaultProps {
-  initialCount: number,
+  initialCount: number;
 }
 
 type PropsWithDefaults = StatefulCounterWithInitialCountProps & DefaultProps;
 
 interface State {
-  count: number,
+  count: number;
 }
 
 export const StatefulCounterWithInitialCount: React.ComponentClass<StatefulCounterWithInitialCountProps> =
@@ -272,7 +272,7 @@ export const StatefulCounterWithInitialCount: React.ComponentClass<StatefulCount
 
     handleIncrement = () => {
       this.setState({ count: this.state.count + 1 });
-    };
+    }
 
     render() {
       const { handleIncrement } = this;
@@ -308,8 +308,8 @@ export const StatefulCounterWithInitialCount: React.ComponentClass<StatefulCount
 import * as React from 'react';
 
 export interface GenericListProps<T> {
-  items: T[],
-  itemRenderer: (item: T) => JSX.Element,
+  items: T[];
+  itemRenderer: (item: T) => JSX.Element;
 }
 
 export class GenericList<T> extends React.Component<GenericListProps<T>, {}> {
@@ -346,19 +346,19 @@ import { Diff as Subtract } from 'react-redux-typescript';
 
 // These props will be subtracted from original component type
 interface WrappedComponentProps {
-  count: number,
-  onIncrement: () => any,
+  count: number;
+  onIncrement: () => any;
 }
 
 export const withState = <P extends WrappedComponentProps>(
-  WrappedComponent: React.ComponentType<P>,
+  WrappedComponent: React.ComponentType<P>
 ) => {
   // These props will be added to original component type
   interface Props {
-    initialCount?: number,
+    initialCount?: number;
   }
   interface State {
-    count: number,
+    count: number;
   }
 
   return class WithState extends React.Component<Subtract<P, WrappedComponentProps> & Props, State> {
@@ -371,7 +371,7 @@ export const withState = <P extends WrappedComponentProps>(
 
     handleIncrement = () => {
       this.setState({ count: this.state.count + 1 });
-    };
+    }
 
     render() {
       const { ...remainingProps } = this.props;
@@ -507,15 +507,15 @@ export default (() => (
 import { connect } from 'react-redux';
 
 import { RootState } from '@src/redux';
-import { actionCreators } from '@src/redux/counters';
+import { actions, CountersSelectors } from '@src/redux/counters';
 import { SFCCounter } from '@src/components';
 
 const mapStateToProps = (state: RootState) => ({
-  count: state.counters.sfcCounter,
+  count: CountersSelectors.getReduxCounter(state),
 });
 
 export const SFCCounterConnected = connect(mapStateToProps, {
-  onIncrement: actionCreators.incrementSfc,
+  onIncrement: actions.increment,
 })(SFCCounter);
 
 ```
@@ -544,15 +544,15 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
 import { RootState, Dispatch } from '@src/redux';
-import { actionCreators } from '@src/redux/counters';
+import { actions } from '@src/redux/counters';
 import { SFCCounter } from '@src/components';
 
 const mapStateToProps = (state: RootState) => ({
-  count: state.counters.sfcCounter,
+  count: state.counters.reduxCounter,
 });
 
 const mapDispatchToProps = (dispatch: Dispatch) => bindActionCreators({
-  onIncrement: actionCreators.incrementSfc,
+  onIncrement: actions.increment,
 }, dispatch);
 
 export const SFCCounterConnectedVerbose =
@@ -583,19 +583,19 @@ export default () => (
 import { connect } from 'react-redux';
 
 import { RootState } from '@src/redux';
-import { actionCreators } from '@src/redux/counters';
+import { actions, CountersSelectors } from '@src/redux/counters';
 import { SFCCounter } from '@src/components';
 
 export interface SFCCounterConnectedExtended {
-  initialCount: number,
+  initialCount: number;
 }
 
 const mapStateToProps = (state: RootState, ownProps: SFCCounterConnectedExtended) => ({
-  count: state.counters.sfcCounter + ownProps.initialCount,
+  count: CountersSelectors.getReduxCounter(state) + ownProps.initialCount,
 });
 
 export const SFCCounterConnectedExtended = connect(mapStateToProps, {
-  onIncrement: actionCreators.incrementSfc,
+  onIncrement: actions.increment,
 })(SFCCounter);
 
 ```
@@ -618,120 +618,26 @@ export default () => (
 
 [⇧ back to top](#table-of-contents)
 
-## Higher-Order Components
-- function that takes a component and returns a new component
-- a new component will infer Props interface from wrapped Component extended with Props of HOC
-- will filter out props specific to HOC, and the rest will be passed through to wrapped component
-
-### Basic HOC Examples
-
-#### - withState
-> enhance stateless counter with state
-
-```tsx
-import * as React from 'react';
-import { Omit } from 'react-redux-typescript';
-
-interface RequiredProps {
-  count: number,
-  onIncrement: () => any,
-}
-
-type Props<T extends RequiredProps> = Omit<T, keyof RequiredProps>;
-
-interface State {
-  count: number,
-}
-
-export function withState<WrappedComponentProps extends RequiredProps>(
-  WrappedComponent: React.ComponentType<WrappedComponentProps>,
-) {
-  const HOC = class extends React.Component<Props<WrappedComponentProps>, State> {
-
-    state: State = {
-      count: 0,
-    };
-
-    handleIncrement = () => {
-      this.setState({ count: this.state.count + 1 });
-    };
-
-    render() {
-      const { handleIncrement } = this;
-      const { count } = this.state;
-
-      return (
-        <WrappedComponent
-          count={count}
-          onIncrement={handleIncrement}
-        />
-      );
-    }
-  };
-
-  return HOC;
-}
-
-```
-
-<details><summary>SHOW USAGE</summary><p>
-
-```tsx
-import * as React from 'react';
-
-import { withState } from '@src/hoc';
-import { SFCCounter } from '@src/components';
-
-const SFCCounterWithState =
-  withState(SFCCounter);
-
-export default (
-  ({ children }) => (
-    <SFCCounterWithState label={'SFCCounterWithState'} />
-  )
-) as React.SFC<{}>;
-
-```
-</p></details>
-
 ---
 
 # Redux
 
 ## Action Creators
 
-### KISS Style
-This pattern is focused on a KISS principle - to stay clear of complex proprietary abstractions and follow simple and familiar JavaScript const based types:
+> Using Typesafe Action Creators helpers for Redux [`typesafe-actions`](https://github.com/piotrwitek/typesafe-actions)
 
-Advantages:
-- simple "const" based types
-- familiar to standard JS usage
-
-Disadvantages:
-- significant amount of boilerplate and duplication
-- necessary to export both action types and action creators to re-use in other places, e.g. `redux-saga` or `redux-observable`
+A recommended approach is to use a simple functional helper to automate the creation of type-safe action creators. The advantage is that we can reduce a lot of code repetition and also minimize surface of errors by using type-checked API.
+> There are more specialized functional helpers available that will help you to further reduce tedious boilerplate and type-annotations in common scenarios like reducers (`getType`) or epics (`isActionOf`). All that without losing type-safety! Please check very short [Tutorial](https://github.com/piotrwitek/typesafe-actions#tutorial)
 
 ```tsx
-export const INCREMENT_SFC = 'INCREMENT_SFC';
-export const DECREMENT_SFC = 'DECREMENT_SFC';
+import { createAction } from 'typesafe-actions';
 
-export type Actions = {
-  INCREMENT_SFC: {
-    type: typeof INCREMENT_SFC,
-  },
-  DECREMENT_SFC: {
-    type: typeof DECREMENT_SFC,
-  },
-};
-
-// Action Creators
-export const actionCreators = {
-  incrementSfc: (): Actions[typeof INCREMENT_SFC] => ({
-    type: INCREMENT_SFC,
-  }),
-  decrementSfc: (): Actions[typeof DECREMENT_SFC] => ({
-    type: DECREMENT_SFC,
-  }),
+export const actions = {
+  increment: createAction('INCREMENT'),
+  add: createAction('ADD', (amount: number) => ({
+    type: 'ADD',
+    payload: amount,
+  })),
 };
 
 ```
@@ -739,47 +645,13 @@ export const actionCreators = {
 
 ```tsx
 import store from '@src/store';
-import { actionCreators } from '@src/redux/counters';
+import { actions } from '@src/redux/counters';
 
-// store.dispatch(actionCreators.incrementSfc(1)); // Error: Expected 0 arguments, but got 1.
-store.dispatch(actionCreators.incrementSfc()); // OK => { type: "INCREMENT_SFC" }
+// store.dispatch(actionCreators.increment(1)); // Error: Expected 0 arguments, but got 1.
+store.dispatch(actions.increment()); // OK => { type: "INCREMENT" }
 
 ```
 </p></details>
-
-[⇧ back to top](#table-of-contents)
-
-### DRY Style
-In a DRY approach, we're introducing a simple factory function to automate the creation process of type-safe action creators. The advantage here is that we can reduce boilerplate and repetition significantly. It is also easier to re-use action creators in other layers thanks to `getType` helper function returning "type constant".
-
-Advantages:
-- using factory function to automate creation of type-safe action creators
-- less boilerplate and code repetition than KISS Style
-- getType helper to obtain action creator type (this makes using "type constants" unnecessary)
-
-```ts
-import { createAction, getType } from 'react-redux-typescript';
-
-// Action Creators
-export const actionCreators = {
-  incrementCounter: createAction('INCREMENT_COUNTER'),
-  showNotification: createAction('SHOW_NOTIFICATION', 
-    (message: string, severity: Severity = 'default') => ({
-      type: 'SHOW_NOTIFICATION', payload: { message, severity },
-    })
-  ),
-};
-
-// Usage
-store.dispatch(actionCreators.incrementCounter(4)); // Error: Expected 0 arguments, but got 1.
-store.dispatch(actionCreators.incrementCounter()); // OK: { type: "INCREMENT_COUNTER" }
-getType(actionCreators.incrementCounter) === "INCREMENT_COUNTER" // true
-
-store.dispatch(actionCreators.showNotification()); // Error: Supplied parameters do not match any signature of call target.
-store.dispatch(actionCreators.showNotification('Hello!')); // OK: { type: "SHOW_NOTIFICATION", payload: { message: 'Hello!', severity: 'default' } }
-store.dispatch(actionCreators.showNotification('Hello!', 'info')); // OK: { type: "SHOW_NOTIFICATION", payload: { message: 'Hello!', severity: 'info' } }
-getType(actionCreators.showNotification) === "SHOW_NOTIFICATION" // true
-```
 
 [⇧ back to top](#table-of-contents)
 
@@ -790,15 +662,15 @@ Relevant TypeScript Docs references:
 - [Discriminated Union types](https://www.typescriptlang.org/docs/handbook/advanced-types.html)
 - [Mapped types](https://www.typescriptlang.org/docs/handbook/advanced-types.html) e.g. `Readonly` & `Partial`  
 
-### Tutorial
-Declare reducer `State` type definition with readonly modifier for `type level` immutability
+### State with Type-level Immutability
+Declare reducer `State` type with `readonly` modifier to get "type level" immutability
 ```ts
 export type State = {
   readonly counter: number,
 };
 ```
 
-Readonly modifier allow initialization, but will not allow rassignment highlighting an error
+Readonly modifier allow initialization, but will not allow rassignment by highlighting compiler errors
 ```ts
 export const initialState: State = {
   counter: 0,
@@ -807,68 +679,66 @@ export const initialState: State = {
 initialState.counter = 3; // Error, cannot be mutated
 ```
 
-#### Caveat: Readonly does not provide recursive immutability on objects
-> This means that readonly modifier does not propagate immutability on nested properties of objects or arrays of objects. You'll need to set it explicitly on each nested property.
+#### Caveat: Readonly does not provide a recursive immutability on objects
+This means that the `readonly` modifier doesn't propagate immutability down to "properties" of objects. You'll need to set it explicitly on each nested property that you want.
 
+Check the example below:
 ```ts
 export type State = {
-  readonly counterContainer: {
-    readonly readonlyCounter: number,
-    mutableCounter: number,
+  readonly containerObject: {
+    readonly immutableProp: number,
+    mutableProp: number,
   }
 };
 
-state.counterContainer = { mutableCounter: 1 }; // Error, cannot be mutated
-state.counterContainer.readonlyCounter = 1; // Error, cannot be mutated
+state.containerObject = { mutableProp: 1 }; // Error, cannot be mutated
+state.containerObject.immutableProp = 1; // Error, cannot be mutated
 
-state.counterContainer.mutableCounter = 1; // No error, can be mutated
+state.containerObject.mutableProp = 1; // OK! No error, can be mutated
 ```
 
-> There are few utilities to help you achieve nested immutability. e.g. you can do it quite easily by using convenient `Readonly` or `ReadonlyArray` mapped types.
+#### Best-practices for nested immutability
+> use `Readonly` or `ReadonlyArray` mapped types
 
 ```ts
 export type State = Readonly<{
-  countersCollection: ReadonlyArray<Readonly<{
-    readonlyCounter1: number,
-    readonlyCounter2: number,
+  counterPairs: ReadonlyArray<Readonly<{
+    immutableCounter1: number,
+    immutableCounter2: number,
   }>>,
 }>;
 
-state.countersCollection[0] = { readonlyCounter1: 1, readonlyCounter2: 1 }; // Error, cannot be mutated
-state.countersCollection[0].readonlyCounter1 = 1; // Error, cannot be mutated
-state.countersCollection[0].readonlyCounter2 = 1; // Error, cannot be mutated
+state.counterPairs[0] = { immutableCounter1: 1, immutableCounter2: 1 }; // Error, cannot be mutated
+state.counterPairs[0].immutableCounter1 = 1; // Error, cannot be mutated
+state.counterPairs[0].immutableCounter2 = 1; // Error, cannot be mutated
 ```
 
-> _There are some experiments in the community to make a `ReadonlyRecursive` mapped type, but I'll need to investigate if they really works_
+> _There are some experiments in the community to make a `ReadonlyRecursive` mapped type. I'll update this section of the guide as soon as they are stable_
 
 [⇧ back to top](#table-of-contents)
 
-### Examples
-
-#### Reducer with classic `const types`
+### Finished reducer example using `getType` helper
 
 ```tsx
 import { combineReducers } from 'redux';
+import { getType } from 'typesafe-actions';
 
 import { RootAction } from '@src/redux';
 
-import {
-  INCREMENT_SFC,
-  DECREMENT_SFC,
-} from './';
+import { actions } from './';
 
 export type State = {
-  readonly sfcCounter: number,
+  readonly reduxCounter: number;
 };
 
 export const reducer = combineReducers<State, RootAction>({
-  sfcCounter: (state = 0, action) => {
+  reduxCounter: (state = 0, action) => {
     switch (action.type) {
-      case INCREMENT_SFC:
+      case getType(actions.increment):
         return state + 1;
 
-      case DECREMENT_SFC:
-        return state + 1;
+      case getType(actions.add):
+        return state + action.payload;
 
       default:
         return state;
@@ -876,25 +746,6 @@ export const reducer = combineReducers<State, RootAction>({
   },
 });
 
-```
-
-[⇧ back to top](#table-of-contents)
-
-#### Reducer with getType helper from `react-redux-typescript`
-```ts
-import { getType } from 'react-redux-typescript';
-
-export const reducer: Reducer<State> = (state = 0, action: RootAction) => {
-  switch (action.type) {
-    case getType(actionCreators.increment):
-      return state + 1;
-      
-    case getType(actionCreators.decrement):
-      return state - 1;
-
-    default: return state;
-  }
-};
 ```
 
 [⇧ back to top](#table-of-contents)
@@ -918,9 +769,9 @@ import { reducer as todos, State as TodosState } from '@src/redux/todos';
 interface StoreEnhancerState { }
 
 export interface RootState extends StoreEnhancerState {
-  router: RouterState,
-  counters: CountersState,
-  todos: TodosState,
+  router: RouterState;
+  counters: CountersState;
+  todos: TodosState;
 }
 
 import { RootAction } from '@src/redux';
@@ -940,18 +791,26 @@ Can be imported in various layers receiving or sending redux actions like: reduc
 ```tsx
 // RootActions
 import { RouterAction, LocationChangeAction } from 'react-router-redux';
+import { getReturnOfExpression } from 'react-redux-typescript';
 
-import { Actions as CountersActions } from '@src/redux/counters';
-import { Actions as TodosActions } from '@src/redux/todos';
-import { Actions as ToastsActions } from '@src/redux/toasts';
+import { actions as countersAC } from '@src/redux/counters';
+import { actions as todosAC } from '@src/redux/todos';
+import { actions as toastsAC } from '@src/redux/toasts';
 
+export const allActions = {
+  ...countersAC,
+  ...todosAC,
+  ...toastsAC,
+};
+
+const returnOfActions =
+  Object.values(allActions).map(getReturnOfExpression);
+type AppAction = typeof returnOfActions[number];
 type ReactRouterAction = RouterAction | LocationChangeAction;
 
 export type RootAction =
-  | ReactRouterAction
-  | CountersActions[keyof CountersActions]
-  | TodosActions[keyof TodosActions]
-  | ToastsActions[keyof ToastsActions];
+  | AppAction
+  | ReactRouterAction;
 
 ```
 
@@ -979,13 +838,13 @@ function configureStore(initialState?: RootState) {
   ];
   // compose enhancers
   const enhancer = composeEnhancers(
-    applyMiddleware(...middlewares),
+    applyMiddleware(...middlewares)
   );
   // create store
   return createStore(
     rootReducer,
     initialState!,
-    enhancer,
+    enhancer
   );
 }
 
@@ -997,35 +856,38 @@ export default store;
 
 ```
 
-[⇧ back to top](#table-of-contents)
-
 ---
 
 ## Async Flow
 
 ### "redux-observable"
 
-```ts
-// import rxjs operators somewhere...
+```tsx
 import { combineEpics, Epic } from 'redux-observable';
+import { isActionOf } from 'typesafe-actions';
+import { Observable } from 'rxjs/Observable';
+import { v4 } from 'uuid';
 
-import { RootAction, RootState } from '@src/redux';
-import { saveState } from '@src/services/local-storage-service';
+import { RootAction, RootState, allActions } from '@src/redux';
+import { actions } from './';
 
-const SAVING_DELAY = 1000;
+const TOAST_LIFETIME = 2000;
 
-// persist state in local storage every 1s
-const saveStateInLocalStorage: Epic<RootAction, RootState> = (action$, store) => action$
-  .debounceTime(SAVING_DELAY)
-  .do((action: RootAction) => {
-    // handle side-effects
-    saveState(store.getState());
-  })
-  .ignoreElements();
+const addTodoToast: Epic<RootAction, RootState> =
+  (action$, store) => action$
+    .filter(isActionOf(allActions.addTodo))
+    .concatMap((action) => {
+      const toast = { id: v4(), text: action.payload };
 
-export const epics = combineEpics(
-  saveStateInLocalStorage,
-);
+      const addToast$ = Observable.of(actions.addToast(toast));
+      const removeToast$ = Observable.of(actions.removeToast(toast.id))
+        .delay(TOAST_LIFETIME);
+
+      return addToast$.concat(removeToast$);
+    });
+
+export const epics = combineEpics(addTodoToast);
+
 ```
 
 [⇧ back to top](#table-of-contents)
@@ -1065,6 +927,45 @@ export const getFilteredTodos = createSelector(
 
 [⇧ back to top](#table-of-contents)
 
+---
+
+### Action Creators - Alternative Pattern
+This pattern is focused on a KISS principle - to stay clear of abstractions and to follow a more complex but familiar JavaScript "const" based approach:
+
+Advantages:
+- familiar to standard JS "const" based approach
+
+Disadvantages:
+- significant amount of boilerplate and duplication
+- more complex compared to `createAction` helper library
+- necessary to export both action types and action creators to re-use in other places, e.g. `redux-saga` or `redux-observable`
+
+```tsx
+export const INCREMENT = 'INCREMENT'; 
+export const ADD = 'ADD'; 
+
+export type Actions = { 
+  INCREMENT: { 
+    type: typeof INCREMENT, 
+  }, 
+  ADD: { 
+    type: typeof ADD,
+    payload: number, 
+  }, 
+}; 
+
+export const actions = { 
+  increment: (): Actions[typeof INCREMENT] => ({ 
+    type: INCREMENT, 
+  }), 
+  add: (amount: number): Actions[typeof ADD] => ({ 
+    type: ADD,
+    payload: amount,
+  }),
+};
+```
+
+[⇧ back to top](#table-of-contents)
 ---
 
 # Tools
@@ -1120,7 +1021,7 @@ export const getFilteredTodos = createSelector(
     "noImplicitReturns": true,
     "noImplicitThis": true,
     "noUnusedLocals": true,
-    "strictNullChecks": true,
+    "strict": true,
     "pretty": true,
     "removeComments": true,
     "sourceMap": true
