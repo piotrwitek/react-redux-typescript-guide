@@ -26,11 +26,13 @@ You should check Playground Project located in the `/playground` folder. It is a
 - [Redux](#redux)
   - [Action Creators](#action-creators) 📝 __UPDATED__
   - [Reducers](#reducers) 📝 __UPDATED__
-  - [Store Configuration](#store-configuration)
-  - [Async Flow](#async-flow) _("redux-observable")_ 📝 __UPDATED__
-  - [Selectors](#selectors) _("reselect")_
+    - [State with Type-level Immutability](#state-with-type-level-immutability)
+    - [Reducer Example](#reducer-example)
+  - [Store Configuration](#store-configuration) 📝 __UPDATED__
+  - [Async Flow](#async-flow) 📝 __UPDATED__
+  - [Selectors](#selectors)
 - [Tools](#tools)
-  - [Living Style Guide](#living-style-guide) _("react-styleguidist")_ 🌟 __NEW__
+  - [Living Style Guide](#living-style-guide) 🌟 __NEW__
 - [Extras](#extras)
   - [tsconfig.json](#tsconfigjson)
   - [tslint.json](#tslintjson)
@@ -502,13 +504,13 @@ export default (() => (
 ## Redux Connected Components
 
 ### Caveat with `bindActionCreators` 
-**If you try to use `connect` or `bindActionCreators` explicitly and type your component callback props as `() => void` this will raise compiler errors because `bindActionCreators` typings will not map your action creator type correctly due to current TypeScript limitations.**
+**If you try to use `connect` or `bindActionCreators` explicitly and want to type your component callback props as `() => void` this will raise compiler errors. I happens because `bindActionCreators` typings will not map the return type of action creators to `void`, due to a current TypeScript limitations.**
 
-A decent alternative I can recommend to use is a `() => any` type, it will work just fine in all possible scenarios and should not cause any typing problems whatsoever. All the code examples in the Guide with `connect` are also using this pattern.
+A decent alternative I can recommend is to use `() => any` type, it will work just fine in all possible scenarios and should not cause any typing problems whatsoever. All the code examples in the Guide with `connect` are also using this pattern.
 
 > If there is any progress or fix in regard to the above caveat I'll update the guide and make an announcement on my twitter/medium (There are a few existing proposals already).
 
-> There is also a way to retain type soundness but it will involve an explicit wrapping with `dispatch` and is very tedious for the long run. See example below:
+> There is alternative way to retain type soundness but it requires an explicit wrapping with `dispatch` and will be very tedious for the long run. See example below:
 ```
 const mapDispatchToProps = (dispatch: Dispatch) => ({
   onIncrement: () => dispatch(actions.increment()),
@@ -641,7 +643,8 @@ export default () => (
 > Using Typesafe Action Creators helpers for Redux [`typesafe-actions`](https://github.com/piotrwitek/typesafe-actions)
 
 A recommended approach is to use a simple functional helper to automate the creation of type-safe action creators. The advantage is that we can reduce a lot of code repetition and also minimize surface of errors by using type-checked API.
-> There are more specialized functional helpers available that will help you to further reduce tedious boilerplate and type-annotations in common scenarios like reducers (`getType`) or epics (`isActionOf`). All that without losing type-safety! Please check very short [Tutorial](https://github.com/piotrwitek/typesafe-actions#tutorial)
+> There are more specialized functional helpers available that will help you to further reduce tedious boilerplate and type-annotations in common scenarios like reducers (`getType`) or epics (`isActionOf`).  
+All that without losing type-safety! Please check this very short [Tutorial](https://github.com/piotrwitek/typesafe-actions#tutorial)
 
 ```tsx
 import { createAction } from 'typesafe-actions';
@@ -672,9 +675,6 @@ store.dispatch(actions.increment()); // OK => { type: "INCREMENT" }
 ---
 
 ## Reducers
-Relevant TypeScript Docs references:  
-- [Discriminated Union types](https://www.typescriptlang.org/docs/handbook/advanced-types.html)
-- [Mapped types](https://www.typescriptlang.org/docs/handbook/advanced-types.html) e.g. `Readonly` & `Partial`  
 
 ### State with Type-level Immutability
 Declare reducer `State` type with `readonly` modifier to get "type level" immutability
@@ -712,7 +712,7 @@ state.containerObject.mutableProp = 1; // OK! No error, can be mutated
 ```
 
 #### Best-practices for nested immutability
-> use `Readonly` or `ReadonlyArray` mapped types
+> use `Readonly` or `ReadonlyArray` [Mapped types](https://www.typescriptlang.org/docs/handbook/advanced-types.html)
 
 ```ts
 export type State = Readonly<{
@@ -731,7 +731,8 @@ state.counterPairs[0].immutableCounter2 = 1; // Error, cannot be mutated
 
 [⇧ back to top](#table-of-contents)
 
-### Finished reducer example using `getType` helper
+### Reducer Example
+> using `getType` helper and [Discriminated Union types](https://www.typescriptlang.org/docs/handbook/advanced-types.html)
 
 ```tsx
 import { combineReducers } from 'redux';

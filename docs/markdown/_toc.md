@@ -10,11 +10,13 @@
 - [Redux](#redux)
   - [Action Creators](#action-creators) 📝 __UPDATED__
   - [Reducers](#reducers) 📝 __UPDATED__
-  - [Store Configuration](#store-configuration)
-  - [Async Flow](#async-flow) _("redux-observable")_ 📝 __UPDATED__
-  - [Selectors](#selectors) _("reselect")_
+    - [State with Type-level Immutability](#state-with-type-level-immutability)
+    - [Reducer Example](#reducer-example)
+  - [Store Configuration](#store-configuration) 📝 __UPDATED__
+  - [Async Flow](#async-flow) 📝 __UPDATED__
+  - [Selectors](#selectors)
 - [Tools](#tools)
-  - [Living Style Guide](#living-style-guide) _("react-styleguidist")_ 🌟 __NEW__
+  - [Living Style Guide](#living-style-guide) 🌟 __NEW__
 - [Extras](#extras)
   - [tsconfig.json](#tsconfigjson)
   - [tslint.json](#tslintjson)

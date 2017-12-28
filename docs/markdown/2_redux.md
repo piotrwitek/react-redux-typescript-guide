@@ -5,7 +5,8 @@
 > Using Typesafe Action Creators helpers for Redux [`typesafe-actions`](https://github.com/piotrwitek/typesafe-actions)
 
 A recommended approach is to use a simple functional helper to automate the creation of type-safe action creators. The advantage is that we can reduce a lot of code repetition and also minimize surface of errors by using type-checked API.
-> There are more specialized functional helpers available that will help you to further reduce tedious boilerplate and type-annotations in common scenarios like reducers (`getType`) or epics (`isActionOf`). All that without losing type-safety! Please check very short [Tutorial](https://github.com/piotrwitek/typesafe-actions#tutorial)
+> There are more specialized functional helpers available that will help you to further reduce tedious boilerplate and type-annotations in common scenarios like reducers (`getType`) or epics (`isActionOf`).  
+All that without losing type-safety! Please check this very short [Tutorial](https://github.com/piotrwitek/typesafe-actions#tutorial)
 
 ::example='../../playground/src/redux/counters/actions.ts'::
 ::usage='../../playground/src/redux/counters/actions.usage.ts'::
@@ -15,9 +16,6 @@ A recommended approach is to use a simple functional helper to automate the crea
 ---
 
 ## Reducers
-Relevant TypeScript Docs references:  
-- [Discriminated Union types](https://www.typescriptlang.org/docs/handbook/advanced-types.html)
-- [Mapped types](https://www.typescriptlang.org/docs/handbook/advanced-types.html) e.g. `Readonly` & `Partial`  
 
 ### State with Type-level Immutability
 Declare reducer `State` type with `readonly` modifier to get "type level" immutability
@@ -55,7 +53,7 @@ state.containerObject.mutableProp = 1; // OK! No error, can be mutated
 ```
 
 #### Best-practices for nested immutability
-> use `Readonly` or `ReadonlyArray` mapped types
+> use `Readonly` or `ReadonlyArray` [Mapped types](https://www.typescriptlang.org/docs/handbook/advanced-types.html)
 
 ```ts
 export type State = Readonly<{
@@ -74,7 +72,8 @@ state.counterPairs[0].immutableCounter2 = 1; // Error, cannot be mutated
 
 [⇧ back to top](#table-of-contents)
 
-### Finished reducer example using `getType` helper
+### Reducer Example
+> using `getType` helper and [Discriminated Union types](https://www.typescriptlang.org/docs/handbook/advanced-types.html)
 
 ::example='../../playground/src/redux/counters/reducer.ts'::
 
