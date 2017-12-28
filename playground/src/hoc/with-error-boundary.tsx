@@ -4,15 +4,15 @@ import { Diff as Subtract } from 'react-redux-typescript';
 const MISSING_ERROR = 'Error was swallowed during propagation.';
 
 interface WrappedComponentProps {
-  onReset?: () => any,
+  onReset?: () => any;
 }
 
 export const withErrorBoundary = <P extends WrappedComponentProps>(
-  WrappedComponent: React.ComponentType<P>,
+  WrappedComponent: React.ComponentType<P>
 ) => {
   interface Props { }
   interface State {
-    error: Error | null | undefined,
+    error: Error | null | undefined;
   }
 
   return class WithErrorBoundary extends React.Component<Subtract<P, WrappedComponentProps> & Props, State> {
