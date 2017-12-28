@@ -501,6 +501,20 @@ export default (() => (
 
 ## Redux Connected Components
 
+### Caveat with `bindActionCreators` 
+**If you try to use `connect` or `bindActionCreators` explicitly and type your component callback props as `() => void` this will raise compiler errors because `bindActionCreators` typings will not map your action creator type correctly due to current TypeScript limitations.**
+
+A decent alternative I can recommend to use is a `() => any` type, it will work just fine in all possible scenarios and should not cause any typing problems whatsoever. All the code examples in the Guide with `connect` are also using this pattern.
+
+> If there is any progress or fix in regard to the above caveat I'll update the guide and make an announcement on my twitter/medium (There are a few existing proposals already).
+
+> There is also a way to retain type soundness but it will involve an explicit wrapping with `dispatch` and is very tedious for the long run. See example below:
+```
+const mapDispatchToProps = (dispatch: Dispatch) => ({
+  onIncrement: () => dispatch(actions.increment()),
+});
+```
+
 #### - redux connected counter
 
 ```tsx
