@@ -3,19 +3,19 @@ import { Diff as Subtract } from 'react-redux-typescript';
 
 // These props will be subtracted from original component type
 interface WrappedComponentProps {
-  count: number,
-  onIncrement: () => any,
+  count: number;
+  onIncrement: () => any;
 }
 
 export const withState = <P extends WrappedComponentProps>(
-  WrappedComponent: React.ComponentType<P>,
+  WrappedComponent: React.ComponentType<P>
 ) => {
   // These props will be added to original component type
   interface Props {
-    initialCount?: number,
+    initialCount?: number;
   }
   interface State {
-    count: number,
+    count: number;
   }
 
   return class WithState extends React.Component<Subtract<P, WrappedComponentProps> & Props, State> {
@@ -28,7 +28,7 @@ export const withState = <P extends WrappedComponentProps>(
 
     handleIncrement = () => {
       this.setState({ count: this.state.count + 1 });
-    };
+    }
 
     render() {
       const { ...remainingProps } = this.props;

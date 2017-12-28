@@ -1,21 +1,16 @@
 import { v4 } from 'uuid';
 import { combineReducers } from 'redux';
+import { getType } from 'typesafe-actions';
 
 import { RootAction } from '@src/redux';
 
-import {
-  ADD_TODO,
-  TOGGLE_TODO,
-  CHANGE_TODOS_FILTER,
-  ITodo,
-  ITodosFilter,
-} from './';
+import { actions, ITodo, ITodosFilter } from './';
 
 export type State = {
-  readonly isFetching: boolean,
-  readonly errorMessage: string | null,
-  readonly todos: ITodo[],
-  readonly todosFilter: ITodosFilter,
+  readonly isFetching: boolean;
+  readonly errorMessage: string | null;
+  readonly todos: ITodo[];
+  readonly todosFilter: ITodosFilter;
 };
 
 export const reducer = combineReducers<State, RootAction>({
@@ -33,20 +28,18 @@ export const reducer = combineReducers<State, RootAction>({
   },
   todos: (state = [], action) => {
     switch (action.type) {
-      case ADD_TODO:
+      case getType(actions.addTodo):
         return [...state, {
           id: v4(),
           title: action.payload,
           completed: false,
         }];
 
-      case TOGGLE_TODO:
-        return state.map((item) => {
-          if (item.id === action.payload) {
-            item.completed = !item.completed;
-          }
-          return item;
-        });
+      case getType(actions.toggleTodo):
+        return state.map((item) => item.id === action.payload
+          ? { ...item, completed: !item.completed }
+          : item
+        );
 
       default:
         return state;
@@ -54,7 +47,7 @@ export const reducer = combineReducers<State, RootAction>({
   },
   todosFilter: (state = '', action) => {
     switch (action.type) {
-      case CHANGE_TODOS_FILTER:
+      case getType(actions.changeFilter):
         return action.payload;
 
       default:

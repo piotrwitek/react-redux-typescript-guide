@@ -1,18 +1,18 @@
 import * as React from 'react';
 
 export interface StatefulCounterWithInitialCountProps {
-  label: string,
-  initialCount?: number,
+  label: string;
+  initialCount?: number;
 }
 
 interface DefaultProps {
-  initialCount: number,
+  initialCount: number;
 }
 
 type PropsWithDefaults = StatefulCounterWithInitialCountProps & DefaultProps;
 
 interface State {
-  count: number,
+  count: number;
 }
 
 export const StatefulCounterWithInitialCount: React.ComponentClass<StatefulCounterWithInitialCountProps> =
@@ -35,7 +35,7 @@ export const StatefulCounterWithInitialCount: React.ComponentClass<StatefulCount
 
     handleIncrement = () => {
       this.setState({ count: this.state.count + 1 });
-    };
+    }
 
     render() {
       const { handleIncrement } = this;

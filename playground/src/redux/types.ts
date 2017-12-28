@@ -12,12 +12,3 @@ export type Api = {};
 
 // import { ThunkAction as ReduxThunkAction } from 'redux-thunk';
 // export type ThunkAction<T> = ReduxThunkAction<T, RootState, Api>;
-
-// OLD ACTION MERGING
-// import { returntypeof } from 'react-redux-typescript';
-
-// const actions = Object.values({
-//   ...converterActionCreators,
-// }).map(returntypeof);
-
-// export type IRootAction = typeof actions[number];

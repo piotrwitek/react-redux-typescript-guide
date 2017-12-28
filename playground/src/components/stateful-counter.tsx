@@ -1,11 +1,11 @@
 import * as React from 'react';
 
 export interface StatefulCounterProps {
-  label: string,
+  label: string;
 }
 
 type State = {
-  count: number,
+  count: number;
 };
 
 export class StatefulCounter extends React.Component<StatefulCounterProps, State> {
@@ -15,7 +15,7 @@ export class StatefulCounter extends React.Component<StatefulCounterProps, State
 
   handleIncrement = () => {
     this.setState({ count: this.state.count + 1 });
-  };
+  }
 
   render() {
     const { handleIncrement } = this;

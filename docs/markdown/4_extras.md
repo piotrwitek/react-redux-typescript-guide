@@ -38,7 +38,7 @@
     "noImplicitReturns": true,
     "noImplicitThis": true,
     "noUnusedLocals": true,
-    "strictNullChecks": true,
+    "strict": true,
     "pretty": true,
     "removeComments": true,
     "sourceMap": true

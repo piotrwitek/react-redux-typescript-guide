@@ -1,5 +1,5 @@
 export const resolveWithDelay = <T>(value: T, time: number = 1000) => new Promise(
-  (resolve) => setTimeout(() => resolve(value), time),
+  (resolve) => setTimeout(() => resolve(value), time)
 );
 
 export const rangeQueryString = (count: number, pageNumber?: number) =>
