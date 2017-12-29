@@ -2,10 +2,10 @@
 
 ## Action Creators
 
-> Using Typesafe Action Creators helpers for Redux [`typesafe-actions`](https://github.com/piotrwitek/typesafe-actions)
+> Using Typesafe Action Creators helpers for Redux [`typesafe-actions`](https://github.com/piotrwitek/typesafe-actions#typesafe-actions)
 
 A recommended approach is to use a simple functional helper to automate the creation of type-safe action creators. The advantage is that we can reduce a lot of code repetition and also minimize surface of errors by using type-checked API.
-> There are more specialized functional helpers available that will help you to further reduce tedious boilerplate and type-annotations in common scenarios like reducers (`getType`) or epics (`isActionOf`).  
+> There are more specialized functional helpers available that will help you to further reduce tedious boilerplate and type-annotations in common scenarios like reducers (using [`getType`](https://github.com/piotrwitek/typesafe-actions#gettype)) or epics (using [`isActionOf`](https://github.com/piotrwitek/typesafe-actions#isactionof)).  
 All that without losing type-safety! Please check this very short [Tutorial](https://github.com/piotrwitek/typesafe-actions#tutorial)
 
 ::example='../../playground/src/redux/counters/actions.ts'::
