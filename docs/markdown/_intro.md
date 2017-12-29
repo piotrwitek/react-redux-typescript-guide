@@ -5,8 +5,8 @@
 
 ### Goals
 - Complete type safety with [`--strict`](https://www.typescriptlang.org/docs/handbook/compiler-options.html) flag without failing to `any` type for the best static-typing experience
-- Minimize amount of manually writing type declarations by leveraging [Type Inference](https://www.typescriptlang.org/docs/handbook/type-inference.html)
-- Reduce redux boilerplate and complexity of it's type annotations to a minimum with [simple utility functions](https://github.com/piotrwitek/react-redux-typescript) by extensive use of [Generics](https://www.typescriptlang.org/docs/handbook/generics.html) and [Advanced Types](https://www.typescriptlang.org/docs/handbook/advanced-types.html) features
+- Minimize amount of manually writing type declarations by learning to leverage [Type Inference](https://www.typescriptlang.org/docs/handbook/type-inference.html)
+- Reduce repetition and complexity of "Redux" type annotations to a minimum with [simple functional utilities](https://github.com/piotrwitek/typesafe-actions#typesafe-actions)
 
 ### Playground Project
 You should check Playground Project located in the `/playground` folder. It is a source of all the code examples found in the guide. They are all tested with the most recent version of TypeScript and 3rd party type definitions (like `@types/react` or `@types/react-redux`) to ensure the examples are up-to-date and not broken with updated definitions.
