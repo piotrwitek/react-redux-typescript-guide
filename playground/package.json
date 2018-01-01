@@ -4,6 +4,9 @@
   "author": "Piotr Witek <piotrek.witek@gmail.com> (http://piotrwitek.github.io/)",
   "repository": "https://github.com/piotrwitek/react-redux-typescript-guide.git",
   "license": "MIT",
+  "engines": {
+    "node": ">= 4.x.x"
+  },
   "scripts": {
     "prereinstall": "rm -rf node_modules",
     "reinstall": "yarn install",
