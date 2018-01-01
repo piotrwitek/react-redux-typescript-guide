@@ -5,7 +5,7 @@
   "repository": "https://github.com/piotrwitek/react-redux-typescript-guide.git",
   "license": "MIT",
   "engines": {
-    "node": ">= 4.x.x"
+    "node": ">= 6.x.x"
   },
   "scripts": {
     "prereinstall": "rm -rf node_modules",
