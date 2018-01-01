@@ -327,7 +327,7 @@ export class GenericList<T> extends React.Component<GenericListProps<T>, {}> {
 
 ```
 
-[⟩⟩⟩ demo](https://piotrwitek.github.io/react-redux-typescript-guide/##genericlist)
+[⟩⟩⟩ demo](https://piotrwitek.github.io/react-redux-typescript-guide/#genericlist)
 
 [⇧ back to top](#table-of-contents)
 

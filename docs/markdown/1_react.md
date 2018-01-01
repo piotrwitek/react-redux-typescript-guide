@@ -103,7 +103,7 @@ const handleChange: React.ReactEventHandler<HTMLInputElement> = (ev) => { ...
 
 ::example='../../playground/src/components/generic-list.tsx'::
 
-[⟩⟩⟩ demo](https://piotrwitek.github.io/react-redux-typescript-guide/##genericlist)
+[⟩⟩⟩ demo](https://piotrwitek.github.io/react-redux-typescript-guide/#genericlist)
 
 [⇧ back to top](#table-of-contents)
 
