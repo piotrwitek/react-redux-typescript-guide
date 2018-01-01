@@ -11,7 +11,7 @@ const TOAST_LIFETIME = 2000;
 const addTodoToast: Epic<RootAction, RootState> =
   (action$, store) => action$
     .filter(isActionOf(allActions.addTodo))
-    .concatMap((action) => {
+    .concatMap((action) => { // action is type: { type: "ADD_TODO"; payload: string; }
       const toast = { id: v4(), text: action.payload };
 
       const addToast$ = Observable.of(actions.addToast(toast));

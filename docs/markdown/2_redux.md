@@ -112,6 +112,8 @@ When creating the store, use rootReducer. This will set-up a **strongly typed St
 
 ### "redux-observable"
 
+Use `isActionOf` helper to filter actions and to narrow `RootAction` union type to a specific "action type" down the stream.
+
 ::example='../../playground/src/redux/toasts/epics.ts'::
 
 [⇧ back to top](#table-of-contents)
@@ -176,7 +178,9 @@ export type Actions = {
     type: typeof ADD,
     payload: number, 
   }, 
-}; 
+};
+
+export type RootAction = Actions[keyof Actions];
 
 export const actions = { 
   increment: (): Actions[typeof INCREMENT] => ({ 
