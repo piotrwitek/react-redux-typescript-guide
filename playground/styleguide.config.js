@@ -26,7 +26,7 @@ module.exports = {
       name: 'Stateful Components - Class',
       components: () => ([
         './src/components/stateful-counter.tsx',
-        './src/components/stateful-counter-with-initial-count.tsx',
+        './src/components/stateful-counter-with-default.tsx',
       ]),
     },
     {

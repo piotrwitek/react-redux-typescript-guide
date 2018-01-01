@@ -87,9 +87,9 @@ const handleChange: React.ReactEventHandler<HTMLInputElement> = (ev) => { ...
 
 #### - with default props
 
-::example='../../playground/src/components/stateful-counter-with-initial-count.tsx'::
+::example='../../playground/src/components/stateful-counter-with-default.tsx'::
 
-[⟩⟩⟩ demo](https://piotrwitek.github.io/react-redux-typescript-guide/#statefulcounterwithinitialcount)
+[⟩⟩⟩ demo](https://piotrwitek.github.io/react-redux-typescript-guide/#statefulcounterwithdefault)
 
 [⇧ back to top](#table-of-contents)
 

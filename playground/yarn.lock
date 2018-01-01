@@ -6050,15 +6050,11 @@ typedarray@^0.0.6:
   version "0.0.6"
   resolved "https://registry.yarnpkg.com/typedarray/-/typedarray-0.0.6.tgz#867ac74e3864187b1d3d47d996a78ec5c8830777"
 
-typesafe-actions@1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/typesafe-actions/-/typesafe-actions-1.0.0.tgz#9bd4b9e250399e818fd3dbf0235fa21972cda509"
+typesafe-actions@1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/typesafe-actions/-/typesafe-actions-1.1.0.tgz#f98c815be0d37d8d1b22f28cc216677810c156e4"
 
-typescript@2.7.0-dev.20171216:
-  version "2.7.0-dev.20171216"
-  resolved "https://registry.yarnpkg.com/typescript/-/typescript-2.7.0-dev.20171216.tgz#ae3ff4ea462a8a5f37923108edeedfcaf9c5f1b7"
-
-typescript@^2.4.2:
+typescript@2.6.2, typescript@^2.4.2:
   version "2.6.2"
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-2.6.2.tgz#3c5b6fd7f6de0914269027f03c0946758f7673a4"
 

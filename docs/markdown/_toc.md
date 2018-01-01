@@ -3,7 +3,7 @@
 - [React Types Cheatsheet](#react-types-cheatsheet) 🌟 __NEW__
 - [Component Typing Patterns](#component-typing-patterns)
   - [Stateless Components - SFC](#stateless-components---sfc)
-  - [Stateful Components - Class](#stateful-components---class)
+  - [Stateful Components - Class](#stateful-components---class) 📝 __UPDATED__
   - [Generic Components](#generic-components)
   - [Higher-Order Components](#higher-order-components) 📝 __UPDATED__
   - [Redux Connected Components](#redux-connected-components)
