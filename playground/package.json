@@ -5,7 +5,7 @@
   "repository": "https://github.com/piotrwitek/react-redux-typescript-guide.git",
   "license": "MIT",
   "engines": {
-    "node": ">= 4.x.x"
+    "node": ">= 6.x.x"
   },
   "scripts": {
     "prereinstall": "rm -rf node_modules",
@@ -25,7 +25,7 @@
     "react": "16.2.0",
     "react-dom": "16.2.0",
     "react-redux": "5.0.6",
-    "react-redux-typescript": "3.0.0-rc.2",
+    "react-redux-typescript": "3.0.0-rc.3",
     "react-router-dom": "4.2.2",
     "react-router-redux": "5.0.0-alpha.8",
     "redux": "3.7.2",
@@ -37,18 +37,18 @@
     "uuid": "3.1.0"
   },
   "devDependencies": {
-    "@types/node": "8.5.1",
+    "@types/node": "8.5.2",
     "@types/react": "16.0.31",
     "@types/react-dom": "16.0.3",
     "@types/react-redux": "5.0.14",
     "@types/react-router-dom": "4.2.3",
-    "@types/react-router-redux": "5.0.10",
+    "@types/react-router-redux": "5.0.11",
     "@types/uuid": "3.4.3",
     "@webpack-blocks/typescript": "1.0.0-rc",
     "react-docgen-typescript": "1.1.0",
     "react-styleguidist": "6.1.0",
     "tslint": "5.8.0",
-    "tslint-react": "3.2.0",
+    "tslint-react": "3.3.3",
     "typescript": "2.6.2",
     "webpack": "3.10.0",
     "webpack-blocks": "1.0.0-rc.2"
