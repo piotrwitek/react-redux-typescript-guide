@@ -2,7 +2,7 @@ import { createAction } from 'typesafe-actions';
 
 import { ITodosFilter } from './';
 
-export const actions = {
+export const todosActions = {
   addTodo: createAction('ADD_TODO', (text: string) => ({
     type: 'ADD_TODO',
     payload: text,

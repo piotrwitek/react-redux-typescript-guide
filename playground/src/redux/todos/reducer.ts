@@ -4,7 +4,7 @@ import { getType } from 'typesafe-actions';
 
 import { RootAction } from '@src/redux';
 
-import { actions, ITodo, ITodosFilter } from './';
+import { todosActions, ITodo, ITodosFilter } from './';
 
 export type State = {
   readonly isFetching: boolean;
@@ -28,14 +28,14 @@ export const reducer = combineReducers<State, RootAction>({
   },
   todos: (state = [], action) => {
     switch (action.type) {
-      case getType(actions.addTodo):
+      case getType(todosActions.addTodo):
         return [...state, {
           id: v4(),
           title: action.payload,
           completed: false,
         }];
 
-      case getType(actions.toggleTodo):
+      case getType(todosActions.toggleTodo):
         return state.map((item) => item.id === action.payload
           ? { ...item, completed: !item.completed }
           : item
@@ -47,7 +47,7 @@ export const reducer = combineReducers<State, RootAction>({
   },
   todosFilter: (state = '', action) => {
     switch (action.type) {
-      case getType(actions.changeFilter):
+      case getType(todosActions.changeFilter):
         return action.payload;
 
       default:

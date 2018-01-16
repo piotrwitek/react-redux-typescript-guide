@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 
 import { RootState } from '@src/redux';
-import { actions, CountersSelectors } from '@src/redux/counters';
+import { countersActions, CountersSelectors } from '@src/redux/counters';
 import { SFCCounter } from '@src/components';
 
 export interface SFCCounterConnectedExtended {
@@ -13,5 +13,5 @@ const mapStateToProps = (state: RootState, ownProps: SFCCounterConnectedExtended
 });
 
 export const SFCCounterConnectedExtended = connect(mapStateToProps, {
-  onIncrement: actions.increment,
+  onIncrement: countersActions.increment,
 })(SFCCounter);

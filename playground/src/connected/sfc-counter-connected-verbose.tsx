@@ -2,7 +2,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
 import { RootState, Dispatch } from '@src/redux';
-import { actions } from '@src/redux/counters';
+import { countersActions } from '@src/redux/counters';
 import { SFCCounter } from '@src/components';
 
 const mapStateToProps = (state: RootState) => ({
@@ -10,7 +10,7 @@ const mapStateToProps = (state: RootState) => ({
 });
 
 const mapDispatchToProps = (dispatch: Dispatch) => bindActionCreators({
-  onIncrement: actions.increment,
+  onIncrement: countersActions.increment,
 }, dispatch);
 
 export const SFCCounterConnectedVerbose =
