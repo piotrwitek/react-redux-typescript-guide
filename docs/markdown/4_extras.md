@@ -105,7 +105,7 @@
       "esSpecCompliant": true
     }],
     "triple-equals": [true, "allow-null-check"],
-    "type-literal-delimiter": true,    
+    "type-literal-delimiter": true,
     "typedef": [true,"parameter", "property-declaration"],
     "variable-name": [true, "ban-keywords", "check-format", "allow-pascal-case", "allow-leading-underscore"],
     // tslint-react
@@ -178,7 +178,7 @@ import Select from '@src/components/select';
 ### Vendor Types Augmentation
 > Strategies to fix issues coming from broken "vendor type declarations" files (*.d.ts)
 
-#### Augmenting library internal type declarations - using relative import resolution 
+#### Augmenting library internal type declarations - using relative import resolution
 ```ts
 // added missing autoFocus Prop on Input component in "antd@2.10.0" npm package
 declare module '../node_modules/antd/lib/input/Input' {
@@ -192,7 +192,7 @@ declare module '../node_modules/antd/lib/input/Input' {
 
 #### Augmenting library public type declarations - using node module import resolution
 ```ts
-// fixed broken public type declaration in "rxjs@5.4.1" npm package 
+// fixed broken public type declaration in "rxjs@5.4.1" npm package
 import { Operator } from 'rxjs/Operator';
 import { Observable } from 'rxjs/Observable';
 

@@ -118,7 +118,7 @@ When creating the store, use rootReducer. This will set-up a **strongly typed St
 
 ---
 
-## Selectors 
+## Selectors
 
 ### "reselect"
 

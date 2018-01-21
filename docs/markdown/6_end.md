@@ -1,6 +1,6 @@
 # Roadmap
 - extend HOC section with more advanced examples [#5](../../issues/5)  
-- investigate typing patterns for generic component children [#7](../../issues/7)
+- investigate typing patterns for generic component children [#7](../../issues/7)  
 
 [⇧ back to top](#table-of-contents)
 
@@ -16,10 +16,10 @@ yarn run lint
 
 # run type-checking in playground
 yarn run tsc
-  
+
 # re-generate `README.md` from repo root
 sh ./generate.sh
-# or 
+# or
 node ./generator/bin/generate-readme.js
 ```
 

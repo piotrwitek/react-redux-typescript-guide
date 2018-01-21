@@ -20,7 +20,7 @@
 - [Extras](#extras)
   - [tsconfig.json](#tsconfigjson)
   - [tslint.json](#tslintjson)
-  - [jest.config.json](#jestconfigjson)  
+  - [jest.config.json](#jestconfigjson)
   - [Default and Named Module Exports](#default-and-named-module-exports)
   - [Vendor Types Augmentation](#vendor-types-augmentation)
   - [Npm Scripts](#npm-scripts)

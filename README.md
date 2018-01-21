@@ -41,7 +41,7 @@ You should check Playground Project located in the `/playground` folder. It is a
 - [Extras](#extras)
   - [tsconfig.json](#tsconfigjson)
   - [tslint.json](#tslintjson)
-  - [jest.config.json](#jestconfigjson)  
+  - [jest.config.json](#jestconfigjson)
   - [Default and Named Module Exports](#default-and-named-module-exports)
   - [Vendor Types Augmentation](#vendor-types-augmentation)
   - [Npm Scripts](#npm-scripts)
@@ -76,7 +76,7 @@ npm i -D @types/react @types/react-dom @types/react-redux
 
 # React Types Cheatsheet
 
-#### `React.StatelessComponent<P>` or alias `React.SFC<P>` 
+#### `React.StatelessComponent<P>` or alias `React.SFC<P>`
 Stateless functional components
 ```tsx
 const MyComponent: React.SFC<MyComponentProps> = ...
@@ -114,7 +114,7 @@ const elementOnly: JSX.Element =  <div /> || <MyComponent />;
 [⇧ back to top](#table-of-contents)
 
 #### `React.CSSProperties`
-Type-safety for styles using css-in-js 
+Type-safety for styles using css-in-js
 ```tsx
 const styles: React.CSSProperties = { flexDirection: 'row', ...
 ```
@@ -507,7 +507,7 @@ export default (() => (
 
 ## Redux Connected Components
 
-### Caveat with `bindActionCreators` 
+### Caveat with `bindActionCreators`
 **If you try to use `connect` or `bindActionCreators` explicitly and want to type your component callback props as `() => void` this will raise compiler errors. I happens because `bindActionCreators` typings will not map the return type of action creators to `void`, due to a current TypeScript limitations.**
 
 A decent alternative I can recommend is to use `() => any` type, it will work just fine in all possible scenarios and should not cause any typing problems whatsoever. All the code examples in the Guide with `connect` are also using this pattern.
@@ -913,7 +913,7 @@ export const epics = combineEpics(addTodoToast);
 
 ---
 
-## Selectors 
+## Selectors
 
 ### "reselect"
 
@@ -1107,7 +1107,7 @@ export const actions = {
       "esSpecCompliant": true
     }],
     "triple-equals": [true, "allow-null-check"],
-    "type-literal-delimiter": true,    
+    "type-literal-delimiter": true,
     "typedef": [true,"parameter", "property-declaration"],
     "variable-name": [true, "ban-keywords", "check-format", "allow-pascal-case", "allow-leading-underscore"],
     // tslint-react
@@ -1180,7 +1180,7 @@ import Select from '@src/components/select';
 ### Vendor Types Augmentation
 > Strategies to fix issues coming from broken "vendor type declarations" files (*.d.ts)
 
-#### Augmenting library internal type declarations - using relative import resolution 
+#### Augmenting library internal type declarations - using relative import resolution
 ```ts
 // added missing autoFocus Prop on Input component in "antd@2.10.0" npm package
 declare module '../node_modules/antd/lib/input/Input' {
@@ -1194,7 +1194,7 @@ declare module '../node_modules/antd/lib/input/Input' {
 
 #### Augmenting library public type declarations - using node module import resolution
 ```ts
-// fixed broken public type declaration in "rxjs@5.4.1" npm package 
+// fixed broken public type declaration in "rxjs@5.4.1" npm package
 import { Operator } from 'rxjs/Operator';
 import { Observable } from 'rxjs/Observable';
 
@@ -1274,7 +1274,7 @@ class StatefulCounterWithInitialCount extends React.Component<Props, State> {
 class StatefulCounter extends React.Component<Props, State> {
 // handlers using Class Fields with arrow functions
   handleIncrement = () => {
-    this.setState({ count: this.state.count + 1 }); 
+    this.setState({ count: this.state.count + 1 });
   };
   ...
 }
@@ -1286,7 +1286,7 @@ class StatefulCounter extends React.Component<Props, State> {
 
 # Roadmap
 - extend HOC section with more advanced examples [#5](../../issues/5)  
-- investigate typing patterns for generic component children [#7](../../issues/7)
+- investigate typing patterns for generic component children [#7](../../issues/7)  
 
 [⇧ back to top](#table-of-contents)
 
@@ -1302,10 +1302,10 @@ yarn run lint
 
 # run type-checking in playground
 yarn run tsc
-  
+
 # re-generate `README.md` from repo root
 sh ./generate.sh
-# or 
+# or
 node ./generator/bin/generate-readme.js
 ```
 

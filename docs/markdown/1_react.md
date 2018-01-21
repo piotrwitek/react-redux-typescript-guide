@@ -1,6 +1,6 @@
 # React Types Cheatsheet
 
-#### `React.StatelessComponent<P>` or alias `React.SFC<P>` 
+#### `React.StatelessComponent<P>` or alias `React.SFC<P>`
 Stateless functional components
 ```tsx
 const MyComponent: React.SFC<MyComponentProps> = ...
@@ -38,7 +38,7 @@ const elementOnly: JSX.Element =  <div /> || <MyComponent />;
 [⇧ back to top](#table-of-contents)
 
 #### `React.CSSProperties`
-Type-safety for styles using css-in-js 
+Type-safety for styles using css-in-js
 ```tsx
 const styles: React.CSSProperties = { flexDirection: 'row', ...
 ```
@@ -134,7 +134,7 @@ Adds error handling using componentDidCatch to any component
 
 ## Redux Connected Components
 
-### Caveat with `bindActionCreators` 
+### Caveat with `bindActionCreators`
 **If you try to use `connect` or `bindActionCreators` explicitly and want to type your component callback props as `() => void` this will raise compiler errors. I happens because `bindActionCreators` typings will not map the return type of action creators to `void`, due to a current TypeScript limitations.**
 
 A decent alternative I can recommend is to use `() => any` type, it will work just fine in all possible scenarios and should not cause any typing problems whatsoever. All the code examples in the Guide with `connect` are also using this pattern.

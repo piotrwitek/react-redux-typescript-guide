@@ -37,7 +37,7 @@ class StatefulCounterWithInitialCount extends React.Component<Props, State> {
 class StatefulCounter extends React.Component<Props, State> {
 // handlers using Class Fields with arrow functions
   handleIncrement = () => {
-    this.setState({ count: this.state.count + 1 }); 
+    this.setState({ count: this.state.count + 1 });
   };
   ...
 }
