@@ -520,11 +520,11 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
 import { connect } from 'react-redux';
 
 import { RootState } from '@src/redux';
-import { countersActions, CountersSelectors } from '@src/redux/counters';
+import { countersActions, countersSelectors } from '@src/redux/counters';
 import { SFCCounter } from '@src/components';
 
 const mapStateToProps = (state: RootState) => ({
-  count: CountersSelectors.getReduxCounter(state),
+  count: countersSelectors.getReduxCounter(state),
 });
 
 export const SFCCounterConnected = connect(mapStateToProps, {
@@ -596,7 +596,7 @@ export default () => (
 import { connect } from 'react-redux';
 
 import { RootState } from '@src/redux';
-import { countersActions, CountersSelectors } from '@src/redux/counters';
+import { countersActions, countersSelectors } from '@src/redux/counters';
 import { SFCCounter } from '@src/components';
 
 export interface SFCCounterConnectedExtended {
@@ -604,7 +604,7 @@ export interface SFCCounterConnectedExtended {
 }
 
 const mapStateToProps = (state: RootState, ownProps: SFCCounterConnectedExtended) => ({
-  count: CountersSelectors.getReduxCounter(state) + ownProps.initialCount,
+  count: countersSelectors.getReduxCounter(state) + ownProps.initialCount,
 });
 
 export const SFCCounterConnectedExtended = connect(mapStateToProps, {
