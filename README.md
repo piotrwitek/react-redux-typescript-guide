@@ -251,44 +251,43 @@ interface State {
   count: number;
 }
 
-export class StatefulCounterWithDefault extends React.Component<StatefulCounterWithDefaultProps, State> {
-  // to make defaultProps strictly typed we need to explicitly declare their type
-  // @see https://github.com/DefinitelyTyped/DefinitelyTyped/issues/11640
-  static defaultProps: DefaultProps = {
-    initialCount: 0,
-  };
+export const StatefulCounterWithDefault: React.ComponentClass<StatefulCounterWithDefaultProps> =
+  class extends React.Component<StatefulCounterWithDefaultProps & DefaultProps> {
+    // to make defaultProps strictly typed we need to explicitly declare their type
+    // @see https://github.com/DefinitelyTyped/DefinitelyTyped/issues/11640
+    static defaultProps: DefaultProps = {
+      initialCount: 0,
+    };
 
-  props: StatefulCounterWithDefaultProps & DefaultProps;
+    state: State = {
+      count: this.props.initialCount,
+    };
 
-  state: State = {
-    count: this.props.initialCount,
-  };
-
-  componentWillReceiveProps({ initialCount }: StatefulCounterWithDefaultProps) {
-    if (initialCount != null && initialCount !== this.props.initialCount) {
-      this.setState({ count: initialCount });
+    componentWillReceiveProps({ initialCount }: StatefulCounterWithDefaultProps) {
+      if (initialCount != null && initialCount !== this.props.initialCount) {
+        this.setState({ count: initialCount });
+      }
     }
-  }
 
-  handleIncrement = () => {
-    this.setState({ count: this.state.count + 1 });
-  }
+    handleIncrement = () => {
+      this.setState({ count: this.state.count + 1 });
+    }
 
-  render() {
-    const { handleIncrement } = this;
-    const { label } = this.props;
-    const { count } = this.state;
+    render() {
+      const { handleIncrement } = this;
+      const { label } = this.props;
+      const { count } = this.state;
 
-    return (
-      <div>
-        <span>{label}: {count} </span>
-        <button type="button" onClick={handleIncrement}>
-          {`Increment`}
-        </button>
-      </div>
-    );
-  }
-}
+      return (
+        <div>
+          <span>{label}: {count} </span>
+          <button type="button" onClick={handleIncrement}>
+            {`Increment`}
+          </button>
+        </div>
+      );
+    }
+  };
 
 ```
 
@@ -342,7 +341,7 @@ Adds state to a stateless counter
 
 ```tsx
 import * as React from 'react';
-import { Diff } from 'utility-types';
+import { Subtract } from 'utility-types';
 
 // These props will be subtracted from original component type
 interface WrappedComponentProps {
@@ -361,7 +360,7 @@ export const withState = <P extends WrappedComponentProps>(
     count: number;
   }
 
-  return class WithState extends React.Component<Diff<P, WrappedComponentProps> & Props, State> {
+  return class WithState extends React.Component<Subtract<P, WrappedComponentProps> & Props, State> {
     // Enhance component name for debugging and React-Dev-Tools
     static displayName = `withState(${WrappedComponent.name})`;
 
@@ -414,7 +413,7 @@ Adds error handling using componentDidCatch to any component
 
 ```tsx
 import * as React from 'react';
-import { Diff } from 'utility-types';
+import { Subtract } from 'utility-types';
 
 const MISSING_ERROR = 'Error was swallowed during propagation.';
 
@@ -430,7 +429,7 @@ export const withErrorBoundary = <P extends WrappedComponentProps>(
     error: Error | null | undefined;
   }
 
-  return class WithErrorBoundary extends React.Component<Diff<P, WrappedComponentProps> & Props, State> {
+  return class WithErrorBoundary extends React.Component<Subtract<P, WrappedComponentProps> & Props, State> {
     static displayName = `withErrorBoundary(${WrappedComponent.name})`;
 
     state: State = {
@@ -521,7 +520,7 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
 import { connect } from 'react-redux';
 
 import { RootState } from '@src/redux';
-import { actions, CountersSelectors } from '@src/redux/counters';
+import { countersActions, CountersSelectors } from '@src/redux/counters';
 import { SFCCounter } from '@src/components';
 
 const mapStateToProps = (state: RootState) => ({
@@ -529,7 +528,7 @@ const mapStateToProps = (state: RootState) => ({
 });
 
 export const SFCCounterConnected = connect(mapStateToProps, {
-  onIncrement: actions.increment,
+  onIncrement: countersActions.increment,
 })(SFCCounter);
 
 ```
@@ -558,7 +557,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
 import { RootState, Dispatch } from '@src/redux';
-import { actions } from '@src/redux/counters';
+import { countersActions } from '@src/redux/counters';
 import { SFCCounter } from '@src/components';
 
 const mapStateToProps = (state: RootState) => ({
@@ -566,7 +565,7 @@ const mapStateToProps = (state: RootState) => ({
 });
 
 const mapDispatchToProps = (dispatch: Dispatch) => bindActionCreators({
-  onIncrement: actions.increment,
+  onIncrement: countersActions.increment,
 }, dispatch);
 
 export const SFCCounterConnectedVerbose =
@@ -597,7 +596,7 @@ export default () => (
 import { connect } from 'react-redux';
 
 import { RootState } from '@src/redux';
-import { actions, CountersSelectors } from '@src/redux/counters';
+import { countersActions, CountersSelectors } from '@src/redux/counters';
 import { SFCCounter } from '@src/components';
 
 export interface SFCCounterConnectedExtended {
@@ -609,7 +608,7 @@ const mapStateToProps = (state: RootState, ownProps: SFCCounterConnectedExtended
 });
 
 export const SFCCounterConnectedExtended = connect(mapStateToProps, {
-  onIncrement: actions.increment,
+  onIncrement: countersActions.increment,
 })(SFCCounter);
 
 ```
@@ -647,7 +646,7 @@ All that without losing type-safety! Please check this very short [Tutorial](htt
 ```tsx
 import { createAction } from 'typesafe-actions';
 
-export const actions = {
+export const countersActions = {
   increment: createAction('INCREMENT'),
   add: createAction('ADD', (amount: number) => ({
     type: 'ADD',
@@ -660,10 +659,10 @@ export const actions = {
 
 ```tsx
 import store from '@src/store';
-import { actions } from '@src/redux/counters';
+import { countersActions } from '@src/redux/counters';
 
 // store.dispatch(actionCreators.increment(1)); // Error: Expected 0 arguments, but got 1.
-store.dispatch(actions.increment()); // OK => { type: "INCREMENT" }
+store.dispatch(countersActions.increment()); // OK => { type: "INCREMENT" }
 
 ```
 </p></details>
@@ -738,7 +737,7 @@ import { getType } from 'typesafe-actions';
 
 import { RootAction } from '@src/redux';
 
-import { actions } from './';
+import { countersActions } from './';
 
 export type State = {
   readonly reduxCounter: number;
@@ -747,10 +746,10 @@ export type State = {
 export const reducer = combineReducers<State, RootAction>({
   reduxCounter: (state = 0, action) => {
     switch (action.type) {
-      case getType(actions.increment):
+      case getType(countersActions.increment):
         return state + 1; // action is type: { type: "INCREMENT"; }
 
-      case getType(actions.add):
+      case getType(countersActions.add):
         return state + action.payload; // action is type: { type: "ADD"; payload: number; }
 
       default:
@@ -804,20 +803,19 @@ Can be imported in various layers receiving or sending redux actions like: reduc
 ```tsx
 // RootActions
 import { RouterAction, LocationChangeAction } from 'react-router-redux';
-import { call } from 'utility-types';
+import { $call } from 'utility-types';
 
-import { actions as countersAC } from '@src/redux/counters';
-import { actions as todosAC } from '@src/redux/todos';
-import { actions as toastsAC } from '@src/redux/toasts';
+import { countersActions } from '@src/redux/counters';
+import { todosActions } from '@src/redux/todos';
+import { toastsActions } from '@src/redux/toasts';
 
-export const allActions = {
-  ...countersAC,
-  ...todosAC,
-  ...toastsAC,
-};
+const returnsOfActions = [
+  ...Object.values(countersActions),
+  ...Object.values(todosActions),
+  ...Object.values(toastsActions),
+].map($call);
 
-const returnOfActions = Object.values(allActions).map(call);
-type AppAction = typeof returnOfActions[number];
+type AppAction = typeof returnsOfActions[number];
 type ReactRouterAction = RouterAction | LocationChangeAction;
 
 export type RootAction =
@@ -882,19 +880,20 @@ import { isActionOf } from 'typesafe-actions';
 import { Observable } from 'rxjs/Observable';
 import { v4 } from 'uuid';
 
-import { RootAction, RootState, allActions } from '@src/redux';
-import { actions } from './';
+import { RootAction, RootState } from '@src/redux';
+import { todosActions } from '@src/redux/todos';
+import { toastsActions } from './';
 
 const TOAST_LIFETIME = 2000;
 
 const addTodoToast: Epic<RootAction, RootState> =
   (action$, store) => action$
-    .filter(isActionOf(allActions.addTodo))
+    .filter(isActionOf(todosActions.addTodo))
     .concatMap((action) => { // action is type: { type: "ADD_TODO"; payload: string; }
       const toast = { id: v4(), text: action.payload };
 
-      const addToast$ = Observable.of(actions.addToast(toast));
-      const removeToast$ = Observable.of(actions.removeToast(toast.id))
+      const addToast$ = Observable.of(toastsActions.addToast(toast));
+      const removeToast$ = Observable.of(toastsActions.removeToast(toast.id))
         .delay(TOAST_LIFETIME);
 
       return addToast$.concat(removeToast$);
@@ -1311,7 +1310,6 @@ node ./generator/bin/generate-readme.js
 
 # Project Examples
 
-https://github.com/piotrwitek/react-redux-typescript-starter-kit  
 https://github.com/piotrwitek/react-redux-typescript-webpack-starter  
 
 [⇧ back to top](#table-of-contents)

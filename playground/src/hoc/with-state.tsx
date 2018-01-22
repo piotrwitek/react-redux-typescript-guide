@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Diff } from 'utility-types';
+import { Subtract } from 'utility-types';
 
 // These props will be subtracted from original component type
 interface WrappedComponentProps {
@@ -18,7 +18,7 @@ export const withState = <P extends WrappedComponentProps>(
     count: number;
   }
 
-  return class WithState extends React.Component<Diff<P, WrappedComponentProps> & Props, State> {
+  return class WithState extends React.Component<Subtract<P, WrappedComponentProps> & Props, State> {
     // Enhance component name for debugging and React-Dev-Tools
     static displayName = `withState(${WrappedComponent.name})`;
 

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Diff } from 'utility-types';
+import { Subtract } from 'utility-types';
 
 const MISSING_ERROR = 'Error was swallowed during propagation.';
 
@@ -15,7 +15,7 @@ export const withErrorBoundary = <P extends WrappedComponentProps>(
     error: Error | null | undefined;
   }
 
-  return class WithErrorBoundary extends React.Component<Diff<P, WrappedComponentProps> & Props, State> {
+  return class WithErrorBoundary extends React.Component<Subtract<P, WrappedComponentProps> & Props, State> {
     static displayName = `withErrorBoundary(${WrappedComponent.name})`;
 
     state: State = {

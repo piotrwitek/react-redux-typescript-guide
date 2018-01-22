@@ -4,7 +4,7 @@ import { Observable } from 'rxjs/Observable';
 import { v4 } from 'uuid';
 
 import { RootAction, RootState } from '@src/redux';
-import { todosActions as todosActions } from '@src/redux/todos';
+import { todosActions } from '@src/redux/todos';
 import { toastsActions } from './';
 
 const TOAST_LIFETIME = 2000;
