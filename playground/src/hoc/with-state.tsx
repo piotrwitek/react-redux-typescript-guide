@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Diff as Subtract } from 'react-redux-typescript';
+import { Subtract } from 'utility-types';
 
 // These props will be subtracted from original component type
 interface WrappedComponentProps {

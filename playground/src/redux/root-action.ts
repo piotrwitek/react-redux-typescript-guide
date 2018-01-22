@@ -1,20 +1,18 @@
 // RootActions
 import { RouterAction, LocationChangeAction } from 'react-router-redux';
-import { getReturnOfExpression } from 'react-redux-typescript';
+import { $call } from 'utility-types';
 
-import { actions as countersAC } from '@src/redux/counters';
-import { actions as todosAC } from '@src/redux/todos';
-import { actions as toastsAC } from '@src/redux/toasts';
+import { countersActions } from '@src/redux/counters';
+import { todosActions } from '@src/redux/todos';
+import { toastsActions } from '@src/redux/toasts';
 
-export const allActions = {
-  ...countersAC,
-  ...todosAC,
-  ...toastsAC,
-};
+const returnsOfActions = [
+  ...Object.values(countersActions),
+  ...Object.values(todosActions),
+  ...Object.values(toastsActions),
+].map($call);
 
-const returnOfActions =
-  Object.values(allActions).map(getReturnOfExpression);
-type AppAction = typeof returnOfActions[number];
+type AppAction = typeof returnsOfActions[number];
 type ReactRouterAction = RouterAction | LocationChangeAction;
 
 export type RootAction =

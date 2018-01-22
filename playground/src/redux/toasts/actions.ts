@@ -5,7 +5,7 @@ export type IToast = {
   text: string;
 };
 
-export const actions = {
+export const toastsActions = {
   addToast: createAction('ADD_TOAST', (toast: IToast) => ({
     type: 'ADD_TOAST',
     payload: toast,

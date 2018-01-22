@@ -1,6 +1,6 @@
 import { createAction } from 'typesafe-actions';
 
-export const actions = {
+export const countersActions = {
   increment: createAction('INCREMENT'),
   add: createAction('ADD', (amount: number) => ({
     type: 'ADD',
