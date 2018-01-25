@@ -12,19 +12,20 @@
   - [Reducers](#reducers) 📝 __UPDATED__
     - [State with Type-level Immutability](#state-with-type-level-immutability)
     - [Reducer Example](#reducer-example)
+    - [Testing Example](#reducer-testing)
   - [Store Configuration](#store-configuration) 📝 __UPDATED__
   - [Async Flow](#async-flow) 📝 __UPDATED__
   - [Selectors](#selectors)
 - [Tools](#tools)
+  - [TSLint](#tslint)
+  - [Jest](#jest)
+  - [Enzyme](#enzyme)
   - [Living Style Guide](#living-style-guide) 🌟 __NEW__
+  - [Common Npm Scripts](#common-npm-scripts)
 - [Extras](#extras)
   - [tsconfig.json](#tsconfigjson)
-  - [Setting-up TSLint](#setting-up-tslint)
-  - [Setting-up Jest](#setting-up-jest)
-  - [Setting-up Enzyme](#setting-up-enzyme)
-  - [Default and Named Module Exports](#default-and-named-module-exports)
   - [Vendor Types Augmentation](#vendor-types-augmentation)
-  - [Npm Scripts](#npm-scripts)
+  - [Default and Named Module Exports](#default-and-named-module-exports)
 - [FAQ](#faq)
 - [Roadmap](#roadmap)
 - [Contribution Guide](#contribution-guide)
