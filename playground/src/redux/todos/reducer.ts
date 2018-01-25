@@ -1,19 +1,21 @@
-import { v4 } from 'uuid';
 import { combineReducers } from 'redux';
 import { getType } from 'typesafe-actions';
 
-import { RootAction } from '@src/redux';
+import { ITodo, ITodosFilter } from './types';
+import * as todosActions from './actions';
 
-import { todosActions, ITodo, ITodosFilter } from './';
-
-export type State = {
+export type TodosState = {
   readonly isFetching: boolean;
   readonly errorMessage: string | null;
   readonly todos: ITodo[];
   readonly todosFilter: ITodosFilter;
 };
 
-export const reducer = combineReducers<State, RootAction>({
+export type RootState = {
+  todos: TodosState;
+};
+
+export const todosReducer = combineReducers<TodosState, TodosAction>({
   isFetching: (state = false, action) => {
     switch (action.type) {
       default:
@@ -29,11 +31,7 @@ export const reducer = combineReducers<State, RootAction>({
   todos: (state = [], action) => {
     switch (action.type) {
       case getType(todosActions.addTodo):
-        return [...state, {
-          id: v4(),
-          title: action.payload,
-          completed: false,
-        }];
+        return [...state, action.payload];
 
       case getType(todosActions.toggleTodo):
         return state.map((item) => item.id === action.payload
@@ -55,3 +53,7 @@ export const reducer = combineReducers<State, RootAction>({
     }
   },
 });
+
+import { $call } from 'utility-types';
+const returnsOfActions = Object.values(todosActions).map($call);
+export type TodosAction = typeof returnsOfActions[number];

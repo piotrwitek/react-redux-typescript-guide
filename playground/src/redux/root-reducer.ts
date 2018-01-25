@@ -1,8 +1,8 @@
 import { combineReducers } from 'redux';
-import { routerReducer as router, RouterState } from 'react-router-redux';
+import { routerReducer, RouterState } from 'react-router-redux';
 
-import { reducer as counters, State as CountersState } from '@src/redux/counters';
-import { reducer as todos, State as TodosState } from '@src/redux/todos';
+import { countersReducer, CountersState } from '@src/redux/counters';
+import { todosReducer, TodosState } from '@src/redux/todos';
 
 interface StoreEnhancerState { }
 
@@ -14,7 +14,7 @@ export interface RootState extends StoreEnhancerState {
 
 import { RootAction } from '@src/redux';
 export const rootReducer = combineReducers<RootState, RootAction>({
-  router,
-  counters,
-  todos,
+  router: routerReducer,
+  counters: countersReducer,
+  todos: todosReducer,
 });

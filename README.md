@@ -40,8 +40,9 @@ You should check Playground Project located in the `/playground` folder. It is a
   - [Living Style Guide](#living-style-guide) 🌟 __NEW__
 - [Extras](#extras)
   - [tsconfig.json](#tsconfigjson)
-  - [tslint.json](#tslintjson)
-  - [jest.config.json](#jestconfigjson)
+  - [Setting-up TSLint](#setting-up-tslint)
+  - [Setting-up Jest](#setting-up-jest)
+  - [Setting-up Enzyme](#setting-up-enzyme)
   - [Default and Named Module Exports](#default-and-named-module-exports)
   - [Vendor Types Augmentation](#vendor-types-augmentation)
   - [Npm Scripts](#npm-scripts)
@@ -740,11 +741,11 @@ import { RootAction } from '@src/redux';
 
 import { countersActions } from './';
 
-export type State = {
+export type CountersState = {
   readonly reduxCounter: number;
 };
 
-export const reducer = combineReducers<State, RootAction>({
+export const countersReducer = combineReducers<CountersState, RootAction>({
   reduxCounter: (state = 0, action) => {
     switch (action.type) {
       case getType(countersActions.increment):
@@ -774,10 +775,10 @@ Can be imported in connected components to provide type-safety to Redux `connect
 
 ```tsx
 import { combineReducers } from 'redux';
-import { routerReducer as router, RouterState } from 'react-router-redux';
+import { routerReducer, RouterState } from 'react-router-redux';
 
-import { reducer as counters, State as CountersState } from '@src/redux/counters';
-import { reducer as todos, State as TodosState } from '@src/redux/todos';
+import { countersReducer, CountersState } from '@src/redux/counters';
+import { todosReducer, TodosState } from '@src/redux/todos';
 
 interface StoreEnhancerState { }
 
@@ -789,9 +790,9 @@ export interface RootState extends StoreEnhancerState {
 
 import { RootAction } from '@src/redux';
 export const rootReducer = combineReducers<RootState, RootAction>({
-  router,
-  counters,
-  todos,
+  router: routerReducer,
+  counters: countersReducer,
+  todos: todosReducer,
 });
 
 ```
@@ -879,7 +880,7 @@ Use `isActionOf` helper to filter actions and to narrow `RootAction` union type 
 import { combineEpics, Epic } from 'redux-observable';
 import { isActionOf } from 'typesafe-actions';
 import { Observable } from 'rxjs/Observable';
-import { v4 } from 'uuid';
+import cuid from 'cuid';
 
 import { RootAction, RootState } from '@src/redux';
 import { todosActions } from '@src/redux/todos';
@@ -891,7 +892,7 @@ const addTodoToast: Epic<RootAction, RootState> =
   (action$, store) => action$
     .filter(isActionOf(todosActions.addTodo))
     .concatMap((action) => { // action is type: { type: "ADD_TODO"; payload: string; }
-      const toast = { id: v4(), text: action.payload };
+      const toast = { id: cuid(), text: action.payload.title };
 
       const addToast$ = Observable.of(toastsActions.addToast(toast));
       const removeToast$ = Observable.of(toastsActions.removeToast(toast.id))
@@ -1055,6 +1056,15 @@ export const actions = {
 
 [⇧ back to top](#table-of-contents)
 
+### Setting-up TSLint
+
+#### Setup
+```bash
+npm i -D jest ts-jest @types/jest
+yarn add -D jest ts-jest @types/jest
+```
+
+#### jest.config.json
 ### tslint.json
 - Recommended setup is to extend build-in preset `tslint:recommended` (for all rules use `tslint:all`)  
 - Add additional `react` specific rules: `npm i -D tslint-react` https://github.com/palantir/tslint-react  
@@ -1116,15 +1126,15 @@ export const actions = {
 
 [⇧ back to top](#table-of-contents)
 
-### jest.config.json
+### Setting-up Jest
 
-#### Installation
+#### Setup
 ```bash
 npm i -D jest ts-jest @types/jest
 yarn add -D jest ts-jest @types/jest
 ```
 
-#### Recommended setup for Jest with TypeScript  
+#### jest.config.json
 ```json
 {
   "verbose": true,
@@ -1145,8 +1155,42 @@ yarn add -D jest ts-jest @types/jest
   "setupFiles": [
     "./jest.stubs.js"
   ],
-  "setupTestFrameworkScriptFile": "./jest.framework.js"
+  "setupTestFrameworkScriptFile": "./jest.tests.js"
 }
+```
+
+#### jest.stubs.js
+```js
+// Global/Window object Stubs for Jest
+window.requestAnimationFrame = function (callback) {
+  setTimeout(callback);
+};
+
+window.localStorage = {
+  getItem: function () { },
+  setItem: function () { },
+};
+
+Object.values = () => [];
+```
+
+
+[⇧ back to top](#table-of-contents)
+
+### Setting-up Enzyme
+
+#### Setup
+```bash
+npm i -D enzyme enzyme-adapter-react-16 @types/enzyme
+yarn add -D enzyme enzyme-adapter-react-16 @types/enzyme
+```
+
+#### jest.tests.js
+```js
+import { configure } from 'enzyme';
+import Adapter from 'enzyme-adapter-react-16';
+
+configure({ adapter: new Adapter() });
 ```
 
 [⇧ back to top](#table-of-contents)
@@ -1231,7 +1275,7 @@ declare module 'enzyme';
 "pretest": "npm run lint & npm run tsc",
 "test": "jest --config jest.config.json",
 "test:watch": "jest --config jest.config.json --watch",
-"test:update": "jest --config jest.json -u",
+"test:update": "jest --config jest.config.json -u",
 ```
 
 [⇧ back to top](#table-of-contents)

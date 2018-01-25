@@ -1,4 +1,4 @@
-import { v4 } from 'uuid';
+import cuid from 'cuid';
 
 export interface IUserDTO {
   id: string;
@@ -22,7 +22,7 @@ export interface IUser {
 export class User implements IUser {
   'constructor': typeof User;
 
-  id: string = v4();
+  id: string = cuid();
   get fullName(): string {
     return `${this.firstName} ${this.lastName}`;
   }

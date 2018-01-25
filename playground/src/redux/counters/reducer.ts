@@ -5,11 +5,11 @@ import { RootAction } from '@src/redux';
 
 import { countersActions } from './';
 
-export type State = {
+export type CountersState = {
   readonly reduxCounter: number;
 };
 
-export const reducer = combineReducers<State, RootAction>({
+export const countersReducer = combineReducers<CountersState, RootAction>({
   reduxCounter: (state = 0, action) => {
     switch (action.type) {
       case getType(countersActions.increment):

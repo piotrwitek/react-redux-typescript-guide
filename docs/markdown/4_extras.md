@@ -55,6 +55,15 @@
 
 [⇧ back to top](#table-of-contents)
 
+### Setting-up TSLint
+
+#### Setup
+```bash
+npm i -D jest ts-jest @types/jest
+yarn add -D jest ts-jest @types/jest
+```
+
+#### jest.config.json
 ### tslint.json
 - Recommended setup is to extend build-in preset `tslint:recommended` (for all rules use `tslint:all`)  
 - Add additional `react` specific rules: `npm i -D tslint-react` https://github.com/palantir/tslint-react  
@@ -116,15 +125,15 @@
 
 [⇧ back to top](#table-of-contents)
 
-### jest.config.json
+### Setting-up Jest
 
-#### Installation
+#### Setup
 ```bash
 npm i -D jest ts-jest @types/jest
 yarn add -D jest ts-jest @types/jest
 ```
 
-#### Recommended setup for Jest with TypeScript  
+#### jest.config.json
 ```json
 {
   "verbose": true,
@@ -145,8 +154,42 @@ yarn add -D jest ts-jest @types/jest
   "setupFiles": [
     "./jest.stubs.js"
   ],
-  "setupTestFrameworkScriptFile": "./jest.framework.js"
+  "setupTestFrameworkScriptFile": "./jest.tests.js"
 }
+```
+
+#### jest.stubs.js
+```js
+// Global/Window object Stubs for Jest
+window.requestAnimationFrame = function (callback) {
+  setTimeout(callback);
+};
+
+window.localStorage = {
+  getItem: function () { },
+  setItem: function () { },
+};
+
+Object.values = () => [];
+```
+
+
+[⇧ back to top](#table-of-contents)
+
+### Setting-up Enzyme
+
+#### Setup
+```bash
+npm i -D enzyme enzyme-adapter-react-16 @types/enzyme
+yarn add -D enzyme enzyme-adapter-react-16 @types/enzyme
+```
+
+#### jest.tests.js
+```js
+import { configure } from 'enzyme';
+import Adapter from 'enzyme-adapter-react-16';
+
+configure({ adapter: new Adapter() });
 ```
 
 [⇧ back to top](#table-of-contents)
@@ -226,7 +269,7 @@ declare module 'rxjs/Subject' {
 "pretest": "npm run lint & npm run tsc",
 "test": "jest --config jest.config.json",
 "test:watch": "jest --config jest.config.json --watch",
-"test:update": "jest --config jest.json -u",
+"test:update": "jest --config jest.config.json -u",
 ```
 
 [⇧ back to top](#table-of-contents)

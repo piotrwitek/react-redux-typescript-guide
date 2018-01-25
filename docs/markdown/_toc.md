@@ -19,8 +19,9 @@
   - [Living Style Guide](#living-style-guide) 🌟 __NEW__
 - [Extras](#extras)
   - [tsconfig.json](#tsconfigjson)
-  - [tslint.json](#tslintjson)
-  - [jest.config.json](#jestconfigjson)
+  - [Setting-up TSLint](#setting-up-tslint)
+  - [Setting-up Jest](#setting-up-jest)
+  - [Setting-up Enzyme](#setting-up-enzyme)
   - [Default and Named Module Exports](#default-and-named-module-exports)
   - [Vendor Types Augmentation](#vendor-types-augmentation)
   - [Npm Scripts](#npm-scripts)

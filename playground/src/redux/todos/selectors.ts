@@ -1,6 +1,6 @@
 import { createSelector } from 'reselect';
 
-import { RootState } from '@src/redux';
+import { RootState } from './reducer';
 
 export const getTodos =
   (state: RootState) => state.todos.todos;
