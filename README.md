@@ -732,38 +732,121 @@ state.counterPairs[0].immutableCounter2 = 1; // Error, cannot be mutated
 [⇧ back to top](#table-of-contents)
 
 ### Reducer Example
-> using `getType` helper and [Discriminated Union types](https://www.typescriptlang.org/docs/handbook/advanced-types.html)
+> using type inference with [Discriminated Union types](https://www.typescriptlang.org/docs/handbook/advanced-types.html)
 
 ```tsx
 import { combineReducers } from 'redux';
 import { getType } from 'typesafe-actions';
 
-import { RootAction } from '@src/redux';
+import { ITodo, ITodosFilter } from './types';
+import { addTodo, toggleTodo, changeFilter } from './actions';
 
-import { countersActions } from './';
-
-export type CountersState = {
-  readonly reduxCounter: number;
+export type TodosState = {
+  readonly isFetching: boolean;
+  readonly errorMessage: string | null;
+  readonly todos: ITodo[];
+  readonly todosFilter: ITodosFilter;
 };
 
-export const countersReducer = combineReducers<CountersState, RootAction>({
-  reduxCounter: (state = 0, action) => {
+export type RootState = {
+  todos: TodosState;
+};
+
+export const todosReducer = combineReducers<TodosState, TodosAction>({
+  isFetching: (state = false, action) => {
     switch (action.type) {
-      case getType(countersActions.increment):
-        return state + 1; // action is type: { type: "INCREMENT"; }
-
-      case getType(countersActions.add):
-        return state + action.payload; // action is type: { type: "ADD"; payload: number; }
-
-      default:
-        return state;
+      default: return state;
     }
   },
+  errorMessage: (state = '', action) => {
+    switch (action.type) {
+      default: return state;
+    }
+  },
+  todos: (state = [], action) => {
+    switch (action.type) {
+      case getType(addTodo):
+        return [...state, action.payload];
+
+      case getType(toggleTodo):
+        return state.map((item) => item.id === action.payload
+          ? { ...item, completed: !item.completed }
+          : item
+        );
+
+      default: return state;
+    }
+  },
+  todosFilter: (state = '', action) => {
+    switch (action.type) {
+      case getType(changeFilter):
+        return action.payload;
+
+      default: return state;
+    }
+  },
+});
+
+// inferring union type of actions
+import { $call } from 'utility-types';
+import * as actions from './actions';
+const returnsOfActions = Object.values(actions).map($call);
+export type TodosAction = typeof returnsOfActions[number];
+
+```
+
+[⇧ back to top](#table-of-contents)
+
+### Testing Example
+
+```tsx
+import { todosReducer, TodosState, TodosAction } from './reducer';
+import { addTodo, changeFilter, toggleTodo } from './actions';
+
+/**
+ * FIXTURES
+ */
+const activeTodo = { id: '1', completed: false, title: 'active todo' };
+const completedTodo = { id: '2', completed: true, title: 'completed todo' };
+
+const initialState = todosReducer(undefined, {});
+
+/**
+ * SCENARIOS
+ */
+describe('Todos Logic', () => {
+
+  describe('initial state', () => {
+    it('should match a snapshot', () => {
+      expect(initialState).toMatchSnapshot();
+    });
+  });
+
+  describe('adding todos', () => {
+    it('should add a new todo as the first active element', () => {
+      const action = addTodo('new todo');
+      const state = todosReducer(initialState, action);
+      expect(state.todos).toHaveLength(1);
+      expect(state.todos[0].id).toEqual(action.payload.id);
+    });
+  });
+
+  describe('toggling completion state', () => {
+    it('should mark as complete todo with id "1"', () => {
+      const action = toggleTodo(activeTodo.id);
+      const state0 = { ...initialState, todos: [activeTodo] };
+      expect(state0.todos[0].completed).toBeFalsy();
+      const state1 = todosReducer(state0, action);
+      expect(state1.todos[0].completed).toBeTruthy();
+    });
+  });
+
 });
 
 ```
 
 [⇧ back to top](#table-of-contents)
+
 
 ---
 

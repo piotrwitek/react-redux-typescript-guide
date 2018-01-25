@@ -73,11 +73,18 @@ state.counterPairs[0].immutableCounter2 = 1; // Error, cannot be mutated
 [⇧ back to top](#table-of-contents)
 
 ### Reducer Example
-> using `getType` helper and [Discriminated Union types](https://www.typescriptlang.org/docs/handbook/advanced-types.html)
+> using type inference with [Discriminated Union types](https://www.typescriptlang.org/docs/handbook/advanced-types.html)
 
-::example='../../playground/src/redux/counters/reducer.ts'::
+::example='../../playground/src/redux/todos/reducer.ts'::
 
 [⇧ back to top](#table-of-contents)
+
+### Testing Example
+
+::example='../../playground/src/redux/todos/reducer.spec.ts'::
+
+[⇧ back to top](#table-of-contents)
+
 
 ---
 

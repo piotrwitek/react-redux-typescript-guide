@@ -1,11 +1,10 @@
 import { createAction } from 'typesafe-actions';
 import cuid from 'cuid';
 
-import { ITodosFilter } from './types';
-
-const ADD_TODO = '@@todos/ADD_TODO';
-const TOGGLE_TODO = '@@todos/TOGGLE_TODO';
-const CHANGE_FILTER = '@@todos/CHANGE_FILTER';
+import {
+  ADD_TODO, TOGGLE_TODO, CHANGE_FILTER,
+  ITodosFilter,
+} from './types';
 
 export const addTodo = createAction(ADD_TODO,
   (title: string) => ({

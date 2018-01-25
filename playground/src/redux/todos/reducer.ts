@@ -2,7 +2,7 @@ import { combineReducers } from 'redux';
 import { getType } from 'typesafe-actions';
 
 import { ITodo, ITodosFilter } from './types';
-import * as todosActions from './actions';
+import { addTodo, toggleTodo, changeFilter } from './actions';
 
 export type TodosState = {
   readonly isFetching: boolean;
@@ -18,42 +18,40 @@ export type RootState = {
 export const todosReducer = combineReducers<TodosState, TodosAction>({
   isFetching: (state = false, action) => {
     switch (action.type) {
-      default:
-        return state;
+      default: return state;
     }
   },
   errorMessage: (state = '', action) => {
     switch (action.type) {
-      default:
-        return state;
+      default: return state;
     }
   },
   todos: (state = [], action) => {
     switch (action.type) {
-      case getType(todosActions.addTodo):
+      case getType(addTodo):
         return [...state, action.payload];
 
-      case getType(todosActions.toggleTodo):
+      case getType(toggleTodo):
         return state.map((item) => item.id === action.payload
           ? { ...item, completed: !item.completed }
           : item
         );
 
-      default:
-        return state;
+      default: return state;
     }
   },
   todosFilter: (state = '', action) => {
     switch (action.type) {
-      case getType(todosActions.changeFilter):
+      case getType(changeFilter):
         return action.payload;
 
-      default:
-        return state;
+      default: return state;
     }
   },
 });
 
+// inferring union type of actions
 import { $call } from 'utility-types';
-const returnsOfActions = Object.values(todosActions).map($call);
+import * as actions from './actions';
+const returnsOfActions = Object.values(actions).map($call);
 export type TodosAction = typeof returnsOfActions[number];

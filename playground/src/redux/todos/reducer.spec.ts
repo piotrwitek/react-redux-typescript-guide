@@ -1,9 +1,6 @@
 import { todosReducer, TodosState, TodosAction } from './reducer';
 import { addTodo, changeFilter, toggleTodo } from './actions';
 
-// tslint:disable:max-line-length
-// tslint:disable:quotemark
-// tslint:disable:object-literal-key-quotes
 /**
  * FIXTURES
  */
