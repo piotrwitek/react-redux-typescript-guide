@@ -11,8 +11,8 @@
   - [Action Creators](#action-creators) 📝 __UPDATED__
   - [Reducers](#reducers) 📝 __UPDATED__
     - [State with Type-level Immutability](#state-with-type-level-immutability)
-    - [Reducer Example](#reducer-example)
-    - [Testing Example](#reducer-testing)
+    - [Typing reducer](#typing-reducer)
+    - [Testing reducer](#testing-reducer)
   - [Store Configuration](#store-configuration) 📝 __UPDATED__
   - [Async Flow](#async-flow) 📝 __UPDATED__
   - [Selectors](#selectors)

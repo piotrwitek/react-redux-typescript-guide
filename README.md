@@ -32,8 +32,8 @@ You should check Playground Project located in the `/playground` folder. It is a
   - [Action Creators](#action-creators) 📝 __UPDATED__
   - [Reducers](#reducers) 📝 __UPDATED__
     - [State with Type-level Immutability](#state-with-type-level-immutability)
-    - [Reducer Example](#reducer-example)
-    - [Testing Example](#reducer-testing)
+    - [Typing reducer](#typing-reducer)
+    - [Testing reducer](#testing-reducer)
   - [Store Configuration](#store-configuration) 📝 __UPDATED__
   - [Async Flow](#async-flow) 📝 __UPDATED__
   - [Selectors](#selectors)
@@ -727,11 +727,11 @@ state.counterPairs[0].immutableCounter1 = 1; // Error, cannot be mutated
 state.counterPairs[0].immutableCounter2 = 1; // Error, cannot be mutated
 ```
 
-> _There are some experiments in the community to make a `ReadonlyRecursive` mapped type. I'll update this section of the guide as soon as they are stable_
+> _There is a new (work in progress) feature called **Conditional Types**, that will allow `ReadonlyRecursive` mapped type_
 
 [⇧ back to top](#table-of-contents)
 
-### Reducer Example
+### Typing reducer
 > using type inference with [Discriminated Union types](https://www.typescriptlang.org/docs/handbook/advanced-types.html)
 
 ```tsx
@@ -797,7 +797,7 @@ export type TodosAction = typeof returnsOfActions[number];
 
 [⇧ back to top](#table-of-contents)
 
-### Testing Example
+### Testing reducer
 
 ```tsx
 import { todosReducer, TodosState, TodosAction } from './reducer';
