@@ -68,16 +68,23 @@ state.counterPairs[0].immutableCounter1 = 1; // Error, cannot be mutated
 state.counterPairs[0].immutableCounter2 = 1; // Error, cannot be mutated
 ```
 
-> _There are some experiments in the community to make a `ReadonlyRecursive` mapped type. I'll update this section of the guide as soon as they are stable_
+> _There is a new (work in progress) feature called **Conditional Types**, that will allow `ReadonlyRecursive` mapped type_
 
 [⇧ back to top](#table-of-contents)
 
-### Reducer Example
-> using `getType` helper and [Discriminated Union types](https://www.typescriptlang.org/docs/handbook/advanced-types.html)
+### Typing reducer
+> using type inference with [Discriminated Union types](https://www.typescriptlang.org/docs/handbook/advanced-types.html)
 
-::example='../../playground/src/redux/counters/reducer.ts'::
+::example='../../playground/src/redux/todos/reducer.ts'::
 
 [⇧ back to top](#table-of-contents)
+
+### Testing reducer
+
+::example='../../playground/src/redux/todos/reducer.spec.ts'::
+
+[⇧ back to top](#table-of-contents)
+
 
 ---
 

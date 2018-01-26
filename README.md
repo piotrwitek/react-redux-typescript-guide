@@ -32,19 +32,21 @@ You should check Playground Project located in the `/playground` folder. It is a
   - [Action Creators](#action-creators) 📝 __UPDATED__
   - [Reducers](#reducers) 📝 __UPDATED__
     - [State with Type-level Immutability](#state-with-type-level-immutability)
-    - [Reducer Example](#reducer-example)
+    - [Typing reducer](#typing-reducer)
+    - [Testing reducer](#testing-reducer)
   - [Store Configuration](#store-configuration) 📝 __UPDATED__
   - [Async Flow](#async-flow) 📝 __UPDATED__
   - [Selectors](#selectors)
 - [Tools](#tools)
+  - [TSLint](#tslint)
+  - [Jest](#jest)
+  - [Enzyme](#enzyme)
   - [Living Style Guide](#living-style-guide) 🌟 __NEW__
+  - [Common Npm Scripts](#common-npm-scripts)
 - [Extras](#extras)
   - [tsconfig.json](#tsconfigjson)
-  - [tslint.json](#tslintjson)
-  - [jest.config.json](#jestconfigjson)
-  - [Default and Named Module Exports](#default-and-named-module-exports)
   - [Vendor Types Augmentation](#vendor-types-augmentation)
-  - [Npm Scripts](#npm-scripts)
+  - [Default and Named Module Exports](#default-and-named-module-exports)
 - [FAQ](#faq)
 - [Roadmap](#roadmap)
 - [Contribution Guide](#contribution-guide)
@@ -725,43 +727,126 @@ state.counterPairs[0].immutableCounter1 = 1; // Error, cannot be mutated
 state.counterPairs[0].immutableCounter2 = 1; // Error, cannot be mutated
 ```
 
-> _There are some experiments in the community to make a `ReadonlyRecursive` mapped type. I'll update this section of the guide as soon as they are stable_
+> _There is a new (work in progress) feature called **Conditional Types**, that will allow `ReadonlyRecursive` mapped type_
 
 [⇧ back to top](#table-of-contents)
 
-### Reducer Example
-> using `getType` helper and [Discriminated Union types](https://www.typescriptlang.org/docs/handbook/advanced-types.html)
+### Typing reducer
+> using type inference with [Discriminated Union types](https://www.typescriptlang.org/docs/handbook/advanced-types.html)
 
 ```tsx
 import { combineReducers } from 'redux';
 import { getType } from 'typesafe-actions';
 
-import { RootAction } from '@src/redux';
+import { ITodo, ITodosFilter } from './types';
+import { addTodo, toggleTodo, changeFilter } from './actions';
 
-import { countersActions } from './';
-
-export type State = {
-  readonly reduxCounter: number;
+export type TodosState = {
+  readonly isFetching: boolean;
+  readonly errorMessage: string | null;
+  readonly todos: ITodo[];
+  readonly todosFilter: ITodosFilter;
 };
 
-export const reducer = combineReducers<State, RootAction>({
-  reduxCounter: (state = 0, action) => {
+export type RootState = {
+  todos: TodosState;
+};
+
+export const todosReducer = combineReducers<TodosState, TodosAction>({
+  isFetching: (state = false, action) => {
     switch (action.type) {
-      case getType(countersActions.increment):
-        return state + 1; // action is type: { type: "INCREMENT"; }
-
-      case getType(countersActions.add):
-        return state + action.payload; // action is type: { type: "ADD"; payload: number; }
-
-      default:
-        return state;
+      default: return state;
     }
   },
+  errorMessage: (state = '', action) => {
+    switch (action.type) {
+      default: return state;
+    }
+  },
+  todos: (state = [], action) => {
+    switch (action.type) {
+      case getType(addTodo):
+        return [...state, action.payload];
+
+      case getType(toggleTodo):
+        return state.map((item) => item.id === action.payload
+          ? { ...item, completed: !item.completed }
+          : item
+        );
+
+      default: return state;
+    }
+  },
+  todosFilter: (state = '', action) => {
+    switch (action.type) {
+      case getType(changeFilter):
+        return action.payload;
+
+      default: return state;
+    }
+  },
+});
+
+// inferring union type of actions
+import { $call } from 'utility-types';
+import * as actions from './actions';
+const returnsOfActions = Object.values(actions).map($call);
+export type TodosAction = typeof returnsOfActions[number];
+
+```
+
+[⇧ back to top](#table-of-contents)
+
+### Testing reducer
+
+```tsx
+import { todosReducer, TodosState, TodosAction } from './reducer';
+import { addTodo, changeFilter, toggleTodo } from './actions';
+
+/**
+ * FIXTURES
+ */
+const activeTodo = { id: '1', completed: false, title: 'active todo' };
+const completedTodo = { id: '2', completed: true, title: 'completed todo' };
+
+const initialState = todosReducer(undefined, {});
+
+/**
+ * SCENARIOS
+ */
+describe('Todos Logic', () => {
+
+  describe('initial state', () => {
+    it('should match a snapshot', () => {
+      expect(initialState).toMatchSnapshot();
+    });
+  });
+
+  describe('adding todos', () => {
+    it('should add a new todo as the first active element', () => {
+      const action = addTodo('new todo');
+      const state = todosReducer(initialState, action);
+      expect(state.todos).toHaveLength(1);
+      expect(state.todos[0].id).toEqual(action.payload.id);
+    });
+  });
+
+  describe('toggling completion state', () => {
+    it('should mark as complete todo with id "1"', () => {
+      const action = toggleTodo(activeTodo.id);
+      const state0 = { ...initialState, todos: [activeTodo] };
+      expect(state0.todos[0].completed).toBeFalsy();
+      const state1 = todosReducer(state0, action);
+      expect(state1.todos[0].completed).toBeTruthy();
+    });
+  });
+
 });
 
 ```
 
 [⇧ back to top](#table-of-contents)
+
 
 ---
 
@@ -774,10 +859,10 @@ Can be imported in connected components to provide type-safety to Redux `connect
 
 ```tsx
 import { combineReducers } from 'redux';
-import { routerReducer as router, RouterState } from 'react-router-redux';
+import { routerReducer, RouterState } from 'react-router-redux';
 
-import { reducer as counters, State as CountersState } from '@src/redux/counters';
-import { reducer as todos, State as TodosState } from '@src/redux/todos';
+import { countersReducer, CountersState } from '@src/redux/counters';
+import { todosReducer, TodosState } from '@src/redux/todos';
 
 interface StoreEnhancerState { }
 
@@ -789,9 +874,9 @@ export interface RootState extends StoreEnhancerState {
 
 import { RootAction } from '@src/redux';
 export const rootReducer = combineReducers<RootState, RootAction>({
-  router,
-  counters,
-  todos,
+  router: routerReducer,
+  counters: countersReducer,
+  todos: todosReducer,
 });
 
 ```
@@ -879,7 +964,7 @@ Use `isActionOf` helper to filter actions and to narrow `RootAction` union type 
 import { combineEpics, Epic } from 'redux-observable';
 import { isActionOf } from 'typesafe-actions';
 import { Observable } from 'rxjs/Observable';
-import { v4 } from 'uuid';
+import cuid from 'cuid';
 
 import { RootAction, RootState } from '@src/redux';
 import { todosActions } from '@src/redux/todos';
@@ -891,7 +976,7 @@ const addTodoToast: Epic<RootAction, RootState> =
   (action$, store) => action$
     .filter(isActionOf(todosActions.addTodo))
     .concatMap((action) => { // action is type: { type: "ADD_TODO"; payload: string; }
-      const toast = { id: v4(), text: action.payload };
+      const toast = { id: cuid(), text: action.payload.title };
 
       const addToast$ = Observable.of(toastsActions.addToast(toast));
       const removeToast$ = Observable.of(toastsActions.removeToast(toast.id))
@@ -987,80 +1072,17 @@ export const actions = {
 
 # Tools
 
-## Living Style Guide
-### ["react-styleguidist"](https://github.com/styleguidist/react-styleguidist)
+## TSLint
 
-[⟩⟩⟩ styleguide.config.js](/playground/styleguide.config.js)  
+> Installation  
+`npm i -D jest ts-jest @types/jest`
 
-[⟩⟩⟩ demo](https://piotrwitek.github.io/react-redux-typescript-guide/)
-
-[⇧ back to top](#table-of-contents)
-
----
-
-# Extras
-
-### tsconfig.json
-> - Recommended setup for best benefits from type-checking, with support for JSX and ES2016 features  
-> - Add [`tslib`](https://www.npmjs.com/package/tslib) to minimize bundle size: `npm i tslib` -  this will externalize helper functions generated by transpiler and otherwise inlined in your modules  
-> - Include absolute imports config working with Webpack  
+#### tslint.json
+- Recommended setup is to extend build-in preset `tslint:recommended` (use `tslint:all` to enable all rules)  
+- Add additional `react` specific rules: `npm i -D tslint-react` https://github.com/palantir/tslint-react  
+- Overwritten some defaults for more flexibility  
 
 ```js
-{
-  "compilerOptions": {
-    "baseUrl": "./", // enables absolute path imports
-    "paths": { // define absolute path mappings
-      "@src/*": ["src/*"] // will enable -> import { ... } from '@src/components'
-      // in webpack you need to add -> resolve: { alias: { '@src': PATH_TO_SRC } }
-    },
-    "outDir": "dist/", // target for compiled files
-    "allowSyntheticDefaultImports": true, // no errors on commonjs default import
-    "allowJs": true, // include js files
-    "checkJs": true, // typecheck js files
-    "declaration": false, // don't emit declarations
-    "emitDecoratorMetadata": true,
-    "experimentalDecorators": true,
-    "forceConsistentCasingInFileNames": true,
-    "importHelpers": true, // importing helper functions from tslib
-    "noEmitHelpers": true, // disable emitting inline helper functions
-    "jsx": "react", // process JSX
-    "lib": [
-      "dom",
-      "es2016",
-      "es2017.object"
-    ],
-    "target": "es5", // "es2015" for ES6+ engines
-    "module": "commonjs", // "es2015" for tree-shaking
-    "moduleResolution": "node",
-    "noEmitOnError": true,
-    "noFallthroughCasesInSwitch": true,
-    "noImplicitAny": true,
-    "noImplicitReturns": true,
-    "noImplicitThis": true,
-    "noUnusedLocals": true,
-    "strict": true,
-    "pretty": true,
-    "removeComments": true,
-    "sourceMap": true
-  },
-  "include": [
-    "src/**/*"
-  ],
-  "exclude": [
-    "node_modules",
-    "src/**/*.spec.*"
-  ]
-}
-```
-
-[⇧ back to top](#table-of-contents)
-
-### tslint.json
-> - Recommended setup is to extend build-in preset `tslint:recommended` (for all rules use `tslint:all`)  
-> - Add tslint react rules: `npm i -D tslint-react` https://github.com/palantir/tslint-react  
-> - Amended some extended defaults for more flexibility  
-
-```json
 {
   "extends": ["tslint:recommended", "tslint-react"],
   "rules": {
@@ -1116,10 +1138,12 @@ export const actions = {
 
 [⇧ back to top](#table-of-contents)
 
-### jest.config.json
-> - Recommended setup for Jest with TypeScript  
-> - Install with `npm i -D jest-cli ts-jest @types/jest`  
+## Jest
 
+> Installation  
+`npm i -D jest ts-jest @types/jest`
+
+#### jest.config.json
 ```json
 {
   "verbose": true,
@@ -1127,11 +1151,10 @@ export const actions = {
     ".(ts|tsx)": "./node_modules/ts-jest/preprocessor.js"
   },
   "testRegex": "(/spec/.*|\\.(test|spec))\\.(ts|tsx|js)$",
-  "moduleFileExtensions": [
-    "ts",
-    "tsx",
-    "js"
-  ],
+  "moduleFileExtensions": ["ts", "tsx", "js"],
+  "moduleNameMapper": {
+    "^Components/(.*)": "./src/components/$1"
+  },
   "globals": {
     "window": {},
     "ts-jest": {
@@ -1139,8 +1162,121 @@ export const actions = {
     }
   },
   "setupFiles": [
-    "./jest.stubs.js",
-    "./src/rxjs-imports.tsx"
+    "./jest.stubs.js"
+  ],
+  "setupTestFrameworkScriptFile": "./jest.tests.js"
+}
+```
+
+#### jest.stubs.js
+```js
+// Global/Window object Stubs for Jest
+window.requestAnimationFrame = function (callback) {
+  setTimeout(callback);
+};
+
+window.localStorage = {
+  getItem: function () { },
+  setItem: function () { },
+};
+
+Object.values = () => [];
+```
+
+
+[⇧ back to top](#table-of-contents)
+
+## Enzyme
+
+> Installation  
+`npm i -D enzyme enzyme-adapter-react-16 @types/enzyme`
+
+#### jest.tests.js
+```js
+import { configure } from 'enzyme';
+import Adapter from 'enzyme-adapter-react-16';
+
+configure({ adapter: new Adapter() });
+```
+
+[⇧ back to top](#table-of-contents)
+
+## Living Style Guide
+### ["react-styleguidist"](https://github.com/styleguidist/react-styleguidist)
+
+[⟩⟩⟩ styleguide.config.js](/playground/styleguide.config.js)  
+
+[⟩⟩⟩ demo](https://piotrwitek.github.io/react-redux-typescript-guide/)
+
+[⇧ back to top](#table-of-contents)
+
+## Common Npm Scripts
+> Common TS-related npm scripts shared across projects
+```
+"lint": "tslint -p ./",
+"tsc": "tsc -p ./ --noEmit",
+"tsc:watch": "tsc -p ./ --noEmit -w",
+"pretest": "npm run lint & npm run tsc",
+"test": "jest --config jest.config.json",
+"test:watch": "jest --config jest.config.json --watch",
+"test:update": "jest --config jest.config.json -u",
+```
+
+[⇧ back to top](#table-of-contents)
+
+---
+
+# Extras
+
+### tsconfig.json
+- Recommended setup for best benefits from type-checking, with support for JSX and ES2016 features  
+- Add [`tslib`](https://www.npmjs.com/package/tslib) to minimize bundle size: `npm i tslib` -  this will externalize helper functions generated by transpiler and otherwise inlined in your modules  
+- Include absolute imports config working with Webpack  
+
+```js
+{
+  "compilerOptions": {
+    "baseUrl": "./", // enables absolute path imports
+    "paths": { // define absolute path mappings
+      "@src/*": ["src/*"] // will enable -> import { ... } from '@src/components'
+      // in webpack you need to add -> resolve: { alias: { '@src': PATH_TO_SRC } }
+    },
+    "outDir": "dist/", // target for compiled files
+    "allowSyntheticDefaultImports": true, // no errors on commonjs default import
+    "allowJs": true, // include js files
+    "checkJs": true, // typecheck js files
+    "declaration": false, // don't emit declarations
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "forceConsistentCasingInFileNames": true,
+    "importHelpers": true, // importing helper functions from tslib
+    "noEmitHelpers": true, // disable emitting inline helper functions
+    "jsx": "react", // process JSX
+    "lib": [
+      "dom",
+      "es2016",
+      "es2017.object"
+    ],
+    "target": "es5", // "es2015" for ES6+ engines
+    "module": "commonjs", // "es2015" for tree-shaking
+    "moduleResolution": "node",
+    "noEmitOnError": true,
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitAny": true,
+    "noImplicitReturns": true,
+    "noImplicitThis": true,
+    "noUnusedLocals": true,
+    "strict": true,
+    "pretty": true,
+    "removeComments": true,
+    "sourceMap": true
+  },
+  "include": [
+    "src/**/*"
+  ],
+  "exclude": [
+    "node_modules",
+    "src/**/*.spec.*"
   ]
 }
 ```
@@ -1215,19 +1351,6 @@ declare module 'enzyme';
 ```
 
 > More advanced scenarios for working with vendor module declarations can be found here [Official TypeScript Docs](https://github.com/Microsoft/TypeScript-Handbook/blob/master/pages/Modules.md#working-with-other-javascript-libraries)
-
-[⇧ back to top](#table-of-contents)
-
-### Npm Scripts
-> Common TS-related npm scripts shared across projects
-```
-"check": "npm run lint & npm run tsc",
-"lint": "tslint --project './tsconfig.json'",
-"tsc": "tsc -p . --noEmit",
-"tsc:watch": "tsc -p . --noEmit -w",
-"test": "jest --config jest.config.json",
-"test:watch": "jest --config jest.config.json --watch",
-```
 
 [⇧ back to top](#table-of-contents)
 

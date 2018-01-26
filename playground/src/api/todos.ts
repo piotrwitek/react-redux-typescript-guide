@@ -1,4 +1,3 @@
-// import * as uuid from 'uuid';
 import { ITodoModel } from './models';
 import { resolveWithDelay } from './utils';
 
