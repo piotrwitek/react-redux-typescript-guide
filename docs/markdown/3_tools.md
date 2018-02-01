@@ -3,7 +3,7 @@
 ## TSLint
 
 > Installation  
-`npm i -D jest ts-jest @types/jest`
+`npm i -D tslint`
 
 #### tslint.json
 - Recommended setup is to extend build-in preset `tslint:recommended` (use `tslint:all` to enable all rules)  
