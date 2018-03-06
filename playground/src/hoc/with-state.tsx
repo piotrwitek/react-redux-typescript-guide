@@ -23,7 +23,7 @@ export const withState = <P extends WrappedComponentProps>(
     static displayName = `withState(${WrappedComponent.name})`;
 
     state: State = {
-      count: (this.props.initialCount || 0)!,
+      count: Number(this.props.initialCount) || 0,
     };
 
     handleIncrement = () => {

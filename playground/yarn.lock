@@ -7211,7 +7211,11 @@ typesafe-actions@1.1.2:
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/typesafe-actions/-/typesafe-actions-1.1.2.tgz#af88ede3ee254be425c3e0e02de11b182830ae48"
 
-typescript@2.6.2, typescript@^2.4.2:
+typescript@2.7.2:
+  version "2.7.2"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-2.7.2.tgz#2d615a1ef4aee4f574425cdff7026edf81919836"
+
+typescript@^2.4.2:
   version "2.6.2"
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-2.6.2.tgz#3c5b6fd7f6de0914269027f03c0946758f7673a4"
 
@@ -7467,9 +7471,9 @@ utila@~0.4:
   version "0.4.0"
   resolved "https://registry.yarnpkg.com/utila/-/utila-0.4.0.tgz#8a16a05d445657a3aea5eecc5b12a4fa5379772c"
 
-utility-types@1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/utility-types/-/utility-types-1.0.0.tgz#95e0774ed78ffa055fc228591963de3902e36609"
+utility-types@1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/utility-types/-/utility-types-1.1.0.tgz#52408b6ed852fdd4076b48b30ed726f139b0f116"
 
 utils-merge@1.0.1:
   version "1.0.1"
