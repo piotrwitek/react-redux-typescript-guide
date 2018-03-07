@@ -73,7 +73,7 @@ npm i -D @types/react @types/react-dom @types/react-redux
 > *NB: Guide is based on types from Redux v4.x.x (Beta). To make it work with Redux v3.x.x please refer to [this config](https://github.com/piotrwitek/react-redux-typescript-guide/blob/master/playground/tsconfig.json#L5))  
 
 ### Complementary Libraries
-> Utility libraries **with focus on type-safety** providing a light functional abstractions for common use-cases 
+> Utility libraries **with focus on type-safety** providing a light functional abstractions for common use-cases
 
 - ["utility-types"](https://github.com/piotrwitek/utility-types) - Utility Types for TypeScript (think lodash for types, moreover provides migration from Flow's Utility Types)  
 - ["typesafe-actions"](https://github.com/piotrwitek/typesafe-actions) - Typesafe Action Creators for Redux / Flux Architectures (in TypeScript)  
@@ -379,7 +379,7 @@ export const withState = <P extends WrappedComponentProps>(
     static displayName = `withState(${WrappedComponent.name})`;
 
     state: State = {
-      count: (this.props.initialCount || 0)!,
+      count: Number(this.props.initialCount) || 0,
     };
 
     handleIncrement = () => {
