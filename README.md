@@ -84,22 +84,22 @@ npm i -D @types/react @types/react-dom @types/react-redux
 
 # React Types Cheatsheet
 
-#### `React.StatelessComponent<P>` or alias `React.SFC<P>`
-Stateless functional components
+#### `React.StatelessComponent<P>` or `React.SFC<P>`
+Type representing stateless functional component
 ```tsx
 const MyComponent: React.SFC<MyComponentProps> = ...
 ```
 [⇧ back to top](#table-of-contents)
 
 #### `React.Component<P, S>`
-Statefull class component
+Type representing statefull class component
 ```tsx
 class MyComponent extends React.Component<MyComponentProps, State> { ...
 ```
 [⇧ back to top](#table-of-contents)
 
 #### `React.ComponentType<P>`
-Accepts sfc or class components with Generic Props Type
+Type representing union type of (SFC | Component)
 ```tsx
 const withState = <P extends WrappedComponentProps>(
   WrappedComponent: React.ComponentType<P>,
@@ -107,31 +107,34 @@ const withState = <P extends WrappedComponentProps>(
 ```
 [⇧ back to top](#table-of-contents)
 
-#### `React.ReactNode`
-Accepts any react elements (component instances) and also primitive types
+#### `React.ReactElement<P>` or `JSX.Element`
+Type representing a concept of React Element - representation of a native DOM component (<div />), or a user-defined composite component (<MyComponent />)
 ```tsx
-const elementOrPrimitive: React.ReactNode = '' || 0 || false || null || <div /> || <MyComponent />;
+const elementOnly: React.ReactElement = <div /> || <MyComponent />;
 ```
 [⇧ back to top](#table-of-contents)
 
-#### `JSX.Element`
-Similar in usage to ReactNode but limited to accept only react elements (and not primitive types)
+#### `React.ReactNode`
+Type representing any possible type of React node (basically ReactElement (including Fragments and Portals) + primitive JS types)
 ```tsx
-const elementOnly: JSX.Element =  <div /> || <MyComponent />;
+const elementOrPrimitive: React.ReactNode = 'string' || 0 || false || null || undefined || <div /> || <MyComponent />;
+const Component = ({ children: React.ReactNode }) => ...
 ```
-[⇧ back to top](#table-of-contents)
+[⇧ back to top](#table-of-contents
 
 #### `React.CSSProperties`
-Type-safety for styles using css-in-js
+Type representing style object in JSX (usefull for css-in-js styles)
 ```tsx
 const styles: React.CSSProperties = { flexDirection: 'row', ...
+const element = <div style={styles} ...
 ```
 [⇧ back to top](#table-of-contents)
 
 #### `React.ReactEventHandler<E>`
-Type-safe event handlers for JSX
+Type representing React event handler
 ```tsx
 const handleChange: React.ReactEventHandler<HTMLInputElement> = (ev) => { ...
+const element = <input onChange={handleChange} ...
 ```
 [⇧ back to top](#table-of-contents)
 
