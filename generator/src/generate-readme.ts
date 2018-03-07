@@ -13,7 +13,8 @@ const inputFiles = [
   DOCS_PATH + '3_tools.md',
   DOCS_PATH + '4_recipes.md',
   DOCS_PATH + '5_faq.md',
-  DOCS_PATH + '6_end.md'
+  DOCS_PATH + '6_end.md',
+  DOCS_PATH + '7_links.md',
 ];
 
 const outputFile = TOP_LEVEL_PATH + 'README.md';

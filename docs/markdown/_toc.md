@@ -27,6 +27,6 @@
   - [Vendor Types Augmentation](#vendor-types-augmentation)
   - [Default and Named Module Exports](#default-and-named-module-exports)
 - [FAQ](#faq)
-- [Roadmap](#roadmap)
 - [Contribution Guide](#contribution-guide)
 - [Project Examples](#project-examples)
+- [Tutorials](#tutorials)

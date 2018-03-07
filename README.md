@@ -52,9 +52,9 @@ You should check Playground Project located in the `/playground` folder. It is a
   - [Vendor Types Augmentation](#vendor-types-augmentation)
   - [Default and Named Module Exports](#default-and-named-module-exports)
 - [FAQ](#faq)
-- [Roadmap](#roadmap)
 - [Contribution Guide](#contribution-guide)
 - [Project Examples](#project-examples)
+- [Tutorials](#tutorials)
 
 ---
 
@@ -1419,12 +1419,6 @@ class StatefulCounter extends React.Component<Props, State> {
 
 ---
 
-# Roadmap
-- extend HOC section with more advanced examples [#5](../../issues/5)  
-- investigate typing patterns for generic component children [#7](../../issues/7)  
-
-[⇧ back to top](#table-of-contents)
-
 # Contribution Guide
 - Don't edit `README.md` - it is built with `generator` script from  separate `.md` files located in the `/docs/markdown` folder, edit them instead
 - For code snippets, they are also injected by `generator` script from the source files located in the playground folder (this step make sure all examples are type-checked and linted), edit them instead
@@ -1446,8 +1440,18 @@ node ./generator/bin/generate-readme.js
 
 [⇧ back to top](#table-of-contents)
 
+---
+
 # Project Examples
 
 https://github.com/piotrwitek/react-redux-typescript-webpack-starter  
+
+[⇧ back to top](#table-of-contents)
+
+# Tutorials
+> Curated list of relevant in-depth tutorials
+
+Higher-Order Components:
+- https://medium.com/@jrwebdev/react-higher-order-component-patterns-in-typescript-42278f7590fb
 
 [⇧ back to top](#table-of-contents)
