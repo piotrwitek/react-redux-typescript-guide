@@ -22,7 +22,7 @@
   - [Enzyme](#enzyme)
   - [Living Style Guide](#living-style-guide) 🌟 __NEW__
   - [Common Npm Scripts](#common-npm-scripts)
-- [Extras](#extras)
+- [Recipes](#recipes)
   - [tsconfig.json](#tsconfigjson)
   - [Vendor Types Augmentation](#vendor-types-augmentation)
   - [Default and Named Module Exports](#default-and-named-module-exports)

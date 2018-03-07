@@ -11,7 +11,7 @@ const inputFiles = [
     DOCS_PATH + '1_react.md',
     DOCS_PATH + '2_redux.md',
     DOCS_PATH + '3_tools.md',
-    DOCS_PATH + '4_extras.md',
+    DOCS_PATH + '4_recipes.md',
     DOCS_PATH + '5_faq.md',
     DOCS_PATH + '6_end.md'
 ];

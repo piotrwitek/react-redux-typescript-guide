@@ -1,4 +1,4 @@
-# Extras
+# Recipes
 
 ### tsconfig.json
 - Recommended setup for best benefits from type-checking, with support for JSX and ES2016 features  

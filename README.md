@@ -47,7 +47,7 @@ You should check Playground Project located in the `/playground` folder. It is a
   - [Enzyme](#enzyme)
   - [Living Style Guide](#living-style-guide) 🌟 __NEW__
   - [Common Npm Scripts](#common-npm-scripts)
-- [Extras](#extras)
+- [Recipes](#recipes)
   - [tsconfig.json](#tsconfigjson)
   - [Vendor Types Augmentation](#vendor-types-augmentation)
   - [Default and Named Module Exports](#default-and-named-module-exports)
@@ -1240,7 +1240,7 @@ configure({ adapter: new Adapter() });
 
 ---
 
-# Extras
+# Recipes
 
 ### tsconfig.json
 - Recommended setup for best benefits from type-checking, with support for JSX and ES2016 features  
