@@ -1,5 +1,5 @@
 ## Table of Contents
-- [Type Definitions & Complementary Libraries](#type-definitions-&-complementary-libraries)
+- [Type Definitions & Complementary Libraries](#type-definitions--complementary-libraries)
 - [React Types Cheatsheet](#react-types-cheatsheet) 🌟 __NEW__
 - [Component Typing Patterns](#component-typing-patterns)
   - [Stateless Components - SFC](#stateless-components---sfc)
