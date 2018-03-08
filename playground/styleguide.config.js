@@ -32,7 +32,14 @@ module.exports = {
     {
       name: 'Generic Components',
       components: () => ([
-        './src/components/generic-list.tsx'
+        './src/components/generic-list.tsx',
+      ]),
+    },
+    {
+      name: 'Render Props',
+      components: () => ([
+        './src/components/name-provider.tsx',
+        './src/components/mouse-provider.tsx',
       ]),
     },
   ],

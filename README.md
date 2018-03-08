@@ -30,6 +30,7 @@ You should check Playground Project located in the `/playground` folder. It is a
   - [Stateless Components - SFC](#stateless-components---sfc)
   - [Stateful Components - Class](#stateful-components---class) 📝 __UPDATED__
   - [Generic Components](#generic-components)
+  - [Render Props](#render-props) 🌟 __NEW__
   - [Higher-Order Components](#higher-order-components) 📝 __UPDATED__
   - [Redux Connected Components](#redux-connected-components)
 - [Redux](#redux)
@@ -176,7 +177,7 @@ export const SFCCounter: React.SFC<SFCCounterProps> = (props) => {
 
 [⇧ back to top](#table-of-contents)
 
-#### - spreading attributes [link](https://facebook.github.io/react/docs/jsx-in-depth.html#spread-attributes)
+#### - spread attributes [link](https://facebook.github.io/react/docs/jsx-in-depth.html#spread-attributes)
 
 ```tsx
 import * as React from 'react';
@@ -348,10 +349,88 @@ export class GenericList<T> extends React.Component<GenericListProps<T>, {}> {
 
 ---
 
+## Render Props
+> https://reactjs.org/docs/render-props.html
+
+#### - name provider
+> simple component using children as a render prop
+
+```tsx
+import * as React from 'react';
+
+interface NameProviderProps {
+  children: (state: NameProviderState) => React.ReactNode;
+}
+
+interface NameProviderState {
+  name: string;
+}
+
+export class NameProvider extends React.Component<NameProviderProps, NameProviderState> {
+  state = {
+    name: 'Piotr',
+  };
+
+  render() {
+    return this.props.children(this.state);
+  }
+}
+
+```
+
+[⟩⟩⟩ demo](https://piotrwitek.github.io/react-redux-typescript-guide/#nameprovider)
+
+[⇧ back to top](#table-of-contents)
+
+#### - mouse provider
+> `Mouse` component found in [Render Props React Docs](https://reactjs.org/docs/render-props.html#use-render-props-for-cross-cutting-concerns)
+
+```tsx
+import * as React from 'react';
+
+export interface MouseProviderProps {
+  render: (state: MouseProviderState) => React.ReactNode;
+}
+
+interface MouseProviderState {
+  x: number;
+  y: number;
+}
+
+export class MouseProvider extends React.Component<MouseProviderProps, MouseProviderState> {
+  state = { x: 0, y: 0 };
+
+  handleMouseMove = (event: React.MouseEvent<any>) => {
+    this.setState({
+      x: event.clientX,
+      y: event.clientY,
+    });
+  }
+
+  render() {
+    return (
+      <div style={{ height: '100%' }} onMouseMove={this.handleMouseMove} >
+
+        {/*
+          Instead of providing a static representation of what <Mouse> renders,
+          use the `render` prop to dynamically determine what to render.
+        */}
+        {this.props.render(this.state)}
+      </div>
+    );
+  }
+}
+
+```
+
+[⟩⟩⟩ demo](https://piotrwitek.github.io/react-redux-typescript-guide/#mouseprovider)
+
+[⇧ back to top](#table-of-contents)
+
+---
+
 ## Higher-Order Components
-- function that takes a component and returns a new component
-- a new component will infer Props interface from wrapped Component extended with Props of HOC
-- will filter out props specific to HOC, and the rest will be passed through to wrapped component
+> https://reactjs.org/docs/higher-order-components.html
 
 #### - withState
 Adds state to a stateless counter

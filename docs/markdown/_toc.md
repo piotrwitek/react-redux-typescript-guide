@@ -5,6 +5,7 @@
   - [Stateless Components - SFC](#stateless-components---sfc)
   - [Stateful Components - Class](#stateful-components---class) 📝 __UPDATED__
   - [Generic Components](#generic-components)
+  - [Render Props](#render-props) 🌟 __NEW__
   - [Higher-Order Components](#higher-order-components) 📝 __UPDATED__
   - [Redux Connected Components](#redux-connected-components)
 - [Redux](#redux)

@@ -7,3 +7,5 @@ Usage Demo:
 const Demo = require('./stateful-counter.usage').default;
 <Demo />
 ```
+
+[⇦ back to guide](https://github.com/piotrwitek/react-redux-typescript-guide#--stateful-counter)

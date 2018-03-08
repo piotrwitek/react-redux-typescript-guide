@@ -11,9 +11,9 @@ const users = [
 
 export class UserList extends GenericList<IUser> { }
 
-export default (() => (
+export default () => (
   <UserList
     items={users}
     itemRenderer={(item) => <div key={item.id}>{item.fullName}</div>}
   />
-)) as React.SFC<{}>;
+);

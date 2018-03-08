@@ -68,7 +68,7 @@ const element = <input onChange={handleChange} ...
 
 [⇧ back to top](#table-of-contents)
 
-#### - spreading attributes [link](https://facebook.github.io/react/docs/jsx-in-depth.html#spread-attributes)
+#### - spread attributes [link](https://facebook.github.io/react/docs/jsx-in-depth.html#spread-attributes)
 
 ::example='../../playground/src/components/sfc-spread-attributes.tsx'::
 
@@ -112,10 +112,31 @@ const element = <input onChange={handleChange} ...
 
 ---
 
+## Render Props
+> https://reactjs.org/docs/render-props.html
+
+#### - name provider
+> simple component using children as a render prop
+
+::example='../../playground/src/components/name-provider.tsx'::
+
+[⟩⟩⟩ demo](https://piotrwitek.github.io/react-redux-typescript-guide/#nameprovider)
+
+[⇧ back to top](#table-of-contents)
+
+#### - mouse provider
+> `Mouse` component found in [Render Props React Docs](https://reactjs.org/docs/render-props.html#use-render-props-for-cross-cutting-concerns)
+
+::example='../../playground/src/components/mouse-provider.tsx'::
+
+[⟩⟩⟩ demo](https://piotrwitek.github.io/react-redux-typescript-guide/#mouseprovider)
+
+[⇧ back to top](#table-of-contents)
+
+---
+
 ## Higher-Order Components
-- function that takes a component and returns a new component
-- a new component will infer Props interface from wrapped Component extended with Props of HOC
-- will filter out props specific to HOC, and the rest will be passed through to wrapped component
+> https://reactjs.org/docs/higher-order-components.html
 
 #### - withState
 Adds state to a stateless counter
