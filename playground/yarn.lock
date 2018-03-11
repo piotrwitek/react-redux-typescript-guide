@@ -7211,9 +7211,9 @@ typesafe-actions@1.1.2:
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/typesafe-actions/-/typesafe-actions-1.1.2.tgz#af88ede3ee254be425c3e0e02de11b182830ae48"
 
-typescript@2.7.2:
-  version "2.7.2"
-  resolved "https://registry.yarnpkg.com/typescript/-/typescript-2.7.2.tgz#2d615a1ef4aee4f574425cdff7026edf81919836"
+typescript@2.8.0-dev.20180308:
+  version "2.8.0-dev.20180308"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-2.8.0-dev.20180308.tgz#d089f067fa8b7190984bc2ea340679bbddc1bd62"
 
 typescript@^2.4.2:
   version "2.6.2"
