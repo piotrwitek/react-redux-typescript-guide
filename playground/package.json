@@ -34,7 +34,7 @@
     "redux-observable": "0.17.0",
     "reselect": "3.0.1",
     "rxjs": "5.5.6",
-    "tslib": "1.8.1",
+    "tslib": "1.9.0",
     "typesafe-actions": "1.1.2",
     "utility-types": "1.1.0"
   },
@@ -58,7 +58,7 @@
     "ts-jest": "22.0.1",
     "tslint": "5.8.0",
     "tslint-react": "3.3.3",
-    "typescript": "2.8.0-dev.20180308",
+    "typescript": "2.8.0-rc",
     "webpack": "3.10.0",
     "webpack-blocks": "1.0.0-rc.2"
   }

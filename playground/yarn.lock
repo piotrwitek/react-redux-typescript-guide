@@ -7152,7 +7152,11 @@ ts-jest@22.0.1:
     source-map-support "^0.5.0"
     yargs "^10.0.3"
 
-tslib@1.8.1, tslib@^1.7.1, tslib@^1.8.0:
+tslib@1.9.0:
+  version "1.9.0"
+  resolved "https://registry.yarnpkg.com/tslib/-/tslib-1.9.0.tgz#e37a86fda8cbbaf23a057f473c9f4dc64e5fc2e8"
+
+tslib@^1.7.1, tslib@^1.8.0:
   version "1.8.1"
   resolved "https://registry.yarnpkg.com/tslib/-/tslib-1.8.1.tgz#6946af2d1d651a7b1863b531d6e5afa41aa44eac"
 
@@ -7227,9 +7231,9 @@ typesafe-actions@1.1.2:
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/typesafe-actions/-/typesafe-actions-1.1.2.tgz#af88ede3ee254be425c3e0e02de11b182830ae48"
 
-typescript@2.8.0-dev.20180308:
-  version "2.8.0-dev.20180308"
-  resolved "https://registry.yarnpkg.com/typescript/-/typescript-2.8.0-dev.20180308.tgz#d089f067fa8b7190984bc2ea340679bbddc1bd62"
+typescript@2.8.0-rc:
+  version "2.8.0-rc"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-2.8.0-rc.tgz#a0256b7d1d39fb7493ba0403f55e95d31e8bc374"
 
 typescript@^2.4.2:
   version "2.6.2"
