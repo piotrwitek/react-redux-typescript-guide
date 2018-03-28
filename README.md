@@ -226,12 +226,12 @@ export interface StatefulCounterProps {
   label: string;
 }
 
-type State = {
-  count: number;
-};
+interface State {
+  readonly count: number;
+}
 
 export class StatefulCounter extends React.Component<StatefulCounterProps, State> {
-  state: State = {
+  readonly state: State = {
     count: 0,
   };
 
@@ -272,11 +272,11 @@ export interface StatefulCounterWithDefaultProps {
 }
 
 interface DefaultProps {
-  initialCount: number;
+  readonly initialCount: number;
 }
 
 interface State {
-  count: number;
+  readonly count: number;
 }
 
 export const StatefulCounterWithDefault: React.ComponentClass<StatefulCounterWithDefaultProps> =
@@ -287,7 +287,7 @@ export const StatefulCounterWithDefault: React.ComponentClass<StatefulCounterWit
       initialCount: 0,
     };
 
-    state: State = {
+    readonly state: State = {
       count: this.props.initialCount,
     };
 
@@ -373,11 +373,11 @@ interface NameProviderProps {
 }
 
 interface NameProviderState {
-  name: string;
+  readonly name: string;
 }
 
 export class NameProvider extends React.Component<NameProviderProps, NameProviderState> {
-  state = {
+  readonly state: NameProviderState = {
     name: 'Piotr',
   };
 
@@ -403,12 +403,12 @@ export interface MouseProviderProps {
 }
 
 interface MouseProviderState {
-  x: number;
-  y: number;
+  readonly x: number;
+  readonly y: number;
 }
 
 export class MouseProvider extends React.Component<MouseProviderProps, MouseProviderState> {
-  state = { x: 0, y: 0 };
+  readonly state: MouseProviderState = { x: 0, y: 0 };
 
   handleMouseMove = (event: React.MouseEvent<HTMLDivElement>) => {
     this.setState({
@@ -463,14 +463,14 @@ export const withState = <P extends WrappedComponentProps>(
     initialCount?: number;
   }
   interface State {
-    count: number;
+    readonly count: number;
   }
 
   return class WithState extends React.Component<Subtract<P, WrappedComponentProps> & Props, State> {
     // Enhance component name for debugging and React-Dev-Tools
     static displayName = `withState(${WrappedComponent.name})`;
 
-    state: State = {
+    readonly state: State = {
       count: Number(this.props.initialCount) || 0,
     };
 
@@ -532,13 +532,13 @@ export const withErrorBoundary = <P extends WrappedComponentProps>(
 ) => {
   interface Props { }
   interface State {
-    error: Error | null | undefined;
+    readonly error: Error | null | undefined;
   }
 
   return class WithErrorBoundary extends React.Component<Subtract<P, WrappedComponentProps> & Props, State> {
     static displayName = `withErrorBoundary(${WrappedComponent.name})`;
 
-    state: State = {
+    readonly state: State = {
       error: undefined,
     };
 
@@ -852,7 +852,7 @@ export type TodosState = {
 };
 
 export type RootState = {
-  todos: TodosState;
+  readonly todos: TodosState;
 };
 
 export const todosReducer = combineReducers<TodosState, TodosAction>({
@@ -1345,7 +1345,8 @@ configure({ adapter: new Adapter() });
       // in webpack you need to add -> resolve: { alias: { '@src': PATH_TO_SRC } }
     },
     "outDir": "dist/", // target for compiled files
-    "allowSyntheticDefaultImports": true, // no errors on commonjs default import
+    "allowSyntheticDefaultImports": true, // no errors with commonjs modules interop
+    "esModuleInterop": true,
     "allowJs": true, // include js files
     "checkJs": true, // typecheck js files
     "declaration": false, // don't emit declarations

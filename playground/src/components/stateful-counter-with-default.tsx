@@ -6,11 +6,11 @@ export interface StatefulCounterWithDefaultProps {
 }
 
 interface DefaultProps {
-  initialCount: number;
+  readonly initialCount: number;
 }
 
 interface State {
-  count: number;
+  readonly count: number;
 }
 
 export const StatefulCounterWithDefault: React.ComponentClass<StatefulCounterWithDefaultProps> =
@@ -21,7 +21,7 @@ export const StatefulCounterWithDefault: React.ComponentClass<StatefulCounterWit
       initialCount: 0,
     };
 
-    state: State = {
+    readonly state: State = {
       count: this.props.initialCount,
     };
 

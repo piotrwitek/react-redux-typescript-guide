@@ -5,11 +5,11 @@ interface NameProviderProps {
 }
 
 interface NameProviderState {
-  name: string;
+  readonly name: string;
 }
 
 export class NameProvider extends React.Component<NameProviderProps, NameProviderState> {
-  state = {
+  readonly state: NameProviderState = {
     name: 'Piotr',
   };
 

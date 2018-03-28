@@ -12,13 +12,13 @@ export const withErrorBoundary = <P extends WrappedComponentProps>(
 ) => {
   interface Props { }
   interface State {
-    error: Error | null | undefined;
+    readonly error: Error | null | undefined;
   }
 
   return class WithErrorBoundary extends React.Component<Subtract<P, WrappedComponentProps> & Props, State> {
     static displayName = `withErrorBoundary(${WrappedComponent.name})`;
 
-    state: State = {
+    readonly state: State = {
       error: undefined,
     };
 

@@ -15,14 +15,14 @@ export const withState = <P extends WrappedComponentProps>(
     initialCount?: number;
   }
   interface State {
-    count: number;
+    readonly count: number;
   }
 
   return class WithState extends React.Component<Subtract<P, WrappedComponentProps> & Props, State> {
     // Enhance component name for debugging and React-Dev-Tools
     static displayName = `withState(${WrappedComponent.name})`;
 
-    state: State = {
+    readonly state: State = {
       count: Number(this.props.initialCount) || 0,
     };
 

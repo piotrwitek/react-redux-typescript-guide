@@ -12,7 +12,7 @@ export type TodosState = {
 };
 
 export type RootState = {
-  todos: TodosState;
+  readonly todos: TodosState;
 };
 
 export const todosReducer = combineReducers<TodosState, TodosAction>({
