@@ -1,6 +1,7 @@
 import { createSelector } from 'reselect';
 
 import { RootState } from './reducer';
+import {ITodo} from './types';
 
 export const getTodos =
   (state: RootState) => state.todos.todos;
@@ -8,7 +9,7 @@ export const getTodos =
 export const getTodosFilter =
   (state: RootState) => state.todos.todosFilter;
 
-export const getFilteredTodos = createSelector(
+export const getFilteredTodos = createSelector<RootState, ITodo[], string, ITodo[]>(
   getTodos, getTodosFilter,
   (todos, todosFilter) => {
     switch (todosFilter) {
