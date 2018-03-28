@@ -36,7 +36,7 @@ Type representing any possible type of React node (basically ReactElement (inclu
 const elementOrPrimitive: React.ReactNode = 'string' || 0 || false || null || undefined || <div /> || <MyComponent />;
 const Component = ({ children: React.ReactNode }) => ...
 ```
-[⇧ back to top](#table-of-contents
+[⇧ back to top](#table-of-contents)
 
 #### `React.CSSProperties`
 Type representing style object in JSX (usefull for css-in-js styles)
