@@ -132,10 +132,20 @@ const element = <div style={styles} ...
 [⇧ back to top](#table-of-contents)
 
 #### `React.ReactEventHandler<E>`
-Type representing React event handler
+Type representing generic event handler
 ```tsx
-const handleChange: React.ReactEventHandler<HTMLInputElement> = (ev) => { ...
-const element = <input onChange={handleChange} ...
+const handleChange: React.ReactEventHandler<HTMLInputElement> = (ev) => { ... } 
+
+<input onChange={handleChange} ... />
+```
+[⇧ back to top](#table-of-contents)
+
+#### `React.MouseEvent<E>` | `React.KeyboardEvent<E>` | `React.TouchEvent<E>` etc...
+Type representing more specific event handler
+```tsx
+const handleChange = (ev: React.MouseEvent<HTMLDivElement>) => { ... }
+
+<div onMouseMove={handleChange} ... />
 ```
 [⇧ back to top](#table-of-contents)
 
@@ -400,7 +410,7 @@ interface MouseProviderState {
 export class MouseProvider extends React.Component<MouseProviderProps, MouseProviderState> {
   state = { x: 0, y: 0 };
 
-  handleMouseMove = (event: React.MouseEvent<any>) => {
+  handleMouseMove = (event: React.MouseEvent<HTMLDivElement>) => {
     this.setState({
       x: event.clientX,
       y: event.clientY,
