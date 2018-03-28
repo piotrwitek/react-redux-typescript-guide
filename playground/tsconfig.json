@@ -7,7 +7,8 @@
       // in webpack you need to add -> resolve: { alias: { '@src': PATH_TO_SRC } }
     },
     "outDir": "dist/", // target for compiled files
-    "allowSyntheticDefaultImports": true, // no errors on commonjs default import
+    "allowSyntheticDefaultImports": true, // no errors with commonjs modules interop
+    "esModuleInterop": true,
     "allowJs": true, // include js files
     "checkJs": true, // typecheck js files
     "declaration": false, // don't emit declarations
