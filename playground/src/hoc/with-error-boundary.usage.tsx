@@ -6,14 +6,14 @@ import { ErrorMessage } from '@src/components';
 const ErrorMessageWithErrorBoundary =
   withErrorBoundary(ErrorMessage);
 
-const ErrorThrower = () => (
-  <button type="button" onClick={() => { throw new Error(`Catch this!`); }}>
+const BrokenButton = () => (
+  <button type="button" onClick={() => { throw new Error(`Catch me!`); }}>
     {`Throw nasty error`}
   </button >
 );
 
 export default (() => (
-  <ErrorMessageWithErrorBoundary>
-    <ErrorThrower />
+  <ErrorMessageWithErrorBoundary  >
+    <BrokenButton />
   </ErrorMessageWithErrorBoundary>
 )) as React.SFC<{}>;

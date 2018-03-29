@@ -450,27 +450,30 @@ import * as React from 'react';
 import { Subtract } from 'utility-types';
 
 // These props will be subtracted from original component type
-interface WrappedComponentProps {
+interface InjectedProps {
   count: number;
   onIncrement: () => any;
 }
 
-export const withState = <P extends WrappedComponentProps>(
-  WrappedComponent: React.ComponentType<P>
+export const withState = <WrappedProps extends InjectedProps>(
+  WrappedComponent: React.ComponentType<WrappedProps>
 ) => {
   // These props will be added to original component type
-  interface Props {
+  type HocProps = Subtract<WrappedProps, InjectedProps> & {
+    // here you can extend hoc props
     initialCount?: number;
-  }
-  interface State {
+  };
+  type HocState = {
     readonly count: number;
-  }
+  };
 
-  return class WithState extends React.Component<Subtract<P, WrappedComponentProps> & Props, State> {
+  return class WithState extends React.Component<HocProps, HocState> {
     // Enhance component name for debugging and React-Dev-Tools
     static displayName = `withState(${WrappedComponent.name})`;
+    // reference to original wrapped component
+    static readonly WrappedComponent = WrappedComponent;
 
-    readonly state: State = {
+    readonly state: HocState = {
       count: Number(this.props.initialCount) || 0,
     };
 
@@ -479,14 +482,14 @@ export const withState = <P extends WrappedComponentProps>(
     }
 
     render() {
-      const { ...remainingProps } = this.props;
+      const { ...restProps } = this.props as {};
       const { count } = this.state;
 
       return (
         <WrappedComponent
-          {...remainingProps}
-          count={count}
-          onIncrement={this.handleIncrement}
+          {...restProps}
+          count={count} // injected
+          onIncrement={this.handleIncrement} // injected
         />
       );
     }
@@ -519,26 +522,29 @@ Adds error handling using componentDidCatch to any component
 
 ```tsx
 import * as React from 'react';
-import { Subtract } from 'utility-types';
+// import { Subtract } from 'utility-types';
+type Omit<A, K> = Pick<A, Exclude<keyof A, K>>;
 
 const MISSING_ERROR = 'Error was swallowed during propagation.';
 
-interface WrappedComponentProps {
-  onReset?: () => any;
+interface InjectedProps {
+  onReset: () => any;
 }
 
-export const withErrorBoundary = <P extends WrappedComponentProps>(
-  WrappedComponent: React.ComponentType<P>
+export const withErrorBoundary = <WrappedProps extends InjectedProps>(
+  WrappedComponent: React.ComponentType<WrappedProps>
 ) => {
-  interface Props { }
-  interface State {
+  type HocProps = Omit<WrappedProps, keyof InjectedProps> & {
+    // here you can extend hoc props
+  };
+  type HocState = {
     readonly error: Error | null | undefined;
-  }
+  };
 
-  return class WithErrorBoundary extends React.Component<Subtract<P, WrappedComponentProps> & Props, State> {
+  return class WithErrorBoundary extends React.Component<HocProps, HocState> {
     static displayName = `withErrorBoundary(${WrappedComponent.name})`;
 
-    readonly state: State = {
+    readonly state: HocState = {
       error: undefined,
     };
 
@@ -556,14 +562,14 @@ export const withErrorBoundary = <P extends WrappedComponentProps>(
     }
 
     render() {
-      const { children, ...remainingProps } = this.props;
+      const { children, ...restProps } = this.props as { children: React.ReactNode };
       const { error } = this.state;
 
       if (error) {
         return (
           <WrappedComponent
-            {...remainingProps}
-            onReset={this.handleReset}
+            {...restProps}
+            onReset={this.handleReset} // injected
           />
         );
       }
@@ -585,15 +591,15 @@ import { ErrorMessage } from '@src/components';
 const ErrorMessageWithErrorBoundary =
   withErrorBoundary(ErrorMessage);
 
-const ErrorThrower = () => (
-  <button type="button" onClick={() => { throw new Error(`Catch this!`); }}>
+const BrokenButton = () => (
+  <button type="button" onClick={() => { throw new Error(`Catch me!`); }}>
     {`Throw nasty error`}
   </button >
 );
 
 export default (() => (
-  <ErrorMessageWithErrorBoundary>
-    <ErrorThrower />
+  <ErrorMessageWithErrorBoundary  >
+    <BrokenButton />
   </ErrorMessageWithErrorBoundary>
 )) as React.SFC<{}>;
 

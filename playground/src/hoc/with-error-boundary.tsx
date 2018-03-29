@@ -1,24 +1,27 @@
 import * as React from 'react';
-import { Subtract } from 'utility-types';
+// import { Subtract } from 'utility-types';
+type Omit<A, K> = Pick<A, Exclude<keyof A, K>>;
 
 const MISSING_ERROR = 'Error was swallowed during propagation.';
 
-interface WrappedComponentProps {
-  onReset?: () => any;
+interface InjectedProps {
+  onReset: () => any;
 }
 
-export const withErrorBoundary = <P extends WrappedComponentProps>(
-  WrappedComponent: React.ComponentType<P>
+export const withErrorBoundary = <WrappedProps extends InjectedProps>(
+  WrappedComponent: React.ComponentType<WrappedProps>
 ) => {
-  interface Props { }
-  interface State {
+  type HocProps = Omit<WrappedProps, keyof InjectedProps> & {
+    // here you can extend hoc props
+  };
+  type HocState = {
     readonly error: Error | null | undefined;
-  }
+  };
 
-  return class WithErrorBoundary extends React.Component<Subtract<P, WrappedComponentProps> & Props, State> {
+  return class WithErrorBoundary extends React.Component<HocProps, HocState> {
     static displayName = `withErrorBoundary(${WrappedComponent.name})`;
 
-    readonly state: State = {
+    readonly state: HocState = {
       error: undefined,
     };
 
@@ -36,14 +39,14 @@ export const withErrorBoundary = <P extends WrappedComponentProps>(
     }
 
     render() {
-      const { children, ...remainingProps } = this.props;
+      const { children, ...restProps } = this.props as { children: React.ReactNode };
       const { error } = this.state;
 
       if (error) {
         return (
           <WrappedComponent
-            {...remainingProps}
-            onReset={this.handleReset}
+            {...restProps}
+            onReset={this.handleReset} // injected
           />
         );
       }
