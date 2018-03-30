@@ -25,8 +25,8 @@
   "dependencies": {
     "axios": "0.18.0",
     "cuid": "2.1.0",
-    "react": "16.2.0",
-    "react-dom": "16.2.0",
+    "react": "16.3.0",
+    "react-dom": "16.3.0",
     "react-redux": "5.0.7",
     "react-router-dom": "4.2.2",
     "react-router-redux": "5.0.0-alpha.8",
@@ -35,7 +35,7 @@
     "reselect": "3.0.1",
     "rxjs": "5.5.8",
     "tslib": "1.9.0",
-    "typesafe-actions": "1.1.2",
+    "typesafe-actions": "1.2.0-rc.2",
     "utility-types": "1.1.0"
   },
   "devDependencies": {
@@ -59,6 +59,6 @@
     "tslint-react": "3.5.1",
     "typescript": "2.8.1",
     "webpack": "3.10.0",
-    "webpack-blocks": "1.0.0-rc.2"
+    "webpack-blocks": "1.0.0"
   }
 }

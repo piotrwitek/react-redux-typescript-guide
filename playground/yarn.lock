@@ -85,9 +85,9 @@
   version "16.1.0"
   resolved "https://registry.yarnpkg.com/@types/react/-/react-16.1.0.tgz#6c0e9955ce73f332b4a1948d45decaf18c764c6e"
 
-"@webpack-blocks/assets@^1.0.0-rc":
-  version "1.0.0-rc"
-  resolved "https://registry.yarnpkg.com/@webpack-blocks/assets/-/assets-1.0.0-rc.tgz#a68da5f8d2e7c03d572bad6fe37b87ea11bc992b"
+"@webpack-blocks/assets@^1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@webpack-blocks/assets/-/assets-1.0.0.tgz#ca412abd95767f37fe36c7cc0e37d908afb32a49"
   dependencies:
     css-loader "^0.28.4"
     file-loader "^0.11.2"
@@ -95,69 +95,76 @@
     style-loader "^0.18.2"
     url-loader "^0.5.9"
 
-"@webpack-blocks/babel@^1.0.0-rc":
-  version "1.0.0-rc"
-  resolved "https://registry.yarnpkg.com/@webpack-blocks/babel/-/babel-1.0.0-rc.tgz#4e2848120fe4bde2501052e951cd3bf2219d4f54"
+"@webpack-blocks/babel@^1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@webpack-blocks/babel/-/babel-1.0.0.tgz#131ecce5decd2b45f5a577cdaa3fa67c243fca58"
   dependencies:
     babel-loader "^7.1.1"
 
-"@webpack-blocks/core@^1.0.0-rc":
-  version "1.0.0-rc"
-  resolved "https://registry.yarnpkg.com/@webpack-blocks/core/-/core-1.0.0-rc.tgz#a820adebea589a684595b74cfff6a290e58a3c96"
+"@webpack-blocks/core@^1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@webpack-blocks/core/-/core-1.0.0.tgz#896bc9ea3e6861ec06ac13ce997ae3af2efe0c95"
   dependencies:
     glob-to-regexp "^0.3.0"
     lodash "^4.17.4"
     webpack-merge "^2.6.1"
 
-"@webpack-blocks/dev-server@^1.0.0-rc":
-  version "1.0.0-rc"
-  resolved "https://registry.yarnpkg.com/@webpack-blocks/dev-server/-/dev-server-1.0.0-rc.tgz#5a1d8b1e4607f7c6e873470d5669683616b817cb"
+"@webpack-blocks/dev-server@^1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@webpack-blocks/dev-server/-/dev-server-1.0.0.tgz#c4f9a045bce4e02c511478a530892a0d4da63de6"
   dependencies:
     webpack-dev-server "^2.9.1"
 
-"@webpack-blocks/extract-text@^1.0.0-rc":
-  version "1.0.0-rc"
-  resolved "https://registry.yarnpkg.com/@webpack-blocks/extract-text/-/extract-text-1.0.0-rc.tgz#7cfe4c37f82fd6e1ad43f48e118c694a47dee8a5"
+"@webpack-blocks/extract-text@^1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@webpack-blocks/extract-text/-/extract-text-1.0.0.tgz#8db782e62de8f808de270a40de7fc55958a8f1fc"
   dependencies:
-    extract-text-webpack-plugin "^3.0.0"
+    extract-text-webpack-plugin "^3.0.2"
 
-"@webpack-blocks/postcss@^1.0.0-rc":
-  version "1.0.0-rc"
-  resolved "https://registry.yarnpkg.com/@webpack-blocks/postcss/-/postcss-1.0.0-rc.tgz#aeba5a45fe5a44c16c09787a72e217bb5889183b"
+"@webpack-blocks/postcss@^1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@webpack-blocks/postcss/-/postcss-1.0.0.tgz#c6c2c01f053d1de976db35bac18fc5265e688e6b"
   dependencies:
-    lodash "^4.17.4"
+    lodash "^4.17.5"
     postcss-loader "^1.3.3"
 
-"@webpack-blocks/sass@^1.0.0-rc":
-  version "1.0.0-rc"
-  resolved "https://registry.yarnpkg.com/@webpack-blocks/sass/-/sass-1.0.0-rc.tgz#b173795974898958e72a53baba447558fa6026a6"
+"@webpack-blocks/sass@^1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@webpack-blocks/sass/-/sass-1.0.0.tgz#7e6667daaa38ac7a8c3168c1b96f629190289d0f"
   dependencies:
-    css-loader "^0.28.4"
-    lodash "^4.17.4"
-    node-sass "^4.5.3"
-    sass-loader "^6.0.6"
+    css-loader "^0.28.11"
+    lodash "^4.17.5"
+    node-sass "^4.8.3"
+    sass-loader "^6.0.7"
     style-loader "^0.18.2"
 
-"@webpack-blocks/typescript@1.0.0-rc", "@webpack-blocks/typescript@^1.0.0-rc":
+"@webpack-blocks/typescript@1.0.0-rc":
   version "1.0.0-rc"
   resolved "https://registry.yarnpkg.com/@webpack-blocks/typescript/-/typescript-1.0.0-rc.tgz#8ce56d347024fd69bf2126c828d1401f37a9c211"
   dependencies:
     awesome-typescript-loader "^3.2.2"
     typescript "^2.4.2"
 
-"@webpack-blocks/uglify@^1.1.0":
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/@webpack-blocks/uglify/-/uglify-1.1.0.tgz#481461489a32cc9eb2269094599a8a65f1b22075"
+"@webpack-blocks/typescript@^1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@webpack-blocks/typescript/-/typescript-1.0.0.tgz#56b32a5bd350f61b6761d587aefced9b229c1269"
   dependencies:
-    uglifyjs-webpack-plugin "^1.0.1"
+    awesome-typescript-loader "^3.5.0"
+    typescript "^2.8.1"
+
+"@webpack-blocks/uglify@^1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@webpack-blocks/uglify/-/uglify-1.0.0.tgz#7ed82f2ba9371bc8ef4e716cb4c25a2944d873b0"
+  dependencies:
+    uglifyjs-webpack-plugin "^1.0.0-beta"
     webpack-merge "^4.1.0"
 
-"@webpack-blocks/webpack@^1.0.0-rc":
-  version "1.0.0-rc"
-  resolved "https://registry.yarnpkg.com/@webpack-blocks/webpack/-/webpack-1.0.0-rc.tgz#14611375d412163334e3f115af51cb432e300be7"
+"@webpack-blocks/webpack@^1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@webpack-blocks/webpack/-/webpack-1.0.0.tgz#d05d855d4ff8e789c559e0bf959aa3bc817827f2"
   dependencies:
-    "@webpack-blocks/core" "^1.0.0-rc"
-    webpack-merge "^4.1.0"
+    "@webpack-blocks/core" "^1.0.0"
+    webpack-merge "^4.1.2"
 
 abab@^1.0.4:
   version "1.0.4"
@@ -496,7 +503,7 @@ autoprefixer@^6.3.1:
     postcss "^5.2.16"
     postcss-value-parser "^3.2.3"
 
-awesome-typescript-loader@^3.2.2:
+awesome-typescript-loader@^3.2.2, awesome-typescript-loader@^3.5.0:
   version "3.5.0"
   resolved "https://registry.yarnpkg.com/awesome-typescript-loader/-/awesome-typescript-loader-3.5.0.tgz#4d4d10cba7a04ed433dfa0334250846fb11a1a5a"
   dependencies:
@@ -2395,7 +2402,7 @@ extglob@^2.0.4:
     snapdragon "^0.8.1"
     to-regex "^3.0.1"
 
-extract-text-webpack-plugin@^3.0.0:
+extract-text-webpack-plugin@^3.0.2:
   version "3.0.2"
   resolved "https://registry.yarnpkg.com/extract-text-webpack-plugin/-/extract-text-webpack-plugin-3.0.2.tgz#5f043eaa02f9750a9258b78c0a6e0dc1408fb2f7"
   dependencies:
@@ -3146,7 +3153,7 @@ http-deceiver@^1.2.7:
   version "1.2.7"
   resolved "https://registry.yarnpkg.com/http-deceiver/-/http-deceiver-1.2.7.tgz#fa7168944ab9a519d337cb0bec7284dc3e723d87"
 
-http-errors@1.6.2, http-errors@~1.6.2:
+http-errors@1.6.2:
   version "1.6.2"
   resolved "https://registry.yarnpkg.com/http-errors/-/http-errors-1.6.2.tgz#0a002cc85707192a7e7946ceedc11155f60ec736"
   dependencies:
@@ -3154,6 +3161,15 @@ http-errors@1.6.2, http-errors@~1.6.2:
     inherits "2.0.3"
     setprototypeof "1.0.3"
     statuses ">= 1.3.1 < 2"
+
+http-errors@~1.6.2:
+  version "1.6.3"
+  resolved "https://registry.yarnpkg.com/http-errors/-/http-errors-1.6.3.tgz#8b55680bb4be283a0b5bf4ea2e38580be1d9320d"
+  dependencies:
+    depd "~1.1.2"
+    inherits "2.0.3"
+    setprototypeof "1.1.0"
+    statuses ">= 1.4.0 < 2"
 
 http-parser-js@>=0.4.0:
   version "0.4.11"
@@ -4798,7 +4814,7 @@ node-pre-gyp@^0.6.39:
     tar "^2.2.1"
     tar-pack "^3.4.0"
 
-node-sass@^4.5.3:
+node-sass@^4.8.3:
   version "4.8.3"
   resolved "https://registry.yarnpkg.com/node-sass/-/node-sass-4.8.3.tgz#d077cc20a08ac06f661ca44fb6f19cd2ed41debb"
   dependencies:
@@ -5857,9 +5873,9 @@ react-docgen@^3.0.0-beta9:
     node-dir "^0.1.10"
     recast "^0.12.6"
 
-react-dom@16.2.0:
-  version "16.2.0"
-  resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-16.2.0.tgz#69003178601c0ca19b709b33a83369fe6124c044"
+react-dom@16.3.0:
+  version "16.3.0"
+  resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-16.3.0.tgz#b318e52184188ecb5c3e81117420cca40618643e"
   dependencies:
     fbjs "^0.8.16"
     loose-envify "^1.1.0"
@@ -5885,6 +5901,10 @@ react-icons@^2.2.7:
   resolved "https://registry.yarnpkg.com/react-icons/-/react-icons-2.2.7.tgz#d7860826b258557510dac10680abea5ca23cf650"
   dependencies:
     react-icon-base "2.1.0"
+
+react-is@^16.3.0:
+  version "16.3.0"
+  resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.3.0.tgz#f0e8bfd8c09b480dd610b8639d9ed65c13601224"
 
 react-reconciler@^0.7.0:
   version "0.7.0"
@@ -6000,16 +6020,17 @@ react-styleguidist@6.5.3:
     webpack-merge "^4.1.2"
 
 react-test-renderer@^16.0.0-0:
-  version "16.2.0"
-  resolved "https://registry.yarnpkg.com/react-test-renderer/-/react-test-renderer-16.2.0.tgz#bddf259a6b8fcd8555f012afc8eacc238872a211"
+  version "16.3.0"
+  resolved "https://registry.yarnpkg.com/react-test-renderer/-/react-test-renderer-16.3.0.tgz#7e88d8cb4c2b95c161b6c6c998991166f74d473e"
   dependencies:
     fbjs "^0.8.16"
     object-assign "^4.1.1"
     prop-types "^15.6.0"
+    react-is "^16.3.0"
 
-react@16.2.0:
-  version "16.2.0"
-  resolved "https://registry.yarnpkg.com/react/-/react-16.2.0.tgz#a31bd2dab89bff65d42134fa187f24d054c273ba"
+react@16.3.0:
+  version "16.3.0"
+  resolved "https://registry.yarnpkg.com/react/-/react-16.3.0.tgz#fc5a01c68f91e9b38e92cf83f7b795ebdca8ddff"
   dependencies:
     fbjs "^0.8.16"
     loose-envify "^1.1.0"
@@ -6512,7 +6533,7 @@ sass-graph@^2.2.4:
     scss-tokenizer "^0.2.3"
     yargs "^7.0.0"
 
-sass-loader@^6.0.6:
+sass-loader@^6.0.7:
   version "6.0.7"
   resolved "https://registry.yarnpkg.com/sass-loader/-/sass-loader-6.0.7.tgz#dd2fdb3e7eeff4a53f35ba6ac408715488353d00"
   dependencies:
@@ -6896,7 +6917,7 @@ static-extend@^0.1.1:
     define-property "^0.2.5"
     object-copy "^0.1.0"
 
-"statuses@>= 1.3.1 < 2":
+"statuses@>= 1.3.1 < 2", "statuses@>= 1.4.0 < 2":
   version "1.5.0"
   resolved "https://registry.yarnpkg.com/statuses/-/statuses-1.5.0.tgz#161c7dac177659fd9811f43771fa99381478628c"
 
@@ -6969,8 +6990,8 @@ string-width@^2.0.0, string-width@^2.1.0, string-width@^2.1.1:
     strip-ansi "^4.0.0"
 
 string_decoder@^1.0.0:
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/string_decoder/-/string_decoder-1.1.0.tgz#384f322ee8a848e500effde99901bba849c5d403"
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/string_decoder/-/string_decoder-1.1.1.tgz#9cf1611ba62685d7030ae9e4ba34149c3af03fc8"
   dependencies:
     safe-buffer "~5.1.0"
 
@@ -7350,11 +7371,11 @@ typedarray@^0.0.6:
   version "0.0.6"
   resolved "https://registry.yarnpkg.com/typedarray/-/typedarray-0.0.6.tgz#867ac74e3864187b1d3d47d996a78ec5c8830777"
 
-typesafe-actions@1.1.2:
-  version "1.1.2"
-  resolved "https://registry.yarnpkg.com/typesafe-actions/-/typesafe-actions-1.1.2.tgz#af88ede3ee254be425c3e0e02de11b182830ae48"
+typesafe-actions@1.2.0-rc.2:
+  version "1.2.0-rc.2"
+  resolved "https://registry.yarnpkg.com/typesafe-actions/-/typesafe-actions-1.2.0-rc.2.tgz#7058ccd9b85b29159e745262eb84095dddc3e723"
 
-typescript@2.8.1, typescript@^2.4.2:
+typescript@2.8.1, typescript@^2.4.2, typescript@^2.8.1:
   version "2.8.1"
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-2.8.1.tgz#6160e4f8f195d5ba81d4876f9c0cc1fbc0820624"
 
@@ -7389,7 +7410,7 @@ uglify-to-browserify@~1.0.0:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/uglify-to-browserify/-/uglify-to-browserify-1.0.2.tgz#6e0924d6bda6b5afe349e39a6d632850a0f882b7"
 
-uglifyjs-webpack-plugin@1.2.4, uglifyjs-webpack-plugin@^1.0.1:
+uglifyjs-webpack-plugin@1.2.4, uglifyjs-webpack-plugin@^1.0.0-beta:
   version "1.2.4"
   resolved "https://registry.yarnpkg.com/uglifyjs-webpack-plugin/-/uglifyjs-webpack-plugin-1.2.4.tgz#5eec941b2e9b8538be0a20fc6eda25b14c7c1043"
   dependencies:
@@ -7715,19 +7736,19 @@ webidl-conversions@^4.0.1, webidl-conversions@^4.0.2:
   version "4.0.2"
   resolved "https://registry.yarnpkg.com/webidl-conversions/-/webidl-conversions-4.0.2.tgz#a855980b1f0b6b359ba1d5d9fb39ae941faa63ad"
 
-webpack-blocks@1.0.0-rc.2:
-  version "1.0.0-rc.2"
-  resolved "https://registry.yarnpkg.com/webpack-blocks/-/webpack-blocks-1.0.0-rc.2.tgz#c2825cfd96e945f578c3f62e0dfb5e87c4607e4e"
+webpack-blocks@1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/webpack-blocks/-/webpack-blocks-1.0.0.tgz#54f8ca53d0be88c6ca49de03978c5142742983d0"
   dependencies:
-    "@webpack-blocks/assets" "^1.0.0-rc"
-    "@webpack-blocks/babel" "^1.0.0-rc"
-    "@webpack-blocks/dev-server" "^1.0.0-rc"
-    "@webpack-blocks/extract-text" "^1.0.0-rc"
-    "@webpack-blocks/postcss" "^1.0.0-rc"
-    "@webpack-blocks/sass" "^1.0.0-rc"
-    "@webpack-blocks/typescript" "^1.0.0-rc"
-    "@webpack-blocks/uglify" "^1.1.0"
-    "@webpack-blocks/webpack" "^1.0.0-rc"
+    "@webpack-blocks/assets" "^1.0.0"
+    "@webpack-blocks/babel" "^1.0.0"
+    "@webpack-blocks/dev-server" "^1.0.0"
+    "@webpack-blocks/extract-text" "^1.0.0"
+    "@webpack-blocks/postcss" "^1.0.0"
+    "@webpack-blocks/sass" "^1.0.0"
+    "@webpack-blocks/typescript" "^1.0.0"
+    "@webpack-blocks/uglify" "^1.0.0"
+    "@webpack-blocks/webpack" "^1.0.0"
 
 webpack-dev-middleware@1.12.2:
   version "1.12.2"
@@ -7835,8 +7856,8 @@ whatwg-encoding@^1.0.1, whatwg-encoding@^1.0.3:
     iconv-lite "0.4.19"
 
 whatwg-fetch@>=0.10.0:
-  version "2.0.3"
-  resolved "https://registry.yarnpkg.com/whatwg-fetch/-/whatwg-fetch-2.0.3.tgz#9c84ec2dcf68187ff00bc64e1274b442176e1c84"
+  version "2.0.4"
+  resolved "https://registry.yarnpkg.com/whatwg-fetch/-/whatwg-fetch-2.0.4.tgz#dde6a5df315f9d39991aa17621853d720b85566f"
 
 whatwg-url@^6.4.0:
   version "6.4.0"
