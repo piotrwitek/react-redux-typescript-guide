@@ -31,7 +31,7 @@ export const withState = <P extends WrappedComponentProps>(
     }
 
     render() {
-      const { ...remainingProps } = this.props;
+      const remainingProps = Object.assign({}, this.props);
       const { count } = this.state;
 
       return (

@@ -479,7 +479,7 @@ export const withState = <P extends WrappedComponentProps>(
     }
 
     render() {
-      const { ...remainingProps } = this.props;
+      const remainingProps = Object.assign({}, this.props);
       const { count } = this.state;
 
       return (
@@ -556,7 +556,7 @@ export const withErrorBoundary = <P extends WrappedComponentProps>(
     }
 
     render() {
-      const { children, ...remainingProps } = this.props;
+      const { children, ...remainingProps } = this.props as any;
       const { error } = this.state;
 
       if (error) {
@@ -958,29 +958,30 @@ describe('Todos Logic', () => {
 ### Create Root State and Root Action Types
 
 #### `RootState` - interface representing redux state tree
-Can be imported in connected components to provide type-safety to Redux `connect` function
+Can be imported in connected components to provide type-safety to Redux `connect` function.
+
+Because the RootState is the sum of it's reducers' return types (plus any store Enhancers we may choose to append), TypeScript can infer its shape entirely from Lookup Types and `ReturnType<>`. 
 
 ```tsx
 import { combineReducers } from 'redux';
-import { routerReducer, RouterState } from 'react-router-redux';
+import { routerReducer } from 'react-router-redux';
 
-import { countersReducer, CountersState } from '@src/redux/counters';
-import { todosReducer, TodosState } from '@src/redux/todos';
-
-interface StoreEnhancerState { }
-
-export interface RootState extends StoreEnhancerState {
-  router: RouterState;
-  counters: CountersState;
-  todos: TodosState;
-}
+import { countersReducer } from '@src/redux/counters';
+import { todosReducer} from '@src/redux/todos';
 
 import { RootAction } from '@src/redux';
-export const rootReducer = combineReducers<RootState, RootAction>({
+
+const reducerMap = {
   router: routerReducer,
   counters: countersReducer,
   todos: todosReducer,
-});
+};
+
+interface StoreEnhancerState { }
+
+export type RootState = { [K in keyof typeof reducerMap]: ReturnType<typeof reducerMap[K]> } & StoreEnhancerState;
+
+export const rootReducer = combineReducers<RootState, RootAction>(reducerMap);
 
 ```
 
