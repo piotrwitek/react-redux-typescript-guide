@@ -36,7 +36,7 @@ export const withErrorBoundary = <P extends WrappedComponentProps>(
     }
 
     render() {
-      const { children, ...remainingProps } = this.props;
+      const { children, ...remainingProps } = this.props as any;
       const { error } = this.state;
 
       if (error) {

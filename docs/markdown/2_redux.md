@@ -93,7 +93,9 @@ state.counterPairs[0].immutableCounter2 = 1; // Error, cannot be mutated
 ### Create Root State and Root Action Types
 
 #### `RootState` - interface representing redux state tree
-Can be imported in connected components to provide type-safety to Redux `connect` function
+Can be imported in connected components to provide type-safety to Redux `connect` function.
+
+Because the RootState is the sum of it's reducers' return types (plus any store Enhancers we may choose to append), TypeScript can infer its shape entirely from Lookup Types and `ReturnType<>`. 
 
 ::example='../../playground/src/redux/root-reducer.ts'::
 
