@@ -4,11 +4,11 @@ import { RootState } from '@src/redux';
 import { countersActions, countersSelectors } from '@src/redux/counters';
 import { SFCCounter } from '@src/components';
 
-export interface SFCCounterConnectedExtended {
+export interface SFCCounterConnectedExtendedProps {
   initialCount: number;
 }
 
-const mapStateToProps = (state: RootState, ownProps: SFCCounterConnectedExtended) => ({
+const mapStateToProps = (state: RootState, ownProps: SFCCounterConnectedExtendedProps) => ({
   count: countersSelectors.getReduxCounter(state) + ownProps.initialCount,
 });
 

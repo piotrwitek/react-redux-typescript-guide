@@ -29,5 +29,4 @@
   - [Default and Named Module Exports](#default-and-named-module-exports)
 - [FAQ](#faq)
 - [Contribution Guide](#contribution-guide)
-- [Project Examples](#project-examples)
 - [Tutorials](#tutorials)

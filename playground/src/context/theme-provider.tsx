@@ -1,18 +1,14 @@
 import React from 'react';
-declare module 'react' {
-  const createContext: <T>(defaultValue: T) => {
-    Consumer: React.ComponentClass<{ children: (value: T) => React.ReactNode }>;
-    Provider: React.ComponentClass<{ value: T }>;
-  };
-}
 
 // Context
 const themes = {
   dark: {
-    color: 'black', backgroundColor: 'white',
+    color: 'black',
+    backgroundColor: 'white',
   } as React.CSSProperties,
   light: {
-    color: 'white', backgroundColor: 'black',
+    color: 'white',
+    backgroundColor: 'black',
   } as React.CSSProperties,
 };
 
@@ -20,7 +16,9 @@ type Theme = { theme: React.CSSProperties; toggleTheme?: () => void };
 const ThemeContext = React.createContext<Theme>({ theme: themes.light });
 
 // Provider
-interface State { theme: Theme['theme']; }
+interface State {
+  theme: Theme['theme'];
+}
 export class App extends React.Component<{}, State> {
   readonly state: State = { theme: themes.light };
 
@@ -34,7 +32,7 @@ export class App extends React.Component<{}, State> {
     const { theme } = this.state;
     const { toggleTheme } = this;
     return (
-      <ThemeContext.Provider value={{ theme, toggleTheme }} >
+      <ThemeContext.Provider value={{ theme, toggleTheme }}>
         <ToggleThemeButton />
       </ThemeContext.Provider>
     );
@@ -42,7 +40,7 @@ export class App extends React.Component<{}, State> {
 }
 
 // Consumer
-interface ThemedButtonProps { }
+interface ThemedButtonProps {}
 
 function ToggleThemeButton(props: ThemedButtonProps) {
   return (

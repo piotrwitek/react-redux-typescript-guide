@@ -4,9 +4,9 @@ _"This guide is a **living compendium** documenting the most important patterns 
 
 To provide the best experience we focus on the symbiosis of type-safe complementary libraries and learning the concepts like [Type Inference](https://www.typescriptlang.org/docs/handbook/type-inference.html), [Control flow analysis](https://github.com/Microsoft/TypeScript/wiki/What%27s-new-in-TypeScript#control-flow-based-type-analysis), [Generics](https://www.typescriptlang.org/docs/handbook/generics.html) and some [Advanced Types](https://www.typescriptlang.org/docs/handbook/advanced-types.html).
 
-(_Compatible with **TypeScript v2.7.2**_)
-
 [![Join the chat at https://gitter.im/react-redux-typescript-guide/Lobby](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/react-redux-typescript-guide/Lobby)  
+
+> _Now compatible with **TypeScript v2.8.3**_
 
 > #### _Found it usefull? Want more updates?_ [**Give it a :star2:**](https://github.com/piotrwitek/react-redux-typescript-patterns/stargazers)  
 
@@ -14,6 +14,11 @@ To provide the best experience we focus on the symbiosis of type-safe complement
 - Complete type safety (with [`--strict`](https://www.typescriptlang.org/docs/handbook/compiler-options.html) flag) without loosing type information downstream through all the layers of our application (e.g. no type assertions or hacking with `any` type)
 - Make type annotations concise by eliminating redudancy in types using advanced TypeScript Language features like **Type Inference** and **Control flow analysis**
 - Reduce repetition and complexity of types with TypeScript focused [complementary libraries](#complementary-libraries)
+
+### Complementary Projects
+- Typesafe Action Creators for Redux / Flux Architectures [typesafe-actions](https://github.com/piotrwitek/typesafe-actions)
+- Reference implementation of Todo-App: [typesafe-actions-todo-app](https://github.com/piotrwitek/typesafe-actions-todo-app)
+- Utility Types for TypeScript: [utility-types](https://github.com/piotrwitek/utility-types)
 
 ### Playground Project
 [![Codeship Status for piotrwitek/react-redux-typescript-guide](https://app.codeship.com/projects/11eb8c10-d117-0135-6c51-26e28af241d2/status?branch=master)](https://app.codeship.com/projects/262359)

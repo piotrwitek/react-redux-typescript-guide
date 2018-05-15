@@ -4,9 +4,9 @@ _"This guide is a **living compendium** documenting the most important patterns 
 
 To provide the best experience we focus on the symbiosis of type-safe complementary libraries and learning the concepts like [Type Inference](https://www.typescriptlang.org/docs/handbook/type-inference.html), [Control flow analysis](https://github.com/Microsoft/TypeScript/wiki/What%27s-new-in-TypeScript#control-flow-based-type-analysis), [Generics](https://www.typescriptlang.org/docs/handbook/generics.html) and some [Advanced Types](https://www.typescriptlang.org/docs/handbook/advanced-types.html).
 
-(_Compatible with **TypeScript v2.7.2**_)
-
 [![Join the chat at https://gitter.im/react-redux-typescript-guide/Lobby](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/react-redux-typescript-guide/Lobby)  
+
+> _Now compatible with **TypeScript v2.8.3**_
 
 > #### _Found it usefull? Want more updates?_ [**Give it a :star2:**](https://github.com/piotrwitek/react-redux-typescript-patterns/stargazers)  
 
@@ -14,6 +14,11 @@ To provide the best experience we focus on the symbiosis of type-safe complement
 - Complete type safety (with [`--strict`](https://www.typescriptlang.org/docs/handbook/compiler-options.html) flag) without loosing type information downstream through all the layers of our application (e.g. no type assertions or hacking with `any` type)
 - Make type annotations concise by eliminating redudancy in types using advanced TypeScript Language features like **Type Inference** and **Control flow analysis**
 - Reduce repetition and complexity of types with TypeScript focused [complementary libraries](#complementary-libraries)
+
+### Complementary Projects
+- Typesafe Action Creators for Redux / Flux Architectures [typesafe-actions](https://github.com/piotrwitek/typesafe-actions)
+- Reference implementation of Todo-App: [typesafe-actions-todo-app](https://github.com/piotrwitek/typesafe-actions-todo-app)
+- Utility Types for TypeScript: [utility-types](https://github.com/piotrwitek/utility-types)
 
 ### Playground Project
 [![Codeship Status for piotrwitek/react-redux-typescript-guide](https://app.codeship.com/projects/11eb8c10-d117-0135-6c51-26e28af241d2/status?branch=master)](https://app.codeship.com/projects/262359)
@@ -54,7 +59,6 @@ You should check Playground Project located in the `/playground` folder. It is a
   - [Default and Named Module Exports](#default-and-named-module-exports)
 - [FAQ](#faq)
 - [Contribution Guide](#contribution-guide)
-- [Project Examples](#project-examples)
 - [Tutorials](#tutorials)
 
 ---
@@ -711,11 +715,11 @@ import { RootState } from '@src/redux';
 import { countersActions, countersSelectors } from '@src/redux/counters';
 import { SFCCounter } from '@src/components';
 
-export interface SFCCounterConnectedExtended {
+export interface SFCCounterConnectedExtendedProps {
   initialCount: number;
 }
 
-const mapStateToProps = (state: RootState, ownProps: SFCCounterConnectedExtended) => ({
+const mapStateToProps = (state: RootState, ownProps: SFCCounterConnectedExtendedProps) => ({
   count: countersSelectors.getReduxCounter(state) + ownProps.initialCount,
 });
 
@@ -731,12 +735,7 @@ import * as React from 'react';
 
 import { SFCCounterConnectedExtended } from '@src/connected';
 
-export default () => (
-  <SFCCounterConnectedExtended
-    label={'SFCCounterConnectedExtended'}
-    initialCount={10}
-  />
-);
+export default () => <SFCCounterConnectedExtended label={'SFCCounterConnectedExtended'} initialCount={10} />;
 
 ```
 </p></details>
@@ -758,23 +757,24 @@ All that without losing type-safety! Please check this very short [Tutorial](htt
 ```tsx
 import { createAction } from 'typesafe-actions';
 
-export const countersActions = {
-  increment: createAction('INCREMENT'),
-  add: createAction('ADD', (amount: number) => ({
-    type: 'ADD',
-    payload: amount,
-  })),
-};
+export const increment = createAction('counters/INCREMENT');
+
+export const add = createAction('counters/ADD', resolve => {
+  return (amount: number) => resolve(amount);
+});
 
 ```
 <details><summary>show usage</summary><p>
 
 ```tsx
 import store from '@src/store';
-import { countersActions } from '@src/redux/counters';
+import { actions as counters } from '@src/redux/counters';
 
 // store.dispatch(countersActions.increment(1)); // Error: Expected 0 arguments, but got 1.
-store.dispatch(countersActions.increment()); // OK => { type: "INCREMENT" }
+store.dispatch(counters.increment()); // OK
+
+// store.dispatch(countersActions.add()); // Error: Expected 1 arguments, but got 0.
+store.dispatch(counters.add(1)); // OK
 
 ```
 </p></details>
@@ -845,62 +845,56 @@ state.counterPairs[0].immutableCounter2 = 1; // Error, cannot be mutated
 
 ```tsx
 import { combineReducers } from 'redux';
-import { getType } from 'typesafe-actions';
+import { ActionsUnion } from 'typesafe-actions';
 
-import { ITodo, ITodosFilter } from './types';
-import { addTodo, toggleTodo, changeFilter } from './actions';
+import { Todo, TodosFilter } from './models';
+import { ADD, CHANGE_FILTER, TOGGLE } from './types';
+import * as actions from './actions';
 
 export type TodosState = {
   readonly isFetching: boolean;
   readonly errorMessage: string | null;
-  readonly todos: ITodo[];
-  readonly todosFilter: ITodosFilter;
+  readonly todos: Todo[];
+  readonly todosFilter: TodosFilter;
 };
 
-export type RootState = {
-  readonly todos: TodosState;
-};
+export type TodosAction = ActionsUnion<typeof actions>;
 
-export const todosReducer = combineReducers<TodosState, TodosAction>({
+export default combineReducers<TodosState, TodosAction>({
   isFetching: (state = false, action) => {
     switch (action.type) {
-      default: return state;
+      default:
+        return state;
     }
   },
-  errorMessage: (state = '', action) => {
+  errorMessage: (state = null, action) => {
     switch (action.type) {
-      default: return state;
+      default:
+        return state;
     }
   },
   todos: (state = [], action) => {
     switch (action.type) {
-      case getType(addTodo):
+      case ADD:
         return [...state, action.payload];
 
-      case getType(toggleTodo):
-        return state.map((item) => item.id === action.payload
-          ? { ...item, completed: !item.completed }
-          : item
-        );
+      case TOGGLE:
+        return state.map(item => (item.id === action.payload ? { ...item, completed: !item.completed } : item));
 
-      default: return state;
+      default:
+        return state;
     }
   },
-  todosFilter: (state = '', action) => {
+  todosFilter: (state = TodosFilter.All, action) => {
     switch (action.type) {
-      case getType(changeFilter):
+      case CHANGE_FILTER:
         return action.payload;
 
-      default: return state;
+      default:
+        return state;
     }
   },
 });
-
-// inferring union type of actions
-import { $call } from 'utility-types';
-import * as actions from './actions';
-const returnsOfActions = Object.values(actions).map($call);
-export type TodosAction = typeof returnsOfActions[number];
 
 ```
 
@@ -909,8 +903,7 @@ export type TodosAction = typeof returnsOfActions[number];
 ### Testing reducer
 
 ```tsx
-import { todosReducer, TodosState, TodosAction } from './reducer';
-import { addTodo, changeFilter, toggleTodo } from './actions';
+import { reducer, actions } from './';
 
 /**
  * FIXTURES
@@ -918,13 +911,12 @@ import { addTodo, changeFilter, toggleTodo } from './actions';
 const activeTodo = { id: '1', completed: false, title: 'active todo' };
 const completedTodo = { id: '2', completed: true, title: 'completed todo' };
 
-const initialState = todosReducer(undefined, {});
+const initialState = reducer(undefined, {});
 
 /**
- * SCENARIOS
+ * STORIES
  */
-describe('Todos Logic', () => {
-
+describe('Todos Stories', () => {
   describe('initial state', () => {
     it('should match a snapshot', () => {
       expect(initialState).toMatchSnapshot();
@@ -932,24 +924,23 @@ describe('Todos Logic', () => {
   });
 
   describe('adding todos', () => {
-    it('should add a new todo as the first active element', () => {
-      const action = addTodo('new todo');
-      const state = todosReducer(initialState, action);
+    it('should add a new todo as the first element', () => {
+      const action = actions.add('new todo');
+      const state = reducer(initialState, action);
       expect(state.todos).toHaveLength(1);
       expect(state.todos[0].id).toEqual(action.payload.id);
     });
   });
 
   describe('toggling completion state', () => {
-    it('should mark as complete todo with id "1"', () => {
-      const action = toggleTodo(activeTodo.id);
+    it('should mark active todo as complete', () => {
+      const action = actions.toggle(activeTodo.id);
       const state0 = { ...initialState, todos: [activeTodo] };
       expect(state0.todos[0].completed).toBeFalsy();
-      const state1 = todosReducer(state0, action);
+      const state1 = reducer(state0, action);
       expect(state1.todos[0].completed).toBeTruthy();
     });
   });
-
 });
 
 ```
@@ -996,26 +987,23 @@ export const rootReducer = combineReducers<RootState, RootAction>({
 Can be imported in various layers receiving or sending redux actions like: reducers, sagas or redux-observables epics
 
 ```tsx
-// RootActions
 import { RouterAction, LocationChangeAction } from 'react-router-redux';
-import { $call } from 'utility-types';
+import { ActionsUnion } from 'typesafe-actions';
 
-import { countersActions } from '@src/redux/counters';
-import { todosActions } from '@src/redux/todos';
-import { toastsActions } from '@src/redux/toasts';
+import { countersActions as counters } from '@src/redux/counters/actions';
+import { actions as todos } from '@src/redux/todos';
+import { toastsActions as toasts } from '@src/redux/toasts/actions';
 
-const returnsOfActions = [
-  ...Object.values(countersActions),
-  ...Object.values(todosActions),
-  ...Object.values(toastsActions),
-].map($call);
+export const actions = {
+  counters,
+  todos,
+  toasts,
+};
 
-type AppAction = typeof returnsOfActions[number];
+type AppAction = ActionsUnion<typeof actions>;
 type ReactRouterAction = RouterAction | LocationChangeAction;
 
-export type RootAction =
-  | AppAction
-  | ReactRouterAction;
+export type RootAction = AppAction | ReactRouterAction;
 
 ```
 
@@ -1338,15 +1326,15 @@ configure({ adapter: new Adapter() });
 # Recipes
 
 ### tsconfig.json
-- Recommended setup for best benefits from type-checking, with support for JSX and ES2016 features  
-- Add [`tslib`](https://www.npmjs.com/package/tslib) to minimize bundle size: `npm i tslib` -  this will externalize helper functions generated by transpiler and otherwise inlined in your modules  
-- Include absolute imports config working with Webpack  
+- Recommended baseline config carefully optimized for strict type-checking and optimal webpack workflow  
+- Install [`tslib`](https://www.npmjs.com/package/tslib) to cut on bundle size, by using external transpiltion helper module instead of adding them inline: `npm i tslib`  
+- Example setup for project relative path imports with Webpack  
 
 ```js
 {
   "compilerOptions": {
-    "baseUrl": "./", // enables absolute path imports
-    "paths": { // define absolute path mappings
+    "baseUrl": "./", // enables project relative paths config
+    "paths": { // define paths mappings
       "@src/*": ["src/*"] // will enable -> import { ... } from '@src/components'
       // in webpack you need to add -> resolve: { alias: { '@src': PATH_TO_SRC } }
     },
@@ -1537,12 +1525,6 @@ node ./generator/bin/generate-readme.js
 [⇧ back to top](#table-of-contents)
 
 ---
-
-# Project Examples
-
-https://github.com/piotrwitek/react-redux-typescript-webpack-starter  
-
-[⇧ back to top](#table-of-contents)
 
 # Tutorials
 > Curated list of relevant in-depth tutorials

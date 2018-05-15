@@ -1,13 +1,24 @@
 import * as React from 'react';
 
-export const ErrorMessage: React.SFC<{ onReset: () => void }> = ({ onReset }) => {
+export const ErrorMessage: React.SFC<{ onReset: () => void }> = ({
+  onReset,
+}) => {
   return (
     <div>
       <h2>{`Sorry there was an unexpected error`}</h2>
       {`To continue: `}
-      <a onClick={() => { onReset(); }}>
+      <a
+        onClick={() => {
+          onReset();
+        }}
+      >
         {`go to home page`}
       </a>
     </div>
   );
 };
+
+export function test(props: any) {
+  const Container = props.componentClass;
+  return <Container />;
+}
