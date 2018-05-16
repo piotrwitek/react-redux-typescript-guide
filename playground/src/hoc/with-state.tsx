@@ -31,7 +31,7 @@ export const withState = <WrappedProps extends InjectedProps>(
 
     handleIncrement = () => {
       this.setState({ count: this.state.count + 1 });
-    }
+    };
 
     render() {
       const { ...restProps } = this.props as {};

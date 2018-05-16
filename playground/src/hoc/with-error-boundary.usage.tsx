@@ -12,8 +12,8 @@ const BrokenButton = () => (
   </button >
 );
 
-export default (() => (
-  <ErrorMessageWithErrorBoundary  >
+export default () => (
+  <ErrorMessageWithErrorBoundary>
     <BrokenButton />
   </ErrorMessageWithErrorBoundary>
-)) as React.SFC<{}>;
+);

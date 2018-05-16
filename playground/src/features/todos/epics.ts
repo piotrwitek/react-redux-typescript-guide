@@ -1,22 +1,24 @@
+// tslint:disable:no-console
+import Types from 'Types';
 import { combineEpics, Epic } from 'redux-observable';
-import { Observable } from 'rxjs/Observable';
+import { tap, ignoreElements, filter } from 'rxjs/operators';
 import { isOfType } from 'typesafe-actions';
 
-import { RootState } from '../../store';
-import { ADD } from '../todos/types';
+import { todosConstants, TodosAction } from '../todos';
 
-const TOAST_LIFETIME = 2000;
+// contrived example!!!
+const logAddAction: Epic<TodosAction, Types.RootState, Types.Services> = (
+  action$,
+  store
+) =>
+  action$.pipe(
+    filter(isOfType(todosConstants.ADD)), // action is narrowed to: { type: "ADD_TODO"; payload: string; }
+    tap(action => {
+      console.log(
+        `action type must be equal: ${todosConstants.ADD} === ${action.type}`
+      );
+    }),
+    ignoreElements()
+  );
 
-const addTodoToast: Epic<RootAction, RootState> = (action$, store) =>
-  action$.filter(isOfType(todosActions.add)).concatMap(action => {
-    // action is type: { type: "ADD_TODO"; payload: string; }
-
-    const addToast$ = Observable.of(toastsActions.addToast(toast));
-    const removeToast$ = Observable.of(
-      toastsActions.removeToast(toast.id)
-    ).delay(TOAST_LIFETIME);
-
-    return addToast$.concat(removeToast$);
-  });
-
-export default combineEpics(addTodoToast);
+export default combineEpics(logAddAction);

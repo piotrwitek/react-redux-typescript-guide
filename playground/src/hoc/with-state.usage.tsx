@@ -6,6 +6,6 @@ import { SFCCounter } from '@src/components';
 const SFCCounterWithState =
   withState(SFCCounter);
 
-export default (() => (
+export default () => (
   <SFCCounterWithState label={'SFCCounterWithState'} />
-)) as React.SFC<{}>;
+);

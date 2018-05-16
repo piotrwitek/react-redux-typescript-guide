@@ -1,6 +1,5 @@
 import * as React from 'react';
-// import { Subtract } from 'utility-types';
-type Omit<A, K> = Pick<A, Exclude<keyof A, K>>;
+import { Subtract } from 'utility-types';
 
 const MISSING_ERROR = 'Error was swallowed during propagation.';
 
@@ -11,7 +10,7 @@ interface InjectedProps {
 export const withErrorBoundary = <WrappedProps extends InjectedProps>(
   WrappedComponent: React.ComponentType<WrappedProps>
 ) => {
-  type HocProps = Omit<WrappedProps, keyof InjectedProps> & {
+  type HocProps = Subtract<WrappedProps, InjectedProps> & {
     // here you can extend hoc props
   };
   type HocState = {
@@ -32,14 +31,16 @@ export const withErrorBoundary = <WrappedProps extends InjectedProps>(
 
     logErrorToCloud = (error: Error | null, info: object) => {
       // TODO: send error report to cloud
-    }
+    };
 
     handleReset = () => {
       this.setState({ error: undefined });
-    }
+    };
 
     render() {
-      const { children, ...restProps } = this.props as { children: React.ReactNode };
+      const { children, ...restProps } = this.props as {
+        children: React.ReactNode;
+      };
       const { error } = this.state;
 
       if (error) {

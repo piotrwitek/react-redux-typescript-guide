@@ -1,14 +1,16 @@
-# React & Redux in TypeScript - Static Typing Guide
+## React & Redux in TypeScript - Static Typing Guide
 
 _"This guide is a **living compendium** documenting the most important patterns and recipes on how to use **React** (and it's Ecosystem) in a **functional style with TypeScript** and to make your code **completely type-safe** while focusing on a **conciseness of type annotations** so it's a minimal effort to write and to maintain types in the long run."_
 
-To provide the best experience we focus on the symbiosis of type-safe complementary libraries and learning the concepts like [Type Inference](https://www.typescriptlang.org/docs/handbook/type-inference.html), [Control flow analysis](https://github.com/Microsoft/TypeScript/wiki/What%27s-new-in-TypeScript#control-flow-based-type-analysis), [Generics](https://www.typescriptlang.org/docs/handbook/generics.html) and some [Advanced Types](https://www.typescriptlang.org/docs/handbook/advanced-types.html).
-
 [![Join the chat at https://gitter.im/react-redux-typescript-guide/Lobby](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/react-redux-typescript-guide/Lobby)  
 
-> _Now compatible with **TypeScript v2.8.3**_
+> #### _Found it usefull? Want more updates?_ [**Show your support by giving a :star:**](https://github.com/piotrwitek/react-redux-typescript-patterns/stargazers)  
 
-> #### _Found it usefull? Want more updates?_ [**Give it a :star2:**](https://github.com/piotrwitek/react-redux-typescript-patterns/stargazers)  
+> _[The Mighty Tutorial](https://github.com/piotrwitek/typesafe-actions#behold-the-mighty-tutorial) for completely typesafe Redux Architecture_ :book:  
+
+> _Reference implementation of Todo-App with `typesafe-actions`: https://codesandbox.io/s/github/piotrwitek/typesafe-actions-todo-app_ :computer:  
+
+> _Now compatible with **TypeScript v2.8.3** (rewritten using conditional types)_ :tada:  
 
 ### Goals
 - Complete type safety (with [`--strict`](https://www.typescriptlang.org/docs/handbook/compiler-options.html) flag) without loosing type information downstream through all the layers of our application (e.g. no type assertions or hacking with `any` type)
@@ -17,8 +19,8 @@ To provide the best experience we focus on the symbiosis of type-safe complement
 
 ### Complementary Projects
 - Typesafe Action Creators for Redux / Flux Architectures [typesafe-actions](https://github.com/piotrwitek/typesafe-actions)
-- Reference implementation of Todo-App: [typesafe-actions-todo-app](https://github.com/piotrwitek/typesafe-actions-todo-app)
 - Utility Types for TypeScript: [utility-types](https://github.com/piotrwitek/utility-types)
+- Reference implementation of Todo-App: [typesafe-actions-todo-app](https://github.com/piotrwitek/typesafe-actions-todo-app)
 
 ### Playground Project
 [![Codeship Status for piotrwitek/react-redux-typescript-guide](https://app.codeship.com/projects/11eb8c10-d117-0135-6c51-26e28af241d2/status?branch=master)](https://app.codeship.com/projects/262359)
@@ -483,7 +485,7 @@ export const withState = <WrappedProps extends InjectedProps>(
 
     handleIncrement = () => {
       this.setState({ count: this.state.count + 1 });
-    }
+    };
 
     render() {
       const { ...restProps } = this.props as {};
@@ -512,9 +514,9 @@ import { SFCCounter } from '@src/components';
 const SFCCounterWithState =
   withState(SFCCounter);
 
-export default (() => (
+export default () => (
   <SFCCounterWithState label={'SFCCounterWithState'} />
-)) as React.SFC<{}>;
+);
 
 ```
 </p></details>
@@ -526,8 +528,7 @@ Adds error handling using componentDidCatch to any component
 
 ```tsx
 import * as React from 'react';
-// import { Subtract } from 'utility-types';
-type Omit<A, K> = Pick<A, Exclude<keyof A, K>>;
+import { Subtract } from 'utility-types';
 
 const MISSING_ERROR = 'Error was swallowed during propagation.';
 
@@ -538,7 +539,7 @@ interface InjectedProps {
 export const withErrorBoundary = <WrappedProps extends InjectedProps>(
   WrappedComponent: React.ComponentType<WrappedProps>
 ) => {
-  type HocProps = Omit<WrappedProps, keyof InjectedProps> & {
+  type HocProps = Subtract<WrappedProps, InjectedProps> & {
     // here you can extend hoc props
   };
   type HocState = {
@@ -559,14 +560,16 @@ export const withErrorBoundary = <WrappedProps extends InjectedProps>(
 
     logErrorToCloud = (error: Error | null, info: object) => {
       // TODO: send error report to cloud
-    }
+    };
 
     handleReset = () => {
       this.setState({ error: undefined });
-    }
+    };
 
     render() {
-      const { children, ...restProps } = this.props as { children: React.ReactNode };
+      const { children, ...restProps } = this.props as {
+        children: React.ReactNode;
+      };
       const { error } = this.state;
 
       if (error) {
@@ -601,11 +604,11 @@ const BrokenButton = () => (
   </button >
 );
 
-export default (() => (
-  <ErrorMessageWithErrorBoundary  >
+export default () => (
+  <ErrorMessageWithErrorBoundary>
     <BrokenButton />
   </ErrorMessageWithErrorBoundary>
-)) as React.SFC<{}>;
+);
 
 ```
 </p></details>
@@ -748,33 +751,49 @@ export default () => <SFCCounterConnectedExtended label={'SFCCounterConnectedExt
 
 ## Action Creators
 
-> Using Typesafe Action Creators helpers for Redux [`typesafe-actions`](https://github.com/piotrwitek/typesafe-actions#typesafe-actions)
+> We'll be using a battle-tested library [![NPM Downloads](https://img.shields.io/npm/dm/typesafe-actions.svg)](https://www.npmjs.com/package/typesafe-actions)
+ that automates and simplify maintenace of **type annotations in Redux Architectures** [`typesafe-actions`](https://github.com/piotrwitek/typesafe-actions#typesafe-actions)
 
-A recommended approach is to use a simple functional helper to automate the creation of type-safe action creators. The advantage is that we can reduce a lot of code repetition and also minimize surface of errors by using type-checked API.
-> There are more specialized functional helpers available that will help you to further reduce tedious boilerplate and type-annotations in common scenarios like reducers (using [`getType`](https://github.com/piotrwitek/typesafe-actions#gettype)) or epics (using [`isActionOf`](https://github.com/piotrwitek/typesafe-actions#isactionof)).  
-All that without losing type-safety! Please check this very short [Tutorial](https://github.com/piotrwitek/typesafe-actions#tutorial)
+### You should read [The Mighty Tutorial](https://github.com/piotrwitek/typesafe-actions#behold-the-mighty-tutorial) to learn it all the easy way!
+
+A solution below is using simple factory function to automate the creation of type-safe action creators. The goal is to reduce the maintainability and code repetition of type annotations for actions and creators and the result is completely typesafe action-creators and their actions.
 
 ```tsx
-import { createAction } from 'typesafe-actions';
+import { action, createAction, createStandardAction } from 'typesafe-actions';
 
-export const increment = createAction('counters/INCREMENT');
+import { ADD, INCREMENT } from './constants';
 
-export const add = createAction('counters/ADD', resolve => {
-  return (amount: number) => resolve(amount);
-});
+// CLASSIC API
+export const increment = () => action(INCREMENT);
+export const add = (amount: number) => action(ADD, amount);
+
+// ALTERNATIVE API - allow to use reference to "action-creator" function instead of "type constant"
+// e.g. case getType(increment): return { ... }
+// This will allow to completely eliminate need for "constants" in your application, more info here:
+// https://github.com/piotrwitek/typesafe-actions#behold-the-mighty-tutorial
+
+// OPTION 1 (with generics):
+// export const increment = createStandardAction(INCREMENT)<void>();
+// export const add = createStandardAction(ADD)<number>();
+
+// OPTION 2 (with resolve callback):
+// export const increment = createAction(INCREMENT);
+// export const add = createAction(ADD, resolve => {
+//   return (amount: number) => resolve(amount);
+// });
 
 ```
 <details><summary>show usage</summary><p>
 
 ```tsx
-import store from '@src/store';
-import { actions as counters } from '@src/redux/counters';
+import store from '../../store';
+import { countersActions as counter } from '../counters';
 
-// store.dispatch(countersActions.increment(1)); // Error: Expected 0 arguments, but got 1.
-store.dispatch(counters.increment()); // OK
+// store.dispatch(counter.increment(1)); // Error: Expected 0 arguments, but got 1.
+store.dispatch(counter.increment()); // OK
 
-// store.dispatch(countersActions.add()); // Error: Expected 1 arguments, but got 0.
-store.dispatch(counters.add(1)); // OK
+// store.dispatch(counter.add()); // Error: Expected 1 arguments, but got 0.
+store.dispatch(counter.add(1)); // OK
 
 ```
 </p></details>
@@ -786,10 +805,11 @@ store.dispatch(counters.add(1)); // OK
 ## Reducers
 
 ### State with Type-level Immutability
-Declare reducer `State` type with `readonly` modifier to get "type level" immutability
+Declare reducer `State` type with `readonly` modifier to get compile time immutability
 ```ts
 export type State = {
-  readonly counter: number,
+  readonly counter: number;
+  readonly todos: ReadonlyArray<string>;
 };
 ```
 
@@ -799,25 +819,34 @@ export const initialState: State = {
   counter: 0,
 }; // OK
 
-initialState.counter = 3; // Error, cannot be mutated
+initialState.counter = 3; // TS Error: cannot be mutated
 ```
 
-#### Caveat: Readonly does not provide a recursive immutability on objects
-This means that the `readonly` modifier doesn't propagate immutability down to "properties" of objects. You'll need to set it explicitly on each nested property that you want.
+It's great for **Arrays in JS** because it will error when using mutator methods like (`push`, `pop`, `splice`, ...), but it'll still allow immutable methods like (`concat`, `map`, `slice`,...).
+```ts
+state.todos.push('Learn about tagged union types') // TS Error: Property 'push' does not exist on type 'ReadonlyArray<string>'
+const newTodos = state.todos.concat('Learn about tagged union types') // OK
+```
+
+#### Caveat: Readonly is not recursive
+This means that the `readonly` modifier doesn't propagate immutability down the nested structure of objects. You'll need to mark each property on each level explicitly.
+
+To fix this we can use [`DeepReadonly`](https://github.com/piotrwitek/utility-types#deepreadonlyt) type (available in `utility-types` npm library - collection of reusable types extending the collection of **standard-lib** in TypeScript.
 
 Check the example below:
 ```ts
-export type State = {
-  readonly containerObject: {
-    readonly immutableProp: number,
-    mutableProp: number,
+import { DeepReadonly } from 'utility-types';
+
+export type State = DeepReadonly<{
+  containerObject: {
+    innerValue: number,
+    numbers: number[],
   }
-};
+}>;
 
-state.containerObject = { mutableProp: 1 }; // Error, cannot be mutated
-state.containerObject.immutableProp = 1; // Error, cannot be mutated
-
-state.containerObject.mutableProp = 1; // OK! No error, can be mutated
+state.containerObject = { innerValue: 1 }; // TS Error: cannot be mutated
+state.containerObject.innerValue = 1; // TS Error: cannot be mutated
+state.containerObject.numbers.push(1); // TS Error: cannot use mutator methods
 ```
 
 #### Best-practices for nested immutability
@@ -831,25 +860,23 @@ export type State = Readonly<{
   }>>,
 }>;
 
-state.counterPairs[0] = { immutableCounter1: 1, immutableCounter2: 1 }; // Error, cannot be mutated
-state.counterPairs[0].immutableCounter1 = 1; // Error, cannot be mutated
-state.counterPairs[0].immutableCounter2 = 1; // Error, cannot be mutated
+state.counterPairs[0] = { immutableCounter1: 1, immutableCounter2: 1 }; // TS Error: cannot be mutated
+state.counterPairs[0].immutableCounter1 = 1; // TS Error: cannot be mutated
+state.counterPairs[0].immutableCounter2 = 1; // TS Error: cannot be mutated
 ```
-
-> _There is a new (work in progress) feature called **Conditional Types**, that will allow `ReadonlyRecursive` mapped type_
 
 [⇧ back to top](#table-of-contents)
 
 ### Typing reducer
-> using type inference with [Discriminated Union types](https://www.typescriptlang.org/docs/handbook/advanced-types.html)
+> to understand following section make sure to learn about [Type Inference](https://www.typescriptlang.org/docs/handbook/type-inference.html), [Control flow analysis](https://github.com/Microsoft/TypeScript/wiki/What%27s-new-in-TypeScript#control-flow-based-type-analysis) and [Tagged union types](https://github.com/Microsoft/TypeScript/wiki/What%27s-new-in-TypeScript#tagged-union-types)
 
 ```tsx
 import { combineReducers } from 'redux';
 import { ActionsUnion } from 'typesafe-actions';
 
 import { Todo, TodosFilter } from './models';
-import { ADD, CHANGE_FILTER, TOGGLE } from './types';
 import * as actions from './actions';
+import { ADD, CHANGE_FILTER, TOGGLE } from './constants';
 
 export type TodosState = {
   readonly isFetching: boolean;
@@ -879,7 +906,12 @@ export default combineReducers<TodosState, TodosAction>({
         return [...state, action.payload];
 
       case TOGGLE:
-        return state.map(item => (item.id === action.payload ? { ...item, completed: !item.completed } : item));
+        return state.map(
+          item =>
+            item.id === action.payload
+              ? { ...item, completed: !item.completed }
+              : item
+        );
 
       default:
         return state;
@@ -903,7 +935,7 @@ export default combineReducers<TodosState, TodosAction>({
 ### Testing reducer
 
 ```tsx
-import { reducer, actions } from './';
+import { todosReducer as reducer, todosActions as actions } from './';
 
 /**
  * FIXTURES
@@ -911,7 +943,7 @@ import { reducer, actions } from './';
 const activeTodo = { id: '1', completed: false, title: 'active todo' };
 const completedTodo = { id: '2', completed: true, title: 'completed todo' };
 
-const initialState = reducer(undefined, {});
+const initialState = reducer(undefined, {} as any);
 
 /**
  * STORIES
@@ -947,63 +979,29 @@ describe('Todos Stories', () => {
 
 [⇧ back to top](#table-of-contents)
 
-
 ---
 
 ## Store Configuration
 
-### Create Root State and Root Action Types
+### Create Global RootState and RootAction Types
 
-#### `RootState` - interface representing redux state tree
+#### `RootState` - type representing root state-tree
 Can be imported in connected components to provide type-safety to Redux `connect` function
 
-```tsx
-import { combineReducers } from 'redux';
-import { routerReducer, RouterState } from 'react-router-redux';
-
-import { countersReducer, CountersState } from '@src/redux/counters';
-import { todosReducer, TodosState } from '@src/redux/todos';
-
-interface StoreEnhancerState { }
-
-export interface RootState extends StoreEnhancerState {
-  router: RouterState;
-  counters: CountersState;
-  todos: TodosState;
-}
-
-import { RootAction } from '@src/redux';
-export const rootReducer = combineReducers<RootState, RootAction>({
-  router: routerReducer,
-  counters: countersReducer,
-  todos: todosReducer,
-});
-
-```
-
-[⇧ back to top](#table-of-contents)
-
-#### `RootAction` - union type of all action objects
+#### `RootAction` - type representing union type of all action objects
 Can be imported in various layers receiving or sending redux actions like: reducers, sagas or redux-observables epics
 
 ```tsx
+import { StateType } from 'typesafe-actions';
 import { RouterAction, LocationChangeAction } from 'react-router-redux';
-import { ActionsUnion } from 'typesafe-actions';
-
-import { countersActions as counters } from '@src/redux/counters/actions';
-import { actions as todos } from '@src/redux/todos';
-import { toastsActions as toasts } from '@src/redux/toasts/actions';
-
-export const actions = {
-  counters,
-  todos,
-  toasts,
-};
-
-type AppAction = ActionsUnion<typeof actions>;
 type ReactRouterAction = RouterAction | LocationChangeAction;
+import { CountersAction } from '../features/counters';
+import rootReducer from './root-reducer';
 
-export type RootAction = AppAction | ReactRouterAction;
+declare module 'Types' {
+  export type RootState = StateType<typeof rootReducer>;
+  export type RootAction = ReactRouterAction | CountersAction;
+}
 
 ```
 
@@ -1011,34 +1009,29 @@ export type RootAction = AppAction | ReactRouterAction;
 
 ### Create Store
 
-When creating the store, use rootReducer. This will set-up a **strongly typed Store instance** with type inference.
-> The resulting store instance methods like `getState` or `dispatch` will be type checked and expose type errors
+When creating a store instance we don't need to provide any additional types. It will set-up a **type-safe Store instance** using type inference.
+> The resulting store instance methods like `getState` or `dispatch` will be type checked and will expose all type errors
 
 ```tsx
 import { createStore, applyMiddleware, compose } from 'redux';
 import { createEpicMiddleware } from 'redux-observable';
-import { rootReducer, rootEpic, RootState } from '@src/redux';
 
-const composeEnhancers = (
-  process.env.NODE_ENV === 'development' &&
-  window && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
-) || compose;
+import rootReducer from './root-reducer';
+import rootEpic from './root-epic';
 
-function configureStore(initialState?: RootState) {
+const composeEnhancers =
+  (process.env.NODE_ENV === 'development' &&
+    window &&
+    window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__) ||
+  compose;
+
+function configureStore(initialState?: object) {
   // configure middlewares
-  const middlewares = [
-    createEpicMiddleware(rootEpic),
-  ];
+  const middlewares = [createEpicMiddleware(rootEpic)];
   // compose enhancers
-  const enhancer = composeEnhancers(
-    applyMiddleware(...middlewares)
-  );
+  const enhancer = composeEnhancers(applyMiddleware(...middlewares));
   // create store
-  return createStore(
-    rootReducer,
-    initialState!,
-    enhancer
-  );
+  return createStore(rootReducer, initialState!, enhancer);
 }
 
 // pass an optional param to rehydrate state on app start
@@ -1055,34 +1048,33 @@ export default store;
 
 ### "redux-observable"
 
-Use `isActionOf` helper to filter actions and to narrow `RootAction` union type to a specific "action type" down the stream.
+### For more examples and in-depth explanation you should read [The Mighty Tutorial](https://github.com/piotrwitek/typesafe-actions#behold-the-mighty-tutorial) to learn it all the easy way!
 
 ```tsx
+// tslint:disable:no-console
+import Types from 'Types';
 import { combineEpics, Epic } from 'redux-observable';
-import { isActionOf } from 'typesafe-actions';
-import { Observable } from 'rxjs/Observable';
-import cuid from 'cuid';
+import { tap, ignoreElements, filter } from 'rxjs/operators';
+import { isOfType } from 'typesafe-actions';
 
-import { RootAction, RootState } from '@src/redux';
-import { todosActions } from '@src/redux/todos';
-import { toastsActions } from './';
+import { todosConstants, TodosAction } from '../todos';
 
-const TOAST_LIFETIME = 2000;
+// contrived example!!!
+const logAddAction: Epic<TodosAction, Types.RootState, Types.Services> = (
+  action$,
+  store
+) =>
+  action$.pipe(
+    filter(isOfType(todosConstants.ADD)), // action is narrowed to: { type: "ADD_TODO"; payload: string; }
+    tap(action => {
+      console.log(
+        `action type must be equal: ${todosConstants.ADD} === ${action.type}`
+      );
+    }),
+    ignoreElements()
+  );
 
-const addTodoToast: Epic<RootAction, RootState> =
-  (action$, store) => action$
-    .filter(isActionOf(todosActions.addTodo))
-    .concatMap((action) => { // action is type: { type: "ADD_TODO"; payload: string; }
-      const toast = { id: cuid(), text: action.payload.title };
-
-      const addToast$ = Observable.of(toastsActions.addToast(toast));
-      const removeToast$ = Observable.of(toastsActions.removeToast(toast.id))
-        .delay(TOAST_LIFETIME);
-
-      return addToast$.concat(removeToast$);
-    });
-
-export const epics = combineEpics(addTodoToast);
+export default combineEpics(logAddAction);
 
 ```
 
@@ -1094,73 +1086,27 @@ export const epics = combineEpics(addTodoToast);
 
 ### "reselect"
 
-```ts
+```tsx
 import { createSelector } from 'reselect';
 
-import { RootState } from '@src/redux';
+import { TodosState } from './reducer';
 
-export const getTodos =
-  (state: RootState) => state.todos.todos;
+export const getTodos = (state: TodosState) => state.todos;
 
-export const getTodosFilter =
-  (state: RootState) => state.todos.todosFilter;
+export const getTodosFilter = (state: TodosState) => state.todosFilter;
 
-export const getFilteredTodos = createSelector(
-  getTodos, getTodosFilter,
-  (todos, todosFilter) => {
-    switch (todosFilter) {
-      case 'completed':
-        return todos.filter((t) => t.completed);
-      case 'active':
-        return todos.filter((t) => !t.completed);
+export const getFilteredTodos = createSelector(getTodos, getTodosFilter, (todos, todosFilter) => {
+  switch (todosFilter) {
+    case 'completed':
+      return todos.filter(t => t.completed);
+    case 'active':
+      return todos.filter(t => !t.completed);
 
-      default:
-        return todos;
-    }
-  },
-);
-```
+    default:
+      return todos;
+  }
+});
 
-[⇧ back to top](#table-of-contents)
-
----
-
-### Action Creators - Alternative Pattern
-This pattern is focused on a KISS principle - to stay clear of abstractions and to follow a more complex but familiar JavaScript "const" based approach:
-
-Advantages:
-- familiar to standard JS "const" based approach
-
-Disadvantages:
-- significant amount of boilerplate and duplication
-- more complex compared to `createAction` helper library
-- necessary to export both action types and action creators to re-use in other places, e.g. `redux-saga` or `redux-observable`
-
-```tsx
-export const INCREMENT = 'INCREMENT'; 
-export const ADD = 'ADD'; 
-
-export type Actions = { 
-  INCREMENT: { 
-    type: typeof INCREMENT, 
-  }, 
-  ADD: { 
-    type: typeof ADD,
-    payload: number, 
-  }, 
-};
-
-export type RootAction = Actions[keyof Actions];
-
-export const actions = { 
-  increment: (): Actions[typeof INCREMENT] => ({ 
-    type: INCREMENT, 
-  }), 
-  add: (amount: number): Actions[typeof ADD] => ({ 
-    type: ADD,
-    payload: amount,
-  }),
-};
 ```
 
 [⇧ back to top](#table-of-contents)
@@ -1327,8 +1273,8 @@ configure({ adapter: new Adapter() });
 
 ### tsconfig.json
 - Recommended baseline config carefully optimized for strict type-checking and optimal webpack workflow  
-- Install [`tslib`](https://www.npmjs.com/package/tslib) to cut on bundle size, by using external transpiltion helper module instead of adding them inline: `npm i tslib`  
-- Example setup for project relative path imports with Webpack  
+- Install [`tslib`](https://www.npmjs.com/package/tslib) to cut on bundle size, by using external runtime helpers instead of adding them inline: `npm i tslib`  
+- Example "paths" setup for baseUrl relative imports with Webpack  
 
 ```js
 {
@@ -1442,7 +1388,8 @@ declare module 'rxjs/Subject' {
 #### To quick-fix missing type declarations for vendor modules you can "assert" a module type with `any` using [Shorthand Ambient Modules](https://github.com/Microsoft/TypeScript-Handbook/blob/master/pages/Modules.md#shorthand-ambient-modules)
 
 ```tsx
-// @src/types/modules.d.ts
+// typings/modules.d.ts
+declare module 'Types';
 declare module 'react-test-renderer';
 declare module 'enzyme';
 

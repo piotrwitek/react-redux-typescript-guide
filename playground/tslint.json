@@ -4,7 +4,7 @@
     "arrow-parens": false,
     "arrow-return-shorthand": [false],
     "comment-format": [true, "check-space"],
-    "import-blacklist": [true, "rxjs"],
+    "import-blacklist": [true],
     "interface-over-type-literal": false,
     "interface-name": false,
     "max-line-length": [true, 120],

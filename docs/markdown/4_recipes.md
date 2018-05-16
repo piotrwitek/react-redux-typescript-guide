@@ -2,8 +2,8 @@
 
 ### tsconfig.json
 - Recommended baseline config carefully optimized for strict type-checking and optimal webpack workflow  
-- Install [`tslib`](https://www.npmjs.com/package/tslib) to cut on bundle size, by using external transpiltion helper module instead of adding them inline: `npm i tslib`  
-- Example setup for project relative path imports with Webpack  
+- Install [`tslib`](https://www.npmjs.com/package/tslib) to cut on bundle size, by using external runtime helpers instead of adding them inline: `npm i tslib`  
+- Example "paths" setup for baseUrl relative imports with Webpack  
 
 ```js
 {
@@ -116,7 +116,7 @@ declare module 'rxjs/Subject' {
 
 #### To quick-fix missing type declarations for vendor modules you can "assert" a module type with `any` using [Shorthand Ambient Modules](https://github.com/Microsoft/TypeScript-Handbook/blob/master/pages/Modules.md#shorthand-ambient-modules)
 
-::example='../../playground/src/types/modules.d.ts'::
+::example='../../playground/typings/modules.d.ts'::
 
 > More advanced scenarios for working with vendor module declarations can be found here [Official TypeScript Docs](https://github.com/Microsoft/TypeScript-Handbook/blob/master/pages/Modules.md#working-with-other-javascript-libraries)
 

@@ -1,4 +1,4 @@
-// augmentations.ts
+// typings/augmentations.ts
 
 // import { Operator } from 'rxjs/Operator';
 // import { Observable } from 'rxjs/Observable';

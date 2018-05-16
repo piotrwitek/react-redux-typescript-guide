@@ -1,7 +1,7 @@
 const version = process.env.APP_VERSION;
 const STORAGE_KEY = `__SERIALIZED_STATE_TREE_v${version}__`;
 
-export function saveState(storeState: App.RootState): boolean {
+export function saveState<T = object>(storeState: T): boolean {
   if (!localStorage) {
     return false;
   }
@@ -15,7 +15,7 @@ export function saveState(storeState: App.RootState): boolean {
   }
 }
 
-export function loadState(): App.RootState | undefined {
+export function loadState<T = object>(): T | undefined {
   if (!localStorage) {
     return;
   }

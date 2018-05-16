@@ -2,14 +2,15 @@
 
 ## Action Creators
 
-> Using Typesafe Action Creators helpers for Redux [`typesafe-actions`](https://github.com/piotrwitek/typesafe-actions#typesafe-actions)
+> We'll be using a battle-tested library [![NPM Downloads](https://img.shields.io/npm/dm/typesafe-actions.svg)](https://www.npmjs.com/package/typesafe-actions)
+ that automates and simplify maintenace of **type annotations in Redux Architectures** [`typesafe-actions`](https://github.com/piotrwitek/typesafe-actions#typesafe-actions)
 
-A recommended approach is to use a simple functional helper to automate the creation of type-safe action creators. The advantage is that we can reduce a lot of code repetition and also minimize surface of errors by using type-checked API.
-> There are more specialized functional helpers available that will help you to further reduce tedious boilerplate and type-annotations in common scenarios like reducers (using [`getType`](https://github.com/piotrwitek/typesafe-actions#gettype)) or epics (using [`isActionOf`](https://github.com/piotrwitek/typesafe-actions#isactionof)).  
-All that without losing type-safety! Please check this very short [Tutorial](https://github.com/piotrwitek/typesafe-actions#tutorial)
+### You should read [The Mighty Tutorial](https://github.com/piotrwitek/typesafe-actions#behold-the-mighty-tutorial) to learn it all the easy way!
 
-::example='../../playground/src/redux/counters/actions.ts'::
-::usage='../../playground/src/redux/counters/actions.usage.ts'::
+A solution below is using simple factory function to automate the creation of type-safe action creators. The goal is to reduce the maintainability and code repetition of type annotations for actions and creators and the result is completely typesafe action-creators and their actions.
+
+::example='../../playground/src/features/counters/actions.ts'::
+::usage='../../playground/src/features/counters/actions.usage.ts'::
 
 [⇧ back to top](#table-of-contents)
 
@@ -18,10 +19,11 @@ All that without losing type-safety! Please check this very short [Tutorial](htt
 ## Reducers
 
 ### State with Type-level Immutability
-Declare reducer `State` type with `readonly` modifier to get "type level" immutability
+Declare reducer `State` type with `readonly` modifier to get compile time immutability
 ```ts
 export type State = {
-  readonly counter: number,
+  readonly counter: number;
+  readonly todos: ReadonlyArray<string>;
 };
 ```
 
@@ -31,25 +33,34 @@ export const initialState: State = {
   counter: 0,
 }; // OK
 
-initialState.counter = 3; // Error, cannot be mutated
+initialState.counter = 3; // TS Error: cannot be mutated
 ```
 
-#### Caveat: Readonly does not provide a recursive immutability on objects
-This means that the `readonly` modifier doesn't propagate immutability down to "properties" of objects. You'll need to set it explicitly on each nested property that you want.
+It's great for **Arrays in JS** because it will error when using mutator methods like (`push`, `pop`, `splice`, ...), but it'll still allow immutable methods like (`concat`, `map`, `slice`,...).
+```ts
+state.todos.push('Learn about tagged union types') // TS Error: Property 'push' does not exist on type 'ReadonlyArray<string>'
+const newTodos = state.todos.concat('Learn about tagged union types') // OK
+```
+
+#### Caveat: Readonly is not recursive
+This means that the `readonly` modifier doesn't propagate immutability down the nested structure of objects. You'll need to mark each property on each level explicitly.
+
+To fix this we can use [`DeepReadonly`](https://github.com/piotrwitek/utility-types#deepreadonlyt) type (available in `utility-types` npm library - collection of reusable types extending the collection of **standard-lib** in TypeScript.
 
 Check the example below:
 ```ts
-export type State = {
-  readonly containerObject: {
-    readonly immutableProp: number,
-    mutableProp: number,
+import { DeepReadonly } from 'utility-types';
+
+export type State = DeepReadonly<{
+  containerObject: {
+    innerValue: number,
+    numbers: number[],
   }
-};
+}>;
 
-state.containerObject = { mutableProp: 1 }; // Error, cannot be mutated
-state.containerObject.immutableProp = 1; // Error, cannot be mutated
-
-state.containerObject.mutableProp = 1; // OK! No error, can be mutated
+state.containerObject = { innerValue: 1 }; // TS Error: cannot be mutated
+state.containerObject.innerValue = 1; // TS Error: cannot be mutated
+state.containerObject.numbers.push(1); // TS Error: cannot use mutator methods
 ```
 
 #### Best-practices for nested immutability
@@ -63,55 +74,48 @@ export type State = Readonly<{
   }>>,
 }>;
 
-state.counterPairs[0] = { immutableCounter1: 1, immutableCounter2: 1 }; // Error, cannot be mutated
-state.counterPairs[0].immutableCounter1 = 1; // Error, cannot be mutated
-state.counterPairs[0].immutableCounter2 = 1; // Error, cannot be mutated
+state.counterPairs[0] = { immutableCounter1: 1, immutableCounter2: 1 }; // TS Error: cannot be mutated
+state.counterPairs[0].immutableCounter1 = 1; // TS Error: cannot be mutated
+state.counterPairs[0].immutableCounter2 = 1; // TS Error: cannot be mutated
 ```
-
-> _There is a new (work in progress) feature called **Conditional Types**, that will allow `ReadonlyRecursive` mapped type_
 
 [⇧ back to top](#table-of-contents)
 
 ### Typing reducer
-> using type inference with [Discriminated Union types](https://www.typescriptlang.org/docs/handbook/advanced-types.html)
+> to understand following section make sure to learn about [Type Inference](https://www.typescriptlang.org/docs/handbook/type-inference.html), [Control flow analysis](https://github.com/Microsoft/TypeScript/wiki/What%27s-new-in-TypeScript#control-flow-based-type-analysis) and [Tagged union types](https://github.com/Microsoft/TypeScript/wiki/What%27s-new-in-TypeScript#tagged-union-types)
 
-::example='../../playground/src/redux/todos/reducer.ts'::
+::example='../../playground/src/features/todos/reducer.ts'::
 
 [⇧ back to top](#table-of-contents)
 
 ### Testing reducer
 
-::example='../../playground/src/redux/todos/reducer.spec.ts'::
+::example='../../playground/src/features/todos/reducer.spec.ts'::
 
 [⇧ back to top](#table-of-contents)
-
 
 ---
 
 ## Store Configuration
 
-### Create Root State and Root Action Types
+### Create Global RootState and RootAction Types
 
-#### `RootState` - interface representing redux state tree
+#### `RootState` - type representing root state-tree
 Can be imported in connected components to provide type-safety to Redux `connect` function
 
-::example='../../playground/src/redux/root-reducer.ts'::
-
-[⇧ back to top](#table-of-contents)
-
-#### `RootAction` - union type of all action objects
+#### `RootAction` - type representing union type of all action objects
 Can be imported in various layers receiving or sending redux actions like: reducers, sagas or redux-observables epics
 
-::example='../../playground/src/redux/root-action.ts'::
+::example='../../playground/src/store/types.d.ts'::
 
 [⇧ back to top](#table-of-contents)
 
 ### Create Store
 
-When creating the store, use rootReducer. This will set-up a **strongly typed Store instance** with type inference.
-> The resulting store instance methods like `getState` or `dispatch` will be type checked and expose type errors
+When creating a store instance we don't need to provide any additional types. It will set-up a **type-safe Store instance** using type inference.
+> The resulting store instance methods like `getState` or `dispatch` will be type checked and will expose all type errors
 
-::example='../../playground/src/store.ts'::
+::example='../../playground/src/store/store.ts'::
 
 ---
 
@@ -119,9 +123,9 @@ When creating the store, use rootReducer. This will set-up a **strongly typed St
 
 ### "redux-observable"
 
-Use `isActionOf` helper to filter actions and to narrow `RootAction` union type to a specific "action type" down the stream.
+### For more examples and in-depth explanation you should read [The Mighty Tutorial](https://github.com/piotrwitek/typesafe-actions#behold-the-mighty-tutorial) to learn it all the easy way!
 
-::example='../../playground/src/redux/toasts/epics.ts'::
+::example='../../playground/src/features/todos/epics.ts'::
 
 [⇧ back to top](#table-of-contents)
 
@@ -131,73 +135,6 @@ Use `isActionOf` helper to filter actions and to narrow `RootAction` union type 
 
 ### "reselect"
 
-```ts
-import { createSelector } from 'reselect';
-
-import { RootState } from '@src/redux';
-
-export const getTodos =
-  (state: RootState) => state.todos.todos;
-
-export const getTodosFilter =
-  (state: RootState) => state.todos.todosFilter;
-
-export const getFilteredTodos = createSelector(
-  getTodos, getTodosFilter,
-  (todos, todosFilter) => {
-    switch (todosFilter) {
-      case 'completed':
-        return todos.filter((t) => t.completed);
-      case 'active':
-        return todos.filter((t) => !t.completed);
-
-      default:
-        return todos;
-    }
-  },
-);
-```
-
-[⇧ back to top](#table-of-contents)
-
----
-
-### Action Creators - Alternative Pattern
-This pattern is focused on a KISS principle - to stay clear of abstractions and to follow a more complex but familiar JavaScript "const" based approach:
-
-Advantages:
-- familiar to standard JS "const" based approach
-
-Disadvantages:
-- significant amount of boilerplate and duplication
-- more complex compared to `createAction` helper library
-- necessary to export both action types and action creators to re-use in other places, e.g. `redux-saga` or `redux-observable`
-
-```tsx
-export const INCREMENT = 'INCREMENT'; 
-export const ADD = 'ADD'; 
-
-export type Actions = { 
-  INCREMENT: { 
-    type: typeof INCREMENT, 
-  }, 
-  ADD: { 
-    type: typeof ADD,
-    payload: number, 
-  }, 
-};
-
-export type RootAction = Actions[keyof Actions];
-
-export const actions = { 
-  increment: (): Actions[typeof INCREMENT] => ({ 
-    type: INCREMENT, 
-  }), 
-  add: (amount: number): Actions[typeof ADD] => ({ 
-    type: ADD,
-    payload: amount,
-  }),
-};
-```
+::example='../../playground/src/features/todos/selectors.ts'::
 
 [⇧ back to top](#table-of-contents)
