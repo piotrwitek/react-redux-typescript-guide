@@ -1,9 +1,3 @@
-# Project Examples
-
-https://github.com/piotrwitek/react-redux-typescript-webpack-starter  
-
-[⇧ back to top](#table-of-contents)
-
 # Tutorials
 > Curated list of relevant in-depth tutorials
 

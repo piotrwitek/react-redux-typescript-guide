@@ -4,12 +4,12 @@ export interface StatefulCounterProps {
   label: string;
 }
 
-type State = {
-  count: number;
-};
+interface State {
+  readonly count: number;
+}
 
 export class StatefulCounter extends React.Component<StatefulCounterProps, State> {
-  state: State = {
+  readonly state: State = {
     count: 0,
   };
 

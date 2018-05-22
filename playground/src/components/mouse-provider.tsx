@@ -5,12 +5,12 @@ export interface MouseProviderProps {
 }
 
 interface MouseProviderState {
-  x: number;
-  y: number;
+  readonly x: number;
+  readonly y: number;
 }
 
 export class MouseProvider extends React.Component<MouseProviderProps, MouseProviderState> {
-  state = { x: 0, y: 0 };
+  readonly state: MouseProviderState = { x: 0, y: 0 };
 
   handleMouseMove = (event: React.MouseEvent<HTMLDivElement>) => {
     this.setState({

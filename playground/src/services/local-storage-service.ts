@@ -1,10 +1,10 @@
-import { RootState } from '@src/redux';
-
 const version = process.env.APP_VERSION;
 const STORAGE_KEY = `__SERIALIZED_STATE_TREE_v${version}__`;
 
-export function saveState(storeState: RootState): boolean {
-  if (!localStorage) { return false; }
+export function saveState<T = object>(storeState: T): boolean {
+  if (!localStorage) {
+    return false;
+  }
 
   try {
     const serializedState = JSON.stringify(storeState);
@@ -15,8 +15,10 @@ export function saveState(storeState: RootState): boolean {
   }
 }
 
-export function loadState(): RootState | undefined {
-  if (!localStorage) { return; }
+export function loadState<T = object>(): T | undefined {
+  if (!localStorage) {
+    return;
+  }
 
   try {
     const serializedState = localStorage.getItem(STORAGE_KEY);
