@@ -383,9 +383,7 @@ interface NameProviderState {
 }
 
 export class NameProvider extends React.Component<NameProviderProps, NameProviderState> {
-  readonly state: NameProviderState = {
-    name: 'Piotr',
-  };
+  readonly state: NameProviderState = { name: 'Piotr' };
 
   render() {
     return this.props.children(this.state);
@@ -421,12 +419,11 @@ export class MouseProvider extends React.Component<MouseProviderProps, MouseProv
       x: event.clientX,
       y: event.clientY,
     });
-  }
+  };
 
   render() {
     return (
-      <div style={{ height: '100%' }} onMouseMove={this.handleMouseMove} >
-
+      <div style={{ height: '100%' }} onMouseMove={this.handleMouseMove}>
         {/*
           Instead of providing a static representation of what <Mouse> renders,
           use the `render` prop to dynamically determine what to render.
