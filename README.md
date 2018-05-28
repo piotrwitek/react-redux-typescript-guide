@@ -869,7 +869,7 @@ state.counterPairs[0].immutableCounter2 = 1; // TS Error: cannot be mutated
 
 ```tsx
 import { combineReducers } from 'redux';
-import { ActionsUnion } from 'typesafe-actions';
+import { ActionUnion } from 'typesafe-actions';
 
 import { Todo, TodosFilter } from './models';
 import * as actions from './actions';
@@ -882,7 +882,7 @@ export type TodosState = {
   readonly todosFilter: TodosFilter;
 };
 
-export type TodosAction = ActionsUnion<typeof actions>;
+export type TodosAction = ActionUnion<typeof actions>;
 
 export default combineReducers<TodosState, TodosAction>({
   isFetching: (state = false, action) => {
