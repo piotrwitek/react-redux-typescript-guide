@@ -1,5 +1,5 @@
 import { combineReducers } from 'redux';
-import { ActionsUnion } from 'typesafe-actions';
+import { ActionType } from 'typesafe-actions';
 
 import { Todo, TodosFilter } from './models';
 import * as actions from './actions';
@@ -12,7 +12,7 @@ export type TodosState = {
   readonly todosFilter: TodosFilter;
 };
 
-export type TodosAction = ActionsUnion<typeof actions>;
+export type TodosAction = ActionType<typeof actions>;
 
 export default combineReducers<TodosState, TodosAction>({
   isFetching: (state = false, action) => {

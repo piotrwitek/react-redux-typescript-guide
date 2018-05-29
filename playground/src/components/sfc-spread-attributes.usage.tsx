@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { SFCSpreadAttributes } from '@src/components';
+import { SFCSpreadAttributes } from '../components';
 
 export default () => (
   <SFCSpreadAttributes

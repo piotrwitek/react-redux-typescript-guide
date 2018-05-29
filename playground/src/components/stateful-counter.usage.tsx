@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { StatefulCounter } from '@src/components';
+import { StatefulCounter } from '../components';
 
 export default () => (
   <StatefulCounter

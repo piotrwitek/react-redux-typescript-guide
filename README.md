@@ -60,7 +60,6 @@ You should check Playground Project located in the `/playground` folder. It is a
   - [Vendor Types Augmentation](#vendor-types-augmentation)
   - [Default and Named Module Exports](#default-and-named-module-exports)
 - [FAQ](#faq)
-- [Contribution Guide](#contribution-guide)
 - [Tutorials](#tutorials)
 
 ---
@@ -505,8 +504,8 @@ export const withState = <WrappedProps extends InjectedProps>(
 ```tsx
 import * as React from 'react';
 
-import { withState } from '@src/hoc';
-import { SFCCounter } from '@src/components';
+import { withState } from '../hoc';
+import { SFCCounter } from '../components';
 
 const SFCCounterWithState =
   withState(SFCCounter);
@@ -589,8 +588,8 @@ export const withErrorBoundary = <WrappedProps extends InjectedProps>(
 ```tsx
 import * as React from 'react';
 
-import { withErrorBoundary } from '@src/hoc';
-import { ErrorMessage } from '@src/components';
+import { withErrorBoundary } from '../hoc';
+import { ErrorMessage } from '../components';
 
 const ErrorMessageWithErrorBoundary =
   withErrorBoundary(ErrorMessage);
@@ -633,14 +632,14 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
 #### - redux connected counter
 
 ```tsx
+import Types from 'Types';
 import { connect } from 'react-redux';
 
-import { RootState } from '@src/redux';
-import { countersActions, countersSelectors } from '@src/redux/counters';
-import { SFCCounter } from '@src/components';
+import { countersActions, countersSelectors } from '../features/counters';
+import { SFCCounter } from '../components';
 
-const mapStateToProps = (state: RootState) => ({
-  count: countersSelectors.getReduxCounter(state),
+const mapStateToProps = (state: Types.RootState) => ({
+  count: countersSelectors.getReduxCounter(state.counters),
 });
 
 export const SFCCounterConnected = connect(mapStateToProps, {
@@ -653,7 +652,7 @@ export const SFCCounterConnected = connect(mapStateToProps, {
 ```tsx
 import * as React from 'react';
 
-import { SFCCounterConnected } from '@src/connected';
+import { SFCCounterConnected } from '../connected';
 
 export default () => (
   <SFCCounterConnected
@@ -669,14 +668,14 @@ export default () => (
 #### - redux connected counter (verbose)
 
 ```tsx
-import { bindActionCreators } from 'redux';
+import Types from 'Types';
+import { bindActionCreators, Dispatch } from 'redux';
 import { connect } from 'react-redux';
 
-import { RootState, Dispatch } from '@src/redux';
-import { countersActions } from '@src/redux/counters';
-import { SFCCounter } from '@src/components';
+import { countersActions } from '../features/counters';
+import { SFCCounter } from '../components';
 
-const mapStateToProps = (state: RootState) => ({
+const mapStateToProps = (state: Types.RootState) => ({
   count: state.counters.reduxCounter,
 });
 
@@ -693,7 +692,7 @@ export const SFCCounterConnectedVerbose =
 ```tsx
 import * as React from 'react';
 
-import { SFCCounterConnectedVerbose } from '@src/connected';
+import { SFCCounterConnectedVerbose } from '../connected';
 
 export default () => (
   <SFCCounterConnectedVerbose
@@ -709,18 +708,18 @@ export default () => (
 #### - with own props
 
 ```tsx
+import Types from 'Types';
 import { connect } from 'react-redux';
 
-import { RootState } from '@src/redux';
-import { countersActions, countersSelectors } from '@src/redux/counters';
-import { SFCCounter } from '@src/components';
+import { countersActions, countersSelectors } from '../features/counters';
+import { SFCCounter } from '../components';
 
 export interface SFCCounterConnectedExtendedProps {
   initialCount: number;
 }
 
-const mapStateToProps = (state: RootState, ownProps: SFCCounterConnectedExtendedProps) => ({
-  count: countersSelectors.getReduxCounter(state) + ownProps.initialCount,
+const mapStateToProps = (state: Types.RootState, ownProps: SFCCounterConnectedExtendedProps) => ({
+  count: countersSelectors.getReduxCounter(state.counters) + ownProps.initialCount,
 });
 
 export const SFCCounterConnectedExtended = connect(mapStateToProps, {
@@ -733,7 +732,7 @@ export const SFCCounterConnectedExtended = connect(mapStateToProps, {
 ```tsx
 import * as React from 'react';
 
-import { SFCCounterConnectedExtended } from '@src/connected';
+import { SFCCounterConnectedExtended } from '../connected';
 
 export default () => <SFCCounterConnectedExtended label={'SFCCounterConnectedExtended'} initialCount={10} />;
 
@@ -756,7 +755,7 @@ export default () => <SFCCounterConnectedExtended label={'SFCCounterConnectedExt
 A solution below is using simple factory function to automate the creation of type-safe action creators. The goal is to reduce the maintainability and code repetition of type annotations for actions and creators and the result is completely typesafe action-creators and their actions.
 
 ```tsx
-import { action, createAction, createStandardAction } from 'typesafe-actions';
+import { action } from 'typesafe-actions';
 
 import { ADD, INCREMENT } from './constants';
 
@@ -770,10 +769,12 @@ export const add = (amount: number) => action(ADD, amount);
 // https://github.com/piotrwitek/typesafe-actions#behold-the-mighty-tutorial
 
 // OPTION 1 (with generics):
+// import { createStandardAction } from 'typesafe-actions';
 // export const increment = createStandardAction(INCREMENT)<void>();
 // export const add = createStandardAction(ADD)<number>();
 
 // OPTION 2 (with resolve callback):
+// import { createAction } from 'typesafe-actions';
 // export const increment = createAction(INCREMENT);
 // export const add = createAction(ADD, resolve => {
 //   return (amount: number) => resolve(amount);
@@ -869,7 +870,7 @@ state.counterPairs[0].immutableCounter2 = 1; // TS Error: cannot be mutated
 
 ```tsx
 import { combineReducers } from 'redux';
-import { ActionsUnion } from 'typesafe-actions';
+import { ActionType } from 'typesafe-actions';
 
 import { Todo, TodosFilter } from './models';
 import * as actions from './actions';
@@ -882,7 +883,7 @@ export type TodosState = {
   readonly todosFilter: TodosFilter;
 };
 
-export type TodosAction = ActionsUnion<typeof actions>;
+export type TodosAction = ActionType<typeof actions>;
 
 export default combineReducers<TodosState, TodosAction>({
   isFetching: (state = false, action) => {
@@ -1010,21 +1011,21 @@ When creating a store instance we don't need to provide any additional types. It
 > The resulting store instance methods like `getState` or `dispatch` will be type checked and will expose all type errors
 
 ```tsx
-import { createStore, applyMiddleware, compose } from 'redux';
+import { createStore, applyMiddleware } from 'redux';
 import { createEpicMiddleware } from 'redux-observable';
 
+import { composeEnhancers } from './utils';
 import rootReducer from './root-reducer';
 import rootEpic from './root-epic';
+import services from '../services';
 
-const composeEnhancers =
-  (process.env.NODE_ENV === 'development' &&
-    window &&
-    window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__) ||
-  compose;
+export const epicMiddleware = createEpicMiddleware(rootEpic, {
+  dependencies: services,
+});
 
 function configureStore(initialState?: object) {
   // configure middlewares
-  const middlewares = [createEpicMiddleware(rootEpic)];
+  const middlewares = [epicMiddleware];
   // compose enhancers
   const enhancer = composeEnhancers(applyMiddleware(...middlewares));
   // create store
@@ -1048,7 +1049,6 @@ export default store;
 ### For more examples and in-depth explanation you should read [The Mighty Tutorial](https://github.com/piotrwitek/typesafe-actions#behold-the-mighty-tutorial) to learn it all the easy way!
 
 ```tsx
-// tslint:disable:no-console
 import Types from 'Types';
 import { combineEpics, Epic } from 'redux-observable';
 import { tap, ignoreElements, filter } from 'rxjs/operators';
@@ -1059,12 +1059,13 @@ import { todosConstants, TodosAction } from '../todos';
 // contrived example!!!
 const logAddAction: Epic<TodosAction, Types.RootState, Types.Services> = (
   action$,
-  store
+  store,
+  { logger }
 ) =>
   action$.pipe(
     filter(isOfType(todosConstants.ADD)), // action is narrowed to: { type: "ADD_TODO"; payload: string; }
     tap(action => {
-      console.log(
+      logger.log(
         `action type must be equal: ${todosConstants.ADD} === ${action.type}`
       );
     }),
@@ -1447,29 +1448,6 @@ class StatefulCounter extends React.Component<Props, State> {
 
 ---
 
-# Contribution Guide
-- Don't edit `README.md` - it is built with `generator` script from  separate `.md` files located in the `/docs/markdown` folder, edit them instead
-- For code snippets, they are also injected by `generator` script from the source files located in the playground folder (this step make sure all examples are type-checked and linted), edit them instead
-> look for include directives in `.md` files that look like this: `::[example|usage]='../../playground/src/components/sfc-counter.tsx'::`
-
-Before opening PR please make sure to check:
-```bash
-# run linter in playground
-yarn run lint
-
-# run type-checking in playground
-yarn run tsc
-
-# re-generate `README.md` from repo root
-sh ./generate.sh
-# or
-node ./generator/bin/generate-readme.js
-```
-
-[⇧ back to top](#table-of-contents)
-
----
-
 # Tutorials
 > Curated list of relevant in-depth tutorials
 
@@ -1477,3 +1455,9 @@ Higher-Order Components:
 - https://medium.com/@jrwebdev/react-higher-order-component-patterns-in-typescript-42278f7590fb
 
 [⇧ back to top](#table-of-contents)
+
+---
+
+MIT License
+
+Copyright (c) 2017 Piotr Witek <piotrek.witek@gmail.com> (http://piotrwitek.github.io)

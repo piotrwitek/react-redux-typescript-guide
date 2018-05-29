@@ -1,10 +1,10 @@
 import { combineReducers } from 'redux';
-import { ActionsUnion } from 'typesafe-actions';
+import { ActionType } from 'typesafe-actions';
 
 import * as counters from './actions';
 import { ADD, INCREMENT } from './constants';
 
-export type CountersAction = ActionsUnion<typeof counters>;
+export type CountersAction = ActionType<typeof counters>;
 
 export type CountersState = {
   readonly reduxCounter: number;

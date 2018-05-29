@@ -1,11 +1,11 @@
-import { bindActionCreators } from 'redux';
+import Types from 'Types';
+import { bindActionCreators, Dispatch } from 'redux';
 import { connect } from 'react-redux';
 
-import { RootState, Dispatch } from '@src/redux';
-import { countersActions } from '@src/redux/counters';
-import { SFCCounter } from '@src/components';
+import { countersActions } from '../features/counters';
+import { SFCCounter } from '../components';
 
-const mapStateToProps = (state: RootState) => ({
+const mapStateToProps = (state: Types.RootState) => ({
   count: state.counters.reduxCounter,
 });
 

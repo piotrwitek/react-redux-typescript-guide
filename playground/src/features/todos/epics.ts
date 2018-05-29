@@ -1,4 +1,3 @@
-// tslint:disable:no-console
 import Types from 'Types';
 import { combineEpics, Epic } from 'redux-observable';
 import { tap, ignoreElements, filter } from 'rxjs/operators';
@@ -9,12 +8,13 @@ import { todosConstants, TodosAction } from '../todos';
 // contrived example!!!
 const logAddAction: Epic<TodosAction, Types.RootState, Types.Services> = (
   action$,
-  store
+  store,
+  { logger }
 ) =>
   action$.pipe(
     filter(isOfType(todosConstants.ADD)), // action is narrowed to: { type: "ADD_TODO"; payload: string; }
     tap(action => {
-      console.log(
+      logger.log(
         `action type must be equal: ${todosConstants.ADD} === ${action.type}`
       );
     }),
