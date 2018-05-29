@@ -28,5 +28,4 @@
   - [Vendor Types Augmentation](#vendor-types-augmentation)
   - [Default and Named Module Exports](#default-and-named-module-exports)
 - [FAQ](#faq)
-- [Contribution Guide](#contribution-guide)
 - [Tutorials](#tutorials)
