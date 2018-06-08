@@ -27,3 +27,6 @@ _"This guide is a **living compendium** documenting the most important patterns 
 
 You should check Playground Project located in the `/playground` folder. It is a source of all the code examples found in the guide. They are all tested with the most recent version of TypeScript and 3rd party type definitions (like `@types/react` or `@types/react-redux`) to ensure the examples are up-to-date and not broken with updated definitions.
 > Playground was created is such a way, that you can simply clone the repository locally and immediately play around on your own to learn all the examples from this guide in a real project environment without the need to create some complicated environment setup by yourself.
+
+### Contribution Guide
+[CONTRIBUTION.md](/CONTRIBUTION.md)

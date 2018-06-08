@@ -1,9 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Todos Logic initial state should match a snapshot 1`] = `
+exports[`Todos Stories initial state should match a snapshot 1`] = `
 Object {
-  "errorMessage": "",
-  "isFetching": false,
   "todos": Array [],
   "todosFilter": "",
 }

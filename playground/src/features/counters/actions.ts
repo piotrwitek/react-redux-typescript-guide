@@ -1,4 +1,4 @@
-import { action, createAction, createStandardAction } from 'typesafe-actions';
+import { action } from 'typesafe-actions';
 
 import { ADD, INCREMENT } from './constants';
 
@@ -12,10 +12,12 @@ export const add = (amount: number) => action(ADD, amount);
 // https://github.com/piotrwitek/typesafe-actions#behold-the-mighty-tutorial
 
 // OPTION 1 (with generics):
+// import { createStandardAction } from 'typesafe-actions';
 // export const increment = createStandardAction(INCREMENT)<void>();
 // export const add = createStandardAction(ADD)<number>();
 
 // OPTION 2 (with resolve callback):
+// import { createAction } from 'typesafe-actions';
 // export const increment = createAction(INCREMENT);
 // export const add = createAction(ADD, resolve => {
 //   return (amount: number) => resolve(amount);

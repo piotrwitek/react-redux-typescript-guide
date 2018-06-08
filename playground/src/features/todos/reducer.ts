@@ -1,32 +1,18 @@
 import { combineReducers } from 'redux';
-import { ActionsUnion } from 'typesafe-actions';
+import { ActionType } from 'typesafe-actions';
 
 import { Todo, TodosFilter } from './models';
 import * as actions from './actions';
 import { ADD, CHANGE_FILTER, TOGGLE } from './constants';
 
 export type TodosState = {
-  readonly isFetching: boolean;
-  readonly errorMessage: string | null;
   readonly todos: Todo[];
   readonly todosFilter: TodosFilter;
 };
 
-export type TodosAction = ActionsUnion<typeof actions>;
+export type TodosAction = ActionType<typeof actions>;
 
 export default combineReducers<TodosState, TodosAction>({
-  isFetching: (state = false, action) => {
-    switch (action.type) {
-      default:
-        return state;
-    }
-  },
-  errorMessage: (state = null, action) => {
-    switch (action.type) {
-      default:
-        return state;
-    }
-  },
   todos: (state = [], action) => {
     switch (action.type) {
       case ADD:

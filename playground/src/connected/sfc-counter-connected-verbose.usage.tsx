@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { SFCCounterConnectedVerbose } from '@src/connected';
+import { SFCCounterConnectedVerbose } from '../connected';
 
 export default () => (
   <SFCCounterConnectedVerbose
