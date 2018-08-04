@@ -8,7 +8,7 @@ const MyComponent: React.SFC<MyComponentProps> = ...
 [⇧ back to top](#table-of-contents)
 
 #### `React.Component<P, S>`
-Type representing statefull class component
+Type representing stateful class component
 ```tsx
 class MyComponent extends React.Component<MyComponentProps, State> { ...
 ```
