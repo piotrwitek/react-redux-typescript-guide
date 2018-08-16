@@ -1,6 +1,6 @@
 ## React & Redux in TypeScript - Static Typing Guide
 
-_"This guide is a **living compendium** documenting the most important patterns and recipes on how to use **React** (and it's Ecosystem) in a **functional style with TypeScript** and to make your code **completely type-safe** while focusing on a **conciseness of type annotations** so it's a minimal effort to write and to maintain types in the long run."_
+_"This guide is a **living compendium** documenting the most important patterns and recipes on how to use **React** (and its Ecosystem) in a **functional style with TypeScript** and to make your code **completely type-safe** while focusing on a **conciseness of type annotations** so it's a minimal effort to write and to maintain types in the long run."_
 
 [![Join the chat at https://gitter.im/react-redux-typescript-guide/Lobby](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/react-redux-typescript-guide/Lobby)  
 
@@ -117,7 +117,7 @@ const withState = <P extends WrappedComponentProps>(
 [⇧ back to top](#table-of-contents)
 
 #### `React.ReactElement<P>` or `JSX.Element`
-Type representing a concept of React Element - representation of a native DOM component (<div />), or a user-defined composite component (<MyComponent />)
+Type representing a concept of React Element - representation of a native DOM component (e.g. `<div />`), or a user-defined composite component (e.g. `<MyComponent />`)
 ```tsx
 const elementOnly: React.ReactElement = <div /> || <MyComponent />;
 ```
