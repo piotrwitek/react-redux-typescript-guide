@@ -31,6 +31,9 @@ You should check out Playground Project located in the `/playground` folder. It 
 ### Contribution Guide
 [CONTRIBUTION.md](/CONTRIBUTION.md)
 
+### Sponsor
+[![issuehunt-image](https://github.com/BoostIO/issuehunt-materials/blob/master/issuehunt-badge@1x.png?raw=true)](https://issuehunt.io/repos/76996763)
+
 ---
 
 ## Table of Contents
