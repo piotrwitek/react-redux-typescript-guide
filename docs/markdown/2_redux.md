@@ -27,7 +27,7 @@ export type State = {
 };
 ```
 
-Readonly modifier allow initialization, but will not allow rassignment by highlighting compiler errors
+Readonly modifier allow initialization, but will not allow reassignment by highlighting compiler errors
 ```ts
 export const initialState: State = {
   counter: 0,
