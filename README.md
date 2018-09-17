@@ -44,37 +44,38 @@ This gives you the power to prioritize our work and support the project contribu
 
 ## Table of Contents
 - [Type Definitions & Complementary Libraries](#type-definitions--complementary-libraries)
-- [React Types Cheatsheet](#react-types-cheatsheet) 🌟 __NEW__
+- [React Types Cheatsheet](#react-types-cheatsheet)
 - [Component Typing Patterns](#component-typing-patterns)
   - [Stateless Components - SFC](#stateless-components---sfc)
-  - [Stateful Components - Class](#stateful-components---class) 📝 __UPDATED__
+  - [Stateful Components - Class](#stateful-components---class)
   - [Generic Components](#generic-components)
-  - [Render Props](#render-props) 🌟 __NEW__
-  - [Higher-Order Components](#higher-order-components) 📝 __UPDATED__
+  - [Render Props](#render-props)
+  - [Higher-Order Components](#higher-order-components)
   - [Redux Connected Components](#redux-connected-components)
 - [Redux](#redux)
-  - [Action Creators](#action-creators) 📝 __UPDATED__
-  - [Reducers](#reducers) 📝 __UPDATED__
+  - [Action Creators](#action-creators)
+  - [Reducers](#reducers)
     - [State with Type-level Immutability](#state-with-type-level-immutability)
     - [Typing reducer](#typing-reducer)
     - [Testing reducer](#testing-reducer)
-  - [Store Configuration](#store-configuration) 📝 __UPDATED__
-  - [Async Flow](#async-flow) 📝 __UPDATED__
+  - [Store Configuration](#store-configuration)
+  - [Async Flow](#async-flow)
   - [Selectors](#selectors)
   - [Typing connect](#typing-connect) 🌟 __NEW__
 - [Tools](#tools)
+  - [Tools Npm Scripts](#tools-npm-scripts)
   - [TSLint](#tslint)
   - [Jest](#jest)
   - [Enzyme](#enzyme)
-  - [Living Style Guide](#living-style-guide) 🌟 __NEW__
-  - [Common Npm Scripts](#common-npm-scripts)
+  - [Living Style Guide](#living-style-guide)
+  - [Recompose](#recompose) 🌟 __NEW__
 - [Recipes](#recipes)
   - [tsconfig.json](#tsconfigjson)
   - [Vendor Types Augmentation](#vendor-types-augmentation)
   - [Default and Named Module Exports](#default-and-named-module-exports)
 - [FAQ](#faq)
 - [Tutorials](#tutorials)
-- [Contributors](#contributors)
+- [Contributors](#contributors) 🌟 __NEW__
 
 ---
 
@@ -1147,6 +1148,23 @@ export const SFCCounterConnectedVerbose =
 ---
 
 # Tools
+> Common tools for TypeScript projects
+
+## Tools Npm Scripts
+> Tools related npm scripts shared across projects
+```
+"lint": "tslint -p ./",
+"tsc": "tsc -p ./ --noEmit",
+"tsc:watch": "tsc -p ./ --noEmit -w",
+"pretest": "npm run lint & npm run tsc",
+"test": "jest --config jest.config.json",
+"test:watch": "jest --config jest.config.json --watch",
+"test:update": "jest --config jest.config.json -u",
+```
+
+[⇧ back to top](#table-of-contents)
+
+---
 
 ## TSLint
 
@@ -1214,6 +1232,8 @@ export const SFCCounterConnectedVerbose =
 
 [⇧ back to top](#table-of-contents)
 
+---
+
 ## Jest
 
 > Installation  
@@ -1259,8 +1279,9 @@ window.localStorage = {
 Object.values = () => [];
 ```
 
-
 [⇧ back to top](#table-of-contents)
+
+---
 
 ## Enzyme
 
@@ -1286,16 +1307,15 @@ configure({ adapter: new Adapter() });
 
 [⇧ back to top](#table-of-contents)
 
-## Common Npm Scripts
-> Common TS-related npm scripts shared across projects
-```
-"lint": "tslint -p ./",
-"tsc": "tsc -p ./ --noEmit",
-"tsc:watch": "tsc -p ./ --noEmit -w",
-"pretest": "npm run lint & npm run tsc",
-"test": "jest --config jest.config.json",
-"test:watch": "jest --config jest.config.json --watch",
-"test:update": "jest --config jest.config.json -u",
+---
+
+## Recompose
+
+> Installation  
+`npm i recompose`
+
+```tsx
+// WIP
 ```
 
 [⇧ back to top](#table-of-contents)
