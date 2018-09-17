@@ -2,11 +2,15 @@
   "bin": "bin/generate-readme.js",
   "devDependencies": {
     "@types/node": "8.5.1",
+    "all-contributors-cli": "^5.4.0",
     "ts-node": "4.0.2",
     "typescript": "2.6.2"
   },
   "scripts": {
     "build": "tsc -p .",
-    "dev": "ts-node src/generate-readme"
+    "dev": "ts-node src/generate-readme",
+    "readme:generate": "node bin/generate-readme",
+    "contributors:add": "all-contributors add",
+    "contributors:generate": "all-contributors generate"
   }
 }

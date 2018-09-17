@@ -29,3 +29,4 @@
   - [Default and Named Module Exports](#default-and-named-module-exports)
 - [FAQ](#faq)
 - [Tutorials](#tutorials)
+- [Contributors](#contributors)

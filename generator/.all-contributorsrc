@@ -1,0 +1,145 @@
+{
+  "projectName": "react-redux-typescript-guide",
+  "projectOwner": "piotrwitek",
+  "repoType": "github",
+  "repoHost": "https://github.com",
+  "files": [
+    "../docs/markdown/_contributors.md"
+  ],
+  "imageSize": 100,
+  "commit": false,
+  "contributors": [
+    {
+      "login": "piotrwitek",
+      "name": "Piotrek Witek",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/739075?v=4",
+      "profile": "https://github.com/piotrwitek",
+      "contributions": [
+        "code",
+        "doc",
+        "ideas",
+        "review",
+        "example",
+        "question"
+      ]
+    },
+    {
+      "login": "kazup01",
+      "name": "Kazz Yokomizo",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/8602615?v=4",
+      "profile": "https://github.com/kazup01",
+      "contributions": [
+        "financial",
+        "fundingFinding"
+      ]
+    },
+    {
+      "login": "jakeboone02",
+      "name": "Jake Boone",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/366438?v=4",
+      "profile": "https://github.com/jakeboone02",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "amitdahan",
+      "name": "Amit Dahan",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/9748762?v=4",
+      "profile": "https://github.com/amitdahan",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "gulderov",
+      "name": "gulderov",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/98167?v=4",
+      "profile": "https://github.com/gulderov",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "emp823",
+      "name": "Erik Pearson",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/1964212?v=4",
+      "profile": "https://github.com/emp823",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "flymason",
+      "name": "Bryan Mason",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/5342677?v=4",
+      "profile": "https://github.com/flymason",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "chodorowicz",
+      "name": "Jakub Chodorowicz",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/119451?v=4",
+      "profile": "http://www.jakub.chodorowicz.pl/",
+      "contributions": [
+        "example"
+      ]
+    },
+    {
+      "login": "mleg",
+      "name": "Oleg Maslov",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/7266431?v=4",
+      "profile": "https://github.com/mleg",
+      "contributions": [
+        "bug"
+      ]
+    },
+    {
+      "login": "awestbro",
+      "name": "Aaron Westbrook",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/3393293?v=4",
+      "profile": "https://github.com/awestbro",
+      "contributions": [
+        "bug"
+      ]
+    },
+    {
+      "login": "peterblazejewicz",
+      "name": "Peter Blazejewicz",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/14539?v=4",
+      "profile": "http://www.linkedin.com/in/peterblazejewicz",
+      "contributions": [
+        "example"
+      ]
+    },
+    {
+      "login": "rubysolo",
+      "name": "Solomon White",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/1642?v=4",
+      "profile": "https://github.com/rubysolo",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "pino",
+      "name": "Levi Rocha",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/8838006?v=4",
+      "profile": "https://github.com/pino",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "loadbalance-sudachi-kun",
+      "name": "Sudachi-kun",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/41281835?v=4",
+      "profile": "http://cloudnative.co.jp",
+      "contributions": [
+        "financial"
+      ]
+    }
+  ]
+}
