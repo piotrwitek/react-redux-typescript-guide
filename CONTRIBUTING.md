@@ -1,6 +1,6 @@
-# Contribution Guide
+# Contributing Guide
 1. Make sure you have read and understand the **Goals** section to be aligned with project goals.
-2. Before submitting a PR please comment in the existing issue (or create a new one if necessary) to discuss the planned work (this will prevent rejecting the PR and wasting your work).
+2. Before submitting a PR please comment in the relevant issue (or create a new one if it doesn't exist yet) to discuss all the requirements (this will prevent rejecting the PR and wasting your work).
 3. All workflow scripts (prettier, linter, tests) must pass successfully.
 4. Don't edit `README.md` directly - it is built using `sh ./generate.sh` script to inject code snippets from the sources in the `/playground` folder (this will make sure all code examples are nicely formatted and working)
    - To make changes in `README.md` edit `.md` files that are located in the `/docs/markdown` folder
