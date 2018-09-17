@@ -28,11 +28,14 @@ _"This guide is a **living compendium** documenting the most important patterns 
 You should check out Playground Project located in the `/playground` folder. It is a source of all the code examples found in the guide. They are all tested with the most recent version of TypeScript and 3rd party type definitions (like `@types/react` or `@types/react-redux`) to ensure the examples are up-to-date and not broken with updated definitions.
 > Playground was created in such a way that you can simply clone the repository locally and immediately play around on your own. It will help you to learn all the examples from this guide in a real project environment without the need to create some complicated environment setup by yourself.
 
-### Contribution Guide
-[CONTRIBUTION.md](/CONTRIBUTION.md)
+## Contribution Guide
+If you're planning to contribute please make sure to read the contribution guide: [CONTRIBUTION.md](/CONTRIBUTION.md)
 
-### Sponsor
-> If you like what we're doing here, you can help us by funding the work on specific issues that you choose by using IssueHunt.io!
-> This gives you the power to prioritize our work and support the project contributors. Moreover it'll guarantee the project will be updated and maintained in the long run.
+## Sponsor
+If you like what we're doing here, you can help us by funding the work on specific issues that you choose by using IssueHunt.io!
+
+This gives you the power to prioritize our work and support the project contributors. Moreover it'll guarantee the project will be updated and maintained in the long run.
+
+> If you're a sponsor and want your logo to be featured in this repo under the sponsors section, please contact me at: piotrek.witek@gmail.com
 
 [![issuehunt-image](https://github.com/BoostIO/issuehunt-materials/blob/master/issuehunt-badge@1x.png?raw=true)](https://issuehunt.io/repos/76996763)
