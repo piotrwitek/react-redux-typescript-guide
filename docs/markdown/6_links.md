@@ -1,4 +1,4 @@
-# Tutorials
+## Tutorials
 > Curated list of relevant in-depth tutorials
 
 Higher-Order Components:
