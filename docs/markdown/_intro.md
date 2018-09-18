@@ -36,6 +36,6 @@ If you like what we're doing here, you can help us by funding the work on specif
 
 This gives you the power to prioritize our work and support the project contributors. Moreover it'll guarantee the project will be updated and maintained in the long run.
 
-> If you're a sponsor and want your logo to be featured in this repo under the sponsors section, please contact me at: piotrek.witek@gmail.com
+> Sponsors are listed in the contributors section at the bottom. If you want to be removed please contact me at: piotrek.witek@gmail.com
 
 [![issuehunt-image](https://github.com/BoostIO/issuehunt-materials/blob/master/issuehunt-badge@1x.png?raw=true)](https://issuehunt.io/repos/76996763)
