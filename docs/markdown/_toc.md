@@ -17,6 +17,7 @@
   - [Store Configuration](#store-configuration) 📝 __UPDATED__
   - [Async Flow](#async-flow) 📝 __UPDATED__
   - [Selectors](#selectors)
+  - [Typing connect](#typing-connect) 🌟 __NEW__
 - [Tools](#tools)
   - [TSLint](#tslint)
   - [Jest](#jest)

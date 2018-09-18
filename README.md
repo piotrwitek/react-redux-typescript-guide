@@ -61,6 +61,7 @@ This gives you the power to prioritize our work and support the project contribu
   - [Store Configuration](#store-configuration) 📝 __UPDATED__
   - [Async Flow](#async-flow) 📝 __UPDATED__
   - [Selectors](#selectors)
+  - [Typing connect](#typing-connect) 🌟 __NEW__
 - [Tools](#tools)
   - [TSLint](#tslint)
   - [Jest](#jest)
@@ -637,7 +638,7 @@ A decent alternative I can recommend is to use `() => any` type, it will work ju
 
 > There is alternative way to retain type soundness but it requires an explicit wrapping with `dispatch` and will be very tedious for the long run. See example below:
 ```
-const mapDispatchToProps = (dispatch: Dispatch) => ({
+const mapDispatchToProps = (dispatch: Dispatch<ActionType>) => ({
   onIncrement: () => dispatch(actions.increment()),
 });
 ```
@@ -692,7 +693,7 @@ const mapStateToProps = (state: Types.RootState) => ({
   count: state.counters.reduxCounter,
 });
 
-const mapDispatchToProps = (dispatch: Dispatch) => bindActionCreators({
+const mapDispatchToProps = (dispatch: Dispatch<Types.RootAction>) => bindActionCreators({
   onIncrement: countersActions.increment,
 }, dispatch);
 
@@ -1104,6 +1105,41 @@ export const getFilteredTodos = createSelector(getTodos, getTodosFilter, (todos,
   }
 });
 
+```
+
+[⇧ back to top](#table-of-contents)
+
+---
+
+## Typing connect
+
+Below snippet can be find in the `playground/` folder, you can checkout the repo and follow all dependencies to understand the bigger picture.
+`playground/src/connected/sfc-counter-connected-verbose.tsx`
+
+```tsx
+import Types from 'Types';
+
+import { bindActionCreators, Dispatch } from 'redux';
+import { connect } from 'react-redux';
+
+import { countersActions } from '../features/counters';
+import { SFCCounter, SFCCounterProps } from '../components';
+
+// `state` parameter needs a type annotation to type-check the correct shape of a state object but also it'll be used by "type inference" to infer the type of returned props
+const mapStateToProps = (state: Types.RootState, ownProps: SFCCounterProps) => ({
+  count: state.counters.reduxCounter,
+});
+
+// `dispatch` parameter needs a type annotation to type-check the correct shape of an action object when using dispatch function
+const mapDispatchToProps = (dispatch: Dispatch<Types.RootAction>) => bindActionCreators({
+  onIncrement: countersActions.increment,
+  // without using action creators, this will be validated using your RootAction union type
+  // onIncrement: () => dispatch({ type: "counters/INCREMENT" }),
+}, dispatch);
+
+// NOTE: We don't need to pass generic type arguments to neither connect nor mapping functions because type inference will do all this work automatically. So there's really no reason to increase the noise ratio in your codebase!
+export const SFCCounterConnectedVerbose =
+  connect(mapStateToProps, mapDispatchToProps)(SFCCounter);
 ```
 
 [⇧ back to top](#table-of-contents)

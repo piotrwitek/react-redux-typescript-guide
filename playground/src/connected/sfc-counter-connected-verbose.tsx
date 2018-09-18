@@ -9,7 +9,7 @@ const mapStateToProps = (state: Types.RootState) => ({
   count: state.counters.reduxCounter,
 });
 
-const mapDispatchToProps = (dispatch: Dispatch) => bindActionCreators({
+const mapDispatchToProps = (dispatch: Dispatch<Types.RootAction>) => bindActionCreators({
   onIncrement: countersActions.increment,
 }, dispatch);
 
