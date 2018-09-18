@@ -177,7 +177,7 @@ A decent alternative I can recommend is to use `() => any` type, it will work ju
 
 > There is alternative way to retain type soundness but it requires an explicit wrapping with `dispatch` and will be very tedious for the long run. See example below:
 ```
-const mapDispatchToProps = (dispatch: Dispatch) => ({
+const mapDispatchToProps = (dispatch: Dispatch<ActionType>) => ({
   onIncrement: () => dispatch(actions.increment()),
 });
 ```
