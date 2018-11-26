@@ -766,11 +766,7 @@ export default () => <SFCCounterConnectedExtended label={'SFCCounterConnectedExt
 
 ### You should read [The Mighty Tutorial](https://github.com/piotrwitek/typesafe-actions#behold-the-mighty-tutorial) to learn it all the easy way!
 
-<<<<<<< HEAD
-A solution below is using a simple factory function to automate the creation of type-safe action creators. The goal is to decrease maintenance effort and reduce code repetition of type annotations for actions and creators. The result is completely typesafe action-creators and their actions.
-=======
-A solution below is using simple factory function to automate the creation of type-safe action creators. The goal is to decrease maintenance effort and reduce code repetition of type annotations for actions and creators and the result is completely typesafe action-creators and their actions.
->>>>>>> 29a4106... reword to "decrease maintenance effort"
+A solution below is using simple factory function to automate the creation of type-safe action creators. The goal is to increase the maintainability and reduce code repetition of type annotations for actions and creators and the result is completely typesafe action-creators and their actions.
 
 ```tsx
 import { action } from 'typesafe-actions';
