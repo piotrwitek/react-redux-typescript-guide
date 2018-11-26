@@ -7,7 +7,7 @@
 
 ### You should read [The Mighty Tutorial](https://github.com/piotrwitek/typesafe-actions#behold-the-mighty-tutorial) to learn it all the easy way!
 
-A solution below is using simple factory function to automate the creation of type-safe action creators. The goal is to reduce the maintainability and code repetition of type annotations for actions and creators and the result is completely typesafe action-creators and their actions.
+A solution below is using a simple factory function to automate the creation of type-safe action creators. The goal is to decrease maintenance effort and reduce code repetition of type annotations for actions and creators. The result is completely typesafe action-creators and their actions.
 
 ::example='../../playground/src/features/counters/actions.ts'::
 ::usage='../../playground/src/features/counters/actions.usage.ts'::
