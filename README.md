@@ -104,10 +104,10 @@ npm i -D @types/react @types/react-dom @types/react-redux
 
 # React Types Cheatsheet
 
-#### `React.StatelessComponent<P>` or `React.SFC<P>`
-Type representing stateless functional component
+#### `React.FunctionComponent<P>` or `React.FC<P>`
+Type representing a functional component
 ```tsx
-const MyComponent: React.SFC<MyComponentProps> = ...
+const MyComponent: React.FC<MyComponentProps> = ...
 ```
 [⇧ back to top](#table-of-contents)
 
