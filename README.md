@@ -119,7 +119,7 @@ class MyComponent extends React.Component<MyComponentProps, State> { ...
 [⇧ back to top](#table-of-contents)
 
 #### `React.ComponentType<P>`
-Type representing union type of (SFC | Component)
+Type representing union type of (FC | Component)
 ```tsx
 const withState = <P extends WrappedComponentProps>(
   WrappedComponent: React.ComponentType<P>,
@@ -179,13 +179,13 @@ const handleChange = (ev: React.MouseEvent<HTMLDivElement>) => { ... }
 ```tsx
 import * as React from 'react';
 
-export interface SFCCounterProps {
+export interface FCCounterProps {
   label: string;
   count: number;
   onIncrement: () => any;
 }
 
-export const SFCCounter: React.SFC<SFCCounterProps> = (props) => {
+export const FCCounter: React.FC<FCCounterProps> = (props) => {
   const { label, count, onIncrement } = props;
 
   const handleIncrement = () => { onIncrement(); };
@@ -211,12 +211,12 @@ export const SFCCounter: React.SFC<SFCCounterProps> = (props) => {
 ```tsx
 import * as React from 'react';
 
-export interface SFCSpreadAttributesProps {
+export interface FCSpreadAttributesProps {
   className?: string;
   style?: React.CSSProperties;
 }
 
-export const SFCSpreadAttributes: React.SFC<SFCSpreadAttributesProps> = (props) => {
+export const FCSpreadAttributes: React.FC<FCSpreadAttributesProps> = (props) => {
   const { children, ...restProps } = props;
 
   return (
