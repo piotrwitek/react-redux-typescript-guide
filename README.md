@@ -46,7 +46,7 @@ This gives you the power to prioritize our work and support the project contribu
 - [Type Definitions & Complementary Libraries](#type-definitions--complementary-libraries)
 - [React Types Cheatsheet](#react-types-cheatsheet) 🌟 __NEW__
 - [Component Typing Patterns](#component-typing-patterns)
-  - [Stateless Components - SFC](#stateless-components---sfc)
+  - [Function Components - FC](#function-components---ffc)
   - [Stateful Components - Class](#stateful-components---class) 📝 __UPDATED__
   - [Generic Components](#generic-components)
   - [Render Props](#render-props) 🌟 __NEW__
@@ -172,9 +172,9 @@ const handleChange = (ev: React.MouseEvent<HTMLDivElement>) => { ... }
 
 # Component Typing Patterns
 
-## Stateless Components - SFC
+## Function Components - FC
 
-#### - stateless counter
+#### - functional counter
 
 ```tsx
 import * as React from 'react';
@@ -519,13 +519,13 @@ export const withState = <WrappedProps extends InjectedProps>(
 import * as React from 'react';
 
 import { withState } from '../hoc';
-import { SFCCounter } from '../components';
+import { FCCounter } from '../components';
 
-const SFCCounterWithState =
-  withState(SFCCounter);
+const FCCounterWithState =
+  withState(FCCounter);
 
 export default () => (
-  <SFCCounterWithState label={'SFCCounterWithState'} />
+  <FCCounterWithState label={'FCCounterWithState'} />
 );
 
 ```
