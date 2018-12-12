@@ -47,7 +47,7 @@ This gives you the power to prioritize our work and support the project contribu
 - [React Types Cheatsheet](#react-types-cheatsheet) 🌟 __NEW__
 - [Component Typing Patterns](#component-typing-patterns)
   - [Function Components - FC](#function-components---ffc)
-  - [Stateful Components - Class](#stateful-components---class) 📝 __UPDATED__
+  - [Class Components - Class](#class-components---class) 📝 __UPDATED__
   - [Generic Components](#generic-components)
   - [Render Props](#render-props) 🌟 __NEW__
   - [Higher-Order Components](#higher-order-components) 📝 __UPDATED__
@@ -112,7 +112,7 @@ const MyComponent: React.FC<MyComponentProps> = ...
 [⇧ back to top](#table-of-contents)
 
 #### `React.Component<P, S>`
-Type representing stateful class component
+Type representing a class component
 ```tsx
 class MyComponent extends React.Component<MyComponentProps, State> { ...
 ```
@@ -174,7 +174,7 @@ const handleChange = (ev: React.MouseEvent<HTMLDivElement>) => { ... }
 
 ## Function Components - FC
 
-#### - functional counter
+#### - counter component
 
 ```tsx
 import * as React from 'react';
@@ -234,14 +234,14 @@ export const FCSpreadAttributes: React.FC<FCSpreadAttributesProps> = (props) => 
 
 ---
 
-## Stateful Components - Class
+## Class Components - Class
 
-#### - stateful counter
+#### - class counter
 
 ```tsx
 import * as React from 'react';
 
-export interface StatefulCounterProps {
+export interface ClassCounterProps {
   label: string;
 }
 
@@ -249,7 +249,7 @@ interface State {
   readonly count: number;
 }
 
-export class StatefulCounter extends React.Component<StatefulCounterProps, State> {
+export class ClassCounter extends React.Component<ClassCounterProps, State> {
   readonly state: State = {
     count: 0,
   };
@@ -276,7 +276,7 @@ export class StatefulCounter extends React.Component<StatefulCounterProps, State
 
 ```
 
-[⟩⟩⟩ demo](https://piotrwitek.github.io/react-redux-typescript-guide/#statefulcounter)
+[⟩⟩⟩ demo](https://piotrwitek.github.io/react-redux-typescript-guide/#classcounter)
 
 [⇧ back to top](#table-of-contents)
 
@@ -285,7 +285,7 @@ export class StatefulCounter extends React.Component<StatefulCounterProps, State
 ```tsx
 import * as React from 'react';
 
-export interface StatefulCounterWithDefaultProps {
+export interface ClassCounterWithDefaultProps {
   label: string;
   initialCount?: number;
 }
@@ -298,8 +298,8 @@ interface State {
   readonly count: number;
 }
 
-export const StatefulCounterWithDefault: React.ComponentClass<StatefulCounterWithDefaultProps> =
-  class extends React.Component<StatefulCounterWithDefaultProps & DefaultProps> {
+export const ClassCounterWithDefault: React.ComponentClass<ClassCounterWithDefaultProps> =
+  class extends React.Component<ClassCounterWithDefaultProps & DefaultProps> {
     // to make defaultProps strictly typed we need to explicitly declare their type
     // @see https://github.com/DefinitelyTyped/DefinitelyTyped/issues/11640
     static defaultProps: DefaultProps = {
@@ -310,7 +310,7 @@ export const StatefulCounterWithDefault: React.ComponentClass<StatefulCounterWit
       count: this.props.initialCount,
     };
 
-    componentWillReceiveProps({ initialCount }: StatefulCounterWithDefaultProps) {
+    componentWillReceiveProps({ initialCount }: ClassCounterWithDefaultProps) {
       if (initialCount != null && initialCount !== this.props.initialCount) {
         this.setState({ count: initialCount });
       }
@@ -338,7 +338,7 @@ export const StatefulCounterWithDefault: React.ComponentClass<StatefulCounterWit
 
 ```
 
-[⟩⟩⟩ demo](https://piotrwitek.github.io/react-redux-typescript-guide/#statefulcounterwithdefault)
+[⟩⟩⟩ demo](https://piotrwitek.github.io/react-redux-typescript-guide/#classcounterwithdefault)
 
 [⇧ back to top](#table-of-contents)
 
@@ -1450,7 +1450,7 @@ Related `ts-lint` rule: https://palantir.github.io/tslint/rules/interface-over-t
 ### - how to best initialize class instance or static properties?
 > Prefered modern style is to use class Property Initializers  
 ```tsx
-class StatefulCounterWithInitialCount extends React.Component<Props, State> {
+class ClassCounterWithInitialCount extends React.Component<Props, State> {
   // default props using Property Initializers
   static defaultProps: DefaultProps = {
     className: 'default-class',
@@ -1470,7 +1470,7 @@ class StatefulCounterWithInitialCount extends React.Component<Props, State> {
 ### - how to best declare component handler functions?
 > Prefered modern style is to use Class Fields with arrow functions  
 ```tsx
-class StatefulCounter extends React.Component<Props, State> {
+class ClassCounter extends React.Component<Props, State> {
 // handlers using Class Fields with arrow functions
   handleIncrement = () => {
     this.setState({ count: this.state.count + 1 });
