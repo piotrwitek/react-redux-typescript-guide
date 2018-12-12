@@ -47,7 +47,7 @@ This gives you the power to prioritize our work and support the project contribu
 - [React Types Cheatsheet](#react-types-cheatsheet) 🌟 __NEW__
 - [Component Typing Patterns](#component-typing-patterns)
   - [Function Components - FC](#function-components---ffc)
-  - [Class Components - Class](#class-components---class) 📝 __UPDATED__
+  - [Class Components ](#class-components---class) 📝 __UPDATED__
   - [Generic Components](#generic-components)
   - [Render Props](#render-props) 🌟 __NEW__
   - [Higher-Order Components](#higher-order-components) 📝 __UPDATED__
@@ -234,7 +234,7 @@ export const FCSpreadAttributes: React.FC<FCSpreadAttributesProps> = (props) => 
 
 ---
 
-## Class Components - Class
+## Class Components
 
 #### - class counter
 
