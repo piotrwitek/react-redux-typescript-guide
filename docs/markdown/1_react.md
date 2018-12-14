@@ -176,7 +176,7 @@ A decent alternative I can recommend is to use `() => any` type, it will work ju
 > If there is any progress or fix in regard to the above caveat I'll update the guide and make an announcement on my twitter/medium (There are a few existing proposals already).
 
 > There is alternative way to retain type soundness but it requires an explicit wrapping with `dispatch` and will be very tedious for the long run. See example below:
-```
+```ts
 const mapDispatchToProps = (dispatch: Dispatch<ActionType>) => ({
   onIncrement: () => dispatch(actions.increment()),
 });
