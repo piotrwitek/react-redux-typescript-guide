@@ -203,11 +203,12 @@ const mapDispatchToProps = (dispatch: Dispatch<ActionType>) => ({
 
 [⇧ back to top](#table-of-contents)
 
-## React Hooks
+## Hooks
 
 > https://reactjs.org/docs/hooks-intro.html
 
 #### - useReducer
+Hook for state management like Redux in a function component.
 
 ::example='../../playground/src/hooks/use-reducer.tsx'::
 
