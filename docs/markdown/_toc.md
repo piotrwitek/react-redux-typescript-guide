@@ -8,6 +8,7 @@
   - [Render Props](#render-props) 🌟 __NEW__
   - [Higher-Order Components](#higher-order-components) 📝 __UPDATED__
   - [Redux Connected Components](#redux-connected-components)
+  - [Hooks](#hooks)
 - [Redux](#redux)
   - [Action Creators](#action-creators) 📝 __UPDATED__
   - [Reducers](#reducers) 📝 __UPDATED__
