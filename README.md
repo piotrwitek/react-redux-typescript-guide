@@ -69,9 +69,10 @@ This gives you the power to prioritize our work and support the project contribu
   - [Living Style Guide](#living-style-guide) 🌟 __NEW__
   - [Common Npm Scripts](#common-npm-scripts)
 - [Recipes](#recipes)
-  - [tsconfig.json](#tsconfigjson)
-  - [Vendor Types Augmentation](#vendor-types-augmentation)
+  - [Baseline tsconfig.json](#baseline-tsconfigjson)
   - [Default and Named Module Exports](#default-and-named-module-exports)
+  - [Type Augmentation for npm libraries](#type-augmentation-for-npm-libraries)
+  - [Override type-definitions for npm libraries](#override-type-definitions-for-npm-libraries)
 - [FAQ](#faq)
 - [Tutorials](#tutorials)
 - [Contributors](#contributors)
@@ -1304,7 +1305,7 @@ configure({ adapter: new Adapter() });
 
 # Recipes
 
-### tsconfig.json
+### Baseline tsconfig.json
 - Recommended baseline config carefully optimized for strict type-checking and optimal webpack workflow  
 - Install [`tslib`](https://www.npmjs.com/package/tslib) to cut on bundle size, by using external runtime helpers instead of adding them inline: `npm i tslib`  
 - Example "paths" setup for baseUrl relative imports with Webpack  
@@ -1314,21 +1315,22 @@ configure({ adapter: new Adapter() });
   "compilerOptions": {
     "baseUrl": "./", // enables project relative paths config
     "paths": { // define paths mappings
-      "@src/*": ["src/*"] // will enable -> import { ... } from '@src/components'
-      // in webpack you need to add -> resolve: { alias: { '@src': PATH_TO_SRC } }
+      "@src/*": ["src/*"] // will enable import aliases -> import { ... } from '@src/components'
+      // WARNING: Add this to your webpack config -> resolve: { alias: { '@src': PATH_TO_SRC } }
+      // "redux": ["typings/redux"], // use an alternative type-definitions instead of the included one
     },
     "outDir": "dist/", // target for compiled files
     "allowSyntheticDefaultImports": true, // no errors with commonjs modules interop
-    "esModuleInterop": true,
+    "esModuleInterop": true, // enable to do "import React ..." instead of "import * as React ..."
     "allowJs": true, // include js files
     "checkJs": true, // typecheck js files
     "declaration": false, // don't emit declarations
-    "emitDecoratorMetadata": true,
-    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true, // only if using decorators
+    "experimentalDecorators": true, // only if using decorators
     "forceConsistentCasingInFileNames": true,
-    "importHelpers": true, // importing helper functions from tslib
-    "noEmitHelpers": true, // disable emitting inline helper functions
-    "jsx": "react", // process JSX
+    "importHelpers": true, // importing transpilation helpers from tslib
+    "noEmitHelpers": true, // disable inline transpilation helpers in each file
+    "jsx": "react", // translate JSX
     "lib": [
       "dom",
       "es2016",
@@ -1339,9 +1341,6 @@ configure({ adapter: new Adapter() });
     "moduleResolution": "node",
     "noEmitOnError": true,
     "noFallthroughCasesInSwitch": true,
-    "noImplicitAny": true,
-    "noImplicitReturns": true,
-    "noImplicitThis": true,
     "noUnusedLocals": true,
     "strict": true,
     "pretty": true,
@@ -1388,10 +1387,10 @@ import Select from '@src/components/select';
 
 [⇧ back to top](#table-of-contents)
 
-### Vendor Types Augmentation
-> Strategies to fix issues coming from broken "vendor type declarations" files (*.d.ts)
+### Type Augmentation for npm libraries
+Strategies to fix issues coming from external type-definitions files (*.d.ts)
 
-#### Augmenting library internal type declarations - using relative import resolution
+#### Augmenting library internal definitions - using relative import resolution
 ```ts
 // added missing autoFocus Prop on Input component in "antd@2.10.0" npm package
 declare module '../node_modules/antd/lib/input/Input' {
@@ -1401,9 +1400,7 @@ declare module '../node_modules/antd/lib/input/Input' {
 }
 ```
 
-[⇧ back to top](#table-of-contents)
-
-#### Augmenting library public type declarations - using node module import resolution
+#### Augmenting library public definitions - using node module import resolution
 ```ts
 // fixed broken public type declaration in "rxjs@5.4.1" npm package
 import { Operator } from 'rxjs/Operator';
@@ -1416,9 +1413,7 @@ declare module 'rxjs/Subject' {
 }
 ```
 
-[⇧ back to top](#table-of-contents)
-
-#### To quick-fix missing type declarations for vendor modules you can "assert" a module type with `any` using [Shorthand Ambient Modules](https://github.com/Microsoft/TypeScript-Handbook/blob/master/pages/Modules.md#shorthand-ambient-modules)
+#### To quick-fix missing type-definitions for vendor modules you can "assert" a module type with `any` using [Shorthand Ambient Modules](https://github.com/Microsoft/TypeScript-Handbook/blob/master/pages/Modules.md#shorthand-ambient-modules)
 
 ```tsx
 // typings/modules.d.ts
@@ -1428,7 +1423,25 @@ declare module 'enzyme';
 
 ```
 
-> More advanced scenarios for working with vendor module declarations can be found here [Official TypeScript Docs](https://github.com/Microsoft/TypeScript-Handbook/blob/master/pages/Modules.md#working-with-other-javascript-libraries)
+> More advanced scenarios for working with vendor type-definitions can be found here [Official TypeScript Docs](https://github.com/Microsoft/TypeScript-Handbook/blob/master/pages/Modules.md#working-with-other-javascript-libraries)
+
+[⇧ back to top](#table-of-contents)
+
+### Override type-definitions for npm libraries
+If you want to use an alternative (customized) type-definitions for some npm library (that usually comes with it's own type definitions), you can do it by adding an override in `paths` compiler option.
+
+```ts
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "redux": ["typings/redux"], // use an alternative type-definitions instead of the included one
+      ...
+    },
+    ...,
+  }
+}
+```
 
 [⇧ back to top](#table-of-contents)
 

@@ -25,9 +25,10 @@
   - [Living Style Guide](#living-style-guide) 🌟 __NEW__
   - [Common Npm Scripts](#common-npm-scripts)
 - [Recipes](#recipes)
-  - [tsconfig.json](#tsconfigjson)
-  - [Vendor Types Augmentation](#vendor-types-augmentation)
+  - [Baseline tsconfig.json](#baseline-tsconfigjson)
   - [Default and Named Module Exports](#default-and-named-module-exports)
+  - [Type Augmentation for npm libraries](#type-augmentation-for-npm-libraries)
+  - [Override type-definitions for npm libraries](#override-type-definitions-for-npm-libraries)
 - [FAQ](#faq)
 - [Tutorials](#tutorials)
 - [Contributors](#contributors)
