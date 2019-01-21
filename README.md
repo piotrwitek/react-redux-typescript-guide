@@ -52,6 +52,7 @@ This gives you the power to prioritize our work and support the project contribu
   - [Render Props](#render-props) 🌟 __NEW__
   - [Higher-Order Components](#higher-order-components) 📝 __UPDATED__
   - [Redux Connected Components](#redux-connected-components)
+  - [Hooks](#hooks)
 - [Redux](#redux)
   - [Action Creators](#action-creators) 📝 __UPDATED__
   - [Reducers](#reducers) 📝 __UPDATED__
@@ -753,6 +754,66 @@ export default () => <SFCCounterConnectedExtended label={'SFCCounterConnectedExt
 
 ```
 </p></details>
+
+[⇧ back to top](#table-of-contents)
+
+## Hooks
+
+> https://reactjs.org/docs/hooks-intro.html
+
+#### - useReducer
+Hook for state management like Redux in a function component.
+
+```tsx
+import * as React from 'react';
+
+interface State {
+  count: number;
+}
+
+type Action  =
+  | { type: 'reset' }
+  | { type: 'increment' }
+  | { type: 'decrement' };
+
+const initialState: State = {
+  count: 0,
+};
+
+function reducer(state: State, action: Action): State {
+  switch (action.type) {
+    case 'reset':
+      return initialState;
+    case 'increment':
+      return { count: state.count + 1 };
+    case 'decrement':
+      return { count: state.count - 1 };
+    default:
+      return state;
+  }
+}
+
+interface CounterProps {
+  initialCount: number;
+}
+
+function Counter({ initialCount }: CounterProps) {
+  const [state, dispatch] = React.useReducer<State, Action>(reducer, {
+    count: initialCount,
+  });
+  return (
+    <>
+      Count: {state.count}
+      <button onClick={() => dispatch({ type: 'reset' })}>Reset</button>
+      <button onClick={() => dispatch({ type: 'increment' })}>+</button>
+      <button onClick={() => dispatch({ type: 'decrement' })}>-</button>
+    </>
+  );
+}
+
+export default Counter;
+
+```
 
 [⇧ back to top](#table-of-contents)
 
