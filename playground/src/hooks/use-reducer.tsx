@@ -4,9 +4,10 @@ interface State {
   count: number;
 }
 
-interface Action {
-  type: string;
-}
+type Action  =
+  | { type: 'reset' }
+  | { type: 'increment' }
+  | { type: 'decrement' };
 
 const initialState: State = {
   count: 0,
