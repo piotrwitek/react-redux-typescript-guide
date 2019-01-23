@@ -1,4 +1,21 @@
 # Tools
+> Common tools for TypeScript projects
+
+## Tools Npm Scripts
+> Tools related npm scripts shared across projects
+```
+"lint": "tslint -p ./",
+"tsc": "tsc -p ./ --noEmit",
+"tsc:watch": "tsc -p ./ --noEmit -w",
+"pretest": "npm run lint & npm run tsc",
+"test": "jest --config jest.config.json",
+"test:watch": "jest --config jest.config.json --watch",
+"test:update": "jest --config jest.config.json -u",
+```
+
+[⇧ back to top](#table-of-contents)
+
+---
 
 ## TSLint
 
@@ -66,6 +83,8 @@
 
 [⇧ back to top](#table-of-contents)
 
+---
+
 ## Jest
 
 > Installation  
@@ -111,8 +130,9 @@ window.localStorage = {
 Object.values = () => [];
 ```
 
-
 [⇧ back to top](#table-of-contents)
+
+---
 
 ## Enzyme
 
@@ -138,16 +158,15 @@ configure({ adapter: new Adapter() });
 
 [⇧ back to top](#table-of-contents)
 
-## Common Npm Scripts
-> Common TS-related npm scripts shared across projects
-```
-"lint": "tslint -p ./",
-"tsc": "tsc -p ./ --noEmit",
-"tsc:watch": "tsc -p ./ --noEmit -w",
-"pretest": "npm run lint & npm run tsc",
-"test": "jest --config jest.config.json",
-"test:watch": "jest --config jest.config.json --watch",
-"test:update": "jest --config jest.config.json -u",
+---
+
+## Recompose
+
+> Installation  
+`npm i recompose`
+
+```tsx
+// WIP
 ```
 
 [⇧ back to top](#table-of-contents)
