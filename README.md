@@ -1286,7 +1286,7 @@ export const SFCCounterConnectedVerbose =
 {
   "verbose": true,
   "transform": {
-    ".(ts|tsx)": "./node_modules/ts-jest/preprocessor.js"
+    ".(ts|tsx)": "ts-jest"
   },
   "testRegex": "(/spec/.*|\\.(test|spec))\\.(ts|tsx|js)$",
   "moduleFileExtensions": ["ts", "tsx", "js"],
@@ -1296,7 +1296,7 @@ export const SFCCounterConnectedVerbose =
   "globals": {
     "window": {},
     "ts-jest": {
-      "tsConfigFile": "./tsconfig.json"
+      "tsConfig": "./tsconfig.json"
     }
   },
   "setupFiles": [
