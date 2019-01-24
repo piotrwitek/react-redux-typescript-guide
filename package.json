@@ -1,12 +1,13 @@
 {
-  "devDependencies": {
-    "@types/node": "8.5.1",
-    "all-contributors-cli": "5.4.0"
-  },
-  "scripts": {
-    "ci-check": "npm run readme:generate",
-    "readme:generate": "node generate-readme",
-    "contributors:add": "all-contributors add",
-    "contributors:generate": "all-contributors generate"
-  }
+    "devDependencies": {
+        "@types/node": "8.5.1",
+        "all-contributors-cli": "5.4.0"
+    },
+    "scripts": {
+        "ci-check": "npm run readme:generate && npm run check-git-clean",
+        "check-git-clean": "if output=$(git status --porcelain) && [ -z '$output' ]; then echo 'Success!'; else echo '\n>>> Please check CONTRIBUTING.md to learn how to properly amend README.md <<<\n'; fi",
+        "readme:generate": "node generate-readme",
+        "contributors:add": "all-contributors add",
+        "contributors:generate": "all-contributors generate"
+    }
 }
