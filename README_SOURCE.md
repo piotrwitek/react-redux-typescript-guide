@@ -109,8 +109,8 @@ Type representing a class component
 class MyComponent extends React.Component<Props, State> { ...
 ```
 
-#### `React.ComponentProps<typeof Component>`
-Gets type of Component Props, so you don't need to export Props from your component ever! (Works for both FC and Class components)
+#### `React.ComponentProps<typeof Component>
+Gets component Props type. You don't no need to export Props from your component ever!
 ```tsx
 type MyComponentProps = React.ComponentProps<typeof MyComponent>;
 ```
