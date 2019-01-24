@@ -109,16 +109,20 @@ npm i -D @types/react @types/react-dom @types/react-redux
 #### `React.FunctionComponent<P>` or `React.FC<P>`
 Type representing a functional component
 ```tsx
-const MyComponent: React.FC<MyComponentProps> = ...
+const MyComponent: React.FC<Props> = ...
 ```
-[⇧ back to top](#table-of-contents)
 
 #### `React.Component<P, S>`
 Type representing a class component
 ```tsx
-class MyComponent extends React.Component<MyComponentProps, State> { ...
+class MyComponent extends React.Component<Props, State> { ...
 ```
-[⇧ back to top](#table-of-contents)
+
+#### `React.ComponentProps<typeof Component>
+Gets component Props type. You don't no need to export Props from your component ever!
+```tsx
+type MyComponentProps = React.ComponentProps<typeof MyComponent>;
+```
 
 #### `React.ComponentType<P>`
 Type representing union type of (FC | Component)
@@ -127,14 +131,12 @@ const withState = <P extends WrappedComponentProps>(
   WrappedComponent: React.ComponentType<P>,
 ) => { ...
 ```
-[⇧ back to top](#table-of-contents)
 
 #### `React.ReactElement<P>` or `JSX.Element`
 Type representing a concept of React Element - representation of a native DOM component (e.g. `<div />`), or a user-defined composite component (e.g. `<MyComponent />`)
 ```tsx
 const elementOnly: React.ReactElement = <div /> || <MyComponent />;
 ```
-[⇧ back to top](#table-of-contents)
 
 #### `React.ReactNode`
 Type representing any possible type of React node (basically ReactElement (including Fragments and Portals) + primitive JS types)
@@ -142,7 +144,6 @@ Type representing any possible type of React node (basically ReactElement (inclu
 const elementOrPrimitive: React.ReactNode = 'string' || 0 || false || null || undefined || <div /> || <MyComponent />;
 const Component = ({ children: React.ReactNode }) => ...
 ```
-[⇧ back to top](#table-of-contents)
 
 #### `React.CSSProperties`
 Type representing style object in JSX (usefull for css-in-js styles)
@@ -150,7 +151,6 @@ Type representing style object in JSX (usefull for css-in-js styles)
 const styles: React.CSSProperties = { flexDirection: 'row', ...
 const element = <div style={styles} ...
 ```
-[⇧ back to top](#table-of-contents)
 
 #### `React.ReactEventHandler<E>`
 Type representing generic event handler
@@ -159,7 +159,6 @@ const handleChange: React.ReactEventHandler<HTMLInputElement> = (ev) => { ... }
 
 <input onChange={handleChange} ... />
 ```
-[⇧ back to top](#table-of-contents)
 
 #### `React.MouseEvent<E>` | `React.KeyboardEvent<E>` | `React.TouchEvent<E>` etc...
 Type representing more specific event handler
@@ -168,6 +167,7 @@ const handleChange = (ev: React.MouseEvent<HTMLDivElement>) => { ... }
 
 <div onMouseMove={handleChange} ... />
 ```
+
 [⇧ back to top](#table-of-contents)
 
 ---
