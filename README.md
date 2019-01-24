@@ -510,7 +510,7 @@ export const withState = <WrappedProps extends InjectedProps>(
 };
 
 ```
-<details><summary>show usage</summary><p>
+<details style="background: #f6f8fa;border-radius: 3px;"><summary style="padding: 6px 12px;border-radius: 3px;"><i>Click to expand</i></summary><p>
 
 ```tsx
 import * as React from 'react';
@@ -594,7 +594,7 @@ export const withErrorBoundary = <WrappedProps extends InjectedProps>(
 };
 
 ```
-<details><summary>show usage</summary><p>
+<details style="background: #f6f8fa;border-radius: 3px;"><summary style="padding: 6px 12px;border-radius: 3px;"><i>Click to expand</i></summary><p>
 
 ```tsx
 import * as React from 'react';
@@ -658,7 +658,7 @@ export const SFCCounterConnected = connect(mapStateToProps, {
 })(SFCCounter);
 
 ```
-<details><summary>show usage</summary><p>
+<details style="background: #f6f8fa;border-radius: 3px;"><summary style="padding: 6px 12px;border-radius: 3px;"><i>Click to expand</i></summary><p>
 
 ```tsx
 import * as React from 'react';
@@ -698,7 +698,7 @@ export const SFCCounterConnectedVerbose =
   connect(mapStateToProps, mapDispatchToProps)(SFCCounter);
 
 ```
-<details><summary>show usage</summary><p>
+<details style="background: #f6f8fa;border-radius: 3px;"><summary style="padding: 6px 12px;border-radius: 3px;"><i>Click to expand</i></summary><p>
 
 ```tsx
 import * as React from 'react';
@@ -738,7 +738,7 @@ export const SFCCounterConnectedExtended = connect(mapStateToProps, {
 })(SFCCounter);
 
 ```
-<details><summary>show usage</summary><p>
+<details style="background: #f6f8fa;border-radius: 3px;"><summary style="padding: 6px 12px;border-radius: 3px;"><i>Click to expand</i></summary><p>
 
 ```tsx
 import * as React from 'react';
@@ -852,7 +852,7 @@ export const add = (amount: number) => action(ADD, amount);
 // });
 
 ```
-<details><summary>show usage</summary><p>
+<details style="background: #f6f8fa;border-radius: 3px;"><summary style="padding: 6px 12px;border-radius: 3px;"><i>Click to expand</i></summary><p>
 
 ```tsx
 import store from '../../store';
@@ -1215,14 +1215,16 @@ export const SFCCounterConnectedVerbose =
 - Add additional `react` specific rules: `npm i -D tslint-react` https://github.com/palantir/tslint-react  
 - Overwritten some defaults for more flexibility  
 
-```js
+<details style="background: #f6f8fa;border-radius: 3px;"><summary style="padding: 6px 12px;border-radius: 3px;"><i>Click to expand</i></summary><p>
+
+```tsx
 {
   "extends": ["tslint:recommended", "tslint-react"],
   "rules": {
     "arrow-parens": false,
     "arrow-return-shorthand": [false],
     "comment-format": [true, "check-space"],
-    "import-blacklist": [true, "rxjs"],
+    "import-blacklist": [true],
     "interface-over-type-literal": false,
     "interface-name": false,
     "max-line-length": [true, 120],
@@ -1234,6 +1236,7 @@ export const SFCCounterConnectedVerbose =
     "no-import-side-effect": [true],
     "no-inferrable-types": [true, "ignore-params", "ignore-properties"],
     "no-invalid-this": [true, "check-function-in-method"],
+    "no-namespace": false,
     "no-null-keyword": false,
     "no-require-imports": false,
     "no-submodule-imports": [true, "@src", "rxjs"],
@@ -1247,26 +1250,38 @@ export const SFCCounterConnectedVerbose =
     "prefer-method-signature": false,
     "prefer-template": [true, "allow-single-concat"],
     "quotemark": [true, "single", "jsx-double"],
-    "semicolon": [true, "always"],
-    "trailing-comma": [true, {
-      "singleline": "never",
-      "multiline": {
-        "objects": "always",
-        "arrays": "always",
-        "functions": "never",
-        "typeLiterals": "ignore"
-      },
-      "esSpecCompliant": true
-    }],
+    "semicolon": [true, "always", "ignore-bound-class-methods"],
+    "trailing-comma": [
+      true,
+      {
+        "singleline": "never",
+        "multiline": {
+          "objects": "always",
+          "arrays": "always",
+          "functions": "ignore",
+          "typeLiterals": "ignore"
+        },
+        "esSpecCompliant": true
+      }
+    ],
     "triple-equals": [true, "allow-null-check"],
     "type-literal-delimiter": true,
-    "typedef": [true,"parameter", "property-declaration"],
-    "variable-name": [true, "ban-keywords", "check-format", "allow-pascal-case", "allow-leading-underscore"],
+    "typedef": [true, "parameter", "property-declaration"],
+    "variable-name": [
+      true,
+      "ban-keywords",
+      "check-format",
+      "allow-pascal-case",
+      "allow-leading-underscore"
+    ],
     // tslint-react
+    "jsx-no-multiline-js": false,
     "jsx-no-lambda": false
   }
 }
+
 ```
+</p></details>
 
 [⇧ back to top](#table-of-contents)
 
@@ -1276,11 +1291,13 @@ export const SFCCounterConnectedVerbose =
 `npm i -D jest ts-jest @types/jest`
 
 #### jest.config.json
-```json
+<details style="background: #f6f8fa;border-radius: 3px;"><summary style="padding: 6px 12px;border-radius: 3px;"><i>Click to expand</i></summary><p>
+
+```tsx
 {
   "verbose": true,
   "transform": {
-    ".(ts|tsx)": "./node_modules/ts-jest/preprocessor.js"
+    ".(ts|tsx)": "ts-jest"
   },
   "testRegex": "(/spec/.*|\\.(test|spec))\\.(ts|tsx|js)$",
   "moduleFileExtensions": ["ts", "tsx", "js"],
@@ -1290,19 +1307,29 @@ export const SFCCounterConnectedVerbose =
   "globals": {
     "window": {},
     "ts-jest": {
-      "tsConfigFile": "./tsconfig.json"
+      "tsConfig": "./tsconfig.json"
     }
   },
-  "setupFiles": [
-    "./jest.stubs.js"
-  ],
-  "setupTestFrameworkScriptFile": "./jest.tests.js"
+  "setupFiles": ["./jest.stubs.js"],
+  "testURL": "http://localhost/"
 }
+
 ```
+</p></details>
 
 #### jest.stubs.js
-```js
+<details style="background: #f6f8fa;border-radius: 3px;"><summary style="padding: 6px 12px;border-radius: 3px;"><i>Click to expand</i></summary><p>
+
+```tsx
 // Global/Window object Stubs for Jest
+window.matchMedia = window.matchMedia || function () {
+  return {
+    matches: false,
+    addListener: function () { },
+    removeListener: function () { },
+  };
+};
+
 window.requestAnimationFrame = function (callback) {
   setTimeout(callback);
 };
@@ -1313,22 +1340,9 @@ window.localStorage = {
 };
 
 Object.values = () => [];
+
 ```
-
-[⇧ back to top](#table-of-contents)
-
-## Enzyme
-
-> Installation  
-`npm i -D enzyme enzyme-adapter-react-16 @types/enzyme`
-
-#### jest.tests.js
-```js
-import { configure } from 'enzyme';
-import Adapter from 'enzyme-adapter-react-16';
-
-configure({ adapter: new Adapter() });
-```
+</p></details>
 
 [⇧ back to top](#table-of-contents)
 
@@ -1364,14 +1378,16 @@ configure({ adapter: new Adapter() });
 - Install [`tslib`](https://www.npmjs.com/package/tslib) to cut on bundle size, by using external runtime helpers instead of adding them inline: `npm i tslib`  
 - Example "paths" setup for baseUrl relative imports with Webpack  
 
-```js
+<details style="background: #f6f8fa;border-radius: 3px;"><summary style="padding: 6px 12px;border-radius: 3px;"><i>Click to expand</i></summary><p>
+
+```tsx
 {
   "compilerOptions": {
-    "baseUrl": "./", // enables project relative paths config
-    "paths": { // define paths mappings
-      "@src/*": ["src/*"] // will enable import aliases -> import { ... } from '@src/components'
-      // WARNING: Add this to your webpack config -> resolve: { alias: { '@src': PATH_TO_SRC } }
-      // "redux": ["typings/redux"], // use an alternative type-definitions instead of the included one
+    "baseUrl": "./", // relative paths base
+    "paths": {
+      // "@src/*": ["src/*"] // will enable import aliases -> import { ... } from '@src/components'
+      // WARNING: Require to add this to your webpack config -> resolve: { alias: { '@src': PATH_TO_SRC } }
+      // "redux": ["typings/redux"], // override library types with your alternative type-definitions in typings folder
     },
     "outDir": "dist/", // target for compiled files
     "allowSyntheticDefaultImports": true, // no errors with commonjs modules interop
@@ -1379,19 +1395,16 @@ configure({ adapter: new Adapter() });
     "allowJs": true, // include js files
     "checkJs": true, // typecheck js files
     "declaration": false, // don't emit declarations
-    "emitDecoratorMetadata": true, // only if using decorators
-    "experimentalDecorators": true, // only if using decorators
+    "emitDecoratorMetadata": true, // include only if using decorators
+    "experimentalDecorators": true, // include only if using decorators
     "forceConsistentCasingInFileNames": true,
     "importHelpers": true, // importing transpilation helpers from tslib
     "noEmitHelpers": true, // disable inline transpilation helpers in each file
-    "jsx": "react", // translate JSX
-    "lib": [
-      "dom",
-      "es2016",
-      "es2017.object"
-    ],
+    "jsx": "react", // transform JSX
+    "lib": ["dom", "es2017"], // you will need to include polyfills for es2017 manually
+    "types": ["jest"], // which global types to use
     "target": "es5", // "es2015" for ES6+ engines
-    "module": "commonjs", // "es2015" for tree-shaking
+    "module": "es2015", // "es2015" for tree-shaking
     "moduleResolution": "node",
     "noEmitOnError": true,
     "noFallthroughCasesInSwitch": true,
@@ -1401,15 +1414,12 @@ configure({ adapter: new Adapter() });
     "removeComments": true,
     "sourceMap": true
   },
-  "include": [
-    "src/**/*"
-  ],
-  "exclude": [
-    "node_modules",
-    "src/**/*.spec.*"
-  ]
+  "include": ["src", "typings"],
+  "exclude": ["src/**/*.spec.*"]
 }
+
 ```
+</p></details>
 
 [⇧ back to top](#table-of-contents)
 

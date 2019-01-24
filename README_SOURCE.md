@@ -178,7 +178,7 @@ const handleChange = (ev: React.MouseEvent<HTMLDivElement>) => { ... }
 
 #### - stateless counter
 
-::example='/playground/src/components/sfc-counter.tsx'::
+::codeblock='playground/src/components/sfc-counter.tsx'::
 
 [⟩⟩⟩ demo](https://piotrwitek.github.io/react-redux-typescript-guide/#sfccounter)
 
@@ -186,7 +186,7 @@ const handleChange = (ev: React.MouseEvent<HTMLDivElement>) => { ... }
 
 #### - spread attributes [link](https://facebook.github.io/react/docs/jsx-in-depth.html#spread-attributes)
 
-::example='/playground/src/components/sfc-spread-attributes.tsx'::
+::codeblock='playground/src/components/sfc-spread-attributes.tsx'::
 
 [⟩⟩⟩ demo](https://piotrwitek.github.io/react-redux-typescript-guide/#sfcspreadattributes)
 
@@ -198,7 +198,7 @@ const handleChange = (ev: React.MouseEvent<HTMLDivElement>) => { ... }
 
 #### - stateful counter
 
-::example='/playground/src/components/stateful-counter.tsx'::
+::codeblock='playground/src/components/stateful-counter.tsx'::
 
 [⟩⟩⟩ demo](https://piotrwitek.github.io/react-redux-typescript-guide/#statefulcounter)
 
@@ -206,7 +206,7 @@ const handleChange = (ev: React.MouseEvent<HTMLDivElement>) => { ... }
 
 #### - with default props
 
-::example='/playground/src/components/stateful-counter-with-default.tsx'::
+::codeblock='playground/src/components/stateful-counter-with-default.tsx'::
 
 [⟩⟩⟩ demo](https://piotrwitek.github.io/react-redux-typescript-guide/#statefulcounterwithdefault)
 
@@ -220,7 +220,7 @@ const handleChange = (ev: React.MouseEvent<HTMLDivElement>) => { ... }
 
 #### - generic list
 
-::example='/playground/src/components/generic-list.tsx'::
+::codeblock='playground/src/components/generic-list.tsx'::
 
 [⟩⟩⟩ demo](https://piotrwitek.github.io/react-redux-typescript-guide/#genericlist)
 
@@ -234,7 +234,7 @@ const handleChange = (ev: React.MouseEvent<HTMLDivElement>) => { ... }
 #### - name provider
 > simple component using children as a render prop
 
-::example='/playground/src/components/name-provider.tsx'::
+::codeblock='playground/src/components/name-provider.tsx'::
 
 [⟩⟩⟩ demo](https://piotrwitek.github.io/react-redux-typescript-guide/#nameprovider)
 
@@ -243,7 +243,7 @@ const handleChange = (ev: React.MouseEvent<HTMLDivElement>) => { ... }
 #### - mouse provider
 > `Mouse` component found in [Render Props React Docs](https://reactjs.org/docs/render-props.html#use-render-props-for-cross-cutting-concerns)
 
-::example='/playground/src/components/mouse-provider.tsx'::
+::codeblock='playground/src/components/mouse-provider.tsx'::
 
 [⟩⟩⟩ demo](https://piotrwitek.github.io/react-redux-typescript-guide/#mouseprovider)
 
@@ -257,16 +257,16 @@ const handleChange = (ev: React.MouseEvent<HTMLDivElement>) => { ... }
 #### - withState
 Adds state to a stateless counter
 
-::example='/playground/src/hoc/with-state.tsx'::
-::usage='/playground/src/hoc/with-state.usage.tsx'::
+::codeblock='playground/src/hoc/with-state.tsx'::
+::expander='playground/src/hoc/with-state.usage.tsx'::
 
 [⇧ back to top](#table-of-contents)
 
 #### - withErrorBoundary
 Adds error handling using componentDidCatch to any component
 
-::example='/playground/src/hoc/with-error-boundary.tsx'::
-::usage='/playground/src/hoc/with-error-boundary.usage.tsx'::
+::codeblock='playground/src/hoc/with-error-boundary.tsx'::
+::expander='playground/src/hoc/with-error-boundary.usage.tsx'::
 
 [⇧ back to top](#table-of-contents)
 
@@ -290,22 +290,22 @@ const mapDispatchToProps = (dispatch: Dispatch<ActionType>) => ({
 
 #### - redux connected counter
 
-::example='/playground/src/connected/sfc-counter-connected.tsx'::
-::usage='/playground/src/connected/sfc-counter-connected.usage.tsx'::
+::codeblock='playground/src/connected/sfc-counter-connected.tsx'::
+::expander='playground/src/connected/sfc-counter-connected.usage.tsx'::
 
 [⇧ back to top](#table-of-contents)
 
 #### - redux connected counter (verbose)
 
-::example='/playground/src/connected/sfc-counter-connected-verbose.tsx'::
-::usage='/playground/src/connected/sfc-counter-connected-verbose.usage.tsx'::
+::codeblock='playground/src/connected/sfc-counter-connected-verbose.tsx'::
+::expander='playground/src/connected/sfc-counter-connected-verbose.usage.tsx'::
 
 [⇧ back to top](#table-of-contents)
 
 #### - with own props
 
-::example='/playground/src/connected/sfc-counter-connected-extended.tsx'::
-::usage='/playground/src/connected/sfc-counter-connected-extended.usage.tsx'::
+::codeblock='playground/src/connected/sfc-counter-connected-extended.tsx'::
+::expander='playground/src/connected/sfc-counter-connected-extended.usage.tsx'::
 
 [⇧ back to top](#table-of-contents)
 
@@ -316,7 +316,7 @@ const mapDispatchToProps = (dispatch: Dispatch<ActionType>) => ({
 #### - useReducer
 Hook for state management like Redux in a function component.
 
-::example='/playground/src/hooks/use-reducer.tsx'::
+::codeblock='playground/src/hooks/use-reducer.tsx'::
 
 [⇧ back to top](#table-of-contents)
 
@@ -333,8 +333,8 @@ Hook for state management like Redux in a function component.
 
 A solution below is using a simple factory function to automate the creation of type-safe action creators. The goal is to decrease maintenance effort and reduce code repetition of type annotations for actions and creators. The result is completely typesafe action-creators and their actions.
 
-::example='/playground/src/features/counters/actions.ts'::
-::usage='/playground/src/features/counters/actions.usage.ts'::
+::codeblock='playground/src/features/counters/actions.ts'::
+::expander='playground/src/features/counters/actions.usage.ts'::
 
 [⇧ back to top](#table-of-contents)
 
@@ -408,13 +408,13 @@ state.counterPairs[0].immutableCounter2 = 1; // TS Error: cannot be mutated
 ### Typing reducer
 > to understand following section make sure to learn about [Type Inference](https://www.typescriptlang.org/docs/handbook/type-inference.html), [Control flow analysis](https://github.com/Microsoft/TypeScript/wiki/What%27s-new-in-TypeScript#control-flow-based-type-analysis) and [Tagged union types](https://github.com/Microsoft/TypeScript/wiki/What%27s-new-in-TypeScript#tagged-union-types)
 
-::example='/playground/src/features/todos/reducer.ts'::
+::codeblock='playground/src/features/todos/reducer.ts'::
 
 [⇧ back to top](#table-of-contents)
 
 ### Testing reducer
 
-::example='/playground/src/features/todos/reducer.spec.ts'::
+::codeblock='playground/src/features/todos/reducer.spec.ts'::
 
 [⇧ back to top](#table-of-contents)
 
@@ -430,7 +430,7 @@ Can be imported in connected components to provide type-safety to Redux `connect
 #### `RootAction` - type representing union type of all action objects
 Can be imported in various layers receiving or sending redux actions like: reducers, sagas or redux-observables epics
 
-::example='/playground/src/store/types.d.ts'::
+::codeblock='playground/src/store/types.d.ts'::
 
 [⇧ back to top](#table-of-contents)
 
@@ -439,7 +439,7 @@ Can be imported in various layers receiving or sending redux actions like: reduc
 When creating a store instance we don't need to provide any additional types. It will set-up a **type-safe Store instance** using type inference.
 > The resulting store instance methods like `getState` or `dispatch` will be type checked and will expose all type errors
 
-::example='/playground/src/store/store.ts'::
+::codeblock='playground/src/store/store.ts'::
 
 ---
 
@@ -449,7 +449,7 @@ When creating a store instance we don't need to provide any additional types. It
 
 ### For more examples and in-depth explanation you should read [The Mighty Tutorial](https://github.com/piotrwitek/typesafe-actions#behold-the-mighty-tutorial) to learn it all the easy way!
 
-::example='/playground/src/features/todos/epics.ts'::
+::codeblock='playground/src/features/todos/epics.ts'::
 
 [⇧ back to top](#table-of-contents)
 
@@ -459,7 +459,7 @@ When creating a store instance we don't need to provide any additional types. It
 
 ### "reselect"
 
-::example='/playground/src/features/todos/selectors.ts'::
+::codeblock='playground/src/features/todos/selectors.ts'::
 
 [⇧ back to top](#table-of-contents)
 
@@ -512,58 +512,7 @@ export const SFCCounterConnectedVerbose =
 - Add additional `react` specific rules: `npm i -D tslint-react` https://github.com/palantir/tslint-react  
 - Overwritten some defaults for more flexibility  
 
-```js
-{
-  "extends": ["tslint:recommended", "tslint-react"],
-  "rules": {
-    "arrow-parens": false,
-    "arrow-return-shorthand": [false],
-    "comment-format": [true, "check-space"],
-    "import-blacklist": [true, "rxjs"],
-    "interface-over-type-literal": false,
-    "interface-name": false,
-    "max-line-length": [true, 120],
-    "member-access": false,
-    "member-ordering": [true, { "order": "fields-first" }],
-    "newline-before-return": false,
-    "no-any": false,
-    "no-empty-interface": false,
-    "no-import-side-effect": [true],
-    "no-inferrable-types": [true, "ignore-params", "ignore-properties"],
-    "no-invalid-this": [true, "check-function-in-method"],
-    "no-null-keyword": false,
-    "no-require-imports": false,
-    "no-submodule-imports": [true, "@src", "rxjs"],
-    "no-this-assignment": [true, { "allow-destructuring": true }],
-    "no-trailing-whitespace": true,
-    "object-literal-sort-keys": false,
-    "object-literal-shorthand": false,
-    "one-variable-per-declaration": [false],
-    "only-arrow-functions": [true, "allow-declarations"],
-    "ordered-imports": [false],
-    "prefer-method-signature": false,
-    "prefer-template": [true, "allow-single-concat"],
-    "quotemark": [true, "single", "jsx-double"],
-    "semicolon": [true, "always"],
-    "trailing-comma": [true, {
-      "singleline": "never",
-      "multiline": {
-        "objects": "always",
-        "arrays": "always",
-        "functions": "never",
-        "typeLiterals": "ignore"
-      },
-      "esSpecCompliant": true
-    }],
-    "triple-equals": [true, "allow-null-check"],
-    "type-literal-delimiter": true,
-    "typedef": [true,"parameter", "property-declaration"],
-    "variable-name": [true, "ban-keywords", "check-format", "allow-pascal-case", "allow-leading-underscore"],
-    // tslint-react
-    "jsx-no-lambda": false
-  }
-}
-```
+::expander='playground/tslint.json'::
 
 [⇧ back to top](#table-of-contents)
 
@@ -573,59 +522,10 @@ export const SFCCounterConnectedVerbose =
 `npm i -D jest ts-jest @types/jest`
 
 #### jest.config.json
-```json
-{
-  "verbose": true,
-  "transform": {
-    ".(ts|tsx)": "./node_modules/ts-jest/preprocessor.js"
-  },
-  "testRegex": "(/spec/.*|\\.(test|spec))\\.(ts|tsx|js)$",
-  "moduleFileExtensions": ["ts", "tsx", "js"],
-  "moduleNameMapper": {
-    "^Components/(.*)": "./src/components/$1"
-  },
-  "globals": {
-    "window": {},
-    "ts-jest": {
-      "tsConfigFile": "./tsconfig.json"
-    }
-  },
-  "setupFiles": [
-    "./jest.stubs.js"
-  ],
-  "setupTestFrameworkScriptFile": "./jest.tests.js"
-}
-```
+::expander='playground/jest.config.json'::
 
 #### jest.stubs.js
-```js
-// Global/Window object Stubs for Jest
-window.requestAnimationFrame = function (callback) {
-  setTimeout(callback);
-};
-
-window.localStorage = {
-  getItem: function () { },
-  setItem: function () { },
-};
-
-Object.values = () => [];
-```
-
-[⇧ back to top](#table-of-contents)
-
-## Enzyme
-
-> Installation  
-`npm i -D enzyme enzyme-adapter-react-16 @types/enzyme`
-
-#### jest.tests.js
-```js
-import { configure } from 'enzyme';
-import Adapter from 'enzyme-adapter-react-16';
-
-configure({ adapter: new Adapter() });
-```
+::expander='playground/jest.stubs.js'::
 
 [⇧ back to top](#table-of-contents)
 
@@ -661,52 +561,7 @@ configure({ adapter: new Adapter() });
 - Install [`tslib`](https://www.npmjs.com/package/tslib) to cut on bundle size, by using external runtime helpers instead of adding them inline: `npm i tslib`  
 - Example "paths" setup for baseUrl relative imports with Webpack  
 
-```js
-{
-  "compilerOptions": {
-    "baseUrl": "./", // enables project relative paths config
-    "paths": { // define paths mappings
-      "@src/*": ["src/*"] // will enable import aliases -> import { ... } from '@src/components'
-      // WARNING: Add this to your webpack config -> resolve: { alias: { '@src': PATH_TO_SRC } }
-      // "redux": ["typings/redux"], // use an alternative type-definitions instead of the included one
-    },
-    "outDir": "dist/", // target for compiled files
-    "allowSyntheticDefaultImports": true, // no errors with commonjs modules interop
-    "esModuleInterop": true, // enable to do "import React ..." instead of "import * as React ..."
-    "allowJs": true, // include js files
-    "checkJs": true, // typecheck js files
-    "declaration": false, // don't emit declarations
-    "emitDecoratorMetadata": true, // only if using decorators
-    "experimentalDecorators": true, // only if using decorators
-    "forceConsistentCasingInFileNames": true,
-    "importHelpers": true, // importing transpilation helpers from tslib
-    "noEmitHelpers": true, // disable inline transpilation helpers in each file
-    "jsx": "react", // translate JSX
-    "lib": [
-      "dom",
-      "es2016",
-      "es2017.object"
-    ],
-    "target": "es5", // "es2015" for ES6+ engines
-    "module": "commonjs", // "es2015" for tree-shaking
-    "moduleResolution": "node",
-    "noEmitOnError": true,
-    "noFallthroughCasesInSwitch": true,
-    "noUnusedLocals": true,
-    "strict": true,
-    "pretty": true,
-    "removeComments": true,
-    "sourceMap": true
-  },
-  "include": [
-    "src/**/*"
-  ],
-  "exclude": [
-    "node_modules",
-    "src/**/*.spec.*"
-  ]
-}
-```
+::expander='playground/tsconfig.json'::
 
 [⇧ back to top](#table-of-contents)
 
@@ -766,7 +621,7 @@ declare module 'rxjs/Subject' {
 
 #### To quick-fix missing type-definitions for vendor modules you can "assert" a module type with `any` using [Shorthand Ambient Modules](https://github.com/Microsoft/TypeScript-Handbook/blob/master/pages/Modules.md#shorthand-ambient-modules)
 
-::example='/playground/typings/modules.d.ts'::
+::codeblock='playground/typings/modules.d.ts'::
 
 > More advanced scenarios for working with vendor type-definitions can be found here [Official TypeScript Docs](https://github.com/Microsoft/TypeScript-Handbook/blob/master/pages/Modules.md#working-with-other-javascript-libraries)
 

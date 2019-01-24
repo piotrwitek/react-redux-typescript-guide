@@ -1,4 +1,4 @@
-const fs = require("fs");
+const fs = require('fs');
 
 const ROOT_PATH = `${__dirname}/`;
 const inputFiles = [ROOT_PATH + 'README_SOURCE.md'];
@@ -6,18 +6,18 @@ const outputFile = ROOT_PATH + 'README.md';
 
 const result = inputFiles
     .map(filePath => fs.readFileSync(filePath, 'utf8'))
-    .map(injectExamples)
-    .map(injectUsages);
+    .map(injectCodeBlocks)
+    .map(injectExpanders);
 
 fs.writeFileSync(outputFile, result, 'utf8');
 
-function injectExamples(text) {
-    const regex = /::example='(.+?)'::/g;
+function injectCodeBlocks(text) {
+    const regex = /::codeblock='(.+?)'::/g;
     return text.replace(regex, createMatchReplacer(withSourceWrapper));
 }
 
-function injectUsages(text) {
-    const regex = /::usage='(.+?)'::/g;
+function injectExpanders(text) {
+    const regex = /::expander='(.+?)'::/g;
     return text.replace(regex, createMatchReplacer(withDetailsWrapper));
 }
 
@@ -39,7 +39,7 @@ ${'```'}
 
 function withDetailsWrapper(text) {
     return `
-<details><summary>show usage</summary><p>
+<details style="background: #f6f8fa;border-radius: 3px;"><summary style="padding: 6px 12px;border-radius: 3px;"><i>Click to expand</i></summary><p>
 
 ${'```tsx'}
 ${text}

@@ -1,39 +1,36 @@
 {
   "compilerOptions": {
-    "baseUrl": "./", // enables absolute path imports
+    "baseUrl": "./", // relative paths base
     "paths": {
-      // "redux": ["typings/redux"], // use for redux 3.X
-      // "@src/*": ["src/*"] // will enable -> import { ... } from '@src/components'
-      // in webpack you need to add -> resolve: { alias: { '@src': PATH_TO_SRC } }
+      // "@src/*": ["src/*"] // will enable import aliases -> import { ... } from '@src/components'
+      // WARNING: Require to add this to your webpack config -> resolve: { alias: { '@src': PATH_TO_SRC } }
+      // "redux": ["typings/redux"], // override library types with your alternative type-definitions in typings folder
     },
     "outDir": "dist/", // target for compiled files
     "allowSyntheticDefaultImports": true, // no errors with commonjs modules interop
-    "esModuleInterop": true,
+    "esModuleInterop": true, // enable to do "import React ..." instead of "import * as React ..."
     "allowJs": true, // include js files
-    "declaration": false,
-    "emitDecoratorMetadata": true,
-    "experimentalDecorators": true,
+    "checkJs": true, // typecheck js files
+    "declaration": false, // don't emit declarations
+    "emitDecoratorMetadata": true, // include only if using decorators
+    "experimentalDecorators": true, // include only if using decorators
     "forceConsistentCasingInFileNames": true,
-    "importHelpers": true, // importing helper functions from tslib
-    "noEmitHelpers": true, // disable emitting inline helper functions
-    "jsx": "react", // process JSX
-    "lib": ["dom", "es2016", "es2017.object"],
-    "types": ["jest"],
-    "target": "es2015",
-    "module": "es2015",
+    "importHelpers": true, // importing transpilation helpers from tslib
+    "noEmitHelpers": true, // disable inline transpilation helpers in each file
+    "jsx": "react", // transform JSX
+    "lib": ["dom", "es2017"], // you will need to include polyfills for es2017 manually
+    "types": ["jest"], // which global types to use
+    "target": "es5", // "es2015" for ES6+ engines
+    "module": "es2015", // "es2015" for tree-shaking
     "moduleResolution": "node",
     "noEmitOnError": true,
     "noFallthroughCasesInSwitch": true,
-    "noImplicitAny": true,
-    "noImplicitReturns": true,
-    "noImplicitThis": true,
     "noUnusedLocals": true,
     "strict": true,
-    "strictFunctionTypes": true,
     "pretty": true,
     "removeComments": true,
     "sourceMap": true
   },
-  "include": ["src/**/*", "typings/*"],
-  "exclude": ["node_modules", "src/**/*.spec.*"]
+  "include": ["src", "typings"],
+  "exclude": ["src/**/*.spec.*"]
 }

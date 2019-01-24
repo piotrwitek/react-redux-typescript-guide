@@ -19,9 +19,11 @@ Don't edit `README.md` directly - it is generated automatically from `README_SOU
    - Use `sh ./generate-readme.sh` script to generate updated `README.md` (this will inject code examples using type-checked source files from the `/playground` folder)
    - So to make changes in code examples edit source files in `/playground` folder
 
-**Source code examples inject directives:**
+**Source code inject directives:**
 ```
-::example='playground/src/components/sfc-counter.tsx'::
+# Inject code block with highlighter
+::codeblock='playground/src/components/sfc-counter.tsx'::
 
-::usage='playground/src/components/sfc-counter.usage.tsx'::
+# Inject code block with highlighter and expander
+::expander='playground/src/components/sfc-counter.usage.tsx'::
 ```
