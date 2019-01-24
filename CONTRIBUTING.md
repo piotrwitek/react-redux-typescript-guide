@@ -1,17 +1,27 @@
 # Contributing Guide
+
+## General
 1. Make sure you have read and understand the **Goals** section to be aligned with project goals.
 2. Before submitting a PR please comment in the relevant issue (or create a new one if it doesn't exist yet) to discuss all the requirements (this will prevent rejecting the PR and wasting your work).
-3. All workflow scripts (prettier, linter, tests) must pass successfully.
-4. Don't edit `README.md` directly - it is built using generator from `README_SOURCE.md`.
-   - Use `sh ./generate-readme.sh` script to generate `README.md` (this will inject code examples using type-checked source files from the `/playground` folder)
-   - include directives look like this: `::[example|usage]='playground/src/components/sfc-counter.tsx'::`
-   - To make changes in code examples edit source files in `/playground` folder
+3. All workflow scripts (prettier, linter, tests) must pass successfully (it is run automatically on CI and will fail on github checks).
 
-**Mandatory PR checklist**:
+## PR Checklist
 - generate a new `README.md` from `README_SOURCE.md` using command:
 ```
 sh ./generate-readme.sh
 
 # or if you don't like bash, simply use node.js
 # node ./generate-readme.js
+```
+
+## `README.md` and `README_SOURCE.md`
+Don't edit `README.md` directly - it is generated automatically from `README_SOURCE.md` using script.
+   - Use `sh ./generate-readme.sh` script to generate updated `README.md` (this will inject code examples using type-checked source files from the `/playground` folder)
+   - So to make changes in code examples edit source files in `/playground` folder
+
+**Source code examples inject directives:**
+```
+::example='playground/src/components/sfc-counter.tsx'::
+
+::usage='playground/src/components/sfc-counter.usage.tsx'::
 ```
