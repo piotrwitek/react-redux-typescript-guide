@@ -1,10 +1,10 @@
 Usage:
-```jsx { "filePath": "./sfc-spread-attributes.usage.tsx" }
+```jsx { "filePath": "./fc-spread-attributes.usage.tsx" }
 ```
 
 Usage Demo:
 ```jsx
-const Demo = require('./sfc-spread-attributes.usage').default;
+const Demo = require('./fc-spread-attributes.usage').default;
 <Demo />
 ```
 

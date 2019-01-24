@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-export const ErrorMessage: React.SFC<{ onReset: () => void }> = ({
+export const ErrorMessage: React.FC<{ onReset: () => void }> = ({
   onReset,
 }) => {
   return (

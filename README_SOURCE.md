@@ -46,8 +46,8 @@ This gives you the power to prioritize our work and support the project contribu
 - [Type Definitions & Complementary Libraries](#type-definitions--complementary-libraries)
 - [React Types Cheatsheet](#react-types-cheatsheet) 🌟 __NEW__
 - [Component Typing Patterns](#component-typing-patterns)
-  - [Stateless Components - SFC](#stateless-components---sfc)
-  - [Stateful Components - Class](#stateful-components---class) 📝 __UPDATED__
+  - [Function Components - FC](#function-components---fc)
+  - [Class Components ](#class-components) 📝 __UPDATED__
   - [Generic Components](#generic-components)
   - [Render Props](#render-props) 🌟 __NEW__
   - [Higher-Order Components](#higher-order-components) 📝 __UPDATED__
@@ -106,22 +106,22 @@ npm i -D @types/react @types/react-dom @types/react-redux
 
 # React Types Cheatsheet
 
-#### `React.StatelessComponent<P>` or `React.SFC<P>`
-Type representing stateless functional component
+#### `React.FunctionComponent<P>` or `React.FC<P>`
+Type representing a functional component
 ```tsx
-const MyComponent: React.SFC<MyComponentProps> = ...
+const MyComponent: React.FC<MyComponentProps> = ...
 ```
 [⇧ back to top](#table-of-contents)
 
 #### `React.Component<P, S>`
-Type representing stateful class component
+Type representing a class component
 ```tsx
 class MyComponent extends React.Component<MyComponentProps, State> { ...
 ```
 [⇧ back to top](#table-of-contents)
 
 #### `React.ComponentType<P>`
-Type representing union type of (SFC | Component)
+Type representing union type of (FC | Component)
 ```tsx
 const withState = <P extends WrappedComponentProps>(
   WrappedComponent: React.ComponentType<P>,
@@ -174,41 +174,41 @@ const handleChange = (ev: React.MouseEvent<HTMLDivElement>) => { ... }
 
 # Component Typing Patterns
 
-## Stateless Components - SFC
+## Function Components - FC
 
-#### - stateless counter
+#### - FC counter
 
-::codeblock='playground/src/components/sfc-counter.tsx'::
+::codeblock='playground/src/components/fc-counter.tsx'::
 
-[⟩⟩⟩ demo](https://piotrwitek.github.io/react-redux-typescript-guide/#sfccounter)
+[⟩⟩⟩ demo](https://piotrwitek.github.io/react-redux-typescript-guide/#fccounter)
 
 [⇧ back to top](#table-of-contents)
 
 #### - spread attributes [link](https://facebook.github.io/react/docs/jsx-in-depth.html#spread-attributes)
 
-::codeblock='playground/src/components/sfc-spread-attributes.tsx'::
+::codeblock='playground/src/components/fc-spread-attributes.tsx'::
 
-[⟩⟩⟩ demo](https://piotrwitek.github.io/react-redux-typescript-guide/#sfcspreadattributes)
+[⟩⟩⟩ demo](https://piotrwitek.github.io/react-redux-typescript-guide/#fcspreadattributes)
 
 [⇧ back to top](#table-of-contents)
 
 ---
 
-## Stateful Components - Class
+## Class Components
 
-#### - stateful counter
+#### - class counter
 
-::codeblock='playground/src/components/stateful-counter.tsx'::
+::codeblock='playground/src/components/class-counter.tsx'::
 
-[⟩⟩⟩ demo](https://piotrwitek.github.io/react-redux-typescript-guide/#statefulcounter)
+[⟩⟩⟩ demo](https://piotrwitek.github.io/react-redux-typescript-guide/#classcounter)
 
 [⇧ back to top](#table-of-contents)
 
 #### - with default props
 
-::codeblock='playground/src/components/stateful-counter-with-default.tsx'::
+::codeblock='playground/src/components/class-counter-with-default-props.tsx'::
 
-[⟩⟩⟩ demo](https://piotrwitek.github.io/react-redux-typescript-guide/#statefulcounterwithdefault)
+[⟩⟩⟩ demo](https://piotrwitek.github.io/react-redux-typescript-guide/#classcounterwithdefaultprops)
 
 [⇧ back to top](#table-of-contents)
 
@@ -290,22 +290,22 @@ const mapDispatchToProps = (dispatch: Dispatch<ActionType>) => ({
 
 #### - redux connected counter
 
-::codeblock='playground/src/connected/sfc-counter-connected.tsx'::
-::expander='playground/src/connected/sfc-counter-connected.usage.tsx'::
+::codeblock='playground/src/connected/fc-counter-connected.tsx'::
+::expander='playground/src/connected/fc-counter-connected.usage.tsx'::
 
 [⇧ back to top](#table-of-contents)
 
 #### - redux connected counter (verbose)
 
-::codeblock='playground/src/connected/sfc-counter-connected-verbose.tsx'::
-::expander='playground/src/connected/sfc-counter-connected-verbose.usage.tsx'::
+::codeblock='playground/src/connected/fc-counter-connected-verbose.tsx'::
+::expander='playground/src/connected/fc-counter-connected-verbose.usage.tsx'::
 
 [⇧ back to top](#table-of-contents)
 
 #### - with own props
 
-::codeblock='playground/src/connected/sfc-counter-connected-extended.tsx'::
-::expander='playground/src/connected/sfc-counter-connected-extended.usage.tsx'::
+::codeblock='playground/src/connected/fc-counter-connected-extended.tsx'::
+::expander='playground/src/connected/fc-counter-connected-extended.usage.tsx'::
 
 [⇧ back to top](#table-of-contents)
 
@@ -468,7 +468,7 @@ When creating a store instance we don't need to provide any additional types. It
 ## Typing connect
 
 Below snippet can be find in the `playground/` folder, you can checkout the repo and follow all dependencies to understand the bigger picture.
-`playground/src/connected/sfc-counter-connected-verbose.tsx`
+`playground/src/connected/fc-counter-connected-verbose.tsx`
 
 ```tsx
 import Types from 'Types';
@@ -477,10 +477,10 @@ import { bindActionCreators, Dispatch } from 'redux';
 import { connect } from 'react-redux';
 
 import { countersActions } from '../features/counters';
-import { SFCCounter, SFCCounterProps } from '../components';
+import { FCCounter } from '../components';
 
 // `state` parameter needs a type annotation to type-check the correct shape of a state object but also it'll be used by "type inference" to infer the type of returned props
-const mapStateToProps = (state: Types.RootState, ownProps: SFCCounterProps) => ({
+const mapStateToProps = (state: Types.RootState, ownProps: FCCounterProps) => ({
   count: state.counters.reduxCounter,
 });
 
@@ -492,8 +492,8 @@ const mapDispatchToProps = (dispatch: Dispatch<Types.RootAction>) => bindActionC
 }, dispatch);
 
 // NOTE: We don't need to pass generic type arguments to neither connect nor mapping functions because type inference will do all this work automatically. So there's really no reason to increase the noise ratio in your codebase!
-export const SFCCounterConnectedVerbose =
-  connect(mapStateToProps, mapDispatchToProps)(SFCCounter);
+export const FCCounterConnectedVerbose =
+  connect(mapStateToProps, mapDispatchToProps)(FCCounter);
 ```
 
 [⇧ back to top](#table-of-contents)
@@ -572,7 +572,7 @@ Using this solution you'll achieve better encapsulation for internal structure/n
 // 1. in `components/` folder create component file (`select.tsx`) with default export:
 
 // components/select.tsx
-const Select: React.SFC<Props> = (props) => {
+const Select: React.FC<Props> = (props) => {
 ...
 export default Select;
 
@@ -663,7 +663,7 @@ Related `ts-lint` rule: https://palantir.github.io/tslint/rules/interface-over-t
 ### - how to best initialize class instance or static properties?
 > Prefered modern style is to use class Property Initializers  
 ```tsx
-class StatefulCounterWithInitialCount extends React.Component<Props, State> {
+class ClassCounterWithInitialCount extends React.Component<Props, State> {
   // default props using Property Initializers
   static defaultProps: DefaultProps = {
     className: 'default-class',
@@ -683,7 +683,7 @@ class StatefulCounterWithInitialCount extends React.Component<Props, State> {
 ### - how to best declare component handler functions?
 > Prefered modern style is to use Class Fields with arrow functions  
 ```tsx
-class StatefulCounter extends React.Component<Props, State> {
+class ClassCounter extends React.Component<Props, State> {
 // handlers using Class Fields with arrow functions
   handleIncrement = () => {
     this.setState({ count: this.state.count + 1 });

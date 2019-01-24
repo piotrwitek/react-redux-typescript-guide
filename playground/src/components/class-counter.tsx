@@ -1,28 +1,17 @@
 import * as React from 'react';
 
-type Props = Readonly<{
+type Props = {
   label: string;
-  initialCount: number;
-}>;
+};
 
-type State = Readonly<{
+type State = {
   count: number;
-}>;
+};
 
-export class StatefulCounterWithDefault extends React.Component<Props, State> {
-  static defaultProps = {
-    initialCount: 0,
-  };
-
+export class ClassCounter extends React.Component<Props, State> {
   readonly state: State = {
-    count: this.props.initialCount,
+    count: 0,
   };
-
-  componentWillReceiveProps({ initialCount }: Props) {
-    if (initialCount != null && initialCount !== this.props.initialCount) {
-      this.setState({ count: initialCount });
-    }
-  }
 
   handleIncrement = () => {
     this.setState({ count: this.state.count + 1 });

@@ -13,34 +13,32 @@ module.exports = {
   sections: [
     {
       name: 'Introduction',
-      content: './docs/intro.md'
+      content: './docs/intro.md',
     },
     {
-      name: 'Stateless Components - SFC',
-      components: () => ([
-        './src/components/sfc-counter.tsx',
-        './src/components/sfc-spread-attributes.tsx',
-      ]),
+      name: 'Function Components',
+      components: () => [
+        './src/components/fc-counter.tsx',
+        './src/components/fc-spread-attributes.tsx',
+      ],
     },
     {
-      name: 'Stateful Components - Class',
-      components: () => ([
-        './src/components/stateful-counter.tsx',
-        './src/components/stateful-counter-with-default.tsx',
-      ]),
+      name: 'Class Components',
+      components: () => [
+        './src/components/class-counter.tsx',
+        './src/components/class-counter-with-default-props.tsx',
+      ],
     },
     {
       name: 'Generic Components',
-      components: () => ([
-        './src/components/generic-list.tsx',
-      ]),
+      components: () => ['./src/components/generic-list.tsx'],
     },
     {
       name: 'Render Props',
-      components: () => ([
+      components: () => [
         './src/components/name-provider.tsx',
         './src/components/mouse-provider.tsx',
-      ]),
+      ],
     },
   ],
   theme: {
@@ -48,18 +46,20 @@ module.exports = {
   },
   propsParser: require('react-docgen-typescript').parse,
   webpackConfig: webpackConfig,
-  updateExample: function (props, exampleFilePath) {
+  updateExample: function(props, exampleFilePath) {
     if (typeof props.settings.filePath === 'string') {
-      const { settings: { filePath } } = props;
+      const {
+        settings: { filePath },
+      } = props;
       delete props.settings.filePath;
 
       props.content = fs.readFileSync(
         path.resolve(exampleFilePath, '..', filePath),
         { encoding: 'utf-8' }
       );
-      props.settings.static = true
+      props.settings.static = true;
     }
 
-    return props
-  }
-}
+    return props;
+  },
+};

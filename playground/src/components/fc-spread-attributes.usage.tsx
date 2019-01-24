@@ -1,12 +1,12 @@
 import * as React from 'react';
 
-import { SFCSpreadAttributes } from '../components';
+import { FCSpreadAttributes } from '.';
 
 export default () => (
-  <SFCSpreadAttributes
+  <FCSpreadAttributes
     className={'classy'}
     style={{ backgroundColor: 'lightcyan' }}
   >
     {`I'll spread every property you give me!`}
-  </SFCSpreadAttributes>
+  </FCSpreadAttributes>
 );

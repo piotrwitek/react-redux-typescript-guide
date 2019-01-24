@@ -1,3 +1,3 @@
-export * from './sfc-counter-connected-extended';
-export * from './sfc-counter-connected-verbose';
-export * from './sfc-counter-connected';
+export * from './fc-counter-connected-extended';
+export * from './fc-counter-connected-verbose';
+export * from './fc-counter-connected';

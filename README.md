@@ -46,8 +46,8 @@ This gives you the power to prioritize our work and support the project contribu
 - [Type Definitions & Complementary Libraries](#type-definitions--complementary-libraries)
 - [React Types Cheatsheet](#react-types-cheatsheet) 🌟 __NEW__
 - [Component Typing Patterns](#component-typing-patterns)
-  - [Stateless Components - SFC](#stateless-components---sfc)
-  - [Stateful Components - Class](#stateful-components---class) 📝 __UPDATED__
+  - [Function Components - FC](#function-components---fc)
+  - [Class Components ](#class-components) 📝 __UPDATED__
   - [Generic Components](#generic-components)
   - [Render Props](#render-props) 🌟 __NEW__
   - [Higher-Order Components](#higher-order-components) 📝 __UPDATED__
@@ -106,22 +106,22 @@ npm i -D @types/react @types/react-dom @types/react-redux
 
 # React Types Cheatsheet
 
-#### `React.StatelessComponent<P>` or `React.SFC<P>`
-Type representing stateless functional component
+#### `React.FunctionComponent<P>` or `React.FC<P>`
+Type representing a functional component
 ```tsx
-const MyComponent: React.SFC<MyComponentProps> = ...
+const MyComponent: React.FC<MyComponentProps> = ...
 ```
 [⇧ back to top](#table-of-contents)
 
 #### `React.Component<P, S>`
-Type representing stateful class component
+Type representing a class component
 ```tsx
 class MyComponent extends React.Component<MyComponentProps, State> { ...
 ```
 [⇧ back to top](#table-of-contents)
 
 #### `React.ComponentType<P>`
-Type representing union type of (SFC | Component)
+Type representing union type of (FC | Component)
 ```tsx
 const withState = <P extends WrappedComponentProps>(
   WrappedComponent: React.ComponentType<P>,
@@ -174,27 +174,31 @@ const handleChange = (ev: React.MouseEvent<HTMLDivElement>) => { ... }
 
 # Component Typing Patterns
 
-## Stateless Components - SFC
+## Function Components - FC
 
-#### - stateless counter
+#### - FC counter
 
 ```tsx
 import * as React from 'react';
 
-export interface SFCCounterProps {
+type Props = {
   label: string;
   count: number;
   onIncrement: () => any;
-}
+};
 
-export const SFCCounter: React.SFC<SFCCounterProps> = (props) => {
+export const FCCounter: React.FC<Props> = props => {
   const { label, count, onIncrement } = props;
 
-  const handleIncrement = () => { onIncrement(); };
+  const handleIncrement = () => {
+    onIncrement();
+  };
 
   return (
     <div>
-      <span>{label}: {count} </span>
+      <span>
+        {label}: {count}{' '}
+      </span>
       <button type="button" onClick={handleIncrement}>
         {`Increment`}
       </button>
@@ -204,7 +208,7 @@ export const SFCCounter: React.SFC<SFCCounterProps> = (props) => {
 
 ```
 
-[⟩⟩⟩ demo](https://piotrwitek.github.io/react-redux-typescript-guide/#sfccounter)
+[⟩⟩⟩ demo](https://piotrwitek.github.io/react-redux-typescript-guide/#fccounter)
 
 [⇧ back to top](#table-of-contents)
 
@@ -213,52 +217,48 @@ export const SFCCounter: React.SFC<SFCCounterProps> = (props) => {
 ```tsx
 import * as React from 'react';
 
-export interface SFCSpreadAttributesProps {
+type Props = {
   className?: string;
   style?: React.CSSProperties;
-}
+};
 
-export const SFCSpreadAttributes: React.SFC<SFCSpreadAttributesProps> = (props) => {
+export const FCSpreadAttributes: React.FC<Props> = props => {
   const { children, ...restProps } = props;
 
-  return (
-    <div {...restProps}>
-      {children}
-    </div>
-  );
+  return <div {...restProps}>{children}</div>;
 };
 
 ```
 
-[⟩⟩⟩ demo](https://piotrwitek.github.io/react-redux-typescript-guide/#sfcspreadattributes)
+[⟩⟩⟩ demo](https://piotrwitek.github.io/react-redux-typescript-guide/#fcspreadattributes)
 
 [⇧ back to top](#table-of-contents)
 
 ---
 
-## Stateful Components - Class
+## Class Components
 
-#### - stateful counter
+#### - class counter
 
 ```tsx
 import * as React from 'react';
 
-export interface StatefulCounterProps {
+type Props = {
   label: string;
-}
+};
 
-interface State {
-  readonly count: number;
-}
+type State = {
+  count: number;
+};
 
-export class StatefulCounter extends React.Component<StatefulCounterProps, State> {
+export class ClassCounter extends React.Component<Props, State> {
   readonly state: State = {
     count: 0,
   };
 
   handleIncrement = () => {
     this.setState({ count: this.state.count + 1 });
-  }
+  };
 
   render() {
     const { handleIncrement } = this;
@@ -267,7 +267,9 @@ export class StatefulCounter extends React.Component<StatefulCounterProps, State
 
     return (
       <div>
-        <span>{label}: {count} </span>
+        <span>
+          {label}: {count}{' '}
+        </span>
         <button type="button" onClick={handleIncrement}>
           {`Increment`}
         </button>
@@ -278,7 +280,7 @@ export class StatefulCounter extends React.Component<StatefulCounterProps, State
 
 ```
 
-[⟩⟩⟩ demo](https://piotrwitek.github.io/react-redux-typescript-guide/#statefulcounter)
+[⟩⟩⟩ demo](https://piotrwitek.github.io/react-redux-typescript-guide/#classcounter)
 
 [⇧ back to top](#table-of-contents)
 
@@ -287,16 +289,19 @@ export class StatefulCounter extends React.Component<StatefulCounterProps, State
 ```tsx
 import * as React from 'react';
 
-type Props = Readonly<{
+type Props = {
   label: string;
   initialCount: number;
-}>;
+};
 
-type State = Readonly<{
+type State = {
   count: number;
-}>;
+};
 
-export class StatefulCounterWithDefault extends React.Component<Props, State> {
+export class ClassCounterWithDefaultProps extends React.Component<
+  Props,
+  State
+> {
   static defaultProps = {
     initialCount: 0,
   };
@@ -335,7 +340,7 @@ export class StatefulCounterWithDefault extends React.Component<Props, State> {
 
 ```
 
-[⟩⟩⟩ demo](https://piotrwitek.github.io/react-redux-typescript-guide/#statefulcounterwithdefault)
+[⟩⟩⟩ demo](https://piotrwitek.github.io/react-redux-typescript-guide/#classcounterwithdefaultprops)
 
 [⇧ back to top](#table-of-contents)
 
@@ -516,14 +521,11 @@ export const withState = <WrappedProps extends InjectedProps>(
 import * as React from 'react';
 
 import { withState } from '../hoc';
-import { SFCCounter } from '../components';
+import { FCCounter } from '../components';
 
-const SFCCounterWithState =
-  withState(SFCCounter);
+const FCCounterWithState = withState(FCCounter);
 
-export default () => (
-  <SFCCounterWithState label={'SFCCounterWithState'} />
-);
+export default () => <FCCounterWithState label={'FCCounterWithState'} />;
 
 ```
 </p></details>
@@ -647,15 +649,18 @@ import Types from 'Types';
 import { connect } from 'react-redux';
 
 import { countersActions, countersSelectors } from '../features/counters';
-import { SFCCounter } from '../components';
+import { FCCounter } from '../components';
 
 const mapStateToProps = (state: Types.RootState) => ({
   count: countersSelectors.getReduxCounter(state.counters),
 });
 
-export const SFCCounterConnected = connect(mapStateToProps, {
-  onIncrement: countersActions.increment,
-})(SFCCounter);
+export const FCCounterConnected = connect(
+  mapStateToProps,
+  {
+    onIncrement: countersActions.increment,
+  }
+)(FCCounter);
 
 ```
 <details><summary><i>Click to expand</i></summary><p>
@@ -663,13 +668,9 @@ export const SFCCounterConnected = connect(mapStateToProps, {
 ```tsx
 import * as React from 'react';
 
-import { SFCCounterConnected } from '../connected';
+import { FCCounterConnected } from '.';
 
-export default () => (
-  <SFCCounterConnected
-    label={'SFCCounterConnected'}
-  />
-);
+export default () => <FCCounterConnected label={'FCCounterConnected'} />;
 
 ```
 </p></details>
@@ -684,18 +685,24 @@ import { bindActionCreators, Dispatch } from 'redux';
 import { connect } from 'react-redux';
 
 import { countersActions } from '../features/counters';
-import { SFCCounter } from '../components';
+import { FCCounter } from '../components';
 
 const mapStateToProps = (state: Types.RootState) => ({
   count: state.counters.reduxCounter,
 });
 
-const mapDispatchToProps = (dispatch: Dispatch<Types.RootAction>) => bindActionCreators({
-  onIncrement: countersActions.increment,
-}, dispatch);
+const mapDispatchToProps = (dispatch: Dispatch<Types.RootAction>) =>
+  bindActionCreators(
+    {
+      onIncrement: countersActions.increment,
+    },
+    dispatch
+  );
 
-export const SFCCounterConnectedVerbose =
-  connect(mapStateToProps, mapDispatchToProps)(SFCCounter);
+export const FCCounterConnectedVerbose = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(FCCounter);
 
 ```
 <details><summary><i>Click to expand</i></summary><p>
@@ -703,12 +710,10 @@ export const SFCCounterConnectedVerbose =
 ```tsx
 import * as React from 'react';
 
-import { SFCCounterConnectedVerbose } from '../connected';
+import { FCCounterConnectedVerbose } from '.';
 
 export default () => (
-  <SFCCounterConnectedVerbose
-    label={'SFCCounterConnectedVerbose'}
-  />
+  <FCCounterConnectedVerbose label={'FCCounterConnectedVerbose'} />
 );
 
 ```
@@ -723,19 +728,23 @@ import Types from 'Types';
 import { connect } from 'react-redux';
 
 import { countersActions, countersSelectors } from '../features/counters';
-import { SFCCounter } from '../components';
+import { FCCounter } from '../components';
 
-export interface SFCCounterConnectedExtendedProps {
+type OwnProps = {
   initialCount: number;
-}
+};
 
-const mapStateToProps = (state: Types.RootState, ownProps: SFCCounterConnectedExtendedProps) => ({
-  count: countersSelectors.getReduxCounter(state.counters) + ownProps.initialCount,
+const mapStateToProps = (state: Types.RootState, ownProps: OwnProps) => ({
+  count:
+    countersSelectors.getReduxCounter(state.counters) + ownProps.initialCount,
 });
 
-export const SFCCounterConnectedExtended = connect(mapStateToProps, {
-  onIncrement: countersActions.increment,
-})(SFCCounter);
+export const FCCounterConnectedExtended = connect(
+  mapStateToProps,
+  {
+    onIncrement: countersActions.increment,
+  }
+)(FCCounter);
 
 ```
 <details><summary><i>Click to expand</i></summary><p>
@@ -743,9 +752,14 @@ export const SFCCounterConnectedExtended = connect(mapStateToProps, {
 ```tsx
 import * as React from 'react';
 
-import { SFCCounterConnectedExtended } from '../connected';
+import { FCCounterConnectedExtended } from '.';
 
-export default () => <SFCCounterConnectedExtended label={'SFCCounterConnectedExtended'} initialCount={10} />;
+export default () => (
+  <FCCounterConnectedExtended
+    label={'FCCounterConnectedExtended'}
+    initialCount={10}
+  />
+);
 
 ```
 </p></details>
@@ -1171,7 +1185,7 @@ export const getFilteredTodos = createSelector(getTodos, getTodosFilter, (todos,
 ## Typing connect
 
 Below snippet can be find in the `playground/` folder, you can checkout the repo and follow all dependencies to understand the bigger picture.
-`playground/src/connected/sfc-counter-connected-verbose.tsx`
+`playground/src/connected/fc-counter-connected-verbose.tsx`
 
 ```tsx
 import Types from 'Types';
@@ -1180,10 +1194,10 @@ import { bindActionCreators, Dispatch } from 'redux';
 import { connect } from 'react-redux';
 
 import { countersActions } from '../features/counters';
-import { SFCCounter, SFCCounterProps } from '../components';
+import { FCCounter } from '../components';
 
 // `state` parameter needs a type annotation to type-check the correct shape of a state object but also it'll be used by "type inference" to infer the type of returned props
-const mapStateToProps = (state: Types.RootState, ownProps: SFCCounterProps) => ({
+const mapStateToProps = (state: Types.RootState, ownProps: FCCounterProps) => ({
   count: state.counters.reduxCounter,
 });
 
@@ -1195,8 +1209,8 @@ const mapDispatchToProps = (dispatch: Dispatch<Types.RootAction>) => bindActionC
 }, dispatch);
 
 // NOTE: We don't need to pass generic type arguments to neither connect nor mapping functions because type inference will do all this work automatically. So there's really no reason to increase the noise ratio in your codebase!
-export const SFCCounterConnectedVerbose =
-  connect(mapStateToProps, mapDispatchToProps)(SFCCounter);
+export const FCCounterConnectedVerbose =
+  connect(mapStateToProps, mapDispatchToProps)(FCCounter);
 ```
 
 [⇧ back to top](#table-of-contents)
@@ -1430,7 +1444,7 @@ Using this solution you'll achieve better encapsulation for internal structure/n
 // 1. in `components/` folder create component file (`select.tsx`) with default export:
 
 // components/select.tsx
-const Select: React.SFC<Props> = (props) => {
+const Select: React.FC<Props> = (props) => {
 ...
 export default Select;
 
@@ -1526,7 +1540,7 @@ Related `ts-lint` rule: https://palantir.github.io/tslint/rules/interface-over-t
 ### - how to best initialize class instance or static properties?
 > Prefered modern style is to use class Property Initializers  
 ```tsx
-class StatefulCounterWithInitialCount extends React.Component<Props, State> {
+class ClassCounterWithInitialCount extends React.Component<Props, State> {
   // default props using Property Initializers
   static defaultProps: DefaultProps = {
     className: 'default-class',
@@ -1546,7 +1560,7 @@ class StatefulCounterWithInitialCount extends React.Component<Props, State> {
 ### - how to best declare component handler functions?
 > Prefered modern style is to use Class Fields with arrow functions  
 ```tsx
-class StatefulCounter extends React.Component<Props, State> {
+class ClassCounter extends React.Component<Props, State> {
 // handlers using Class Fields with arrow functions
   handleIncrement = () => {
     this.setState({ count: this.state.count + 1 });

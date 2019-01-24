@@ -22,8 +22,8 @@ Don't edit `README.md` directly - it is generated automatically from `README_SOU
 **Source code inject directives:**
 ```
 # Inject code block with highlighter
-::codeblock='playground/src/components/sfc-counter.tsx'::
+::codeblock='playground/src/components/fc-counter.tsx'::
 
 # Inject code block with highlighter and expander
-::expander='playground/src/components/sfc-counter.usage.tsx'::
+::expander='playground/src/components/fc-counter.usage.tsx'::
 ```
