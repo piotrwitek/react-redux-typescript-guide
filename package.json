@@ -1,0 +1,12 @@
+{
+  "devDependencies": {
+    "@types/node": "8.5.1",
+    "all-contributors-cli": "5.4.0"
+  },
+  "scripts": {
+    "ci-check": "npm run readme:generate",
+    "readme:generate": "node generate-readme",
+    "contributors:add": "all-contributors add",
+    "contributors:generate": "all-contributors generate"
+  }
+}
