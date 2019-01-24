@@ -29,7 +29,7 @@
     "noImplicitThis": true,
     "noUnusedLocals": true,
     "strict": true,
-    "strictFunctionTypes": false,
+    "strictFunctionTypes": true,
     "pretty": true,
     "removeComments": true,
     "sourceMap": true

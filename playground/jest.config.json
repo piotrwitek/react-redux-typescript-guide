@@ -14,8 +14,6 @@
       "tsConfigFile": "./tsconfig.json"
     }
   },
-  "setupFiles": [
-    "./jest.stubs.js"
-  ],
-  "setupTestFrameworkScriptFile": "./jest.tests.js"
+  "setupFiles": ["./jest.stubs.js"],
+  "testURL": "http://localhost/"
 }
