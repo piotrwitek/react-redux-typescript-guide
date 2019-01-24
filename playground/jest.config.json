@@ -1,7 +1,7 @@
 {
   "verbose": true,
   "transform": {
-    ".(ts|tsx)": "./node_modules/ts-jest/preprocessor.js"
+    ".(ts|tsx)": "ts-jest"
   },
   "testRegex": "(/spec/.*|\\.(test|spec))\\.(ts|tsx|js)$",
   "moduleFileExtensions": ["ts", "tsx", "js"],
@@ -11,11 +11,9 @@
   "globals": {
     "window": {},
     "ts-jest": {
-      "tsConfigFile": "./tsconfig.json"
+      "tsConfig": "./tsconfig.json"
     }
   },
-  "setupFiles": [
-    "./jest.stubs.js"
-  ],
-  "setupTestFrameworkScriptFile": "./jest.tests.js"
+  "setupFiles": ["./jest.stubs.js"],
+  "testURL": "http://localhost/"
 }

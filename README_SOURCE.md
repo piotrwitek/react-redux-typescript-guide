@@ -178,31 +178,7 @@ const handleChange = (ev: React.MouseEvent<HTMLDivElement>) => { ... }
 
 #### - counter component
 
-```tsx
-import * as React from 'react';
-
-export interface SFCCounterProps {
-  label: string;
-  count: number;
-  onIncrement: () => any;
-}
-
-export const SFCCounter: React.SFC<SFCCounterProps> = (props) => {
-  const { label, count, onIncrement } = props;
-
-  const handleIncrement = () => { onIncrement(); };
-
-  return (
-    <div>
-      <span>{label}: {count} </span>
-      <button type="button" onClick={handleIncrement}>
-        {`Increment`}
-      </button>
-    </div>
-  );
-};
-
-```
+::codeblock='playground/src/components/sfc-counter.tsx'::
 
 [⟩⟩⟩ demo](https://piotrwitek.github.io/react-redux-typescript-guide/#sfccounter)
 
@@ -210,25 +186,7 @@ export const SFCCounter: React.SFC<SFCCounterProps> = (props) => {
 
 #### - spread attributes [link](https://facebook.github.io/react/docs/jsx-in-depth.html#spread-attributes)
 
-```tsx
-import * as React from 'react';
-
-export interface SFCSpreadAttributesProps {
-  className?: string;
-  style?: React.CSSProperties;
-}
-
-export const SFCSpreadAttributes: React.SFC<SFCSpreadAttributesProps> = (props) => {
-  const { children, ...restProps } = props;
-
-  return (
-    <div {...restProps}>
-      {children}
-    </div>
-  );
-};
-
-```
+::codeblock='playground/src/components/sfc-spread-attributes.tsx'::
 
 [⟩⟩⟩ demo](https://piotrwitek.github.io/react-redux-typescript-guide/#sfcspreadattributes)
 
@@ -240,43 +198,7 @@ export const SFCSpreadAttributes: React.SFC<SFCSpreadAttributesProps> = (props) 
 
 #### - class counter
 
-```tsx
-import * as React from 'react';
-
-export interface StatefulCounterProps {
-  label: string;
-}
-
-interface State {
-  readonly count: number;
-}
-
-export class StatefulCounter extends React.Component<StatefulCounterProps, State> {
-  readonly state: State = {
-    count: 0,
-  };
-
-  handleIncrement = () => {
-    this.setState({ count: this.state.count + 1 });
-  }
-
-  render() {
-    const { handleIncrement } = this;
-    const { label } = this.props;
-    const { count } = this.state;
-
-    return (
-      <div>
-        <span>{label}: {count} </span>
-        <button type="button" onClick={handleIncrement}>
-          {`Increment`}
-        </button>
-      </div>
-    );
-  }
-}
-
-```
+::codeblock='playground/src/components/stateful-counter.tsx'::
 
 [⟩⟩⟩ demo](https://piotrwitek.github.io/react-redux-typescript-guide/#classcounter)
 
@@ -284,56 +206,7 @@ export class StatefulCounter extends React.Component<StatefulCounterProps, State
 
 #### - with default props
 
-```tsx
-import * as React from 'react';
-
-type Props = Readonly<{
-  label: string;
-  initialCount: number;
-}>;
-
-type State = Readonly<{
-  count: number;
-}>;
-
-export class StatefulCounterWithDefault extends React.Component<Props, State> {
-  static defaultProps = {
-    initialCount: 0,
-  };
-
-  readonly state: State = {
-    count: this.props.initialCount,
-  };
-
-  componentWillReceiveProps({ initialCount }: Props) {
-    if (initialCount != null && initialCount !== this.props.initialCount) {
-      this.setState({ count: initialCount });
-    }
-  }
-
-  handleIncrement = () => {
-    this.setState({ count: this.state.count + 1 });
-  };
-
-  render() {
-    const { handleIncrement } = this;
-    const { label } = this.props;
-    const { count } = this.state;
-
-    return (
-      <div>
-        <span>
-          {label}: {count}{' '}
-        </span>
-        <button type="button" onClick={handleIncrement}>
-          {`Increment`}
-        </button>
-      </div>
-    );
-  }
-}
-
-```
+::codeblock='playground/src/components/stateful-counter-with-default.tsx'::
 
 [⟩⟩⟩ demo](https://piotrwitek.github.io/react-redux-typescript-guide/#classcounterwithdefault)
 
@@ -347,27 +220,7 @@ export class StatefulCounterWithDefault extends React.Component<Props, State> {
 
 #### - generic list
 
-```tsx
-import * as React from 'react';
-
-export interface GenericListProps<T> {
-  items: T[];
-  itemRenderer: (item: T) => JSX.Element;
-}
-
-export class GenericList<T> extends React.Component<GenericListProps<T>, {}> {
-  render() {
-    const { items, itemRenderer } = this.props;
-
-    return (
-      <div>
-        {items.map(itemRenderer)}
-      </div>
-    );
-  }
-}
-
-```
+::codeblock='playground/src/components/generic-list.tsx'::
 
 [⟩⟩⟩ demo](https://piotrwitek.github.io/react-redux-typescript-guide/#genericlist)
 
@@ -381,26 +234,7 @@ export class GenericList<T> extends React.Component<GenericListProps<T>, {}> {
 #### - name provider
 > simple component using children as a render prop
 
-```tsx
-import * as React from 'react';
-
-interface NameProviderProps {
-  children: (state: NameProviderState) => React.ReactNode;
-}
-
-interface NameProviderState {
-  readonly name: string;
-}
-
-export class NameProvider extends React.Component<NameProviderProps, NameProviderState> {
-  readonly state: NameProviderState = { name: 'Piotr' };
-
-  render() {
-    return this.props.children(this.state);
-  }
-}
-
-```
+::codeblock='playground/src/components/name-provider.tsx'::
 
 [⟩⟩⟩ demo](https://piotrwitek.github.io/react-redux-typescript-guide/#nameprovider)
 
@@ -409,42 +243,7 @@ export class NameProvider extends React.Component<NameProviderProps, NameProvide
 #### - mouse provider
 > `Mouse` component found in [Render Props React Docs](https://reactjs.org/docs/render-props.html#use-render-props-for-cross-cutting-concerns)
 
-```tsx
-import * as React from 'react';
-
-export interface MouseProviderProps {
-  render: (state: MouseProviderState) => React.ReactNode;
-}
-
-interface MouseProviderState {
-  readonly x: number;
-  readonly y: number;
-}
-
-export class MouseProvider extends React.Component<MouseProviderProps, MouseProviderState> {
-  readonly state: MouseProviderState = { x: 0, y: 0 };
-
-  handleMouseMove = (event: React.MouseEvent<HTMLDivElement>) => {
-    this.setState({
-      x: event.clientX,
-      y: event.clientY,
-    });
-  };
-
-  render() {
-    return (
-      <div style={{ height: '100%' }} onMouseMove={this.handleMouseMove}>
-        {/*
-          Instead of providing a static representation of what <Mouse> renders,
-          use the `render` prop to dynamically determine what to render.
-        */}
-        {this.props.render(this.state)}
-      </div>
-    );
-  }
-}
-
-```
+::codeblock='playground/src/components/mouse-provider.tsx'::
 
 [⟩⟩⟩ demo](https://piotrwitek.github.io/react-redux-typescript-guide/#mouseprovider)
 
@@ -458,167 +257,16 @@ export class MouseProvider extends React.Component<MouseProviderProps, MouseProv
 #### - withState
 Adds state to a stateless counter
 
-```tsx
-import * as React from 'react';
-import { Subtract } from 'utility-types';
-
-// These props will be subtracted from original component type
-interface InjectedProps {
-  count: number;
-  onIncrement: () => any;
-}
-
-export const withState = <WrappedProps extends InjectedProps>(
-  WrappedComponent: React.ComponentType<WrappedProps>
-) => {
-  // These props will be added to original component type
-  type HocProps = Subtract<WrappedProps, InjectedProps> & {
-    // here you can extend hoc props
-    initialCount?: number;
-  };
-  type HocState = {
-    readonly count: number;
-  };
-
-  return class WithState extends React.Component<HocProps, HocState> {
-    // Enhance component name for debugging and React-Dev-Tools
-    static displayName = `withState(${WrappedComponent.name})`;
-    // reference to original wrapped component
-    static readonly WrappedComponent = WrappedComponent;
-
-    readonly state: HocState = {
-      count: Number(this.props.initialCount) || 0,
-    };
-
-    handleIncrement = () => {
-      this.setState({ count: this.state.count + 1 });
-    };
-
-    render() {
-      const { ...restProps } = this.props as {};
-      const { count } = this.state;
-
-      return (
-        <WrappedComponent
-          {...restProps}
-          count={count} // injected
-          onIncrement={this.handleIncrement} // injected
-        />
-      );
-    }
-  };
-};
-
-```
-<details><summary><i>Click to expand</i></summary><p>
-
-```tsx
-import * as React from 'react';
-
-import { withState } from '../hoc';
-import { SFCCounter } from '../components';
-
-const SFCCounterWithState =
-  withState(SFCCounter);
-
-export default () => (
-  <SFCCounterWithState label={'SFCCounterWithState'} />
-);
-
-```
-</p></details>
+::codeblock='playground/src/hoc/with-state.tsx'::
+::expander='playground/src/hoc/with-state.usage.tsx'::
 
 [⇧ back to top](#table-of-contents)
 
 #### - withErrorBoundary
 Adds error handling using componentDidCatch to any component
 
-```tsx
-import * as React from 'react';
-import { Subtract } from 'utility-types';
-
-const MISSING_ERROR = 'Error was swallowed during propagation.';
-
-interface InjectedProps {
-  onReset: () => any;
-}
-
-export const withErrorBoundary = <WrappedProps extends InjectedProps>(
-  WrappedComponent: React.ComponentType<WrappedProps>
-) => {
-  type HocProps = Subtract<WrappedProps, InjectedProps> & {
-    // here you can extend hoc props
-  };
-  type HocState = {
-    readonly error: Error | null | undefined;
-  };
-
-  return class WithErrorBoundary extends React.Component<HocProps, HocState> {
-    static displayName = `withErrorBoundary(${WrappedComponent.name})`;
-
-    readonly state: HocState = {
-      error: undefined,
-    };
-
-    componentDidCatch(error: Error | null, info: object) {
-      this.setState({ error: error || new Error(MISSING_ERROR) });
-      this.logErrorToCloud(error, info);
-    }
-
-    logErrorToCloud = (error: Error | null, info: object) => {
-      // TODO: send error report to cloud
-    };
-
-    handleReset = () => {
-      this.setState({ error: undefined });
-    };
-
-    render() {
-      const { children, ...restProps } = this.props as {
-        children: React.ReactNode;
-      };
-      const { error } = this.state;
-
-      if (error) {
-        return (
-          <WrappedComponent
-            {...restProps}
-            onReset={this.handleReset} // injected
-          />
-        );
-      }
-
-      return children;
-    }
-  };
-};
-
-```
-<details><summary><i>Click to expand</i></summary><p>
-
-```tsx
-import * as React from 'react';
-
-import { withErrorBoundary } from '../hoc';
-import { ErrorMessage } from '../components';
-
-const ErrorMessageWithErrorBoundary =
-  withErrorBoundary(ErrorMessage);
-
-const BrokenButton = () => (
-  <button type="button" onClick={() => { throw new Error(`Catch me!`); }}>
-    {`Throw nasty error`}
-  </button >
-);
-
-export default () => (
-  <ErrorMessageWithErrorBoundary>
-    <BrokenButton />
-  </ErrorMessageWithErrorBoundary>
-);
-
-```
-</p></details>
+::codeblock='playground/src/hoc/with-error-boundary.tsx'::
+::expander='playground/src/hoc/with-error-boundary.usage.tsx'::
 
 [⇧ back to top](#table-of-contents)
 
@@ -642,113 +290,22 @@ const mapDispatchToProps = (dispatch: Dispatch<ActionType>) => ({
 
 #### - redux connected counter
 
-```tsx
-import Types from 'Types';
-import { connect } from 'react-redux';
-
-import { countersActions, countersSelectors } from '../features/counters';
-import { SFCCounter } from '../components';
-
-const mapStateToProps = (state: Types.RootState) => ({
-  count: countersSelectors.getReduxCounter(state.counters),
-});
-
-export const SFCCounterConnected = connect(mapStateToProps, {
-  onIncrement: countersActions.increment,
-})(SFCCounter);
-
-```
-<details><summary><i>Click to expand</i></summary><p>
-
-```tsx
-import * as React from 'react';
-
-import { SFCCounterConnected } from '../connected';
-
-export default () => (
-  <SFCCounterConnected
-    label={'SFCCounterConnected'}
-  />
-);
-
-```
-</p></details>
+::codeblock='playground/src/connected/sfc-counter-connected.tsx'::
+::expander='playground/src/connected/sfc-counter-connected.usage.tsx'::
 
 [⇧ back to top](#table-of-contents)
 
 #### - redux connected counter (verbose)
 
-```tsx
-import Types from 'Types';
-import { bindActionCreators, Dispatch } from 'redux';
-import { connect } from 'react-redux';
-
-import { countersActions } from '../features/counters';
-import { SFCCounter } from '../components';
-
-const mapStateToProps = (state: Types.RootState) => ({
-  count: state.counters.reduxCounter,
-});
-
-const mapDispatchToProps = (dispatch: Dispatch<Types.RootAction>) => bindActionCreators({
-  onIncrement: countersActions.increment,
-}, dispatch);
-
-export const SFCCounterConnectedVerbose =
-  connect(mapStateToProps, mapDispatchToProps)(SFCCounter);
-
-```
-<details><summary><i>Click to expand</i></summary><p>
-
-```tsx
-import * as React from 'react';
-
-import { SFCCounterConnectedVerbose } from '../connected';
-
-export default () => (
-  <SFCCounterConnectedVerbose
-    label={'SFCCounterConnectedVerbose'}
-  />
-);
-
-```
-</p></details>
+::codeblock='playground/src/connected/sfc-counter-connected-verbose.tsx'::
+::expander='playground/src/connected/sfc-counter-connected-verbose.usage.tsx'::
 
 [⇧ back to top](#table-of-contents)
 
 #### - with own props
 
-```tsx
-import Types from 'Types';
-import { connect } from 'react-redux';
-
-import { countersActions, countersSelectors } from '../features/counters';
-import { SFCCounter } from '../components';
-
-export interface SFCCounterConnectedExtendedProps {
-  initialCount: number;
-}
-
-const mapStateToProps = (state: Types.RootState, ownProps: SFCCounterConnectedExtendedProps) => ({
-  count: countersSelectors.getReduxCounter(state.counters) + ownProps.initialCount,
-});
-
-export const SFCCounterConnectedExtended = connect(mapStateToProps, {
-  onIncrement: countersActions.increment,
-})(SFCCounter);
-
-```
-<details><summary><i>Click to expand</i></summary><p>
-
-```tsx
-import * as React from 'react';
-
-import { SFCCounterConnectedExtended } from '../connected';
-
-export default () => <SFCCounterConnectedExtended label={'SFCCounterConnectedExtended'} initialCount={10} />;
-
-```
-</p></details>
+::codeblock='playground/src/connected/sfc-counter-connected-extended.tsx'::
+::expander='playground/src/connected/sfc-counter-connected-extended.usage.tsx'::
 
 [⇧ back to top](#table-of-contents)
 
@@ -759,56 +316,7 @@ export default () => <SFCCounterConnectedExtended label={'SFCCounterConnectedExt
 #### - useReducer
 Hook for state management like Redux in a function component.
 
-```tsx
-import * as React from 'react';
-
-interface State {
-  count: number;
-}
-
-type Action  =
-  | { type: 'reset' }
-  | { type: 'increment' }
-  | { type: 'decrement' };
-
-const initialState: State = {
-  count: 0,
-};
-
-function reducer(state: State, action: Action): State {
-  switch (action.type) {
-    case 'reset':
-      return initialState;
-    case 'increment':
-      return { count: state.count + 1 };
-    case 'decrement':
-      return { count: state.count - 1 };
-    default:
-      return state;
-  }
-}
-
-interface CounterProps {
-  initialCount: number;
-}
-
-function Counter({ initialCount }: CounterProps) {
-  const [state, dispatch] = React.useReducer<State, Action>(reducer, {
-    count: initialCount,
-  });
-  return (
-    <>
-      Count: {state.count}
-      <button onClick={() => dispatch({ type: 'reset' })}>Reset</button>
-      <button onClick={() => dispatch({ type: 'increment' })}>+</button>
-      <button onClick={() => dispatch({ type: 'decrement' })}>-</button>
-    </>
-  );
-}
-
-export default Counter;
-
-```
+::codeblock='playground/src/hooks/use-reducer.tsx'::
 
 [⇧ back to top](#table-of-contents)
 
@@ -825,47 +333,8 @@ export default Counter;
 
 A solution below is using a simple factory function to automate the creation of type-safe action creators. The goal is to decrease maintenance effort and reduce code repetition of type annotations for actions and creators. The result is completely typesafe action-creators and their actions.
 
-```tsx
-import { action } from 'typesafe-actions';
-
-import { ADD, INCREMENT } from './constants';
-
-// CLASSIC API
-export const increment = () => action(INCREMENT);
-export const add = (amount: number) => action(ADD, amount);
-
-// ALTERNATIVE API - allow to use reference to "action-creator" function instead of "type constant"
-// e.g. case getType(increment): return { ... }
-// This will allow to completely eliminate need for "constants" in your application, more info here:
-// https://github.com/piotrwitek/typesafe-actions#behold-the-mighty-tutorial
-
-// OPTION 1 (with generics):
-// import { createStandardAction } from 'typesafe-actions';
-// export const increment = createStandardAction(INCREMENT)<void>();
-// export const add = createStandardAction(ADD)<number>();
-
-// OPTION 2 (with resolve callback):
-// import { createAction } from 'typesafe-actions';
-// export const increment = createAction(INCREMENT);
-// export const add = createAction(ADD, resolve => {
-//   return (amount: number) => resolve(amount);
-// });
-
-```
-<details><summary><i>Click to expand</i></summary><p>
-
-```tsx
-import store from '../../store';
-import { countersActions as counter } from '../counters';
-
-// store.dispatch(counter.increment(1)); // Error: Expected 0 arguments, but got 1.
-store.dispatch(counter.increment()); // OK
-
-// store.dispatch(counter.add()); // Error: Expected 1 arguments, but got 0.
-store.dispatch(counter.add(1)); // OK
-
-```
-</p></details>
+::codeblock='playground/src/features/counters/actions.ts'::
+::expander='playground/src/features/counters/actions.usage.ts'::
 
 [⇧ back to top](#table-of-contents)
 
@@ -939,98 +408,13 @@ state.counterPairs[0].immutableCounter2 = 1; // TS Error: cannot be mutated
 ### Typing reducer
 > to understand following section make sure to learn about [Type Inference](https://www.typescriptlang.org/docs/handbook/type-inference.html), [Control flow analysis](https://github.com/Microsoft/TypeScript/wiki/What%27s-new-in-TypeScript#control-flow-based-type-analysis) and [Tagged union types](https://github.com/Microsoft/TypeScript/wiki/What%27s-new-in-TypeScript#tagged-union-types)
 
-```tsx
-import { combineReducers } from 'redux';
-import { ActionType } from 'typesafe-actions';
-
-import { Todo, TodosFilter } from './models';
-import * as actions from './actions';
-import { ADD, CHANGE_FILTER, TOGGLE } from './constants';
-
-export type TodosState = {
-  readonly todos: Todo[];
-  readonly todosFilter: TodosFilter;
-};
-
-export type TodosAction = ActionType<typeof actions>;
-
-export default combineReducers<TodosState, TodosAction>({
-  todos: (state = [], action) => {
-    switch (action.type) {
-      case ADD:
-        return [...state, action.payload];
-
-      case TOGGLE:
-        return state.map(
-          item =>
-            item.id === action.payload
-              ? { ...item, completed: !item.completed }
-              : item
-        );
-
-      default:
-        return state;
-    }
-  },
-  todosFilter: (state = TodosFilter.All, action) => {
-    switch (action.type) {
-      case CHANGE_FILTER:
-        return action.payload;
-
-      default:
-        return state;
-    }
-  },
-});
-
-```
+::codeblock='playground/src/features/todos/reducer.ts'::
 
 [⇧ back to top](#table-of-contents)
 
 ### Testing reducer
 
-```tsx
-import { todosReducer as reducer, todosActions as actions } from './';
-
-/**
- * FIXTURES
- */
-const activeTodo = { id: '1', completed: false, title: 'active todo' };
-const completedTodo = { id: '2', completed: true, title: 'completed todo' };
-
-const initialState = reducer(undefined, {} as any);
-
-/**
- * STORIES
- */
-describe('Todos Stories', () => {
-  describe('initial state', () => {
-    it('should match a snapshot', () => {
-      expect(initialState).toMatchSnapshot();
-    });
-  });
-
-  describe('adding todos', () => {
-    it('should add a new todo as the first element', () => {
-      const action = actions.add('new todo');
-      const state = reducer(initialState, action);
-      expect(state.todos).toHaveLength(1);
-      expect(state.todos[0].id).toEqual(action.payload.id);
-    });
-  });
-
-  describe('toggling completion state', () => {
-    it('should mark active todo as complete', () => {
-      const action = actions.toggle(activeTodo.id);
-      const state0 = { ...initialState, todos: [activeTodo] };
-      expect(state0.todos[0].completed).toBeFalsy();
-      const state1 = reducer(state0, action);
-      expect(state1.todos[0].completed).toBeTruthy();
-    });
-  });
-});
-
-```
+::codeblock='playground/src/features/todos/reducer.spec.ts'::
 
 [⇧ back to top](#table-of-contents)
 
@@ -1046,19 +430,7 @@ Can be imported in connected components to provide type-safety to Redux `connect
 #### `RootAction` - type representing union type of all action objects
 Can be imported in various layers receiving or sending redux actions like: reducers, sagas or redux-observables epics
 
-```tsx
-import { StateType } from 'typesafe-actions';
-import { RouterAction, LocationChangeAction } from 'react-router-redux';
-type ReactRouterAction = RouterAction | LocationChangeAction;
-import { CountersAction } from '../features/counters';
-import rootReducer from './root-reducer';
-
-declare module 'Types' {
-  export type RootState = StateType<typeof rootReducer>;
-  export type RootAction = ReactRouterAction | CountersAction;
-}
-
-```
+::codeblock='playground/src/store/types.d.ts'::
 
 [⇧ back to top](#table-of-contents)
 
@@ -1067,35 +439,7 @@ declare module 'Types' {
 When creating a store instance we don't need to provide any additional types. It will set-up a **type-safe Store instance** using type inference.
 > The resulting store instance methods like `getState` or `dispatch` will be type checked and will expose all type errors
 
-```tsx
-import { createStore, applyMiddleware } from 'redux';
-import { createEpicMiddleware } from 'redux-observable';
-
-import { composeEnhancers } from './utils';
-import rootReducer from './root-reducer';
-import rootEpic from './root-epic';
-import services from '../services';
-
-export const epicMiddleware = createEpicMiddleware(rootEpic, {
-  dependencies: services,
-});
-
-function configureStore(initialState?: object) {
-  // configure middlewares
-  const middlewares = [epicMiddleware];
-  // compose enhancers
-  const enhancer = composeEnhancers(applyMiddleware(...middlewares));
-  // create store
-  return createStore(rootReducer, initialState!, enhancer);
-}
-
-// pass an optional param to rehydrate state on app start
-const store = configureStore();
-
-// export store singleton instance
-export default store;
-
-```
+::codeblock='playground/src/store/store.ts'::
 
 ---
 
@@ -1105,33 +449,7 @@ export default store;
 
 ### For more examples and in-depth explanation you should read [The Mighty Tutorial](https://github.com/piotrwitek/typesafe-actions#behold-the-mighty-tutorial) to learn it all the easy way!
 
-```tsx
-import Types from 'Types';
-import { combineEpics, Epic } from 'redux-observable';
-import { tap, ignoreElements, filter } from 'rxjs/operators';
-import { isOfType } from 'typesafe-actions';
-
-import { todosConstants, TodosAction } from '../todos';
-
-// contrived example!!!
-const logAddAction: Epic<TodosAction, Types.RootState, Types.Services> = (
-  action$,
-  store,
-  { logger }
-) =>
-  action$.pipe(
-    filter(isOfType(todosConstants.ADD)), // action is narrowed to: { type: "ADD_TODO"; payload: string; }
-    tap(action => {
-      logger.log(
-        `action type must be equal: ${todosConstants.ADD} === ${action.type}`
-      );
-    }),
-    ignoreElements()
-  );
-
-export default combineEpics(logAddAction);
-
-```
+::codeblock='playground/src/features/todos/epics.ts'::
 
 [⇧ back to top](#table-of-contents)
 
@@ -1141,28 +459,7 @@ export default combineEpics(logAddAction);
 
 ### "reselect"
 
-```tsx
-import { createSelector } from 'reselect';
-
-import { TodosState } from './reducer';
-
-export const getTodos = (state: TodosState) => state.todos;
-
-export const getTodosFilter = (state: TodosState) => state.todosFilter;
-
-export const getFilteredTodos = createSelector(getTodos, getTodosFilter, (todos, todosFilter) => {
-  switch (todosFilter) {
-    case 'completed':
-      return todos.filter(t => t.completed);
-    case 'active':
-      return todos.filter(t => !t.completed);
-
-    default:
-      return todos;
-  }
-});
-
-```
+::codeblock='playground/src/features/todos/selectors.ts'::
 
 [⇧ back to top](#table-of-contents)
 
@@ -1215,73 +512,7 @@ export const SFCCounterConnectedVerbose =
 - Add additional `react` specific rules: `npm i -D tslint-react` https://github.com/palantir/tslint-react  
 - Overwritten some defaults for more flexibility  
 
-<details><summary><i>Click to expand</i></summary><p>
-
-```tsx
-{
-  "extends": ["tslint:recommended", "tslint-react"],
-  "rules": {
-    "arrow-parens": false,
-    "arrow-return-shorthand": [false],
-    "comment-format": [true, "check-space"],
-    "import-blacklist": [true],
-    "interface-over-type-literal": false,
-    "interface-name": false,
-    "max-line-length": [true, 120],
-    "member-access": false,
-    "member-ordering": [true, { "order": "fields-first" }],
-    "newline-before-return": false,
-    "no-any": false,
-    "no-empty-interface": false,
-    "no-import-side-effect": [true],
-    "no-inferrable-types": [true, "ignore-params", "ignore-properties"],
-    "no-invalid-this": [true, "check-function-in-method"],
-    "no-namespace": false,
-    "no-null-keyword": false,
-    "no-require-imports": false,
-    "no-submodule-imports": [true, "@src", "rxjs"],
-    "no-this-assignment": [true, { "allow-destructuring": true }],
-    "no-trailing-whitespace": true,
-    "object-literal-sort-keys": false,
-    "object-literal-shorthand": false,
-    "one-variable-per-declaration": [false],
-    "only-arrow-functions": [true, "allow-declarations"],
-    "ordered-imports": [false],
-    "prefer-method-signature": false,
-    "prefer-template": [true, "allow-single-concat"],
-    "quotemark": [true, "single", "jsx-double"],
-    "semicolon": [true, "always", "ignore-bound-class-methods"],
-    "trailing-comma": [
-      true,
-      {
-        "singleline": "never",
-        "multiline": {
-          "objects": "always",
-          "arrays": "always",
-          "functions": "ignore",
-          "typeLiterals": "ignore"
-        },
-        "esSpecCompliant": true
-      }
-    ],
-    "triple-equals": [true, "allow-null-check"],
-    "type-literal-delimiter": true,
-    "typedef": [true, "parameter", "property-declaration"],
-    "variable-name": [
-      true,
-      "ban-keywords",
-      "check-format",
-      "allow-pascal-case",
-      "allow-leading-underscore"
-    ],
-    // tslint-react
-    "jsx-no-multiline-js": false,
-    "jsx-no-lambda": false
-  }
-}
-
-```
-</p></details>
+::expander='playground/tslint.json'::
 
 [⇧ back to top](#table-of-contents)
 
@@ -1291,58 +522,10 @@ export const SFCCounterConnectedVerbose =
 `npm i -D jest ts-jest @types/jest`
 
 #### jest.config.json
-<details><summary><i>Click to expand</i></summary><p>
-
-```tsx
-{
-  "verbose": true,
-  "transform": {
-    ".(ts|tsx)": "ts-jest"
-  },
-  "testRegex": "(/spec/.*|\\.(test|spec))\\.(ts|tsx|js)$",
-  "moduleFileExtensions": ["ts", "tsx", "js"],
-  "moduleNameMapper": {
-    "^Components/(.*)": "./src/components/$1"
-  },
-  "globals": {
-    "window": {},
-    "ts-jest": {
-      "tsConfig": "./tsconfig.json"
-    }
-  },
-  "setupFiles": ["./jest.stubs.js"],
-  "testURL": "http://localhost/"
-}
-
-```
-</p></details>
+::expander='playground/jest.config.json'::
 
 #### jest.stubs.js
-<details><summary><i>Click to expand</i></summary><p>
-
-```tsx
-// Global/Window object Stubs for Jest
-window.matchMedia = window.matchMedia || function () {
-  return {
-    matches: false,
-    addListener: function () { },
-    removeListener: function () { },
-  };
-};
-
-window.requestAnimationFrame = function (callback) {
-  setTimeout(callback);
-};
-
-window.localStorage = {
-  getItem: function () { },
-  setItem: function () { },
-};
-
-Object.values = () => [];
-
-```
-</p></details>
+::expander='playground/jest.stubs.js'::
 
 [⇧ back to top](#table-of-contents)
 
@@ -1378,48 +561,7 @@ Object.values = () => [];
 - Install [`tslib`](https://www.npmjs.com/package/tslib) to cut on bundle size, by using external runtime helpers instead of adding them inline: `npm i tslib`  
 - Example "paths" setup for baseUrl relative imports with Webpack  
 
-<details><summary><i>Click to expand</i></summary><p>
-
-```tsx
-{
-  "compilerOptions": {
-    "baseUrl": "./", // relative paths base
-    "paths": {
-      // "@src/*": ["src/*"] // will enable import aliases -> import { ... } from '@src/components'
-      // WARNING: Require to add this to your webpack config -> resolve: { alias: { '@src': PATH_TO_SRC } }
-      // "redux": ["typings/redux"], // override library types with your alternative type-definitions in typings folder
-    },
-    "outDir": "dist/", // target for compiled files
-    "allowSyntheticDefaultImports": true, // no errors with commonjs modules interop
-    "esModuleInterop": true, // enable to do "import React ..." instead of "import * as React ..."
-    "allowJs": true, // include js files
-    "checkJs": true, // typecheck js files
-    "declaration": false, // don't emit declarations
-    "emitDecoratorMetadata": true, // include only if using decorators
-    "experimentalDecorators": true, // include only if using decorators
-    "forceConsistentCasingInFileNames": true,
-    "importHelpers": true, // importing transpilation helpers from tslib
-    "noEmitHelpers": true, // disable inline transpilation helpers in each file
-    "jsx": "react", // transform JSX
-    "lib": ["dom", "es2017"], // you will need to include polyfills for es2017 manually
-    "types": ["jest"], // which global types to use
-    "target": "es5", // "es2015" for ES6+ engines
-    "module": "es2015", // "es2015" for tree-shaking
-    "moduleResolution": "node",
-    "noEmitOnError": true,
-    "noFallthroughCasesInSwitch": true,
-    "noUnusedLocals": true,
-    "strict": true,
-    "pretty": true,
-    "removeComments": true,
-    "sourceMap": true
-  },
-  "include": ["src", "typings"],
-  "exclude": ["src/**/*.spec.*"]
-}
-
-```
-</p></details>
+::expander='playground/tsconfig.json'::
 
 [⇧ back to top](#table-of-contents)
 
@@ -1479,12 +621,7 @@ declare module 'rxjs/Subject' {
 
 #### To quick-fix missing type-definitions for vendor modules you can "assert" a module type with `any` using [Shorthand Ambient Modules](https://github.com/Microsoft/TypeScript-Handbook/blob/master/pages/Modules.md#shorthand-ambient-modules)
 
-```tsx
-// typings/modules.d.ts
-declare module 'Types';
-declare module 'react-test-renderer';
-
-```
+::codeblock='playground/typings/modules.d.ts'::
 
 > More advanced scenarios for working with vendor type-definitions can be found here [Official TypeScript Docs](https://github.com/Microsoft/TypeScript-Handbook/blob/master/pages/Modules.md#working-with-other-javascript-libraries)
 
