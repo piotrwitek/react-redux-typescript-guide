@@ -1,19 +1,23 @@
 import * as React from 'react';
 
-export interface SFCCounterProps {
+type Props = {
   label: string;
   count: number;
   onIncrement: () => any;
-}
+};
 
-export const SFCCounter: React.SFC<SFCCounterProps> = (props) => {
+export const FCCounter: React.FC<Props> = props => {
   const { label, count, onIncrement } = props;
 
-  const handleIncrement = () => { onIncrement(); };
+  const handleIncrement = () => {
+    onIncrement();
+  };
 
   return (
     <div>
-      <span>{label}: {count} </span>
+      <span>
+        {label}: {count}{' '}
+      </span>
       <button type="button" onClick={handleIncrement}>
         {`Increment`}
       </button>

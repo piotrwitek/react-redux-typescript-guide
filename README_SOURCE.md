@@ -176,19 +176,19 @@ const handleChange = (ev: React.MouseEvent<HTMLDivElement>) => { ... }
 
 ## Function Components - FC
 
-#### - counter component
+#### - FC counter
 
-::codeblock='playground/src/components/sfc-counter.tsx'::
+::codeblock='playground/src/components/fc-counter.tsx'::
 
-[⟩⟩⟩ demo](https://piotrwitek.github.io/react-redux-typescript-guide/#sfccounter)
+[⟩⟩⟩ demo](https://piotrwitek.github.io/react-redux-typescript-guide/#fccounter)
 
 [⇧ back to top](#table-of-contents)
 
 #### - spread attributes [link](https://facebook.github.io/react/docs/jsx-in-depth.html#spread-attributes)
 
-::codeblock='playground/src/components/sfc-spread-attributes.tsx'::
+::codeblock='playground/src/components/fc-spread-attributes.tsx'::
 
-[⟩⟩⟩ demo](https://piotrwitek.github.io/react-redux-typescript-guide/#sfcspreadattributes)
+[⟩⟩⟩ demo](https://piotrwitek.github.io/react-redux-typescript-guide/#fcspreadattributes)
 
 [⇧ back to top](#table-of-contents)
 
@@ -198,7 +198,7 @@ const handleChange = (ev: React.MouseEvent<HTMLDivElement>) => { ... }
 
 #### - class counter
 
-::codeblock='playground/src/components/stateful-counter.tsx'::
+::codeblock='playground/src/components/class-counter.tsx'::
 
 [⟩⟩⟩ demo](https://piotrwitek.github.io/react-redux-typescript-guide/#classcounter)
 
@@ -206,9 +206,9 @@ const handleChange = (ev: React.MouseEvent<HTMLDivElement>) => { ... }
 
 #### - with default props
 
-::codeblock='playground/src/components/stateful-counter-with-default.tsx'::
+::codeblock='playground/src/components/class-counter-with-default-props.tsx'::
 
-[⟩⟩⟩ demo](https://piotrwitek.github.io/react-redux-typescript-guide/#classcounterwithdefault)
+[⟩⟩⟩ demo](https://piotrwitek.github.io/react-redux-typescript-guide/#classcounterwithdefaultprops)
 
 [⇧ back to top](#table-of-contents)
 
@@ -290,22 +290,22 @@ const mapDispatchToProps = (dispatch: Dispatch<ActionType>) => ({
 
 #### - redux connected counter
 
-::codeblock='playground/src/connected/sfc-counter-connected.tsx'::
-::expander='playground/src/connected/sfc-counter-connected.usage.tsx'::
+::codeblock='playground/src/connected/fc-counter-connected.tsx'::
+::expander='playground/src/connected/fc-counter-connected.usage.tsx'::
 
 [⇧ back to top](#table-of-contents)
 
 #### - redux connected counter (verbose)
 
-::codeblock='playground/src/connected/sfc-counter-connected-verbose.tsx'::
-::expander='playground/src/connected/sfc-counter-connected-verbose.usage.tsx'::
+::codeblock='playground/src/connected/fc-counter-connected-verbose.tsx'::
+::expander='playground/src/connected/fc-counter-connected-verbose.usage.tsx'::
 
 [⇧ back to top](#table-of-contents)
 
 #### - with own props
 
-::codeblock='playground/src/connected/sfc-counter-connected-extended.tsx'::
-::expander='playground/src/connected/sfc-counter-connected-extended.usage.tsx'::
+::codeblock='playground/src/connected/fc-counter-connected-extended.tsx'::
+::expander='playground/src/connected/fc-counter-connected-extended.usage.tsx'::
 
 [⇧ back to top](#table-of-contents)
 
@@ -468,7 +468,7 @@ When creating a store instance we don't need to provide any additional types. It
 ## Typing connect
 
 Below snippet can be find in the `playground/` folder, you can checkout the repo and follow all dependencies to understand the bigger picture.
-`playground/src/connected/sfc-counter-connected-verbose.tsx`
+`playground/src/connected/fc-counter-connected-verbose.tsx`
 
 ```tsx
 import Types from 'Types';
@@ -477,10 +477,10 @@ import { bindActionCreators, Dispatch } from 'redux';
 import { connect } from 'react-redux';
 
 import { countersActions } from '../features/counters';
-import { SFCCounter, SFCCounterProps } from '../components';
+import { FCCounter } from '../components';
 
 // `state` parameter needs a type annotation to type-check the correct shape of a state object but also it'll be used by "type inference" to infer the type of returned props
-const mapStateToProps = (state: Types.RootState, ownProps: SFCCounterProps) => ({
+const mapStateToProps = (state: Types.RootState, ownProps: FCCounterProps) => ({
   count: state.counters.reduxCounter,
 });
 
@@ -492,8 +492,8 @@ const mapDispatchToProps = (dispatch: Dispatch<Types.RootAction>) => bindActionC
 }, dispatch);
 
 // NOTE: We don't need to pass generic type arguments to neither connect nor mapping functions because type inference will do all this work automatically. So there's really no reason to increase the noise ratio in your codebase!
-export const SFCCounterConnectedVerbose =
-  connect(mapStateToProps, mapDispatchToProps)(SFCCounter);
+export const FCCounterConnectedVerbose =
+  connect(mapStateToProps, mapDispatchToProps)(FCCounter);
 ```
 
 [⇧ back to top](#table-of-contents)
@@ -572,7 +572,7 @@ Using this solution you'll achieve better encapsulation for internal structure/n
 // 1. in `components/` folder create component file (`select.tsx`) with default export:
 
 // components/select.tsx
-const Select: React.SFC<Props> = (props) => {
+const Select: React.FC<Props> = (props) => {
 ...
 export default Select;
 

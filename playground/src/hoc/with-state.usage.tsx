@@ -1,11 +1,8 @@
 import * as React from 'react';
 
 import { withState } from '../hoc';
-import { SFCCounter } from '../components';
+import { FCCounter } from '../components';
 
-const SFCCounterWithState =
-  withState(SFCCounter);
+const FCCounterWithState = withState(FCCounter);
 
-export default () => (
-  <SFCCounterWithState label={'SFCCounterWithState'} />
-);
+export default () => <FCCounterWithState label={'FCCounterWithState'} />;

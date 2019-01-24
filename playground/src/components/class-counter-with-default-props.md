@@ -1,10 +1,10 @@
 Usage:
-```jsx { "filePath": "./stateful-counter-with-default.usage.tsx" }
+```jsx { "filePath": "./class-counter-with-default-props.usage.tsx" }
 ```
 
 Usage Demo:
 ```jsx 
-const Demo = require('./stateful-counter-with-default.usage').default;
+const Demo = require('./class-counter-with-default-props.usage').default;
 <Demo />
 ```
 

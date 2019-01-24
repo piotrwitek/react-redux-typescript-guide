@@ -1,14 +1,14 @@
 import * as React from 'react';
 
-import { SFCCounter } from '../components';
+import { FCCounter } from '.';
 
 export default class extends React.Component<{}, { count: number }> {
   state = { count: 0 };
 
   render() {
     return (
-      <SFCCounter
-        label={'SFCCounter'}
+      <FCCounter
+        label={'FCCounter'}
         count={this.state.count}
         onIncrement={() => {
           this.setState({ count: this.state.count + 1 });
