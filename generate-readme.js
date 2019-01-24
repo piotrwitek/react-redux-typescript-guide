@@ -39,7 +39,7 @@ ${'```'}
 
 function withDetailsWrapper(text) {
     return `
-<details style="background: #f6f8fa;border-radius: 3px;"><summary style="padding: 6px 12px;border-radius: 3px;"><i>Click to expand</i></summary><p>
+<details><summary><i>Click to expand</i></summary><p>
 
 ${'```tsx'}
 ${text}

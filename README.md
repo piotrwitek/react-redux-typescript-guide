@@ -510,7 +510,7 @@ export const withState = <WrappedProps extends InjectedProps>(
 };
 
 ```
-<details style="background: #f6f8fa;border-radius: 3px;"><summary style="padding: 6px 12px;border-radius: 3px;"><i>Click to expand</i></summary><p>
+<details><summary><i>Click to expand</i></summary><p>
 
 ```tsx
 import * as React from 'react';
@@ -594,7 +594,7 @@ export const withErrorBoundary = <WrappedProps extends InjectedProps>(
 };
 
 ```
-<details style="background: #f6f8fa;border-radius: 3px;"><summary style="padding: 6px 12px;border-radius: 3px;"><i>Click to expand</i></summary><p>
+<details><summary><i>Click to expand</i></summary><p>
 
 ```tsx
 import * as React from 'react';
@@ -658,7 +658,7 @@ export const SFCCounterConnected = connect(mapStateToProps, {
 })(SFCCounter);
 
 ```
-<details style="background: #f6f8fa;border-radius: 3px;"><summary style="padding: 6px 12px;border-radius: 3px;"><i>Click to expand</i></summary><p>
+<details><summary><i>Click to expand</i></summary><p>
 
 ```tsx
 import * as React from 'react';
@@ -698,7 +698,7 @@ export const SFCCounterConnectedVerbose =
   connect(mapStateToProps, mapDispatchToProps)(SFCCounter);
 
 ```
-<details style="background: #f6f8fa;border-radius: 3px;"><summary style="padding: 6px 12px;border-radius: 3px;"><i>Click to expand</i></summary><p>
+<details><summary><i>Click to expand</i></summary><p>
 
 ```tsx
 import * as React from 'react';
@@ -738,7 +738,7 @@ export const SFCCounterConnectedExtended = connect(mapStateToProps, {
 })(SFCCounter);
 
 ```
-<details style="background: #f6f8fa;border-radius: 3px;"><summary style="padding: 6px 12px;border-radius: 3px;"><i>Click to expand</i></summary><p>
+<details><summary><i>Click to expand</i></summary><p>
 
 ```tsx
 import * as React from 'react';
@@ -852,7 +852,7 @@ export const add = (amount: number) => action(ADD, amount);
 // });
 
 ```
-<details style="background: #f6f8fa;border-radius: 3px;"><summary style="padding: 6px 12px;border-radius: 3px;"><i>Click to expand</i></summary><p>
+<details><summary><i>Click to expand</i></summary><p>
 
 ```tsx
 import store from '../../store';
@@ -1215,7 +1215,7 @@ export const SFCCounterConnectedVerbose =
 - Add additional `react` specific rules: `npm i -D tslint-react` https://github.com/palantir/tslint-react  
 - Overwritten some defaults for more flexibility  
 
-<details style="background: #f6f8fa;border-radius: 3px;"><summary style="padding: 6px 12px;border-radius: 3px;"><i>Click to expand</i></summary><p>
+<details><summary><i>Click to expand</i></summary><p>
 
 ```tsx
 {
@@ -1291,7 +1291,7 @@ export const SFCCounterConnectedVerbose =
 `npm i -D jest ts-jest @types/jest`
 
 #### jest.config.json
-<details style="background: #f6f8fa;border-radius: 3px;"><summary style="padding: 6px 12px;border-radius: 3px;"><i>Click to expand</i></summary><p>
+<details><summary><i>Click to expand</i></summary><p>
 
 ```tsx
 {
@@ -1318,7 +1318,7 @@ export const SFCCounterConnectedVerbose =
 </p></details>
 
 #### jest.stubs.js
-<details style="background: #f6f8fa;border-radius: 3px;"><summary style="padding: 6px 12px;border-radius: 3px;"><i>Click to expand</i></summary><p>
+<details><summary><i>Click to expand</i></summary><p>
 
 ```tsx
 // Global/Window object Stubs for Jest
@@ -1378,7 +1378,7 @@ Object.values = () => [];
 - Install [`tslib`](https://www.npmjs.com/package/tslib) to cut on bundle size, by using external runtime helpers instead of adding them inline: `npm i tslib`  
 - Example "paths" setup for baseUrl relative imports with Webpack  
 
-<details style="background: #f6f8fa;border-radius: 3px;"><summary style="padding: 6px 12px;border-radius: 3px;"><i>Click to expand</i></summary><p>
+<details><summary><i>Click to expand</i></summary><p>
 
 ```tsx
 {
