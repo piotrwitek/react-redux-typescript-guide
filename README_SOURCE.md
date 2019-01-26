@@ -52,6 +52,7 @@ This gives you the power to prioritize our work and support the project contribu
   - [Render Props](#render-props) 🌟 __NEW__
   - [Higher-Order Components](#higher-order-components) 📝 __UPDATED__
   - [Redux Connected Components](#redux-connected-components)
+  - [Context](#context)
   - [Hooks](#hooks)
 - [Redux](#redux)
   - [Action Creators](#action-creators) 📝 __UPDATED__
@@ -306,6 +307,30 @@ const mapDispatchToProps = (dispatch: Dispatch<ActionType>) => ({
 
 ::codeblock='playground/src/connected/fc-counter-connected-extended.tsx'::
 ::expander='playground/src/connected/fc-counter-connected-extended.usage.tsx'::
+
+[⇧ back to top](#table-of-contents)
+
+## Context
+
+> https://reactjs.org/docs/context.html
+
+#### ThemeContext
+
+::codeblock='playground/src/context/theme-context.ts'::
+
+[⇧ back to top](#table-of-contents)
+
+#### ThemeProvider
+
+::codeblock='playground/src/context/theme-provider.tsx'::
+
+[⇧ back to top](#table-of-contents)
+
+#### ThemeConsumer
+
+::codeblock='playground/src/context/theme-consumer.tsx'::
+
+[Implementation with Hooks](#--usecontext)
 
 [⇧ back to top](#table-of-contents)
 

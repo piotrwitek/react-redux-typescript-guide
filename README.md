@@ -52,6 +52,7 @@ This gives you the power to prioritize our work and support the project contribu
   - [Render Props](#render-props) 🌟 __NEW__
   - [Higher-Order Components](#higher-order-components) 📝 __UPDATED__
   - [Redux Connected Components](#redux-connected-components)
+  - [Context](#context)
   - [Hooks](#hooks)
 - [Redux](#redux)
   - [Action Creators](#action-creators) 📝 __UPDATED__
@@ -763,6 +764,98 @@ export default () => (
 
 ```
 </p></details>
+
+[⇧ back to top](#table-of-contents)
+
+## Context
+
+> https://reactjs.org/docs/context.html
+
+#### ThemeContext
+
+```tsx
+import * as React from 'react';
+
+export type Theme = React.CSSProperties;
+
+type Themes = {
+  dark: Theme;
+  light: Theme;
+};
+
+export const themes: Themes = {
+  dark: {
+    color: 'black',
+    backgroundColor: 'white',
+  },
+  light: {
+    color: 'white',
+    backgroundColor: 'black',
+  },
+};
+
+export type ThemeContextProps = { theme: Theme; toggleTheme?: () => void };
+const ThemeContext = React.createContext<ThemeContextProps>({ theme: themes.light });
+
+export default ThemeContext;
+
+```
+
+[⇧ back to top](#table-of-contents)
+
+#### ThemeProvider
+
+```tsx
+import React from 'react';
+import ThemeContext, { themes, Theme } from './theme-context';
+import ToggleThemeButton from './theme-consumer';
+
+interface State {
+  theme: Theme;
+}
+export class ThemeProvider extends React.Component<{}, State> {
+  readonly state: State = { theme: themes.light };
+
+  toggleTheme = () => {
+    this.setState(state => ({
+      theme: state.theme === themes.light ? themes.dark : themes.light,
+    }));
+  }
+
+  render() {
+    const { theme } = this.state;
+    const { toggleTheme } = this;
+    return (
+      <ThemeContext.Provider value={{ theme, toggleTheme }}>
+        <ToggleThemeButton />
+      </ThemeContext.Provider>
+    );
+  }
+}
+
+```
+
+[⇧ back to top](#table-of-contents)
+
+#### ThemeConsumer
+
+```tsx
+import * as React from 'react';
+import ThemeContext from './theme-context';
+
+type Props = {};
+
+export default function ToggleThemeButton(props: Props) {
+  return (
+    <ThemeContext.Consumer>
+      {({ theme, toggleTheme }) => <button style={theme} onClick={toggleTheme} {...props} />}
+    </ThemeContext.Consumer>
+  );
+}
+
+```
+
+[Implementation with Hooks](#--usecontext)
 
 [⇧ back to top](#table-of-contents)
 
