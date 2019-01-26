@@ -52,7 +52,7 @@ This gives you the power to prioritize our work and support the project contribu
   - [Render Props](#render-props) 🌟 __NEW__
   - [Higher-Order Components](#higher-order-components) 📝 __UPDATED__
   - [Redux Connected Components](#redux-connected-components)
-  - [Context API](#context-api)
+  - [Context](#context)
   - [Hooks](#hooks)
 - [Redux](#redux)
   - [Action Creators](#action-creators) 📝 __UPDATED__
