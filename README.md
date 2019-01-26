@@ -770,6 +770,31 @@ export default () => (
 
 > https://reactjs.org/docs/hooks-intro.html
 
+#### - useState
+
+> https://reactjs.org/docs/hooks-reference.html#usestate
+
+```tsx
+import * as React from 'react';
+
+type Props = { initialCount: number };
+
+export default function Counter({initialCount}: Props) {
+  const [count, setCount] = React.useState(initialCount);
+  return (
+    <>
+      Count: {count}
+      <button onClick={() => setCount(initialCount)}>Reset</button>
+      <button onClick={() => setCount(prevCount => prevCount + 1)}>+</button>
+      <button onClick={() => setCount(prevCount => prevCount - 1)}>-</button>
+    </>
+  );
+}
+
+```
+
+[⇧ back to top](#table-of-contents)
+
 #### - useReducer
 Hook for state management like Redux in a function component.
 
