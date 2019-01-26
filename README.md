@@ -777,11 +777,9 @@ export default () => (
 ```tsx
 import * as React from 'react';
 
-interface CounterProps {
-  initialCount: number;
-}
+type Props = { initialCount: number };
 
-export default function Counter({initialCount}: CounterProps) {
+export default function Counter({initialCount}: Props) {
   const [count, setCount] = React.useState(initialCount);
   return (
     <>
