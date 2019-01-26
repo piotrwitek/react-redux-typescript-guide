@@ -309,6 +309,30 @@ const mapDispatchToProps = (dispatch: Dispatch<ActionType>) => ({
 
 [⇧ back to top](#table-of-contents)
 
+## Context API
+
+> https://reactjs.org/docs/context.html
+
+#### ThemeContext
+
+::codeblock='playground/src/context/theme-context.ts'::
+
+[⇧ back to top](#table-of-contents)
+
+#### ThemeProvider
+
+::codeblock='playground/src/context/theme-provider.tsx'::
+
+[⇧ back to top](#table-of-contents)
+
+#### ThemeConsumer
+
+::codeblock='playground/src/context/theme-consumer.tsx'::
+
+[Implementation with Hooks](#hooks)
+
+[⇧ back to top](#table-of-contents)
+
 ## Hooks
 
 > https://reactjs.org/docs/hooks-intro.html
