@@ -52,6 +52,7 @@ This gives you the power to prioritize our work and support the project contribu
   - [Render Props](#render-props) 🌟 __NEW__
   - [Higher-Order Components](#higher-order-components) 📝 __UPDATED__
   - [Redux Connected Components](#redux-connected-components)
+  - [Context API](#context-api)
   - [Hooks](#hooks)
 - [Redux](#redux)
   - [Action Creators](#action-creators) 📝 __UPDATED__
@@ -854,7 +855,7 @@ export default function ToggleThemeButton(props: Props) {
 
 ```
 
-[Implementation with Hooks](#hooks)
+[Implementation with Hooks](#--usecontext)
 
 [⇧ back to top](#table-of-contents)
 
