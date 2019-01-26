@@ -5,7 +5,7 @@ import ToggleThemeButton from './theme-consumer';
 interface State {
   theme: Theme;
 }
-export class App extends React.Component<{}, State> {
+export class ThemeProvider extends React.Component<{}, State> {
   readonly state: State = { theme: themes.light };
 
   toggleTheme = () => {
