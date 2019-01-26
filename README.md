@@ -782,7 +782,7 @@ interface CounterProps {
 }
 
 export default function Counter({initialCount}: CounterProps) {
-  const [count, setCount] = React.useState<number>(initialCount);
+  const [count, setCount] = React.useState(initialCount);
   return (
     <>
       Count: {count}
