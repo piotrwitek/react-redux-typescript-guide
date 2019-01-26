@@ -1,25 +1,11 @@
 import React from 'react';
+import ThemeContext, { themes, Theme } from './theme-context';
+import ToggleThemeButton from './theme-consumer';
 
-// Context
-const themes = {
-  dark: {
-    color: 'black',
-    backgroundColor: 'white',
-  } as React.CSSProperties,
-  light: {
-    color: 'white',
-    backgroundColor: 'black',
-  } as React.CSSProperties,
-};
-
-type Theme = { theme: React.CSSProperties; toggleTheme?: () => void };
-const ThemeContext = React.createContext<Theme>({ theme: themes.light });
-
-// Provider
 interface State {
-  theme: Theme['theme'];
+  theme: Theme;
 }
-export class App extends React.Component<{}, State> {
+export class ThemeProvider extends React.Component<{}, State> {
   readonly state: State = { theme: themes.light };
 
   toggleTheme = () => {
@@ -37,15 +23,4 @@ export class App extends React.Component<{}, State> {
       </ThemeContext.Provider>
     );
   }
-}
-
-// Consumer
-interface ThemedButtonProps {}
-
-function ToggleThemeButton(props: ThemedButtonProps) {
-  return (
-    <ThemeContext.Consumer>
-      {({ theme, toggleTheme }) => <button style={theme} onClick={toggleTheme} {...props} />}
-    </ThemeContext.Consumer>
-  );
 }
