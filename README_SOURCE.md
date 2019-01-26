@@ -330,7 +330,7 @@ const mapDispatchToProps = (dispatch: Dispatch<ActionType>) => ({
 
 ::codeblock='playground/src/context/theme-consumer.tsx'::
 
-[Implementation with Hooks](#hooks)
+[Implementation with Hooks](#--usecontext)
 
 [⇧ back to top](#table-of-contents)
 
