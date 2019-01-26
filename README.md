@@ -767,7 +767,7 @@ export default () => (
 
 [⇧ back to top](#table-of-contents)
 
-## Context API
+## Context
 
 > https://reactjs.org/docs/context.html
 

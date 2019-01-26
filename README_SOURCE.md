@@ -310,7 +310,7 @@ const mapDispatchToProps = (dispatch: Dispatch<ActionType>) => ({
 
 [⇧ back to top](#table-of-contents)
 
-## Context API
+## Context
 
 > https://reactjs.org/docs/context.html
 
