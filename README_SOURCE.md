@@ -313,6 +313,14 @@ const mapDispatchToProps = (dispatch: Dispatch<ActionType>) => ({
 
 > https://reactjs.org/docs/hooks-intro.html
 
+#### - useState
+
+> https://reactjs.org/docs/hooks-reference.html#usestate
+
+::codeblock='playground/src/hooks/use-state.tsx'::
+
+[⇧ back to top](#table-of-contents)
+
 #### - useReducer
 Hook for state management like Redux in a function component.
 
