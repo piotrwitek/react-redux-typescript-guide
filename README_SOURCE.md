@@ -320,6 +320,14 @@ Hook for state management like Redux in a function component.
 
 [⇧ back to top](#table-of-contents)
 
+#### - useContext
+
+> https://reactjs.org/docs/hooks-reference.html#usecontext
+
+::codeblock='playground/src/hooks/use-theme-context.tsx'::
+
+[⇧ back to top](#table-of-contents)
+
 ---
 
 # Redux
