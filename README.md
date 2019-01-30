@@ -73,6 +73,7 @@ This gives you the power to prioritize our work and support the project contribu
 - [Recipes](#recipes)
   - [Baseline tsconfig.json](#baseline-tsconfigjson)
   - [Default and Named Module Exports](#default-and-named-module-exports)
+  - [Imports in Module Decleration](#imports-in-module-decleration)
   - [Type Augmentation for npm libraries](#type-augmentation-for-npm-libraries)
   - [Override type-definitions for npm libraries](#override-type-definitions-for-npm-libraries)
 - [FAQ](#faq)
@@ -1604,6 +1605,18 @@ import Select from '@src/components/select';
 ...
 ```
 
+[⇧ back to top](#table-of-contents)
+
+### Imports in Module Decleration
+
+> When creating 3rd party modules declarations all the imports should be put inside the module decleration, otherwise it will be treated as augmentation and show error
+```ts
+declare module "react-custom-scrollbars" {
+    import * as React from "react";
+
+    export interface positionValues {
+    ...
+```
 [⇧ back to top](#table-of-contents)
 
 ### Type Augmentation for npm libraries
