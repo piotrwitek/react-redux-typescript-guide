@@ -1,26 +1,22 @@
 ## React & Redux in TypeScript - Static Typing Guide
 
-_"This guide is a **living compendium** documenting the most important patterns and recipes on how to use **React** (and its Ecosystem) in a **functional style with TypeScript** and to make your code **completely type-safe** while focusing on a **conciseness of type annotations** so it's a minimal effort to write and to maintain types in the long run."_
+_"This guide is a **living compendium** documenting the most important patterns and recipes on how to use **React** (and its Ecosystem) in a **functional style** using **TypeScript**. It will help you make your code **completely type-safe** while focusing on **inferring the types from implementation** so there is less noise coming from excessive type annotations and it's easier to write and maintain correct types in the long run."_
 
 [![Join the chat at https://gitter.im/react-redux-typescript-guide/Lobby](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/react-redux-typescript-guide/Lobby)  
+> #### _Found it useful? Want more updates?_ [**Show your support by giving a :star:**](https://github.com/piotrwitek/react-redux-typescript-guide/stargazers)  
 
-> #### _Found it useful? Want more updates?_ [**Show your support by giving a :star:**](https://github.com/piotrwitek/react-redux-typescript-patterns/stargazers)  
+:tada: _Now updated to be compatible with **TypeScript v3.1.6**_ :tada:  
 
-> _[The Mighty Tutorial](https://github.com/piotrwitek/typesafe-actions#behold-the-mighty-tutorial) for completely typesafe Redux Architecture_ :book:  
-
-> _Reference implementation of Todo-App with `typesafe-actions`: https://codesandbox.io/s/github/piotrwitek/typesafe-actions-todo-app_ :computer:  
-
-> _Now compatible with **TypeScript v2.8.3** (rewritten using conditional types)_ :tada:  
+:computer: _Reference implementation of Todo-App with `typesafe-actions`: https://codesandbox.io/s/github/piotrwitek/typesafe-actions-todo-app_ :computer:  
 
 ### Goals
 - Complete type safety (with [`--strict`](https://www.typescriptlang.org/docs/handbook/compiler-options.html) flag) without losing type information downstream through all the layers of our application (e.g. no type assertions or hacking with `any` type)
 - Make type annotations concise by eliminating redundancy in types using advanced TypeScript Language features like **Type Inference** and **Control flow analysis**
 - Reduce repetition and complexity of types with TypeScript focused [complementary libraries](#complementary-libraries)
 
-### Complementary Projects
-- Typesafe Action Creators for Redux / Flux Architectures [typesafe-actions](https://github.com/piotrwitek/typesafe-actions)
-- Utility Types for TypeScript: [utility-types](https://github.com/piotrwitek/utility-types)
-- Reference implementation of Todo-App: [typesafe-actions-todo-app](https://github.com/piotrwitek/typesafe-actions-todo-app)
+### Complementary Libraries
+- [utility-types](https://github.com/piotrwitek/utility-types) - Collection of generic types for TypeScript, complementing built-in mapped types and aliases - think lodash for reusable types.  
+- [typesafe-actions](https://github.com/piotrwitek/typesafe-actions) - Typesafe utilities for "action-creators" in Redux / Flux Architecture  
 
 ### Playground Project
 [![Build Status](https://semaphoreci.com/api/v1/piotrekwitek/react-redux-typescript-guide/branches/master/shields_badge.svg)](https://semaphoreci.com/piotrekwitek/react-redux-typescript-guide)
@@ -29,46 +25,45 @@ You should check out Playground Project located in the `/playground` folder. It 
 > Playground was created in such a way that you can simply clone the repository locally and immediately play around on your own. It will help you to learn all the examples from this guide in a real project environment without the need to create some complicated environment setup by yourself.
 
 ## Contributing Guide
-If you're planning to contribute please make sure to read the contributing guide: [CONTRIBUTING.md](/CONTRIBUTING.md)
+We are open for contributions. If you're planning to contribute please make sure to read the contributing guide: [CONTRIBUTING.md](/CONTRIBUTING.md)
 
 ## Sponsor
-If you like what we're doing here, you can help us by funding the work on specific issues that you choose by using IssueHunt.io!
+This is an independent open-source project created by people investing their free time for the benefit of our community.
 
-This gives you the power to prioritize our work and support the project contributors. Moreover it'll guarantee the project will be updated and maintained in the long run.
+If you are using it please consider donating as this will guarantee the project will be updated and maintained in the long run.
 
-> Sponsors are listed in the contributors section at the bottom. If you want to be removed please contact me at: piotrek.witek@gmail.com
+Issues can be funded by anyone and the money will be transparently distributed to the contributors handling a particular issue.
 
-[![issuehunt-image](https://github.com/BoostIO/issuehunt-materials/blob/master/issuehunt-badge@1x.png?raw=true)](https://issuehunt.io/repos/76996763)
+[![Let's fund issues in this repository](https://issuehunt.io/static/embed/issuehunt-button-v1.svg)](https://issuehunt.io/repos/76996763)
 
 ---
 
 ## Table of Contents
-- [Type Definitions & Complementary Libraries](#type-definitions--complementary-libraries)
-- [React Types Cheatsheet](#react-types-cheatsheet) 🌟 __NEW__
-- [Component Typing Patterns](#component-typing-patterns)
+- [Introduction](#introduction)
+- [React - Type-Definitions Cheatsheet](#react---type-definitions-cheatsheet)
+- [React - Typing Patterns](#react---typing-patterns)
   - [Function Components - FC](#function-components---fc)
-  - [Class Components ](#class-components) 📝 __UPDATED__
+  - [Class Components ](#class-components)
   - [Generic Components](#generic-components)
-  - [Render Props](#render-props) 🌟 __NEW__
-  - [Higher-Order Components](#higher-order-components) 📝 __UPDATED__
+  - [Render Props](#render-props)
+  - [Higher-Order Components](#higher-order-components)
   - [Redux Connected Components](#redux-connected-components)
-  - [Context](#context)
-  - [Hooks](#hooks)
-- [Redux](#redux)
-  - [Action Creators](#action-creators) 📝 __UPDATED__
-  - [Reducers](#reducers) 📝 __UPDATED__
+  - [Context](#context) 🌟 __NEW__
+  - [Hooks](#hooks) 🌟 __NEW__
+- [Redux - Typing Patterns](#redux---typing-patterns)
+  - [Action Creators](#action-creators)
+  - [Reducers](#reducers)
     - [State with Type-level Immutability](#state-with-type-level-immutability)
     - [Typing reducer](#typing-reducer)
     - [Testing reducer](#testing-reducer)
-  - [Store Configuration](#store-configuration) 📝 __UPDATED__
-  - [Async Flow](#async-flow) 📝 __UPDATED__
+  - [Store Configuration](#store-configuration)
+  - [Async Flow](#async-flow)
   - [Selectors](#selectors)
-  - [Typing connect](#typing-connect) 🌟 __NEW__
+  - [Typing connect](#typing-connect)
 - [Tools](#tools)
   - [TSLint](#tslint)
   - [Jest](#jest)
-  - [Enzyme](#enzyme)
-  - [Living Style Guide](#living-style-guide) 🌟 __NEW__
+  - [Living Style Guide](#living-style-guide)
   - [Common Npm Scripts](#common-npm-scripts)
 - [Recipes](#recipes)
   - [Baseline tsconfig.json](#baseline-tsconfigjson)
@@ -81,9 +76,9 @@ This gives you the power to prioritize our work and support the project contribu
 
 ---
 
-# Type Definitions & Complementary Libraries
+# Introduction
 
-### Type Definitions for React & Redux
+### Type-Definitions for React & Redux
 ```
 npm i -D @types/react @types/react-dom @types/react-redux
 ```
@@ -93,19 +88,13 @@ npm i -D @types/react @types/react-dom @types/react-redux
 "redux" - (types included with npm package)*  
 "react-redux" - `@types/react-redux`  
 
-> *NB: Guide is based on types from Redux v4.x.x (Beta). To make it work with Redux v3.x.x please refer to [this config](https://github.com/piotrwitek/react-redux-typescript-guide/blob/master/playground/tsconfig.json#L5))  
-
-### Complementary Libraries
-> Utility libraries **with focus on type-safety** providing a light functional abstractions for common use-cases
-
-- ["utility-types"](https://github.com/piotrwitek/utility-types) - Utility Types for TypeScript (think lodash for types, moreover provides migration from Flow's Utility Types)  
-- ["typesafe-actions"](https://github.com/piotrwitek/typesafe-actions) - Typesafe Action Creators for Redux / Flux Architectures (in TypeScript)  
+> *NB: Guide is based on types for Redux >= v4.x.x. To make it work with Redux v3.x.x please refer to [this config](https://github.com/piotrwitek/react-redux-typescript-guide/blob/master/playground/tsconfig.json#L5))  
 
 [⇧ back to top](#table-of-contents)
 
 ---
 
-# React Types Cheatsheet
+# React - Type-Definitions Cheatsheet
 
 #### `React.FunctionComponent<P>` or `React.FC<P>`
 Type representing a functional component
@@ -173,7 +162,7 @@ const handleChange = (ev: React.MouseEvent<HTMLDivElement>) => { ... }
 
 ---
 
-# Component Typing Patterns
+# React - Typing Patterns
 
 ## Function Components - FC
 
@@ -363,7 +352,7 @@ Hook for state management like Redux in a function component.
 
 ---
 
-# Redux
+# Redux - Typing Patterns
 
 ## Action Creators
 
