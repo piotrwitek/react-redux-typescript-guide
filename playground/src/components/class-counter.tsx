@@ -25,7 +25,7 @@ export class ClassCounter extends React.Component<Props, State> {
     return (
       <div>
         <span>
-          {label}: {count}{' '}
+          {label}: {count}
         </span>
         <button type="button" onClick={handleIncrement}>
           {`Increment`}

@@ -39,7 +39,7 @@ export class ClassCounterWithDefaultProps extends React.Component<
     return (
       <div>
         <span>
-          {label}: {count}{' '}
+          {label}: {count}
         </span>
         <button type="button" onClick={handleIncrement}>
           {`Increment`}

@@ -198,7 +198,7 @@ export const FCCounter: React.FC<Props> = props => {
   return (
     <div>
       <span>
-        {label}: {count}{' '}
+        {label}: {count}
       </span>
       <button type="button" onClick={handleIncrement}>
         {`Increment`}
@@ -269,7 +269,7 @@ export class ClassCounter extends React.Component<Props, State> {
     return (
       <div>
         <span>
-          {label}: {count}{' '}
+          {label}: {count}
         </span>
         <button type="button" onClick={handleIncrement}>
           {`Increment`}
@@ -329,7 +329,7 @@ export class ClassCounterWithDefaultProps extends React.Component<
     return (
       <div>
         <span>
-          {label}: {count}{' '}
+          {label}: {count}
         </span>
         <button type="button" onClick={handleIncrement}>
           {`Increment`}
@@ -732,12 +732,13 @@ import { countersActions, countersSelectors } from '../features/counters';
 import { FCCounter } from '../components';
 
 type OwnProps = {
-  initialCount: number;
+  initialCount?: number;
 };
 
 const mapStateToProps = (state: Types.RootState, ownProps: OwnProps) => ({
   count:
-    countersSelectors.getReduxCounter(state.counters) + ownProps.initialCount,
+    countersSelectors.getReduxCounter(state.counters) +
+    (ownProps.initialCount || 0),
 });
 
 export const FCCounterConnectedExtended = connect(
@@ -1569,8 +1570,7 @@ Object.values = () => [];
     "removeComments": true,
     "sourceMap": true
   },
-  "include": ["src", "typings"],
-  "exclude": ["src/**/*.spec.*"]
+  "include": ["src", "typings"]
 }
 
 ```

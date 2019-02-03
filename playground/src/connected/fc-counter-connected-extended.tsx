@@ -5,12 +5,13 @@ import { countersActions, countersSelectors } from '../features/counters';
 import { FCCounter } from '../components';
 
 type OwnProps = {
-  initialCount: number;
+  initialCount?: number;
 };
 
 const mapStateToProps = (state: Types.RootState, ownProps: OwnProps) => ({
   count:
-    countersSelectors.getReduxCounter(state.counters) + ownProps.initialCount,
+    countersSelectors.getReduxCounter(state.counters) +
+    (ownProps.initialCount || 0),
 });
 
 export const FCCounterConnectedExtended = connect(
