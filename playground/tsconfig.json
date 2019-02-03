@@ -31,6 +31,5 @@
     "removeComments": true,
     "sourceMap": true
   },
-  "include": ["src", "typings"],
-  "exclude": ["src/**/*.spec.*"]
+  "include": ["src", "typings"]
 }

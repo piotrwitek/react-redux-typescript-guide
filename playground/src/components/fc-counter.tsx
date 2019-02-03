@@ -16,7 +16,7 @@ export const FCCounter: React.FC<Props> = props => {
   return (
     <div>
       <span>
-        {label}: {count}{' '}
+        {label}: {count}
       </span>
       <button type="button" onClick={handleIncrement}>
         {`Increment`}
