@@ -1,3 +1,3 @@
 // typings/modules.d.ts
-declare module 'Types';
+declare module 'MyTypes';
 declare module 'react-test-renderer';

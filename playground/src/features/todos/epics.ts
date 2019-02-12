@@ -1,14 +1,14 @@
-import Types from 'Types';
-import { combineEpics, Epic } from 'redux-observable';
+import { RootAction, RootState, Services } from 'MyTypes';
+import { Epic } from 'redux-observable';
 import { tap, ignoreElements, filter } from 'rxjs/operators';
 import { isOfType } from 'typesafe-actions';
 
-import { todosConstants, TodosAction } from '../todos';
+import { todosConstants } from '../todos';
 
 // contrived example!!!
-const logAddAction: Epic<TodosAction, Types.RootState, Types.Services> = (
+export const logAddAction: Epic<RootAction, RootAction, RootState, Services> = (
   action$,
-  store,
+  state$,
   { logger }
 ) =>
   action$.pipe(
@@ -20,5 +20,3 @@ const logAddAction: Epic<TodosAction, Types.RootState, Types.Services> = (
     }),
     ignoreElements()
   );
-
-export default combineEpics(logAddAction);

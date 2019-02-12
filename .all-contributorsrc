@@ -4,7 +4,7 @@
   "repoType": "github",
   "repoHost": "https://github.com",
   "files": [
-    "../docs/markdown/_contributors.md"
+    "./CONTRIBUTORS.md"
   ],
   "imageSize": 100,
   "commit": false,
@@ -19,7 +19,6 @@
         "doc",
         "ideas",
         "review",
-        "example",
         "question"
       ]
     },
@@ -84,7 +83,7 @@
       "avatar_url": "https://avatars1.githubusercontent.com/u/119451?v=4",
       "profile": "http://www.jakub.chodorowicz.pl/",
       "contributions": [
-        "example"
+        "code"
       ]
     },
     {
@@ -111,7 +110,7 @@
       "avatar_url": "https://avatars3.githubusercontent.com/u/14539?v=4",
       "profile": "http://www.linkedin.com/in/peterblazejewicz",
       "contributions": [
-        "example"
+        "doc"
       ]
     },
     {
@@ -139,6 +138,42 @@
       "profile": "http://cloudnative.co.jp",
       "contributions": [
         "financial"
+      ]
+    },
+    {
+      "login": "sosukesuzuki",
+      "name": "Sosuke Suzuki",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/14838850?v=4",
+      "profile": "http://sosukesuzuki.github.io",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "chillitom",
+      "name": "Tom Rathbone",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/74433?v=4",
+      "profile": "https://github.com/chillitom",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "arshadkazmi42",
+      "name": "Arshad Kazmi",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/4654382?v=4",
+      "profile": "https://arshadkazmi42.github.io/",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "JeongUkJae",
+      "name": "JeongUkJae",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/8815362?v=4",
+      "profile": "https://jeongukjae.github.io",
+      "contributions": [
+        "doc"
       ]
     }
   ]

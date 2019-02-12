@@ -635,7 +635,7 @@ const mapDispatchToProps = (dispatch: Dispatch<ActionType>) => ({
 #### - redux connected counter
 
 ```tsx
-import Types from 'Types';
+import Types from 'MyTypes';
 import { connect } from 'react-redux';
 
 import { countersActions, countersSelectors } from '../features/counters';
@@ -670,7 +670,7 @@ export default () => <FCCounterConnected label={'FCCounterConnected'} />;
 #### - redux connected counter (verbose)
 
 ```tsx
-import Types from 'Types';
+import Types from 'MyTypes';
 import { bindActionCreators, Dispatch } from 'redux';
 import { connect } from 'react-redux';
 
@@ -714,7 +714,7 @@ export default () => (
 #### - with own props
 
 ```tsx
-import Types from 'Types';
+import Types from 'MyTypes';
 import { connect } from 'react-redux';
 
 import { countersActions, countersSelectors } from '../features/counters';
@@ -888,25 +888,18 @@ interface State {
   count: number;
 }
 
-type Action  =
-  | { type: 'reset' }
-  | { type: 'increment' }
-  | { type: 'decrement' };
-
-const initialState: State = {
-  count: 0,
-};
+type Action = { type: 'reset' } | { type: 'increment' } | { type: 'decrement' };
 
 function reducer(state: State, action: Action): State {
   switch (action.type) {
-    case 'reset':
-      return initialState;
     case 'increment':
       return { count: state.count + 1 };
     case 'decrement':
       return { count: state.count - 1 };
+    case 'reset':
+      return { count: 0 };
     default:
-      return state;
+      throw new Error();
   }
 }
 
@@ -915,9 +908,10 @@ interface CounterProps {
 }
 
 function Counter({ initialCount }: CounterProps) {
-  const [state, dispatch] = React.useReducer<State, Action>(reducer, {
+  const [state, dispatch] = React.useReducer(reducer, {
     count: initialCount,
   });
+
   return (
     <>
       Count: {state.count}
@@ -1106,11 +1100,10 @@ export default combineReducers<TodosState, TodosAction>({
         return [...state, action.payload];
 
       case TOGGLE:
-        return state.map(
-          item =>
-            item.id === action.payload
-              ? { ...item, completed: !item.completed }
-              : item
+        return state.map(item =>
+          item.id === action.payload
+            ? { ...item, completed: !item.completed }
+            : item
         );
 
       default:
@@ -1196,15 +1189,11 @@ Can be imported in connected components to provide type-safety to Redux `connect
 Can be imported in various layers receiving or sending redux actions like: reducers, sagas or redux-observables epics
 
 ```tsx
-import { StateType } from 'typesafe-actions';
-import { RouterAction, LocationChangeAction } from 'react-router-redux';
-type ReactRouterAction = RouterAction | LocationChangeAction;
-import { CountersAction } from '../features/counters';
-import rootReducer from './root-reducer';
-
-declare module 'Types' {
-  export type RootState = StateType<typeof rootReducer>;
-  export type RootAction = ReactRouterAction | CountersAction;
+declare module 'MyTypes' {
+  import { StateType, ActionType } from 'typesafe-actions';
+  export type Store = StateType<typeof import('./index').default>;
+  export type RootAction = ActionType<typeof import('./root-action').default>;
+  export type RootState = StateType<typeof import('./root-reducer').default>;
 }
 
 ```
@@ -1217,6 +1206,7 @@ When creating a store instance we don't need to provide any additional types. It
 > The resulting store instance methods like `getState` or `dispatch` will be type checked and will expose all type errors
 
 ```tsx
+import { RootAction, RootState, Services } from 'MyTypes';
 import { createStore, applyMiddleware } from 'redux';
 import { createEpicMiddleware } from 'redux-observable';
 
@@ -1225,21 +1215,27 @@ import rootReducer from './root-reducer';
 import rootEpic from './root-epic';
 import services from '../services';
 
-export const epicMiddleware = createEpicMiddleware(rootEpic, {
+export const epicMiddleware = createEpicMiddleware<
+  RootAction,
+  RootAction,
+  RootState,
+  Services
+>({
   dependencies: services,
 });
 
-function configureStore(initialState?: object) {
-  // configure middlewares
-  const middlewares = [epicMiddleware];
-  // compose enhancers
-  const enhancer = composeEnhancers(applyMiddleware(...middlewares));
-  // create store
-  return createStore(rootReducer, initialState!, enhancer);
-}
+// configure middlewares
+const middlewares = [epicMiddleware];
+// compose enhancers
+const enhancer = composeEnhancers(applyMiddleware(...middlewares));
 
-// pass an optional param to rehydrate state on app start
-const store = configureStore();
+// rehydrate state on app start
+const initialState = {};
+
+// create store
+const store = createStore(rootReducer, initialState, enhancer);
+
+epicMiddleware.run(rootEpic);
 
 // export store singleton instance
 export default store;
@@ -1255,17 +1251,17 @@ export default store;
 ### For more examples and in-depth explanation you should read [The Mighty Tutorial](https://github.com/piotrwitek/typesafe-actions#behold-the-mighty-tutorial) to learn it all the easy way!
 
 ```tsx
-import Types from 'Types';
-import { combineEpics, Epic } from 'redux-observable';
+import { RootAction, RootState, Services } from 'MyTypes';
+import { Epic } from 'redux-observable';
 import { tap, ignoreElements, filter } from 'rxjs/operators';
 import { isOfType } from 'typesafe-actions';
 
-import { todosConstants, TodosAction } from '../todos';
+import { todosConstants } from '../todos';
 
 // contrived example!!!
-const logAddAction: Epic<TodosAction, Types.RootState, Types.Services> = (
+export const logAddAction: Epic<RootAction, RootAction, RootState, Services> = (
   action$,
-  store,
+  state$,
   { logger }
 ) =>
   action$.pipe(
@@ -1277,8 +1273,6 @@ const logAddAction: Epic<TodosAction, Types.RootState, Types.Services> = (
     }),
     ignoreElements()
   );
-
-export default combineEpics(logAddAction);
 
 ```
 
@@ -1682,7 +1676,7 @@ if you cannot find types for a third-party module you can provide your own types
 
 ```tsx
 // typings/modules.d.ts
-declare module 'Types';
+declare module 'MyTypes';
 declare module 'react-test-renderer';
 
 ```
@@ -1756,9 +1750,10 @@ Thanks goes to these wonderful people ([emoji key](https://github.com/kentcdodds
 
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
 <!-- prettier-ignore -->
-| [<img src="https://avatars0.githubusercontent.com/u/739075?v=4" width="100px;"/><br /><sub><b>Piotrek Witek</b></sub>](https://github.com/piotrwitek)<br />[💻](https://github.com/piotrwitek/react-redux-typescript-guide/commits?author=piotrwitek "Code") [📖](https://github.com/piotrwitek/react-redux-typescript-guide/commits?author=piotrwitek "Documentation") [🤔](#ideas-piotrwitek "Ideas, Planning, & Feedback") [👀](#review-piotrwitek "Reviewed Pull Requests") [💡](#example-piotrwitek "Examples") [💬](#question-piotrwitek "Answering Questions") | [<img src="https://avatars3.githubusercontent.com/u/8602615?v=4" width="100px;"/><br /><sub><b>Kazz Yokomizo</b></sub>](https://github.com/kazup01)<br />[💵](#financial-kazup01 "Financial") [🔍](#fundingFinding-kazup01 "Funding Finding") | [<img src="https://avatars1.githubusercontent.com/u/366438?v=4" width="100px;"/><br /><sub><b>Jake Boone</b></sub>](https://github.com/jakeboone02)<br />[📖](https://github.com/piotrwitek/react-redux-typescript-guide/commits?author=jakeboone02 "Documentation") | [<img src="https://avatars1.githubusercontent.com/u/9748762?v=4" width="100px;"/><br /><sub><b>Amit Dahan</b></sub>](https://github.com/amitdahan)<br />[📖](https://github.com/piotrwitek/react-redux-typescript-guide/commits?author=amitdahan "Documentation") | [<img src="https://avatars1.githubusercontent.com/u/98167?v=4" width="100px;"/><br /><sub><b>gulderov</b></sub>](https://github.com/gulderov)<br />[📖](https://github.com/piotrwitek/react-redux-typescript-guide/commits?author=gulderov "Documentation") | [<img src="https://avatars1.githubusercontent.com/u/1964212?v=4" width="100px;"/><br /><sub><b>Erik Pearson</b></sub>](https://github.com/emp823)<br />[📖](https://github.com/piotrwitek/react-redux-typescript-guide/commits?author=emp823 "Documentation") | [<img src="https://avatars1.githubusercontent.com/u/5342677?v=4" width="100px;"/><br /><sub><b>Bryan Mason</b></sub>](https://github.com/flymason)<br />[📖](https://github.com/piotrwitek/react-redux-typescript-guide/commits?author=flymason "Documentation") |
+| [<img src="https://avatars0.githubusercontent.com/u/739075?v=4" width="100px;"/><br /><sub><b>Piotrek Witek</b></sub>](https://github.com/piotrwitek)<br />[💻](https://github.com/piotrwitek/react-redux-typescript-guide/commits?author=piotrwitek "Code") [📖](https://github.com/piotrwitek/react-redux-typescript-guide/commits?author=piotrwitek "Documentation") [🤔](#ideas-piotrwitek "Ideas, Planning, & Feedback") [👀](#review-piotrwitek "Reviewed Pull Requests") [💬](#question-piotrwitek "Answering Questions") | [<img src="https://avatars3.githubusercontent.com/u/8602615?v=4" width="100px;"/><br /><sub><b>Kazz Yokomizo</b></sub>](https://github.com/kazup01)<br />[💵](#financial-kazup01 "Financial") [🔍](#fundingFinding-kazup01 "Funding Finding") | [<img src="https://avatars1.githubusercontent.com/u/366438?v=4" width="100px;"/><br /><sub><b>Jake Boone</b></sub>](https://github.com/jakeboone02)<br />[📖](https://github.com/piotrwitek/react-redux-typescript-guide/commits?author=jakeboone02 "Documentation") | [<img src="https://avatars1.githubusercontent.com/u/9748762?v=4" width="100px;"/><br /><sub><b>Amit Dahan</b></sub>](https://github.com/amitdahan)<br />[📖](https://github.com/piotrwitek/react-redux-typescript-guide/commits?author=amitdahan "Documentation") | [<img src="https://avatars1.githubusercontent.com/u/98167?v=4" width="100px;"/><br /><sub><b>gulderov</b></sub>](https://github.com/gulderov)<br />[📖](https://github.com/piotrwitek/react-redux-typescript-guide/commits?author=gulderov "Documentation") | [<img src="https://avatars1.githubusercontent.com/u/1964212?v=4" width="100px;"/><br /><sub><b>Erik Pearson</b></sub>](https://github.com/emp823)<br />[📖](https://github.com/piotrwitek/react-redux-typescript-guide/commits?author=emp823 "Documentation") | [<img src="https://avatars1.githubusercontent.com/u/5342677?v=4" width="100px;"/><br /><sub><b>Bryan Mason</b></sub>](https://github.com/flymason)<br />[📖](https://github.com/piotrwitek/react-redux-typescript-guide/commits?author=flymason "Documentation") |
 | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
-| [<img src="https://avatars1.githubusercontent.com/u/119451?v=4" width="100px;"/><br /><sub><b>Jakub Chodorowicz</b></sub>](http://www.jakub.chodorowicz.pl/)<br />[💡](#example-chodorowicz "Examples") | [<img src="https://avatars1.githubusercontent.com/u/7266431?v=4" width="100px;"/><br /><sub><b>Oleg Maslov</b></sub>](https://github.com/mleg)<br />[🐛](https://github.com/piotrwitek/react-redux-typescript-guide/issues?q=author%3Amleg "Bug reports") | [<img src="https://avatars0.githubusercontent.com/u/3393293?v=4" width="100px;"/><br /><sub><b>Aaron Westbrook</b></sub>](https://github.com/awestbro)<br />[🐛](https://github.com/piotrwitek/react-redux-typescript-guide/issues?q=author%3Aawestbro "Bug reports") | [<img src="https://avatars3.githubusercontent.com/u/14539?v=4" width="100px;"/><br /><sub><b>Peter Blazejewicz</b></sub>](http://www.linkedin.com/in/peterblazejewicz)<br />[💡](#example-peterblazejewicz "Examples") | [<img src="https://avatars3.githubusercontent.com/u/1642?v=4" width="100px;"/><br /><sub><b>Solomon White</b></sub>](https://github.com/rubysolo)<br />[📖](https://github.com/piotrwitek/react-redux-typescript-guide/commits?author=rubysolo "Documentation") | [<img src="https://avatars2.githubusercontent.com/u/8838006?v=4" width="100px;"/><br /><sub><b>Levi Rocha</b></sub>](https://github.com/pino)<br />[📖](https://github.com/piotrwitek/react-redux-typescript-guide/commits?author=pino "Documentation") | [<img src="https://avatars1.githubusercontent.com/u/41281835?v=4" width="100px;"/><br /><sub><b>Sudachi-kun</b></sub>](http://cloudnative.co.jp)<br />[💵](#financial-loadbalance-sudachi-kun "Financial") |
+| [<img src="https://avatars1.githubusercontent.com/u/119451?v=4" width="100px;"/><br /><sub><b>Jakub Chodorowicz</b></sub>](http://www.jakub.chodorowicz.pl/)<br />[💻](https://github.com/piotrwitek/react-redux-typescript-guide/commits?author=chodorowicz "Code") | [<img src="https://avatars1.githubusercontent.com/u/7266431?v=4" width="100px;"/><br /><sub><b>Oleg Maslov</b></sub>](https://github.com/mleg)<br />[🐛](https://github.com/piotrwitek/react-redux-typescript-guide/issues?q=author%3Amleg "Bug reports") | [<img src="https://avatars0.githubusercontent.com/u/3393293?v=4" width="100px;"/><br /><sub><b>Aaron Westbrook</b></sub>](https://github.com/awestbro)<br />[🐛](https://github.com/piotrwitek/react-redux-typescript-guide/issues?q=author%3Aawestbro "Bug reports") | [<img src="https://avatars3.githubusercontent.com/u/14539?v=4" width="100px;"/><br /><sub><b>Peter Blazejewicz</b></sub>](http://www.linkedin.com/in/peterblazejewicz)<br />[📖](https://github.com/piotrwitek/react-redux-typescript-guide/commits?author=peterblazejewicz "Documentation") | [<img src="https://avatars3.githubusercontent.com/u/1642?v=4" width="100px;"/><br /><sub><b>Solomon White</b></sub>](https://github.com/rubysolo)<br />[📖](https://github.com/piotrwitek/react-redux-typescript-guide/commits?author=rubysolo "Documentation") | [<img src="https://avatars2.githubusercontent.com/u/8838006?v=4" width="100px;"/><br /><sub><b>Levi Rocha</b></sub>](https://github.com/pino)<br />[📖](https://github.com/piotrwitek/react-redux-typescript-guide/commits?author=pino "Documentation") | [<img src="https://avatars1.githubusercontent.com/u/41281835?v=4" width="100px;"/><br /><sub><b>Sudachi-kun</b></sub>](http://cloudnative.co.jp)<br />[💵](#financial-loadbalance-sudachi-kun "Financial") |
+| [<img src="https://avatars1.githubusercontent.com/u/14838850?v=4" width="100px;"/><br /><sub><b>Sosuke Suzuki</b></sub>](http://sosukesuzuki.github.io)<br />[💻](https://github.com/piotrwitek/react-redux-typescript-guide/commits?author=sosukesuzuki "Code") | [<img src="https://avatars0.githubusercontent.com/u/74433?v=4" width="100px;"/><br /><sub><b>Tom Rathbone</b></sub>](https://github.com/chillitom)<br />[📖](https://github.com/piotrwitek/react-redux-typescript-guide/commits?author=chillitom "Documentation") | [<img src="https://avatars3.githubusercontent.com/u/4654382?v=4" width="100px;"/><br /><sub><b>Arshad Kazmi</b></sub>](https://arshadkazmi42.github.io/)<br />[📖](https://github.com/piotrwitek/react-redux-typescript-guide/commits?author=arshadkazmi42 "Documentation") | [<img src="https://avatars1.githubusercontent.com/u/8815362?v=4" width="100px;"/><br /><sub><b>JeongUkJae</b></sub>](https://jeongukjae.github.io)<br />[📖](https://github.com/piotrwitek/react-redux-typescript-guide/commits?author=JeongUkJae "Documentation") |
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
 This project follows the [all-contributors](https://github.com/kentcdodds/all-contributors) specification. Contributions of any kind welcome!

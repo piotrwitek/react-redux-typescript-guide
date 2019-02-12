@@ -19,11 +19,10 @@ export default combineReducers<TodosState, TodosAction>({
         return [...state, action.payload];
 
       case TOGGLE:
-        return state.map(
-          item =>
-            item.id === action.payload
-              ? { ...item, completed: !item.completed }
-              : item
+        return state.map(item =>
+          item.id === action.payload
+            ? { ...item, completed: !item.completed }
+            : item
         );
 
       default:
