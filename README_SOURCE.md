@@ -21,7 +21,7 @@ _"This guide is a **living compendium** documenting the most important patterns 
 ### Playground Project
 [![Build Status](https://semaphoreci.com/api/v1/piotrekwitek/react-redux-typescript-guide/branches/master/shields_badge.svg)](https://semaphoreci.com/piotrekwitek/react-redux-typescript-guide)
 
-You should check out Playground Project located in the `/playground` folder. It is a source of all the code examples found in the guide. They are all tested with the most recent version of TypeScript and 3rd party type definitions (like `@types/react` or `@types/react-redux`) to ensure the examples are up-to-date and not broken with updated definitions.
+You should check out Playground Project located in the `/playground` folder. It is a source of all the code examples found in the guide. They are all tested with the most recent version of TypeScript and 3rd party type-definitions (like `@types/react` or `@types/react-redux`) to ensure the examples are up-to-date and not broken with updated definitions.
 > Playground was created in such a way that you can simply clone the repository locally and immediately play around on your own. It will help you to learn all the examples from this guide in a real project environment without the need to create some complicated environment setup by yourself.
 
 ## Contributing Guide
@@ -67,12 +67,11 @@ Issues can be funded by anyone and the money will be transparently distributed t
   - [Common Npm Scripts](#common-npm-scripts)
 - [Recipes](#recipes)
   - [Baseline tsconfig.json](#baseline-tsconfigjson)
-  - [Default and Named Module Exports](#default-and-named-module-exports)
-  - [Imports in Module Decleration](#imports-in-module-decleration)
-  - [Type Augmentation for npm libraries](#type-augmentation-for-npm-libraries)
-  - [Override type-definitions for npm libraries](#override-type-definitions-for-npm-libraries)
+  - [Ambient Modules Tips](#ambient-modules-tips)
+  - [Type-Definitions Tips](#type-definitions-tips)
+  - [Type Augmentation Tips](#type-augmentation-tips)
 - [FAQ](#faq)
-- [Tutorials](#tutorials)
+- [Tutorials & Articles](#tutorials--articles)
 - [Contributors](#contributors)
 
 ---
@@ -588,6 +587,7 @@ export const FCCounterConnectedVerbose =
 # Recipes
 
 ### Baseline tsconfig.json
+
 - Recommended baseline config carefully optimized for strict type-checking and optimal webpack workflow  
 - Install [`tslib`](https://www.npmjs.com/package/tslib) to cut on bundle size, by using external runtime helpers instead of adding them inline: `npm i tslib`  
 - Example "paths" setup for baseUrl relative imports with Webpack  
@@ -596,18 +596,33 @@ export const FCCounterConnectedVerbose =
 
 [⇧ back to top](#table-of-contents)
 
-### Default and Named Module Exports
-> Most flexible solution is to use module folder pattern, because you can leverage both named and default import when you see fit.  
-Using this solution you'll achieve better encapsulation for internal structure/naming refactoring without breaking your consumer code:  
+### General Tips
+
+#### - should I still use React.PropTypes in TS?
+No. With TypeScript, using PropTypes is an unnecessary overhead. When declaring Props and State interfaces, you will get complete intellisense and design-time safety with static type checking. This way you'll be safe from runtime errors and you will save a lot of time on debugging. Additional benefit is an elegant and standardized method of documenting your component public API in the source code.  
+
+[⇧ back to top](#table-of-contents)
+
+#### - when to use `interface` declarations and when `type` aliases?
+From practical side, using `interface` declaration will create an identity (interface name) in compiler errors, on the contrary `type` aliases doesn't create an identity and will be unwinded to show all the properties and nested types it consists of.  
+Although I prefer to use `type` most of the time there are some places this can become too noisy when reading compiler errors and that's why I like to leverage this distinction to hide some of not so important type details in errors using interfaces identity.
+Related `ts-lint` rule: https://palantir.github.io/tslint/rules/interface-over-type-literal/  
+
+[⇧ back to top](#table-of-contents)
+
+#### - what's better default or named exports?
+A common flexible solution is to use module folder pattern, because you can leverage both named and default import when you see fit.  
+With this solution you'll achieve better encapsulation and be able to safely refactor internal naming and folders structure without breaking your consumer code:
+
 ```ts
-// 1. in `components/` folder create component file (`select.tsx`) with default export:
+// 1. create your component files (`select.tsx`) using default export in some folder:
 
 // components/select.tsx
 const Select: React.FC<Props> = (props) => {
 ...
 export default Select;
 
-// 2. in `components/` folder create `index.ts` file handling named imports:
+// 2. in this folder create an `index.ts` file that will re-export components with named exports:
 
 // components/index.ts
 export { default as Select } from './select';
@@ -624,85 +639,8 @@ import Select from '@src/components/select';
 
 [⇧ back to top](#table-of-contents)
 
-### Imports in Module Decleration
-> When creating 3rd party modules declarations all the imports should be put inside the module decleration, otherwise it will be treated as augmentation and show error
-```ts
-declare module "react-custom-scrollbars" {
-    import * as React from "react";
-    export interface positionValues {
-    ...
-```
-[⇧ back to top](#table-of-contents)
-
-### Type Augmentation for npm libraries
-Strategies to fix issues coming from external type-definitions files (*.d.ts)
-
-#### Augmenting library internal definitions - using relative import resolution
-```ts
-// added missing autoFocus Prop on Input component in "antd@2.10.0" npm package
-declare module '../node_modules/antd/lib/input/Input' {
-  export interface InputProps {
-    autoFocus?: boolean;
-  }
-}
-```
-
-#### Augmenting library public definitions - using node module import resolution
-```ts
-// fixed broken public type declaration in "rxjs@5.4.1" npm package
-import { Operator } from 'rxjs/Operator';
-import { Observable } from 'rxjs/Observable';
-
-declare module 'rxjs/Subject' {
-  interface Subject<T> {
-    lift<R>(operator: Operator<T, R>): Observable<R>;
-  }
-}
-```
-
-#### To quick-fix missing type-definitions for vendor modules you can "assert" a module type with `any` using [Shorthand Ambient Modules](https://github.com/Microsoft/TypeScript-Handbook/blob/master/pages/Modules.md#shorthand-ambient-modules)
-
-::codeblock='playground/typings/modules.d.ts'::
-
-> More advanced scenarios for working with vendor type-definitions can be found here [Official TypeScript Docs](https://github.com/Microsoft/TypeScript-Handbook/blob/master/pages/Modules.md#working-with-other-javascript-libraries)
-
-[⇧ back to top](#table-of-contents)
-
-### Override type-definitions for npm libraries
-If you want to use an alternative (customized) type-definitions for some npm library (that usually comes with it's own type definitions), you can do it by adding an override in `paths` compiler option.
-
-```ts
-{
-  "compilerOptions": {
-    "baseUrl": ".",
-    "paths": {
-      "redux": ["typings/redux"], // use an alternative type-definitions instead of the included one
-      ...
-    },
-    ...,
-  }
-}
-```
-
-[⇧ back to top](#table-of-contents)
-
----
-
-# FAQ
-
-### - should I still use React.PropTypes in TS?
-> No. With TypeScript, using PropTypes is an unnecessary overhead. When declaring IProps and IState interfaces, you will get complete intellisense and compile-time safety with static type checking. This way you'll be safe from runtime errors and you will save a lot of time on debugging. Additional benefit is an elegant and standardized method of documenting your component external API in the source code.  
-
-[⇧ back to top](#table-of-contents)
-
-### - when to use `interface` declarations and when `type` aliases?
-> From practical side, using `interface` declaration will display identity (interface name) in compiler errors, on the contrary `type` aliases will be unwinded to show all the properties and nested types it consists of. This can be a bit noisy when reading compiler errors and I like to leverage this distinction to hide some of not so important type details in errors  
-Related `ts-lint` rule: https://palantir.github.io/tslint/rules/interface-over-type-literal/  
-
-[⇧ back to top](#table-of-contents)
-
-### - how to best initialize class instance or static properties?
-> Prefered modern style is to use class Property Initializers  
+#### - how to best initialize class instance or static properties?
+Prefered modern syntax is to use class Property Initializers  
 ```tsx
 class ClassCounterWithInitialCount extends React.Component<Props, State> {
   // default props using Property Initializers
@@ -721,8 +659,8 @@ class ClassCounterWithInitialCount extends React.Component<Props, State> {
 
 [⇧ back to top](#table-of-contents)
 
-### - how to best declare component handler functions?
-> Prefered modern style is to use Class Fields with arrow functions  
+#### - how to best declare component handler functions?
+Prefered modern syntax is to use Class Fields with arrow functions  
 ```tsx
 class ClassCounter extends React.Component<Props, State> {
 // handlers using Class Fields with arrow functions
@@ -735,9 +673,92 @@ class ClassCounter extends React.Component<Props, State> {
 
 [⇧ back to top](#table-of-contents)
 
+### Ambient Modules Tips
+
+#### Imports in ambient modules
+For type augmentation imports should stay outside of module declaration.
+```ts
+import { Operator } from 'rxjs/Operator';
+import { Observable } from 'rxjs/Observable';
+
+declare module 'rxjs/Subject' {
+  interface Subject<T> {
+    lift<R>(operator: Operator<T, R>): Observable<R>;
+  }
+}
+```
+
+When creating 3rd party type-definitions all the imports should be kept inside the module decleration, otherwise it will be treated as augmentation and show error
+
+```ts
+declare module "react-custom-scrollbars" {
+    import * as React from "react";
+    export interface positionValues {
+    ...
+```
+
+[⇧ back to top](#table-of-contents)
+
+### Type-Definitions Tips
+
+#### Missing type-definitions error
+if you cannot find types for a third-party module you can provide your own types or disable type-checking for this module using [Shorthand Ambient Modules](https://github.com/Microsoft/TypeScript-Handbook/blob/master/pages/Modules.md#shorthand-ambient-modules)
+
+::codeblock='playground/typings/modules.d.ts'::
+
+#### Using custom `d.ts` files for npm modules
+If you want to use an alternative (customized) type-definitions for some npm module (that usually comes with it's own type-definitions), you can do it by adding an override in `paths` compiler option.
+
+```ts
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "redux": ["typings/redux"], // use an alternative type-definitions instead of the included one
+      ...
+    },
+    ...,
+  }
+}
+```
+
+[⇧ back to top](#table-of-contents)
+
+### Type Augmentation Tips
+Strategies to fix issues coming from external type-definitions files (*.d.ts)
+
+#### Augmenting library internal declarations - using relative import
+
+```ts
+// added missing autoFocus Prop on Input component in "antd@2.10.0" npm package
+declare module '../node_modules/antd/lib/input/Input' {
+  export interface InputProps {
+    autoFocus?: boolean;
+  }
+}
+```
+
+#### Augmenting library public declarations - using node_modules import
+
+```ts
+// fixed broken public type-definitions in "rxjs@5.4.1" npm package
+import { Operator } from 'rxjs/Operator';
+import { Observable } from 'rxjs/Observable';
+
+declare module 'rxjs/Subject' {
+  interface Subject<T> {
+    lift<R>(operator: Operator<T, R>): Observable<R>;
+  }
+}
+```
+
+> More advanced scenarios for working with vendor type-definitions can be found here [Official TypeScript Docs](https://github.com/Microsoft/TypeScript-Handbook/blob/master/pages/Modules.md#working-with-other-javascript-libraries)
+
+[⇧ back to top](#table-of-contents)
+
 ---
 
-## Tutorials
+## Tutorials & Articles
 > Curated list of relevant in-depth tutorials
 
 Higher-Order Components:
