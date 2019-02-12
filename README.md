@@ -635,7 +635,7 @@ const mapDispatchToProps = (dispatch: Dispatch<ActionType>) => ({
 #### - redux connected counter
 
 ```tsx
-import Types from 'Types';
+import Types from 'MyTypes';
 import { connect } from 'react-redux';
 
 import { countersActions, countersSelectors } from '../features/counters';
@@ -670,7 +670,7 @@ export default () => <FCCounterConnected label={'FCCounterConnected'} />;
 #### - redux connected counter (verbose)
 
 ```tsx
-import Types from 'Types';
+import Types from 'MyTypes';
 import { bindActionCreators, Dispatch } from 'redux';
 import { connect } from 'react-redux';
 
@@ -714,7 +714,7 @@ export default () => (
 #### - with own props
 
 ```tsx
-import Types from 'Types';
+import Types from 'MyTypes';
 import { connect } from 'react-redux';
 
 import { countersActions, countersSelectors } from '../features/counters';
@@ -1100,11 +1100,10 @@ export default combineReducers<TodosState, TodosAction>({
         return [...state, action.payload];
 
       case TOGGLE:
-        return state.map(
-          item =>
-            item.id === action.payload
-              ? { ...item, completed: !item.completed }
-              : item
+        return state.map(item =>
+          item.id === action.payload
+            ? { ...item, completed: !item.completed }
+            : item
         );
 
       default:
@@ -1207,6 +1206,7 @@ When creating a store instance we don't need to provide any additional types. It
 > The resulting store instance methods like `getState` or `dispatch` will be type checked and will expose all type errors
 
 ```tsx
+import { RootAction, RootState, Services } from 'MyTypes';
 import { createStore, applyMiddleware } from 'redux';
 import { createEpicMiddleware } from 'redux-observable';
 
@@ -1215,21 +1215,27 @@ import rootReducer from './root-reducer';
 import rootEpic from './root-epic';
 import services from '../services';
 
-export const epicMiddleware = createEpicMiddleware(rootEpic, {
+export const epicMiddleware = createEpicMiddleware<
+  RootAction,
+  RootAction,
+  RootState,
+  Services
+>({
   dependencies: services,
 });
 
-function configureStore(initialState?: object) {
-  // configure middlewares
-  const middlewares = [epicMiddleware];
-  // compose enhancers
-  const enhancer = composeEnhancers(applyMiddleware(...middlewares));
-  // create store
-  return createStore(rootReducer, initialState!, enhancer);
-}
+// configure middlewares
+const middlewares = [epicMiddleware];
+// compose enhancers
+const enhancer = composeEnhancers(applyMiddleware(...middlewares));
 
-// pass an optional param to rehydrate state on app start
-const store = configureStore();
+// rehydrate state on app start
+const initialState = {};
+
+// create store
+const store = createStore(rootReducer, initialState, enhancer);
+
+epicMiddleware.run(rootEpic);
 
 // export store singleton instance
 export default store;
@@ -1246,16 +1252,16 @@ export default store;
 
 ```tsx
 import { RootAction, RootState, Services } from 'MyTypes';
-import { combineEpics, Epic } from 'redux-observable';
+import { Epic } from 'redux-observable';
 import { tap, ignoreElements, filter } from 'rxjs/operators';
 import { isOfType } from 'typesafe-actions';
 
 import { todosConstants } from '../todos';
 
 // contrived example!!!
-const logAddAction: Epic<RootAction, RootAction, RootState, Services> = (
+export const logAddAction: Epic<RootAction, RootAction, RootState, Services> = (
   action$,
-  store,
+  state$,
   { logger }
 ) =>
   action$.pipe(
@@ -1267,8 +1273,6 @@ const logAddAction: Epic<RootAction, RootAction, RootState, Services> = (
     }),
     ignoreElements()
   );
-
-export default combineEpics(logAddAction);
 
 ```
 
