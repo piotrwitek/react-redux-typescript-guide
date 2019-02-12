@@ -67,10 +67,10 @@ Issues can be funded by anyone and the money will be transparently distributed t
   - [Common Npm Scripts](#common-npm-scripts)
 - [Recipes](#recipes)
   - [Baseline tsconfig.json](#baseline-tsconfigjson)
+  - [General Tips](#general-tips)
   - [Ambient Modules Tips](#ambient-modules-tips)
   - [Type-Definitions Tips](#type-definitions-tips)
   - [Type Augmentation Tips](#type-augmentation-tips)
-- [FAQ](#faq)
 - [Tutorials & Articles](#tutorials--articles)
 - [Contributors](#contributors)
 
