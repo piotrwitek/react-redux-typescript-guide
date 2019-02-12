@@ -4,25 +4,18 @@ interface State {
   count: number;
 }
 
-type Action  =
-  | { type: 'reset' }
-  | { type: 'increment' }
-  | { type: 'decrement' };
-
-const initialState: State = {
-  count: 0,
-};
+type Action = { type: 'reset' } | { type: 'increment' } | { type: 'decrement' };
 
 function reducer(state: State, action: Action): State {
   switch (action.type) {
-    case 'reset':
-      return initialState;
     case 'increment':
       return { count: state.count + 1 };
     case 'decrement':
       return { count: state.count - 1 };
+    case 'reset':
+      return { count: 0 };
     default:
-      return state;
+      throw new Error();
   }
 }
 
@@ -31,9 +24,10 @@ interface CounterProps {
 }
 
 function Counter({ initialCount }: CounterProps) {
-  const [state, dispatch] = React.useReducer<State, Action>(reducer, {
+  const [state, dispatch] = React.useReducer(reducer, {
     count: initialCount,
   });
+
   return (
     <>
       Count: {state.count}
