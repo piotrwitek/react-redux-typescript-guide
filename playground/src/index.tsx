@@ -7,7 +7,7 @@ import { Provider } from 'react-redux';
 import './rxjs-imports';
 
 import store from './store';
-import { Home } from './pages';
+import { Home } from './routes';
 
 const Root = (
   <Provider store={store}>

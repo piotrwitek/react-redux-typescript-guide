@@ -1190,15 +1190,11 @@ Can be imported in connected components to provide type-safety to Redux `connect
 Can be imported in various layers receiving or sending redux actions like: reducers, sagas or redux-observables epics
 
 ```tsx
-import { StateType } from 'typesafe-actions';
-import { RouterAction, LocationChangeAction } from 'react-router-redux';
-type ReactRouterAction = RouterAction | LocationChangeAction;
-import { CountersAction } from '../features/counters';
-import rootReducer from './root-reducer';
-
-declare module 'Types' {
-  export type RootState = StateType<typeof rootReducer>;
-  export type RootAction = ReactRouterAction | CountersAction;
+declare module 'MyTypes' {
+  import { StateType, ActionType } from 'typesafe-actions';
+  export type Store = StateType<typeof import('./index').default>;
+  export type RootAction = ActionType<typeof import('./root-action').default>;
+  export type RootState = StateType<typeof import('./root-reducer').default>;
 }
 
 ```
@@ -1249,15 +1245,15 @@ export default store;
 ### For more examples and in-depth explanation you should read [The Mighty Tutorial](https://github.com/piotrwitek/typesafe-actions#behold-the-mighty-tutorial) to learn it all the easy way!
 
 ```tsx
-import Types from 'Types';
+import { RootAction, RootState, Services } from 'MyTypes';
 import { combineEpics, Epic } from 'redux-observable';
 import { tap, ignoreElements, filter } from 'rxjs/operators';
 import { isOfType } from 'typesafe-actions';
 
-import { todosConstants, TodosAction } from '../todos';
+import { todosConstants } from '../todos';
 
 // contrived example!!!
-const logAddAction: Epic<TodosAction, Types.RootState, Types.Services> = (
+const logAddAction: Epic<RootAction, RootAction, RootState, Services> = (
   action$,
   store,
   { logger }
@@ -1676,7 +1672,7 @@ if you cannot find types for a third-party module you can provide your own types
 
 ```tsx
 // typings/modules.d.ts
-declare module 'Types';
+declare module 'MyTypes';
 declare module 'react-test-renderer';
 
 ```

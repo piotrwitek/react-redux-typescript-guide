@@ -1,4 +1,4 @@
-import Types from 'Types';
+import Types from 'MyTypes';
 import { bindActionCreators, Dispatch } from 'redux';
 import { connect } from 'react-redux';
 

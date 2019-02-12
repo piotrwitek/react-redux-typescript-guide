@@ -1,5 +1,3 @@
-import services from './index';
-
-declare module 'Types' {
-  type Services = typeof services;
+declare module 'MyTypes' {
+  export type Services = typeof import('./index').default;
 }
