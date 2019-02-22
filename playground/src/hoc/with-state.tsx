@@ -1,18 +1,17 @@
 import * as React from 'react';
 import { Subtract } from 'utility-types';
 
-// These props will be subtracted from original component type
+// These props will be subtracted from base component props
 interface InjectedProps {
   count: number;
   onIncrement: () => any;
 }
 
-export const withState = <BaseProps extends {}>(
+export const withState = <BaseProps extends InjectedProps>(
   BaseComponent: React.ComponentType<BaseProps>
 ) => {
-  // These props will be added to original component type
-  type HocProps = BaseProps & {
-    // here you can extend hoc props
+  type HocProps = Subtract<BaseProps, InjectedProps> & {
+    // here you can extend hoc with new props
     initialCount?: number;
   };
   type HocState = {
@@ -34,14 +33,14 @@ export const withState = <BaseProps extends {}>(
     };
 
     render() {
-      const { ...restProps } = this.props;
+      const { ...restProps } = this.props as any;
       const { count } = this.state;
 
       return (
         <BaseComponent
-          {...restProps}
           count={count} // injected
           onIncrement={this.handleIncrement} // injected
+          {...restProps}
         />
       );
     }

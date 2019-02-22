@@ -459,18 +459,17 @@ Adds state to a stateless counter
 import * as React from 'react';
 import { Subtract } from 'utility-types';
 
-// These props will be subtracted from original component type
+// These props will be subtracted from base component props
 interface InjectedProps {
   count: number;
   onIncrement: () => any;
 }
 
-export const withState = <BaseProps extends {}>(
+export const withState = <BaseProps extends InjectedProps>(
   BaseComponent: React.ComponentType<BaseProps>
 ) => {
-  // These props will be added to original component type
-  type HocProps = BaseProps & {
-    // here you can extend hoc props
+  type HocProps = Subtract<BaseProps, InjectedProps> & {
+    // here you can extend hoc with new props
     initialCount?: number;
   };
   type HocState = {
@@ -492,14 +491,14 @@ export const withState = <BaseProps extends {}>(
     };
 
     render() {
-      const { ...restProps } = this.props;
+      const { ...restProps } = this.props as any;
       const { count } = this.state;
 
       return (
         <BaseComponent
-          {...restProps}
           count={count} // injected
           onIncrement={this.handleIncrement} // injected
+          {...restProps}
         />
       );
     }
@@ -533,22 +532,26 @@ import { Subtract } from 'utility-types';
 
 const MISSING_ERROR = 'Error was swallowed during propagation.';
 
+// These props will be subtracted from base component props
 interface InjectedProps {
   onReset: () => any;
 }
 
-export const withErrorBoundary = <WrappedProps extends InjectedProps>(
-  WrappedComponent: React.ComponentType<WrappedProps>
+export const withErrorBoundary = <BaseProps extends InjectedProps>(
+  BaseComponent: React.ComponentType<BaseProps>
 ) => {
-  type HocProps = Subtract<WrappedProps, InjectedProps> & {
-    // here you can extend hoc props
+  type HocProps = Subtract<BaseProps, InjectedProps> & {
+    // here you can extend hoc with new props
   };
   type HocState = {
     readonly error: Error | null | undefined;
   };
 
-  return class WithErrorBoundary extends React.Component<HocProps, HocState> {
-    static displayName = `withErrorBoundary(${WrappedComponent.name})`;
+  return class Hoc extends React.Component<HocProps, HocState> {
+    // Enhance component name for debugging and React-Dev-Tools
+    static displayName = `withErrorBoundary(${BaseComponent.name})`;
+    // reference to original wrapped component
+    static readonly WrappedComponent = BaseComponent;
 
     readonly state: HocState = {
       error: undefined,
@@ -560,7 +563,7 @@ export const withErrorBoundary = <WrappedProps extends InjectedProps>(
     }
 
     logErrorToCloud = (error: Error | null, info: object) => {
-      // TODO: send error report to cloud
+      // TODO: send error report to service provider
     };
 
     handleReset = () => {
@@ -575,9 +578,9 @@ export const withErrorBoundary = <WrappedProps extends InjectedProps>(
 
       if (error) {
         return (
-          <WrappedComponent
-            {...restProps}
+          <BaseComponent
             onReset={this.handleReset} // injected
+            {...restProps}
           />
         );
       }
