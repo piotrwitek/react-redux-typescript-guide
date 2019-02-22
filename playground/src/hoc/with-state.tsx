@@ -7,11 +7,11 @@ interface InjectedProps {
   onIncrement: () => any;
 }
 
-export const withState = <WrappedProps extends InjectedProps>(
-  WrappedComponent: React.ComponentType<WrappedProps>
+export const withState = <BaseProps extends {}>(
+  BaseComponent: React.ComponentType<BaseProps>
 ) => {
   // These props will be added to original component type
-  type HocProps = Subtract<WrappedProps, InjectedProps> & {
+  type HocProps = BaseProps & {
     // here you can extend hoc props
     initialCount?: number;
   };
@@ -19,11 +19,11 @@ export const withState = <WrappedProps extends InjectedProps>(
     readonly count: number;
   };
 
-  return class WithState extends React.Component<HocProps, HocState> {
+  return class Hoc extends React.Component<HocProps, HocState> {
     // Enhance component name for debugging and React-Dev-Tools
-    static displayName = `withState(${WrappedComponent.name})`;
+    static displayName = `withState(${BaseComponent.name})`;
     // reference to original wrapped component
-    static readonly WrappedComponent = WrappedComponent;
+    static readonly WrappedComponent = BaseComponent;
 
     readonly state: HocState = {
       count: Number(this.props.initialCount) || 0,
@@ -34,11 +34,11 @@ export const withState = <WrappedProps extends InjectedProps>(
     };
 
     render() {
-      const { ...restProps } = this.props as {};
+      const { ...restProps } = this.props;
       const { count } = this.state;
 
       return (
-        <WrappedComponent
+        <BaseComponent
           {...restProps}
           count={count} // injected
           onIncrement={this.handleIncrement} // injected
