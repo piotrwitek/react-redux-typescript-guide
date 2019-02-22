@@ -51,13 +51,15 @@ Issues can be funded by anyone and the money will be transparently distributed t
   - [Context](#context) 🌟 __NEW__
   - [Hooks](#hooks) 🌟 __NEW__
 - [Redux - Typing Patterns](#redux---typing-patterns)
+  - [Store Configuration](#store-configuration)
   - [Action Creators](#action-creators)
   - [Reducers](#reducers)
     - [State with Type-level Immutability](#state-with-type-level-immutability)
     - [Typing reducer](#typing-reducer)
     - [Testing reducer](#testing-reducer)
-  - [Store Configuration](#store-configuration)
-  - [Async Flow](#async-flow)
+  - [Async Flow with `redux-observable`](#async-flow-with-redux-observable)
+    - [Typing Epics](#typing-epics)
+    - [Testing Epics](#testing-epics) 🌟 __NEW__
   - [Selectors](#selectors)
   - [Typing connect](#typing-connect)
 - [Tools](#tools)
@@ -358,12 +360,35 @@ Hook for state management like Redux in a function component.
 
 # Redux - Typing Patterns
 
+## Store Configuration
+
+### Create Global RootState and RootAction Types
+
+#### `RootState` - type representing root state-tree
+Can be imported in connected components to provide type-safety to Redux `connect` function
+
+#### `RootAction` - type representing union type of all action objects
+Can be imported in various layers receiving or sending redux actions like: reducers, sagas or redux-observables epics
+
+::codeblock='playground/src/store/types.d.ts'::
+
+[⇧ back to top](#table-of-contents)
+
+### Create Store
+
+When creating a store instance we don't need to provide any additional types. It will set-up a **type-safe Store instance** using type inference.
+> The resulting store instance methods like `getState` or `dispatch` will be type checked and will expose all type errors
+
+::codeblock='playground/src/store/index.ts'::
+
+---
+
 ## Action Creators
 
 > We'll be using a battle-tested library [![NPM Downloads](https://img.shields.io/npm/dm/typesafe-actions.svg)](https://www.npmjs.com/package/typesafe-actions)
  that automates and simplify maintenace of **type annotations in Redux Architectures** [`typesafe-actions`](https://github.com/piotrwitek/typesafe-actions#typesafe-actions)
 
-### You should read [The Mighty Tutorial](https://github.com/piotrwitek/typesafe-actions#behold-the-mighty-tutorial) to learn it all the easy way!
+### For more examples and in-depth tutorial you should check [The Mighty Tutorial](https://github.com/piotrwitek/typesafe-actions#behold-the-mighty-tutorial)!
 
 A solution below is using a simple factory function to automate the creation of type-safe action creators. The goal is to decrease maintenance effort and reduce code repetition of type annotations for actions and creators. The result is completely typesafe action-creators and their actions.
 
@@ -440,6 +465,7 @@ state.counterPairs[0].immutableCounter2 = 1; // TS Error: cannot be mutated
 [⇧ back to top](#table-of-contents)
 
 ### Typing reducer
+
 > to understand following section make sure to learn about [Type Inference](https://www.typescriptlang.org/docs/handbook/type-inference.html), [Control flow analysis](https://github.com/Microsoft/TypeScript/wiki/What%27s-new-in-TypeScript#control-flow-based-type-analysis) and [Tagged union types](https://github.com/Microsoft/TypeScript/wiki/What%27s-new-in-TypeScript#tagged-union-types)
 
 ::codeblock='playground/src/features/todos/reducer.ts'::
@@ -454,36 +480,19 @@ state.counterPairs[0].immutableCounter2 = 1; // TS Error: cannot be mutated
 
 ---
 
-## Store Configuration
+## Async Flow with `redux-observable`
 
-### Create Global RootState and RootAction Types
+### For more examples and in-depth tutorial you should check [The Mighty Tutorial](https://github.com/piotrwitek/typesafe-actions#behold-the-mighty-tutorial)!
 
-#### `RootState` - type representing root state-tree
-Can be imported in connected components to provide type-safety to Redux `connect` function
+### Typing epics
 
-#### `RootAction` - type representing union type of all action objects
-Can be imported in various layers receiving or sending redux actions like: reducers, sagas or redux-observables epics
-
-::codeblock='playground/src/store/types.d.ts'::
+::codeblock='playground/src/features/todos/epics.ts'::
 
 [⇧ back to top](#table-of-contents)
 
-### Create Store
+### Testing epics
 
-When creating a store instance we don't need to provide any additional types. It will set-up a **type-safe Store instance** using type inference.
-> The resulting store instance methods like `getState` or `dispatch` will be type checked and will expose all type errors
-
-::codeblock='playground/src/store/index.ts'::
-
----
-
-## Async Flow
-
-### "redux-observable"
-
-### For more examples and in-depth explanation you should read [The Mighty Tutorial](https://github.com/piotrwitek/typesafe-actions#behold-the-mighty-tutorial) to learn it all the easy way!
-
-::codeblock='playground/src/features/todos/epics.ts'::
+::codeblock='playground/src/features/todos/epics.spec.ts'::
 
 [⇧ back to top](#table-of-contents)
 

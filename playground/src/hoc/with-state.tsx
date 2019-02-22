@@ -1,29 +1,28 @@
 import * as React from 'react';
 import { Subtract } from 'utility-types';
 
-// These props will be subtracted from original component type
+// These props will be subtracted from base component props
 interface InjectedProps {
   count: number;
   onIncrement: () => any;
 }
 
-export const withState = <WrappedProps extends InjectedProps>(
-  WrappedComponent: React.ComponentType<WrappedProps>
+export const withState = <BaseProps extends InjectedProps>(
+  BaseComponent: React.ComponentType<BaseProps>
 ) => {
-  // These props will be added to original component type
-  type HocProps = Subtract<WrappedProps, InjectedProps> & {
-    // here you can extend hoc props
+  type HocProps = Subtract<BaseProps, InjectedProps> & {
+    // here you can extend hoc with new props
     initialCount?: number;
   };
   type HocState = {
     readonly count: number;
   };
 
-  return class WithState extends React.Component<HocProps, HocState> {
+  return class Hoc extends React.Component<HocProps, HocState> {
     // Enhance component name for debugging and React-Dev-Tools
-    static displayName = `withState(${WrappedComponent.name})`;
+    static displayName = `withState(${BaseComponent.name})`;
     // reference to original wrapped component
-    static readonly WrappedComponent = WrappedComponent;
+    static readonly WrappedComponent = BaseComponent;
 
     readonly state: HocState = {
       count: Number(this.props.initialCount) || 0,
@@ -34,14 +33,14 @@ export const withState = <WrappedProps extends InjectedProps>(
     };
 
     render() {
-      const { ...restProps } = this.props as {};
+      const { ...restProps } = this.props as any;
       const { count } = this.state;
 
       return (
-        <WrappedComponent
-          {...restProps}
+        <BaseComponent
           count={count} // injected
           onIncrement={this.handleIncrement} // injected
+          {...restProps}
         />
       );
     }

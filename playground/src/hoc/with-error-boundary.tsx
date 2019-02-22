@@ -3,22 +3,26 @@ import { Subtract } from 'utility-types';
 
 const MISSING_ERROR = 'Error was swallowed during propagation.';
 
+// These props will be subtracted from base component props
 interface InjectedProps {
   onReset: () => any;
 }
 
-export const withErrorBoundary = <WrappedProps extends InjectedProps>(
-  WrappedComponent: React.ComponentType<WrappedProps>
+export const withErrorBoundary = <BaseProps extends InjectedProps>(
+  BaseComponent: React.ComponentType<BaseProps>
 ) => {
-  type HocProps = Subtract<WrappedProps, InjectedProps> & {
-    // here you can extend hoc props
+  type HocProps = Subtract<BaseProps, InjectedProps> & {
+    // here you can extend hoc with new props
   };
   type HocState = {
     readonly error: Error | null | undefined;
   };
 
-  return class WithErrorBoundary extends React.Component<HocProps, HocState> {
-    static displayName = `withErrorBoundary(${WrappedComponent.name})`;
+  return class Hoc extends React.Component<HocProps, HocState> {
+    // Enhance component name for debugging and React-Dev-Tools
+    static displayName = `withErrorBoundary(${BaseComponent.name})`;
+    // reference to original wrapped component
+    static readonly WrappedComponent = BaseComponent;
 
     readonly state: HocState = {
       error: undefined,
@@ -30,7 +34,7 @@ export const withErrorBoundary = <WrappedProps extends InjectedProps>(
     }
 
     logErrorToCloud = (error: Error | null, info: object) => {
-      // TODO: send error report to cloud
+      // TODO: send error report to service provider
     };
 
     handleReset = () => {
@@ -45,9 +49,9 @@ export const withErrorBoundary = <WrappedProps extends InjectedProps>(
 
       if (error) {
         return (
-          <WrappedComponent
-            {...restProps}
+          <BaseComponent
             onReset={this.handleReset} // injected
+            {...restProps}
           />
         );
       }

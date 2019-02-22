@@ -51,13 +51,15 @@ Issues can be funded by anyone and the money will be transparently distributed t
   - [Context](#context) 🌟 __NEW__
   - [Hooks](#hooks) 🌟 __NEW__
 - [Redux - Typing Patterns](#redux---typing-patterns)
+  - [Store Configuration](#store-configuration)
   - [Action Creators](#action-creators)
   - [Reducers](#reducers)
     - [State with Type-level Immutability](#state-with-type-level-immutability)
     - [Typing reducer](#typing-reducer)
     - [Testing reducer](#testing-reducer)
-  - [Store Configuration](#store-configuration)
-  - [Async Flow](#async-flow)
+  - [Async Flow with `redux-observable`](#async-flow-with-redux-observable)
+    - [Typing Epics](#typing-epics)
+    - [Testing Epics](#testing-epics) 🌟 __NEW__
   - [Selectors](#selectors)
   - [Typing connect](#typing-connect)
 - [Tools](#tools)
@@ -457,29 +459,28 @@ Adds state to a stateless counter
 import * as React from 'react';
 import { Subtract } from 'utility-types';
 
-// These props will be subtracted from original component type
+// These props will be subtracted from base component props
 interface InjectedProps {
   count: number;
   onIncrement: () => any;
 }
 
-export const withState = <WrappedProps extends InjectedProps>(
-  WrappedComponent: React.ComponentType<WrappedProps>
+export const withState = <BaseProps extends InjectedProps>(
+  BaseComponent: React.ComponentType<BaseProps>
 ) => {
-  // These props will be added to original component type
-  type HocProps = Subtract<WrappedProps, InjectedProps> & {
-    // here you can extend hoc props
+  type HocProps = Subtract<BaseProps, InjectedProps> & {
+    // here you can extend hoc with new props
     initialCount?: number;
   };
   type HocState = {
     readonly count: number;
   };
 
-  return class WithState extends React.Component<HocProps, HocState> {
+  return class Hoc extends React.Component<HocProps, HocState> {
     // Enhance component name for debugging and React-Dev-Tools
-    static displayName = `withState(${WrappedComponent.name})`;
+    static displayName = `withState(${BaseComponent.name})`;
     // reference to original wrapped component
-    static readonly WrappedComponent = WrappedComponent;
+    static readonly WrappedComponent = BaseComponent;
 
     readonly state: HocState = {
       count: Number(this.props.initialCount) || 0,
@@ -490,14 +491,14 @@ export const withState = <WrappedProps extends InjectedProps>(
     };
 
     render() {
-      const { ...restProps } = this.props as {};
+      const { ...restProps } = this.props as any;
       const { count } = this.state;
 
       return (
-        <WrappedComponent
-          {...restProps}
+        <BaseComponent
           count={count} // injected
           onIncrement={this.handleIncrement} // injected
+          {...restProps}
         />
       );
     }
@@ -531,22 +532,26 @@ import { Subtract } from 'utility-types';
 
 const MISSING_ERROR = 'Error was swallowed during propagation.';
 
+// These props will be subtracted from base component props
 interface InjectedProps {
   onReset: () => any;
 }
 
-export const withErrorBoundary = <WrappedProps extends InjectedProps>(
-  WrappedComponent: React.ComponentType<WrappedProps>
+export const withErrorBoundary = <BaseProps extends InjectedProps>(
+  BaseComponent: React.ComponentType<BaseProps>
 ) => {
-  type HocProps = Subtract<WrappedProps, InjectedProps> & {
-    // here you can extend hoc props
+  type HocProps = Subtract<BaseProps, InjectedProps> & {
+    // here you can extend hoc with new props
   };
   type HocState = {
     readonly error: Error | null | undefined;
   };
 
-  return class WithErrorBoundary extends React.Component<HocProps, HocState> {
-    static displayName = `withErrorBoundary(${WrappedComponent.name})`;
+  return class Hoc extends React.Component<HocProps, HocState> {
+    // Enhance component name for debugging and React-Dev-Tools
+    static displayName = `withErrorBoundary(${BaseComponent.name})`;
+    // reference to original wrapped component
+    static readonly WrappedComponent = BaseComponent;
 
     readonly state: HocState = {
       error: undefined,
@@ -558,7 +563,7 @@ export const withErrorBoundary = <WrappedProps extends InjectedProps>(
     }
 
     logErrorToCloud = (error: Error | null, info: object) => {
-      // TODO: send error report to cloud
+      // TODO: send error report to service provider
     };
 
     handleReset = () => {
@@ -573,9 +578,9 @@ export const withErrorBoundary = <WrappedProps extends InjectedProps>(
 
       if (error) {
         return (
-          <WrappedComponent
-            {...restProps}
+          <BaseComponent
             onReset={this.handleReset} // injected
+            {...restProps}
           />
         );
       }
@@ -979,12 +984,78 @@ export default function ThemeToggleButton(props: Props) {
 
 # Redux - Typing Patterns
 
+## Store Configuration
+
+### Create Global RootState and RootAction Types
+
+#### `RootState` - type representing root state-tree
+Can be imported in connected components to provide type-safety to Redux `connect` function
+
+#### `RootAction` - type representing union type of all action objects
+Can be imported in various layers receiving or sending redux actions like: reducers, sagas or redux-observables epics
+
+```tsx
+declare module 'MyTypes' {
+  import { StateType, ActionType } from 'typesafe-actions';
+  export type Store = StateType<typeof import('./index').default>;
+  export type RootAction = ActionType<typeof import('./root-action').default>;
+  export type RootState = StateType<typeof import('./root-reducer').default>;
+}
+
+```
+
+[⇧ back to top](#table-of-contents)
+
+### Create Store
+
+When creating a store instance we don't need to provide any additional types. It will set-up a **type-safe Store instance** using type inference.
+> The resulting store instance methods like `getState` or `dispatch` will be type checked and will expose all type errors
+
+```tsx
+import { RootAction, RootState, Services } from 'MyTypes';
+import { createStore, applyMiddleware } from 'redux';
+import { createEpicMiddleware } from 'redux-observable';
+
+import { composeEnhancers } from './utils';
+import rootReducer from './root-reducer';
+import rootEpic from './root-epic';
+import services from '../services';
+
+export const epicMiddleware = createEpicMiddleware<
+  RootAction,
+  RootAction,
+  RootState,
+  Services
+>({
+  dependencies: services,
+});
+
+// configure middlewares
+const middlewares = [epicMiddleware];
+// compose enhancers
+const enhancer = composeEnhancers(applyMiddleware(...middlewares));
+
+// rehydrate state on app start
+const initialState = {};
+
+// create store
+const store = createStore(rootReducer, initialState, enhancer);
+
+epicMiddleware.run(rootEpic);
+
+// export store singleton instance
+export default store;
+
+```
+
+---
+
 ## Action Creators
 
 > We'll be using a battle-tested library [![NPM Downloads](https://img.shields.io/npm/dm/typesafe-actions.svg)](https://www.npmjs.com/package/typesafe-actions)
  that automates and simplify maintenace of **type annotations in Redux Architectures** [`typesafe-actions`](https://github.com/piotrwitek/typesafe-actions#typesafe-actions)
 
-### You should read [The Mighty Tutorial](https://github.com/piotrwitek/typesafe-actions#behold-the-mighty-tutorial) to learn it all the easy way!
+### For more examples and in-depth tutorial you should check [The Mighty Tutorial](https://github.com/piotrwitek/typesafe-actions#behold-the-mighty-tutorial)!
 
 A solution below is using a simple factory function to automate the creation of type-safe action creators. The goal is to decrease maintenance effort and reduce code repetition of type annotations for actions and creators. The result is completely typesafe action-creators and their actions.
 
@@ -1100,6 +1171,7 @@ state.counterPairs[0].immutableCounter2 = 1; // TS Error: cannot be mutated
 [⇧ back to top](#table-of-contents)
 
 ### Typing reducer
+
 > to understand following section make sure to learn about [Type Inference](https://www.typescriptlang.org/docs/handbook/type-inference.html), [Control flow analysis](https://github.com/Microsoft/TypeScript/wiki/What%27s-new-in-TypeScript#control-flow-based-type-analysis) and [Tagged union types](https://github.com/Microsoft/TypeScript/wiki/What%27s-new-in-TypeScript#tagged-union-types)
 
 ```tsx
@@ -1202,77 +1274,11 @@ describe('Todos Stories', () => {
 
 ---
 
-## Store Configuration
+## Async Flow with `redux-observable`
 
-### Create Global RootState and RootAction Types
+### For more examples and in-depth tutorial you should check [The Mighty Tutorial](https://github.com/piotrwitek/typesafe-actions#behold-the-mighty-tutorial)!
 
-#### `RootState` - type representing root state-tree
-Can be imported in connected components to provide type-safety to Redux `connect` function
-
-#### `RootAction` - type representing union type of all action objects
-Can be imported in various layers receiving or sending redux actions like: reducers, sagas or redux-observables epics
-
-```tsx
-declare module 'MyTypes' {
-  import { StateType, ActionType } from 'typesafe-actions';
-  export type Store = StateType<typeof import('./index').default>;
-  export type RootAction = ActionType<typeof import('./root-action').default>;
-  export type RootState = StateType<typeof import('./root-reducer').default>;
-}
-
-```
-
-[⇧ back to top](#table-of-contents)
-
-### Create Store
-
-When creating a store instance we don't need to provide any additional types. It will set-up a **type-safe Store instance** using type inference.
-> The resulting store instance methods like `getState` or `dispatch` will be type checked and will expose all type errors
-
-```tsx
-import { RootAction, RootState, Services } from 'MyTypes';
-import { createStore, applyMiddleware } from 'redux';
-import { createEpicMiddleware } from 'redux-observable';
-
-import { composeEnhancers } from './utils';
-import rootReducer from './root-reducer';
-import rootEpic from './root-epic';
-import services from '../services';
-
-export const epicMiddleware = createEpicMiddleware<
-  RootAction,
-  RootAction,
-  RootState,
-  Services
->({
-  dependencies: services,
-});
-
-// configure middlewares
-const middlewares = [epicMiddleware];
-// compose enhancers
-const enhancer = composeEnhancers(applyMiddleware(...middlewares));
-
-// rehydrate state on app start
-const initialState = {};
-
-// create store
-const store = createStore(rootReducer, initialState, enhancer);
-
-epicMiddleware.run(rootEpic);
-
-// export store singleton instance
-export default store;
-
-```
-
----
-
-## Async Flow
-
-### "redux-observable"
-
-### For more examples and in-depth explanation you should read [The Mighty Tutorial](https://github.com/piotrwitek/typesafe-actions#behold-the-mighty-tutorial) to learn it all the easy way!
+### Typing epics
 
 ```tsx
 import { RootAction, RootState, Services } from 'MyTypes';
@@ -1297,6 +1303,66 @@ export const logAddAction: Epic<RootAction, RootAction, RootState, Services> = (
     }),
     ignoreElements()
   );
+
+```
+
+[⇧ back to top](#table-of-contents)
+
+### Testing epics
+
+```tsx
+import { StateObservable, ActionsObservable } from 'redux-observable';
+import { RootState, Services, RootAction } from 'MyTypes';
+import { Subject } from 'rxjs';
+
+import { add } from './actions';
+import { logAddAction } from './epics';
+
+// Simple typesafe mock of all the services, you dont't need to mock anything else
+// It is decoupled and reusable for all your tests, just put it in a separate file
+const services = {
+  logger: {
+    log: jest.fn<Services['logger']['log']>(),
+  },
+  localStorage: {
+    loadState: jest.fn<Services['localStorage']['loadState']>(),
+    saveState: jest.fn<Services['localStorage']['saveState']>(),
+  },
+};
+
+describe('Todos Epics', () => {
+  let state$: StateObservable<RootState>;
+
+  beforeEach(() => {
+    state$ = new StateObservable<RootState>(
+      new Subject<RootState>(),
+      undefined as any
+    );
+  });
+
+  describe('logging todos actions', () => {
+    beforeEach(() => {
+      services.logger.log.mockClear();
+    });
+
+    it('should call the logger service when adding a new todo', done => {
+      const addTodoAction = add('new todo');
+      const action$ = ActionsObservable.of(addTodoAction);
+
+      logAddAction(action$, state$, services)
+        .toPromise()
+        .then((outputAction: RootAction) => {
+          expect(services.logger.log).toHaveBeenCalledTimes(1);
+          expect(services.logger.log).toHaveBeenCalledWith(
+            'action type must be equal: todos/ADD === todos/ADD'
+          );
+          // expect output undefined because we're using "ignoreElements" in epic
+          expect(outputAction).toEqual(undefined);
+          done();
+        });
+    });
+  });
+});
 
 ```
 
