@@ -176,7 +176,7 @@ import * as React from 'react';
 type Props = {
   label: string;
   count: number;
-  onIncrement: () => any;
+  onIncrement: () => void;
 };
 
 export const FCCounter: React.FC<Props> = props => {
@@ -462,7 +462,7 @@ import { Subtract } from 'utility-types';
 // These props will be subtracted from base component props
 interface InjectedProps {
   count: number;
-  onIncrement: () => any;
+  onIncrement: () => void;
 }
 
 export const withState = <BaseProps extends InjectedProps>(
@@ -534,7 +534,7 @@ const MISSING_ERROR = 'Error was swallowed during propagation.';
 
 // These props will be subtracted from base component props
 interface InjectedProps {
-  onReset: () => any;
+  onReset: () => void;
 }
 
 export const withErrorBoundary = <BaseProps extends InjectedProps>(
@@ -623,20 +623,6 @@ export default () => (
 
 ## Redux Connected Components
 
-### Caveat with `bindActionCreators`
-**If you try to use `connect` or `bindActionCreators` explicitly and want to type your component callback props as `() => void` this will raise compiler errors. It happens because `bindActionCreators` typings will not map the return type of action creators to `void`, due to a current TypeScript limitations.**
-
-A decent alternative I can recommend is to use `() => any` type, it will work just fine in all possible scenarios and should not cause any typing problems whatsoever. All the code examples in the Guide with `connect` are also using this pattern.
-
-> If there is any progress or fix in regard to the above caveat I'll update the guide and make an announcement on my twitter/medium (There are a few existing proposals already).
-
-> There is alternative way to retain type soundness but it requires an explicit wrapping with `dispatch` and will be very tedious for the long run. See example below:
-```ts
-const mapDispatchToProps = (dispatch: Dispatch<ActionType>) => ({
-  onIncrement: () => dispatch(actions.increment()),
-});
-```
-
 #### - redux connected counter
 
 ```tsx
@@ -650,11 +636,13 @@ const mapStateToProps = (state: Types.RootState) => ({
   count: countersSelectors.getReduxCounter(state.counters),
 });
 
+const dispatchProps = {
+  onIncrement: countersActions.increment,
+};
+
 export const FCCounterConnected = connect(
   mapStateToProps,
-  {
-    onIncrement: countersActions.increment,
-  }
+  dispatchProps
 )(FCCounter);
 
 ```
@@ -735,11 +723,13 @@ const mapStateToProps = (state: Types.RootState, ownProps: OwnProps) => ({
     (ownProps.initialCount || 0),
 });
 
+const dispatchProps = {
+  onIncrement: countersActions.increment,
+};
+
 export const FCCounterConnectedExtended = connect(
   mapStateToProps,
-  {
-    onIncrement: countersActions.increment,
-  }
+  dispatchProps
 )(FCCounter);
 
 ```
@@ -1131,12 +1121,28 @@ state.todos.push('Learn about tagged union types') // TS Error: Property 'push' 
 const newTodos = state.todos.concat('Learn about tagged union types') // OK
 ```
 
-#### Caveat: Readonly is not recursive
+#### Caveat - `Readonly` is not recursive
 This means that the `readonly` modifier doesn't propagate immutability down the nested structure of objects. You'll need to mark each property on each level explicitly.
 
-To fix this we can use [`DeepReadonly`](https://github.com/piotrwitek/utility-types#deepreadonlyt) type (available in `utility-types` npm library - collection of reusable types extending the collection of **standard-lib** in TypeScript.
+> **TIP:** use `Readonly` or `ReadonlyArray` [Mapped types](https://www.typescriptlang.org/docs/handbook/advanced-types.html)
 
-Check the example below:
+```ts
+export type State = Readonly<{
+  counterPairs: ReadonlyArray<Readonly<{
+    immutableCounter1: number,
+    immutableCounter2: number,
+  }>>,
+}>;
+
+state.counterPairs[0] = { immutableCounter1: 1, immutableCounter2: 1 }; // TS Error: cannot be mutated
+state.counterPairs[0].immutableCounter1 = 1; // TS Error: cannot be mutated
+state.counterPairs[0].immutableCounter2 = 1; // TS Error: cannot be mutated
+```
+
+#### Solution - recursive `Readonly` is called `DeepReadonly`
+
+To fix this we can use [`DeepReadonly`](https://github.com/piotrwitek/utility-types#deepreadonlyt) type (available from `utility-types`).
+
 ```ts
 import { DeepReadonly } from 'utility-types';
 
@@ -1152,21 +1158,6 @@ state.containerObject.innerValue = 1; // TS Error: cannot be mutated
 state.containerObject.numbers.push(1); // TS Error: cannot use mutator methods
 ```
 
-#### Best-practices for nested immutability
-> use `Readonly` or `ReadonlyArray` [Mapped types](https://www.typescriptlang.org/docs/handbook/advanced-types.html)
-
-```ts
-export type State = Readonly<{
-  counterPairs: ReadonlyArray<Readonly<{
-    immutableCounter1: number,
-    immutableCounter2: number,
-  }>>,
-}>;
-
-state.counterPairs[0] = { immutableCounter1: 1, immutableCounter2: 1 }; // TS Error: cannot be mutated
-state.counterPairs[0].immutableCounter1 = 1; // TS Error: cannot be mutated
-state.counterPairs[0].immutableCounter2 = 1; // TS Error: cannot be mutated
-```
 
 [⇧ back to top](#table-of-contents)
 
@@ -1403,11 +1394,10 @@ export const getFilteredTodos = createSelector(getTodos, getTodosFilter, (todos,
 
 ## Typing connect
 
-Below snippet can be find in the `playground/` folder, you can checkout the repo and follow all dependencies to understand the bigger picture.
-`playground/src/connected/fc-counter-connected-verbose.tsx`
+*__NOTE__: Below you'll find only a short explanation of concepts behind typing `connect`. For more advanced scenarios and common use-cases (`redux-thunk` and more...) please check [Redux Connected Components](#redux-connected-components) section.*
 
 ```tsx
-import Types from 'Types';
+import MyTypes from 'MyTypes';
 
 import { bindActionCreators, Dispatch } from 'redux';
 import { connect } from 'react-redux';
@@ -1415,19 +1405,26 @@ import { connect } from 'react-redux';
 import { countersActions } from '../features/counters';
 import { FCCounter } from '../components';
 
-// `state` parameter needs a type annotation to type-check the correct shape of a state object but also it'll be used by "type inference" to infer the type of returned props
-const mapStateToProps = (state: Types.RootState, ownProps: FCCounterProps) => ({
+// `state` argument annotation is mandatory to check the correct shape of a state object and injected props
+// you can also extend connected component Props type by annotating `ownProps` argument
+const mapStateToProps = (state: MyTypes.RootState, ownProps: FCCounterProps) => ({
   count: state.counters.reduxCounter,
 });
 
-// `dispatch` parameter needs a type annotation to type-check the correct shape of an action object when using dispatch function
-const mapDispatchToProps = (dispatch: Dispatch<Types.RootAction>) => bindActionCreators({
+// `dispatch` argument needs an annotation to check the correct shape of an action object
+// when using dispatch function
+const mapDispatchToProps = (dispatch: Dispatch<MyTypes.RootAction>) => bindActionCreators({
   onIncrement: countersActions.increment,
-  // without using action creators, this will be validated using your RootAction union type
-  // onIncrement: () => dispatch({ type: "counters/INCREMENT" }),
 }, dispatch);
 
-// NOTE: We don't need to pass generic type arguments to neither connect nor mapping functions because type inference will do all this work automatically. So there's really no reason to increase the noise ratio in your codebase!
+// shorter alternative is to use an object instead of mapDispatchToProps function
+const dispatchToProps = {
+    onIncrement: countersActions.increment,
+};
+
+// Notice ee don't need to pass any generic type parameters to neither connect nor map functions above
+// because type inference will infer types from arguments annotations automatically
+// It's much cleaner and idiomatic approach
 export const FCCounterConnectedVerbose =
   connect(mapStateToProps, mapDispatchToProps)(FCCounter);
 ```
@@ -1622,6 +1619,7 @@ Object.values = () => [];
       // "@src/*": ["src/*"] // will enable import aliases -> import { ... } from '@src/components'
       // WARNING: Require to add this to your webpack config -> resolve: { alias: { '@src': PATH_TO_SRC } }
       // "redux": ["typings/redux"], // override library types with your alternative type-definitions in typings folder
+      "redux-thunk": ["typings/redux-thunk"] // override library types with your alternative type-definitions in typings folder
     },
     "outDir": "dist/", // target for compiled files
     "allowSyntheticDefaultImports": true, // no errors with commonjs modules interop

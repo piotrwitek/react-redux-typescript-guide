@@ -3,7 +3,7 @@ import { createStore, combineReducers } from 'redux';
 import { Provider } from 'react-redux';
 import { render, fireEvent, cleanup } from 'react-testing-library';
 
-import { FCCounterConnectedExtended as ConnectedCounter } from './fc-counter-connected-extended';
+import { FCCounterConnectedExtended as ConnectedCounter } from './fc-counter-connected-own-props';
 
 const reducer = combineReducers({
   counters: combineReducers({
