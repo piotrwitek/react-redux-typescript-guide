@@ -3,7 +3,7 @@ import * as React from 'react';
 type Props = {
   label: string;
   count: number;
-  onIncrement: () => any;
+  onIncrement: () => void;
 };
 
 export const FCCounter: React.FC<Props> = props => {

@@ -7,7 +7,7 @@ _"This guide is a **living compendium** documenting the most important patterns 
 
 :tada: _Now updated to be compatible with **TypeScript v3.1.6**_ :tada:  
 
-:computer: _Reference implementation of Todo-App with `typesafe-actions`: https://codesandbox.io/s/github/piotrwitek/typesafe-actions-todo-app_ :computer:  
+:computer: _Reference implementation of Todo-App with `typesafe-actions`: https://codesandbox.io/s/github/piotrwitek/typesafe-actions/tree/master/codesandbox_ :computer:  
 
 ### Goals
 - Complete type safety (with [`--strict`](https://www.typescriptlang.org/docs/handbook/compiler-options.html) flag) without losing type information downstream through all the layers of our application (e.g. no type assertions or hacking with `any` type)
@@ -59,9 +59,10 @@ Issues can be funded by anyone and the money will be transparently distributed t
     - [Testing reducer](#testing-reducer)
   - [Async Flow with `redux-observable`](#async-flow-with-redux-observable)
     - [Typing Epics](#typing-epics)
-    - [Testing Epics](#testing-epics) 🌟 __NEW__
-  - [Selectors](#selectors)
-  - [Typing connect](#typing-connect)
+    - [Testing Epics](#testing-epics)
+  - [Async Flow with `redux-thunk`](#async-flow-with-redux-thunk) 🌟 __NEW__
+  - [Selectors with `reselect`](#selectors-with-reselect)
+  - [Connect with `react-redux`](#connect-with-react-redux) 🌟 __NEW__
 - [Tools](#tools)
   - [TSLint](#tslint)
   - [Jest](#jest)
@@ -176,7 +177,7 @@ import * as React from 'react';
 type Props = {
   label: string;
   count: number;
-  onIncrement: () => any;
+  onIncrement: () => void;
 };
 
 export const FCCounter: React.FC<Props> = props => {
@@ -462,7 +463,7 @@ import { Subtract } from 'utility-types';
 // These props will be subtracted from base component props
 interface InjectedProps {
   count: number;
-  onIncrement: () => any;
+  onIncrement: () => void;
 }
 
 export const withState = <BaseProps extends InjectedProps>(
@@ -534,7 +535,7 @@ const MISSING_ERROR = 'Error was swallowed during propagation.';
 
 // These props will be subtracted from base component props
 interface InjectedProps {
-  onReset: () => any;
+  onReset: () => void;
 }
 
 export const withErrorBoundary = <BaseProps extends InjectedProps>(
@@ -623,20 +624,6 @@ export default () => (
 
 ## Redux Connected Components
 
-### Caveat with `bindActionCreators`
-**If you try to use `connect` or `bindActionCreators` explicitly and want to type your component callback props as `() => void` this will raise compiler errors. It happens because `bindActionCreators` typings will not map the return type of action creators to `void`, due to current TypeScript limitations.**
-
-A decent alternative I can recommend is to use `() => any` type, it will work just fine in all possible scenarios and should not cause any typing problems whatsoever. All the code examples in the Guide with `connect` are also using this pattern.
-
-> If there is any progress or fix in regard to the above caveat I'll update the guide and make an announcement on my twitter/medium (There are a few existing proposals already).
-
-> There is alternative way to retain type soundness but it requires an explicit wrapping with `dispatch` and will be very tedious for the long run. See example below:
-```ts
-const mapDispatchToProps = (dispatch: Dispatch<ActionType>) => ({
-  onIncrement: () => dispatch(actions.increment()),
-});
-```
-
 #### - redux connected counter
 
 ```tsx
@@ -650,11 +637,13 @@ const mapStateToProps = (state: Types.RootState) => ({
   count: countersSelectors.getReduxCounter(state.counters),
 });
 
+const dispatchProps = {
+  onIncrement: countersActions.increment,
+};
+
 export const FCCounterConnected = connect(
   mapStateToProps,
-  {
-    onIncrement: countersActions.increment,
-  }
+  dispatchProps
 )(FCCounter);
 
 ```
@@ -672,51 +661,7 @@ export default () => <FCCounterConnected label={'FCCounterConnected'} />;
 
 [⇧ back to top](#table-of-contents)
 
-#### - redux connected counter (verbose)
-
-```tsx
-import Types from 'MyTypes';
-import { bindActionCreators, Dispatch } from 'redux';
-import { connect } from 'react-redux';
-
-import { countersActions } from '../features/counters';
-import { FCCounter } from '../components';
-
-const mapStateToProps = (state: Types.RootState) => ({
-  count: state.counters.reduxCounter,
-});
-
-const mapDispatchToProps = (dispatch: Dispatch<Types.RootAction>) =>
-  bindActionCreators(
-    {
-      onIncrement: countersActions.increment,
-    },
-    dispatch
-  );
-
-export const FCCounterConnectedVerbose = connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(FCCounter);
-
-```
-<details><summary><i>Click to expand</i></summary><p>
-
-```tsx
-import * as React from 'react';
-
-import { FCCounterConnectedVerbose } from '.';
-
-export default () => (
-  <FCCounterConnectedVerbose label={'FCCounterConnectedVerbose'} />
-);
-
-```
-</p></details>
-
-[⇧ back to top](#table-of-contents)
-
-#### - with own props
+#### - redux connected counter with own props
 
 ```tsx
 import Types from 'MyTypes';
@@ -735,11 +680,13 @@ const mapStateToProps = (state: Types.RootState, ownProps: OwnProps) => ({
     (ownProps.initialCount || 0),
 });
 
-export const FCCounterConnectedExtended = connect(
+const dispatchProps = {
+  onIncrement: countersActions.increment,
+};
+
+export const FCCounterConnectedOwnProps = connect(
   mapStateToProps,
-  {
-    onIncrement: countersActions.increment,
-  }
+  dispatchProps
 )(FCCounter);
 
 ```
@@ -748,12 +695,90 @@ export const FCCounterConnectedExtended = connect(
 ```tsx
 import * as React from 'react';
 
-import { FCCounterConnectedExtended } from '.';
+import { FCCounterConnectedOwnProps } from '.';
 
 export default () => (
-  <FCCounterConnectedExtended
-    label={'FCCounterConnectedExtended'}
+  <FCCounterConnectedOwnProps
+    label={'FCCounterConnectedOwnProps'}
     initialCount={10}
+  />
+);
+
+```
+</p></details>
+
+[⇧ back to top](#table-of-contents)
+
+#### - redux connected counter with `redux-thunk` integration
+
+```tsx
+import Types from 'MyTypes';
+import { bindActionCreators, Dispatch } from 'redux';
+import { connect } from 'react-redux';
+import * as React from 'react';
+
+import { countersActions } from '../features/counters';
+
+// Thunk Action
+const incrementWithDelay = () => async (dispatch: Dispatch): Promise<void> => {
+  setTimeout(() => dispatch(countersActions.increment()), 1000);
+};
+
+const mapStateToProps = (state: Types.RootState) => ({
+  count: state.counters.reduxCounter,
+});
+
+const mapDispatchToProps = (dispatch: Dispatch<Types.RootAction>) =>
+  bindActionCreators(
+    {
+      onIncrement: incrementWithDelay,
+    },
+    dispatch
+  );
+
+type Props = ReturnType<typeof mapStateToProps> &
+  ReturnType<typeof mapDispatchToProps> & {
+    label: string;
+  };
+
+export const FCCounter: React.FC<Props> = props => {
+  const { label, count, onIncrement } = props;
+
+  const handleIncrement = () => {
+    // Thunk action is correctly typed as promise
+    onIncrement().then(() => {
+      // ...
+    });
+  };
+
+  return (
+    <div>
+      <span>
+        {label}: {count}
+      </span>
+      <button type="button" onClick={handleIncrement}>
+        {`Increment`}
+      </button>
+    </div>
+  );
+};
+
+export const FCCounterConnectedBindActionCreators = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(FCCounter);
+
+```
+<details><summary><i>Click to expand</i></summary><p>
+
+```tsx
+import * as React from 'react';
+
+import { FCCounterConnectedBindActionCreators } from '.';
+
+export default () => (
+  <FCCounterConnectedBindActionCreators
+    label={'FCCounterConnectedBindActionCreators'}
   />
 );
 
@@ -1053,9 +1078,9 @@ export default store;
 ## Action Creators
 
 > We'll be using a battle-tested library [![NPM Downloads](https://img.shields.io/npm/dm/typesafe-actions.svg)](https://www.npmjs.com/package/typesafe-actions)
- that automates and simplify maintenace of **type annotations in Redux Architectures** [`typesafe-actions`](https://github.com/piotrwitek/typesafe-actions#typesafe-actions)
+ that'll help retain complete type soundness and simplify maintenace of **types in Redux Architectures** [`typesafe-actions`](https://github.com/piotrwitek/typesafe-actions#typesafe-actions)
 
-### For more examples and in-depth tutorial you should check [The Mighty Tutorial](https://github.com/piotrwitek/typesafe-actions#behold-the-mighty-tutorial)!
+> You can find more real-world examples and in-depth tutorial in: [Typesafe-Actions - The Mighty Tutorial](https://github.com/piotrwitek/typesafe-actions#behold-the-mighty-tutorial)!
 
 A solution below is using a simple factory function to automate the creation of type-safe action creators. The goal is to decrease maintenance effort and reduce code repetition of type annotations for actions and creators. The result is completely typesafe action-creators and their actions.
 
@@ -1131,12 +1156,28 @@ state.todos.push('Learn about tagged union types') // TS Error: Property 'push' 
 const newTodos = state.todos.concat('Learn about tagged union types') // OK
 ```
 
-#### Caveat: Readonly is not recursive
+#### Caveat - `Readonly` is not recursive
 This means that the `readonly` modifier doesn't propagate immutability down the nested structure of objects. You'll need to mark each property on each level explicitly.
 
-To fix this we can use [`DeepReadonly`](https://github.com/piotrwitek/utility-types#deepreadonlyt) type (available in `utility-types` npm library - collection of reusable types extending the collection of **standard-lib** in TypeScript.
+> **TIP:** use `Readonly` or `ReadonlyArray` [Mapped types](https://www.typescriptlang.org/docs/handbook/advanced-types.html)
 
-Check the example below:
+```ts
+export type State = Readonly<{
+  counterPairs: ReadonlyArray<Readonly<{
+    immutableCounter1: number,
+    immutableCounter2: number,
+  }>>,
+}>;
+
+state.counterPairs[0] = { immutableCounter1: 1, immutableCounter2: 1 }; // TS Error: cannot be mutated
+state.counterPairs[0].immutableCounter1 = 1; // TS Error: cannot be mutated
+state.counterPairs[0].immutableCounter2 = 1; // TS Error: cannot be mutated
+```
+
+#### Solution - recursive `Readonly` is called `DeepReadonly`
+
+To fix this we can use [`DeepReadonly`](https://github.com/piotrwitek/utility-types#deepreadonlyt) type (available from `utility-types`).
+
 ```ts
 import { DeepReadonly } from 'utility-types';
 
@@ -1152,21 +1193,6 @@ state.containerObject.innerValue = 1; // TS Error: cannot be mutated
 state.containerObject.numbers.push(1); // TS Error: cannot use mutator methods
 ```
 
-#### Best-practices for nested immutability
-> use `Readonly` or `ReadonlyArray` [Mapped types](https://www.typescriptlang.org/docs/handbook/advanced-types.html)
-
-```ts
-export type State = Readonly<{
-  counterPairs: ReadonlyArray<Readonly<{
-    immutableCounter1: number,
-    immutableCounter2: number,
-  }>>,
-}>;
-
-state.counterPairs[0] = { immutableCounter1: 1, immutableCounter2: 1 }; // TS Error: cannot be mutated
-state.counterPairs[0].immutableCounter1 = 1; // TS Error: cannot be mutated
-state.counterPairs[0].immutableCounter2 = 1; // TS Error: cannot be mutated
-```
 
 [⇧ back to top](#table-of-contents)
 
@@ -1276,8 +1302,6 @@ describe('Todos Stories', () => {
 
 ## Async Flow with `redux-observable`
 
-### For more examples and in-depth tutorial you should check [The Mighty Tutorial](https://github.com/piotrwitek/typesafe-actions#behold-the-mighty-tutorial)!
-
 ### Typing epics
 
 ```tsx
@@ -1370,9 +1394,7 @@ describe('Todos Epics', () => {
 
 ---
 
-## Selectors
-
-### "reselect"
+## Selectors with `reselect`
 
 ```tsx
 import { createSelector } from 'reselect';
@@ -1401,13 +1423,12 @@ export const getFilteredTodos = createSelector(getTodos, getTodosFilter, (todos,
 
 ---
 
-## Typing connect
+## Connect with `react-redux`
 
-Below snippet can be find in the `playground/` folder, you can checkout the repo and follow all dependencies to understand the bigger picture.
-`playground/src/connected/fc-counter-connected-verbose.tsx`
+*__NOTE__: Below you'll find only a short explanation of concepts behind typing `connect`. For more real-world examples please check [Redux Connected Components](#redux-connected-components) section.*
 
 ```tsx
-import Types from 'Types';
+import MyTypes from 'MyTypes';
 
 import { bindActionCreators, Dispatch } from 'redux';
 import { connect } from 'react-redux';
@@ -1415,21 +1436,52 @@ import { connect } from 'react-redux';
 import { countersActions } from '../features/counters';
 import { FCCounter } from '../components';
 
-// `state` parameter needs a type annotation to type-check the correct shape of a state object but also it'll be used by "type inference" to infer the type of returned props
-const mapStateToProps = (state: Types.RootState, ownProps: FCCounterProps) => ({
+// `state` argument annotation is mandatory to check the correct shape of a state object and injected props
+// you can also extend connected component Props type by annotating `ownProps` argument
+const mapStateToProps = (state: MyTypes.RootState, ownProps: FCCounterProps) => ({
   count: state.counters.reduxCounter,
 });
 
-// `dispatch` parameter needs a type annotation to type-check the correct shape of an action object when using dispatch function
-const mapDispatchToProps = (dispatch: Dispatch<Types.RootAction>) => bindActionCreators({
+// `dispatch` argument needs an annotation to check the correct shape of an action object
+// when using dispatch function
+const mapDispatchToProps = (dispatch: Dispatch<MyTypes.RootAction>) => bindActionCreators({
   onIncrement: countersActions.increment,
-  // without using action creators, this will be validated using your RootAction union type
-  // onIncrement: () => dispatch({ type: "counters/INCREMENT" }),
 }, dispatch);
 
-// NOTE: We don't need to pass generic type arguments to neither connect nor mapping functions because type inference will do all this work automatically. So there's really no reason to increase the noise ratio in your codebase!
-export const FCCounterConnectedVerbose =
+// shorter alternative is to use an object instead of mapDispatchToProps function
+const dispatchToProps = {
+    onIncrement: countersActions.increment,
+};
+
+// Notice ee don't need to pass any generic type parameters to neither connect nor map functions above
+// because type inference will infer types from arguments annotations automatically
+// It's much cleaner and idiomatic approach
+export const FCCounterConnected =
   connect(mapStateToProps, mapDispatchToProps)(FCCounter);
+```
+
+*__NOTE__ (for `redux-thunk`): When using thunk action creators you need to use `bindActionCreators`. Only this way you can get corrected dispatch props type signature like below.*
+
+*__WARNING__: As of now (Apr 2019) `bindActionCreators` signature of the latest `redux-thunk` release will not work as below, you need to use updated type definitions that you can find in `/playground/typings/redux-thunk` folder and then add paths overload in your tsconfig like this: `"paths":{"redux-thunk":["typings/redux-thunk"]}`.*
+
+```tsx
+const thunkAsyncAction = () => async (dispatch: Dispatch): Promise<void> => {
+  // dispatch actions, return Promise, etc.
+}
+
+const mapDispatchToProps = (dispatch: Dispatch<Types.RootAction>) =>
+  bindActionCreators(
+    {
+      thunkAsyncAction,
+    },
+    dispatch
+  );
+
+type DispatchProps = ReturnType<typeof mapDispatchToProps>;
+// { thunkAsyncAction: () => Promise<void>; }
+
+/* Without "bindActionCreators" fix signature will be the same as the original "unbound" thunk function: */
+// { thunkAsyncAction: () => (dispatch: Dispatch<AnyAction>) => Promise<void>; }
 ```
 
 [⇧ back to top](#table-of-contents)
@@ -1622,6 +1674,7 @@ Object.values = () => [];
       // "@src/*": ["src/*"] // will enable import aliases -> import { ... } from '@src/components'
       // WARNING: Require to add this to your webpack config -> resolve: { alias: { '@src': PATH_TO_SRC } }
       // "redux": ["typings/redux"], // override library types with your alternative type-definitions in typings folder
+      "redux-thunk": ["typings/redux-thunk"] // override library types with your alternative type-definitions in typings folder
     },
     "outDir": "dist/", // target for compiled files
     "allowSyntheticDefaultImports": true, // no errors with commonjs modules interop

@@ -5,6 +5,7 @@
       // "@src/*": ["src/*"] // will enable import aliases -> import { ... } from '@src/components'
       // WARNING: Require to add this to your webpack config -> resolve: { alias: { '@src': PATH_TO_SRC } }
       // "redux": ["typings/redux"], // override library types with your alternative type-definitions in typings folder
+      "redux-thunk": ["typings/redux-thunk"] // override library types with your alternative type-definitions in typings folder
     },
     "outDir": "dist/", // target for compiled files
     "allowSyntheticDefaultImports": true, // no errors with commonjs modules interop

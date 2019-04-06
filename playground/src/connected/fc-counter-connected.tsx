@@ -8,9 +8,11 @@ const mapStateToProps = (state: Types.RootState) => ({
   count: countersSelectors.getReduxCounter(state.counters),
 });
 
+const dispatchProps = {
+  onIncrement: countersActions.increment,
+};
+
 export const FCCounterConnected = connect(
   mapStateToProps,
-  {
-    onIncrement: countersActions.increment,
-  }
+  dispatchProps
 )(FCCounter);

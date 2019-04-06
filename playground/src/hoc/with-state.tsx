@@ -4,7 +4,7 @@ import { Subtract } from 'utility-types';
 // These props will be subtracted from base component props
 interface InjectedProps {
   count: number;
-  onIncrement: () => any;
+  onIncrement: () => void;
 }
 
 export const withState = <BaseProps extends InjectedProps>(

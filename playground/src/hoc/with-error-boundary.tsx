@@ -5,7 +5,7 @@ const MISSING_ERROR = 'Error was swallowed during propagation.';
 
 // These props will be subtracted from base component props
 interface InjectedProps {
-  onReset: () => any;
+  onReset: () => void;
 }
 
 export const withErrorBoundary = <BaseProps extends InjectedProps>(

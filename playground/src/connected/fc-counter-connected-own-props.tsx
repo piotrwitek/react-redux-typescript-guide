@@ -14,9 +14,11 @@ const mapStateToProps = (state: Types.RootState, ownProps: OwnProps) => ({
     (ownProps.initialCount || 0),
 });
 
-export const FCCounterConnectedExtended = connect(
+const dispatchProps = {
+  onIncrement: countersActions.increment,
+};
+
+export const FCCounterConnectedOwnProps = connect(
   mapStateToProps,
-  {
-    onIncrement: countersActions.increment,
-  }
+  dispatchProps
 )(FCCounter);
