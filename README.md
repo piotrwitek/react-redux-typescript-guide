@@ -138,7 +138,7 @@ const Component = ({ children: React.ReactNode }) => ...
 ```
 
 #### `React.CSSProperties`
-Type representing style object in JSX (usefull for css-in-js styles)
+Type representing style object in JSX (useful for css-in-js styles)
 ```tsx
 const styles: React.CSSProperties = { flexDirection: 'row', ...
 const element = <div style={styles} ...
@@ -624,7 +624,7 @@ export default () => (
 ## Redux Connected Components
 
 ### Caveat with `bindActionCreators`
-**If you try to use `connect` or `bindActionCreators` explicitly and want to type your component callback props as `() => void` this will raise compiler errors. It happens because `bindActionCreators` typings will not map the return type of action creators to `void`, due to a current TypeScript limitations.**
+**If you try to use `connect` or `bindActionCreators` explicitly and want to type your component callback props as `() => void` this will raise compiler errors. It happens because `bindActionCreators` typings will not map the return type of action creators to `void`, due to current TypeScript limitations.**
 
 A decent alternative I can recommend is to use `() => any` type, it will work just fine in all possible scenarios and should not cause any typing problems whatsoever. All the code examples in the Guide with `connect` are also using this pattern.
 
