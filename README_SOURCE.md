@@ -7,7 +7,7 @@ _"This guide is a **living compendium** documenting the most important patterns 
 
 :tada: _Now updated to be compatible with **TypeScript v3.1.6**_ :tada:  
 
-:computer: _Reference implementation of Todo-App with `typesafe-actions`: https://codesandbox.io/s/github/piotrwitek/typesafe-actions-todo-app_ :computer:  
+:computer: _Reference implementation of Todo-App with `typesafe-actions`: https://codesandbox.io/s/github/piotrwitek/typesafe-actions/tree/master/codesandbox_ :computer:  
 
 ### Goals
 - Complete type safety (with [`--strict`](https://www.typescriptlang.org/docs/handbook/compiler-options.html) flag) without losing type information downstream through all the layers of our application (e.g. no type assertions or hacking with `any` type)
@@ -59,9 +59,10 @@ Issues can be funded by anyone and the money will be transparently distributed t
     - [Testing reducer](#testing-reducer)
   - [Async Flow with `redux-observable`](#async-flow-with-redux-observable)
     - [Typing Epics](#typing-epics)
-    - [Testing Epics](#testing-epics) 🌟 __NEW__
-  - [Selectors](#selectors)
-  - [Typing connect](#typing-connect)
+    - [Testing Epics](#testing-epics)
+  - [Async Flow with `redux-thunk`](#async-flow-with-redux-thunk) 🌟 __NEW__
+  - [Selectors with `reselect`](#selectors-with-reselect)
+  - [Connect with `react-redux`](#connect-with-react-redux) 🌟 __NEW__
 - [Tools](#tools)
   - [TSLint](#tslint)
   - [Jest](#jest)
@@ -138,7 +139,7 @@ const Component = ({ children: React.ReactNode }) => ...
 ```
 
 #### `React.CSSProperties`
-Type representing style object in JSX (usefull for css-in-js styles)
+Type representing style object in JSX (useful for css-in-js styles)
 ```tsx
 const styles: React.CSSProperties = { flexDirection: 'row', ...
 const element = <div style={styles} ...
@@ -273,17 +274,17 @@ Adds error handling using componentDidCatch to any component
 
 [⇧ back to top](#table-of-contents)
 
-#### - redux connected counter (verbose)
-
-::codeblock='playground/src/connected/fc-counter-connected-bind-action-creators.tsx'::
-::expander='playground/src/connected/fc-counter-connected-bind-action-creators.usage.tsx'::
-
-[⇧ back to top](#table-of-contents)
-
-#### - with own props
+#### - redux connected counter with own props
 
 ::codeblock='playground/src/connected/fc-counter-connected-own-props.tsx'::
 ::expander='playground/src/connected/fc-counter-connected-own-props.usage.tsx'::
+
+[⇧ back to top](#table-of-contents)
+
+#### - redux connected counter with `redux-thunk` integration
+
+::codeblock='playground/src/connected/fc-counter-connected-bind-action-creators.tsx'::
+::expander='playground/src/connected/fc-counter-connected-bind-action-creators.usage.tsx'::
 
 [⇧ back to top](#table-of-contents)
 
@@ -372,9 +373,9 @@ When creating a store instance we don't need to provide any additional types. It
 ## Action Creators
 
 > We'll be using a battle-tested library [![NPM Downloads](https://img.shields.io/npm/dm/typesafe-actions.svg)](https://www.npmjs.com/package/typesafe-actions)
- that automates and simplify maintenace of **type annotations in Redux Architectures** [`typesafe-actions`](https://github.com/piotrwitek/typesafe-actions#typesafe-actions)
+ that'll help retain complete type soundness and simplify maintenace of **types in Redux Architectures** [`typesafe-actions`](https://github.com/piotrwitek/typesafe-actions#typesafe-actions)
 
-### For more examples and in-depth tutorial you should check [The Mighty Tutorial](https://github.com/piotrwitek/typesafe-actions#behold-the-mighty-tutorial)!
+> You can find more real-world examples and in-depth tutorial in: [Typesafe-Actions - The Mighty Tutorial](https://github.com/piotrwitek/typesafe-actions#behold-the-mighty-tutorial)!
 
 A solution below is using a simple factory function to automate the creation of type-safe action creators. The goal is to decrease maintenance effort and reduce code repetition of type annotations for actions and creators. The result is completely typesafe action-creators and their actions.
 
@@ -469,8 +470,6 @@ state.containerObject.numbers.push(1); // TS Error: cannot use mutator methods
 
 ## Async Flow with `redux-observable`
 
-### For more examples and in-depth tutorial you should check [The Mighty Tutorial](https://github.com/piotrwitek/typesafe-actions#behold-the-mighty-tutorial)!
-
 ### Typing epics
 
 ::codeblock='playground/src/features/todos/epics.ts'::
@@ -485,9 +484,7 @@ state.containerObject.numbers.push(1); // TS Error: cannot use mutator methods
 
 ---
 
-## Selectors
-
-### "reselect"
+## Selectors with `reselect`
 
 ::codeblock='playground/src/features/todos/selectors.ts'::
 
@@ -495,9 +492,9 @@ state.containerObject.numbers.push(1); // TS Error: cannot use mutator methods
 
 ---
 
-## Typing connect
+## Connect with `react-redux`
 
-*__NOTE__: Below you'll find only a short explanation of concepts behind typing `connect`. For more advanced scenarios and common use-cases (`redux-thunk` and more...) please check [Redux Connected Components](#redux-connected-components) section.*
+*__NOTE__: Below you'll find only a short explanation of concepts behind typing `connect`. For more real-world examples please check [Redux Connected Components](#redux-connected-components) section.*
 
 ```tsx
 import MyTypes from 'MyTypes';
@@ -528,8 +525,32 @@ const dispatchToProps = {
 // Notice ee don't need to pass any generic type parameters to neither connect nor map functions above
 // because type inference will infer types from arguments annotations automatically
 // It's much cleaner and idiomatic approach
-export const FCCounterConnectedVerbose =
+export const FCCounterConnected =
   connect(mapStateToProps, mapDispatchToProps)(FCCounter);
+```
+
+*__NOTE__ (for `redux-thunk`): When using thunk action creators you need to use `bindActionCreators`. Only this way you can get corrected dispatch props type signature like below.*
+
+*__WARNING__: As of now (Apr 2019) `bindActionCreators` signature of the latest `redux-thunk` release will not work as below, you need to use updated type definitions that you can find in `/playground/typings/redux-thunk` folder and then add paths overload in your tsconfig like this: `"paths":{"redux-thunk":["typings/redux-thunk"]}`.*
+
+```tsx
+const thunkAsyncAction = () => async (dispatch: Dispatch): Promise<void> => {
+  // dispatch actions, return Promise, etc.
+}
+
+const mapDispatchToProps = (dispatch: Dispatch<Types.RootAction>) =>
+  bindActionCreators(
+    {
+      thunkAsyncAction,
+    },
+    dispatch
+  );
+
+type DispatchProps = ReturnType<typeof mapDispatchToProps>;
+// { thunkAsyncAction: () => Promise<void>; }
+
+/* Without "bindActionCreators" fix signature will be the same as the original "unbound" thunk function: */
+// { thunkAsyncAction: () => (dispatch: Dispatch<AnyAction>) => Promise<void>; }
 ```
 
 [⇧ back to top](#table-of-contents)

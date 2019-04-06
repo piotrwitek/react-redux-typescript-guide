@@ -18,7 +18,7 @@ const dispatchProps = {
   onIncrement: countersActions.increment,
 };
 
-export const FCCounterConnectedExtended = connect(
+export const FCCounterConnectedOwnProps = connect(
   mapStateToProps,
   dispatchProps
 )(FCCounter);

@@ -1,7 +1,9 @@
 import * as React from 'react';
 
-import { FCCounterConnectedVerbose } from '.';
+import { FCCounterConnectedBindActionCreators } from '.';
 
 export default () => (
-  <FCCounterConnectedVerbose label={'FCCounterConnectedVerbose'} />
+  <FCCounterConnectedBindActionCreators
+    label={'FCCounterConnectedBindActionCreators'}
+  />
 );

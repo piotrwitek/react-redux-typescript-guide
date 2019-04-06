@@ -1,10 +1,10 @@
 import * as React from 'react';
 
-import { FCCounterConnectedExtended } from '.';
+import { FCCounterConnectedOwnProps } from '.';
 
 export default () => (
-  <FCCounterConnectedExtended
-    label={'FCCounterConnectedExtended'}
+  <FCCounterConnectedOwnProps
+    label={'FCCounterConnectedOwnProps'}
     initialCount={10}
   />
 );
