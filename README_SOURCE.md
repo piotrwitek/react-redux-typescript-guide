@@ -531,7 +531,7 @@ export const FCCounterConnected =
 
 *__NOTE__ (for `redux-thunk`): When using thunk action creators you need to use `bindActionCreators`. Only this way you can get corrected dispatch props type signature like below.*
 
-*__WARNING__: As of now (Apr 2019) `bindActionCreators` signature of the latest `redux-thunk` release will not work as below, you need to use updated type definitions that you can find in `/playground/typings/redux-thunk` folder and then add paths overload in your tsconfig like this: `"paths":{"redux-thunk":["typings/redux-thunk"]}`.*
+*__WARNING__: As of now (Apr 2019) `bindActionCreators` signature of the latest `redux-thunk` release will not work as below, you need to use updated type definitions that you can find here [`/playground/typings/redux-thunk/index.d.ts`](./playground/typings/redux-thunk/index.d.ts) and then add `paths` overload in your tsconfig like this: [`"paths":{"redux-thunk":["typings/redux-thunk"]}`](./playground/tsconfig.json).*
 
 ```tsx
 const thunkAsyncAction = () => async (dispatch: Dispatch): Promise<void> => {
