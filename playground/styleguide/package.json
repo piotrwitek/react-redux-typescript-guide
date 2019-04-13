@@ -1,0 +1,20 @@
+{
+  "name": "styleguide",
+  "description": "Styleguide for https://github.com/piotrwitek/react-redux-typescript-guide",
+  "version": "1.0.0",
+  "private": true,
+  "author": "Piotr Witek <piotrek.witek@gmail.com> (http://piotrwitek.github.io/)",
+  "repository": "https://github.com/piotrwitek/react-redux-typescript-guide.git",
+  "license": "MIT",
+  "main": "src/index.tsx",
+  "scripts": {
+    "styleguide": "styleguidist server",
+    "styleguide:build": "styleguidist build"
+  },
+  "dependencies": {
+    "react-docgen-typescript": "1.12.3",
+    "react-styleguidist": "8.0.6",
+    "typescript": "3.1.6",
+    "webpack-blocks": "1.0.0"
+  }
+}

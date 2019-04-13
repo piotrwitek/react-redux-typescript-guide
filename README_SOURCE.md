@@ -17,6 +17,7 @@ _"This guide is a **living compendium** documenting the most important patterns 
 ### Complementary Libraries
 - [utility-types](https://github.com/piotrwitek/utility-types) - Collection of generic types for TypeScript, complementing built-in mapped types and aliases - think lodash for reusable types.  
 - [typesafe-actions](https://github.com/piotrwitek/typesafe-actions) - Typesafe utilities for "action-creators" in Redux / Flux Architecture  
+- [react-redux-typescript-scripts](https://github.com/piotrwitek/react-redux-typescript-scripts) - dev-tools configuration files shared between projects based on this guide
 
 ### Playground Project
 [![Build Status](https://semaphoreci.com/api/v1/piotrekwitek/react-redux-typescript-guide/branches/master/shields_badge.svg)](https://semaphoreci.com/piotrekwitek/react-redux-typescript-guide)
@@ -63,13 +64,14 @@ Issues can be funded by anyone and the money will be transparently distributed t
   - [Async Flow with `redux-thunk`](#async-flow-with-redux-thunk) 🌟 __NEW__
   - [Selectors with `reselect`](#selectors-with-reselect)
   - [Connect with `react-redux`](#connect-with-react-redux) 🌟 __NEW__
-- [Tools](#tools)
+- [Configuration & Dev Tools](#configuration-&-dev-tools)
+  - [Common Npm Scripts](#common-npm-scripts)
+  - [TypeScript](#typescript)
+  - [TSLib](#tslib)
   - [TSLint](#tslint)
   - [Jest](#jest)
-  - [Living Style Guide](#living-style-guide)
-  - [Common Npm Scripts](#common-npm-scripts)
+  - [Style Guide](#style-guide)
 - [Recipes](#recipes)
-  - [Baseline tsconfig.json](#baseline-tsconfigjson)
   - [General Tips](#general-tips)
   - [Ambient Modules Tips](#ambient-modules-tips)
   - [Type-Definitions Tips](#type-definitions-tips)
@@ -557,23 +559,65 @@ type DispatchProps = ReturnType<typeof mapDispatchToProps>;
 
 ---
 
-# Tools
+# Configuration & Dev Tools
+
+## Common Npm Scripts
+> Common TS-related npm scripts shared across projects
+```
+"ci-check": "npm run lint && npm run tsc && npm run test",
+"lint": "tslint -p ./",
+"tsc": "tsc -p ./ --noEmit",
+"tsc:watch": "tsc -p ./ --noEmit -w",
+"test": "jest --config jest.config.json",
+"test:watch": "jest --config jest.config.json --watch",
+"test:update": "jest --config jest.config.json -u"
+```
+
+[⇧ back to top](#table-of-contents)
+
+### TypeScript
+
+We have our own recommended `tsconfig.json` that you can easily add to your project thanks to [`react-redux-typescript-scripts`](https://github.com/piotrwitek/react-redux-typescript-scripts) package.
+
+#### tsconfig.json
+::expander='playground/tsconfig.json'::
+
+[⇧ back to top](#table-of-contents)
+
+## TSLib
+https://www.npmjs.com/package/tslib
+
+This library will cut down on your bundle size, thanks to using external runtime helpers instead of adding them per each file.
+
+> Installation  
+`npm i tslib`
+
+Then add this to your `tsconfig.json`:
+```ts
+"compilerOptions": {
+  "importHelpers": true
+}
+```
+
+[⇧ back to top](#table-of-contents)
 
 ## TSLint
+https://palantir.github.io/tslint/
 
 > Installation  
 `npm i -D tslint`
 
-#### tslint.json
-- Recommended setup is to extend build-in preset `tslint:recommended` (use `tslint:all` to enable all rules)  
-- Add additional `react` specific rules: `npm i -D tslint-react` https://github.com/palantir/tslint-react  
-- Overwritten some defaults for more flexibility  
+> For React project you should add additional `react` specific rules: `npm i -D tslint-react` https://github.com/palantir/tslint-react  
 
+We have our own recommended config that you can easily add to your project thanks to [`react-redux-typescript-scripts`](https://github.com/piotrwitek/react-redux-typescript-scripts) package.
+
+#### tslint.json
 ::expander='playground/tslint.json'::
 
 [⇧ back to top](#table-of-contents)
 
 ## Jest
+https://jestjs.io/
 
 > Installation  
 `npm i -D jest ts-jest @types/jest`
@@ -586,7 +630,7 @@ type DispatchProps = ReturnType<typeof mapDispatchToProps>;
 
 [⇧ back to top](#table-of-contents)
 
-## Living Style Guide
+## Style Guide
 ### ["react-styleguidist"](https://github.com/styleguidist/react-styleguidist)
 
 [⟩⟩⟩ styleguide.config.js](/playground/styleguide.config.js)  
@@ -595,33 +639,9 @@ type DispatchProps = ReturnType<typeof mapDispatchToProps>;
 
 [⇧ back to top](#table-of-contents)
 
-## Common Npm Scripts
-> Common TS-related npm scripts shared across projects
-```
-"lint": "tslint -p ./",
-"tsc": "tsc -p ./ --noEmit",
-"tsc:watch": "tsc -p ./ --noEmit -w",
-"pretest": "npm run lint & npm run tsc",
-"test": "jest --config jest.config.json",
-"test:watch": "jest --config jest.config.json --watch",
-"test:update": "jest --config jest.config.json -u",
-```
-
-[⇧ back to top](#table-of-contents)
-
 ---
 
 # Recipes
-
-### Baseline tsconfig.json
-
-- Recommended baseline config carefully optimized for strict type-checking and optimal webpack workflow  
-- Install [`tslib`](https://www.npmjs.com/package/tslib) to cut on bundle size, by using external runtime helpers instead of adding them inline: `npm i tslib`  
-- Example "paths" setup for baseUrl relative imports with Webpack  
-
-::expander='playground/tsconfig.json'::
-
-[⇧ back to top](#table-of-contents)
 
 ### General Tips
 

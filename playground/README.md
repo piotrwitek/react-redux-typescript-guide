@@ -1,6 +1,1 @@
-This folder is a playground for testing examples from `react-redux-typescript-guide`.
-
-I have a secondary goal to create a separate project starter that could be used to bootstrap a real world application like this one: https://github.com/gothinkster/realworld
-
-Standard Approach
-Opinionated Approach
+This folder is a playground project for testing the code examples that can be found in the guide. They are all tested with the most recent supported version of TypeScript and third-party type-definitions (like `@types/react` or `@types/react-redux`) to ensure the examples are still working when new third-party type-definitions are released.
