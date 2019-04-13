@@ -496,42 +496,57 @@ state.containerObject.numbers.push(1); // TS Error: cannot use mutator methods
 
 ## Connect with `react-redux`
 
+### Typing connected component
+
 *__NOTE__: Below you'll find only a short explanation of concepts behind typing `connect`. For more real-world examples please check [Redux Connected Components](#redux-connected-components) section.*
 
 ```tsx
 import MyTypes from 'MyTypes';
 
-import { bindActionCreators, Dispatch } from 'redux';
+import { bindActionCreators, Dispatch, ActionCreatorsMapObject } from 'redux';
 import { connect } from 'react-redux';
 
 import { countersActions } from '../features/counters';
 import { FCCounter } from '../components';
 
-// `state` argument annotation is mandatory to check the correct shape of a state object and injected props
-// you can also extend connected component Props type by annotating `ownProps` argument
+// Type annotation for "state" argument is mandatory to check 
+// the correct shape of state object and injected props you can also
+// extend connected component Props interface by annotating `ownProps` argument
 const mapStateToProps = (state: MyTypes.RootState, ownProps: FCCounterProps) => ({
   count: state.counters.reduxCounter,
 });
 
-// `dispatch` argument needs an annotation to check the correct shape of an action object
-// when using dispatch function
-const mapDispatchToProps = (dispatch: Dispatch<MyTypes.RootAction>) => bindActionCreators({
-  onIncrement: countersActions.increment,
-}, dispatch);
+// "dispatch" argument needs an annotation to check the correct shape
+//  of an action object when using dispatch function
+const mapDispatchToProps = (dispatch: Dispatch<MyTypes.RootAction>) =>
+  bindActionCreators({
+    onIncrement: countersActions.increment,
+  }, dispatch);
 
 // shorter alternative is to use an object instead of mapDispatchToProps function
 const dispatchToProps = {
     onIncrement: countersActions.increment,
 };
 
-// Notice ee don't need to pass any generic type parameters to neither connect nor map functions above
+// Notice we don't need to pass any generic type parameters to neither
+// the connect function below nor map functions declared above
 // because type inference will infer types from arguments annotations automatically
-// It's much cleaner and idiomatic approach
+// This is much cleaner and idiomatic approach
 export const FCCounterConnected =
   connect(mapStateToProps, mapDispatchToProps)(FCCounter);
+
+// You can add extra layer of validation of your action creators
+// by using bindActionCreators generic type parameter and RootAction type
+const mapDispatchToProps = (dispatch: Dispatch<MyTypes.RootAction>) =>
+  bindActionCreators<ActionCreatorsMapObject<Types.RootAction>>({
+    invalidActionCreator: () => 1, // Error: Type 'number' is not assignable to type '{ type: "todos/ADD"; payload: Todo; } | { ... }
+  }, dispatch);
+
 ```
 
-*__NOTE__ (for `redux-thunk`): When using thunk action creators you need to use `bindActionCreators`. Only this way you can get corrected dispatch props type signature like below.*
+### Typing connected component using `redux-thunk` action creators
+
+*__NOTE__: When using thunk action creators you need to use `bindActionCreators`. Only this way you can get corrected dispatch props type signature like below.*
 
 *__WARNING__: As of now (Apr 2019) `bindActionCreators` signature of the latest `redux-thunk` release will not work as below, you need to use updated type definitions that you can find here [`/playground/typings/redux-thunk/index.d.ts`](./playground/typings/redux-thunk/index.d.ts) and then add `paths` overload in your tsconfig like this: [`"paths":{"redux-thunk":["typings/redux-thunk"]}`](./playground/tsconfig.json).*
 
