@@ -17,6 +17,7 @@ _"This guide is a **living compendium** documenting the most important patterns 
 ### Complementary Libraries
 - [utility-types](https://github.com/piotrwitek/utility-types) - Collection of generic types for TypeScript, complementing built-in mapped types and aliases - think lodash for reusable types.  
 - [typesafe-actions](https://github.com/piotrwitek/typesafe-actions) - Typesafe utilities for "action-creators" in Redux / Flux Architecture  
+- [react-redux-typescript-scripts](https://github.com/piotrwitek/react-redux-typescript-scripts) - dev-tools configuration files shared between projects based on this guide
 
 ### Playground Project
 [![Build Status](https://semaphoreci.com/api/v1/piotrekwitek/react-redux-typescript-guide/branches/master/shields_badge.svg)](https://semaphoreci.com/piotrekwitek/react-redux-typescript-guide)
@@ -63,13 +64,14 @@ Issues can be funded by anyone and the money will be transparently distributed t
   - [Async Flow with `redux-thunk`](#async-flow-with-redux-thunk) 🌟 __NEW__
   - [Selectors with `reselect`](#selectors-with-reselect)
   - [Connect with `react-redux`](#connect-with-react-redux) 🌟 __NEW__
-- [Tools](#tools)
+- [Configuration & Dev Tools](#configuration-&-dev-tools)
+  - [Common Npm Scripts](#common-npm-scripts)
+  - [TypeScript](#typescript)
+  - [TSLib](#tslib)
   - [TSLint](#tslint)
   - [Jest](#jest)
-  - [Living Style Guide](#living-style-guide)
-  - [Common Npm Scripts](#common-npm-scripts)
+  - [Style Guide](#style-guide)
 - [Recipes](#recipes)
-  - [Baseline tsconfig.json](#baseline-tsconfigjson)
   - [General Tips](#general-tips)
   - [Ambient Modules Tips](#ambient-modules-tips)
   - [Type-Definitions Tips](#type-definitions-tips)
@@ -492,7 +494,7 @@ export const withState = <BaseProps extends InjectedProps>(
     };
 
     render() {
-      const { ...restProps } = this.props as any;
+      const { ...restProps } = this.props as {};
       const { count } = this.state;
 
       return (
@@ -1488,80 +1490,81 @@ type DispatchProps = ReturnType<typeof mapDispatchToProps>;
 
 ---
 
-# Tools
+# Configuration & Dev Tools
 
-## TSLint
+## Common Npm Scripts
+> Common TS-related npm scripts shared across projects
+```
+"ci-check": "npm run lint && npm run tsc && npm run test",
+"lint": "tslint -p ./",
+"tsc": "tsc -p ./ --noEmit",
+"tsc:watch": "tsc -p ./ --noEmit -w",
+"test": "jest --config jest.config.json",
+"test:watch": "jest --config jest.config.json --watch",
+"test:update": "jest --config jest.config.json -u"
+```
 
-> Installation  
-`npm i -D tslint`
+[⇧ back to top](#table-of-contents)
 
-#### tslint.json
-- Recommended setup is to extend build-in preset `tslint:recommended` (use `tslint:all` to enable all rules)  
-- Add additional `react` specific rules: `npm i -D tslint-react` https://github.com/palantir/tslint-react  
-- Overwritten some defaults for more flexibility  
+### TypeScript
 
+We have our own recommended `tsconfig.json` that you can easily add to your project thanks to [`react-redux-typescript-scripts`](https://github.com/piotrwitek/react-redux-typescript-scripts) package.
+
+#### tsconfig.json
 <details><summary><i>Click to expand</i></summary><p>
 
 ```tsx
 {
-  "extends": ["tslint:recommended", "tslint-react"],
+  "include": ["src", "typings"],
+  "extends": "./node_modules/react-redux-typescript-scripts/tsconfig.json",
+  "compilerOptions": {
+    // you can further customize options here
+  }
+}
+
+```
+</p></details>
+
+[⇧ back to top](#table-of-contents)
+
+## TSLib
+https://www.npmjs.com/package/tslib
+
+This library will cut down on your bundle size, thanks to using external runtime helpers instead of adding them per each file.
+
+> Installation  
+`npm i tslib`
+
+Then add this to your `tsconfig.json`:
+```ts
+"compilerOptions": {
+  "importHelpers": true
+}
+```
+
+[⇧ back to top](#table-of-contents)
+
+## TSLint
+https://palantir.github.io/tslint/
+
+> Installation  
+`npm i -D tslint`
+
+> For React project you should add additional `react` specific rules: `npm i -D tslint-react` https://github.com/palantir/tslint-react  
+
+We have our own recommended config that you can easily add to your project thanks to [`react-redux-typescript-scripts`](https://github.com/piotrwitek/react-redux-typescript-scripts) package.
+
+#### tslint.json
+<details><summary><i>Click to expand</i></summary><p>
+
+```tsx
+{
+  "extends": [
+    "react-redux-typescript-scripts/tslint-recommended.json",
+    "react-redux-typescript-scripts/tslint-react.json"
+  ],
   "rules": {
-    "arrow-parens": false,
-    "arrow-return-shorthand": [false],
-    "comment-format": [true, "check-space"],
-    "import-blacklist": [true],
-    "interface-over-type-literal": false,
-    "interface-name": false,
-    "max-line-length": [true, 120],
-    "member-access": false,
-    "member-ordering": [true, { "order": "fields-first" }],
-    "newline-before-return": false,
-    "no-any": false,
-    "no-empty-interface": false,
-    "no-import-side-effect": [true],
-    "no-inferrable-types": [true, "ignore-params", "ignore-properties"],
-    "no-invalid-this": [true, "check-function-in-method"],
-    "no-namespace": false,
-    "no-null-keyword": false,
-    "no-require-imports": false,
-    "no-submodule-imports": [true, "@src", "rxjs"],
-    "no-this-assignment": [true, { "allow-destructuring": true }],
-    "no-trailing-whitespace": true,
-    "object-literal-sort-keys": false,
-    "object-literal-shorthand": false,
-    "one-variable-per-declaration": [false],
-    "only-arrow-functions": [true, "allow-declarations"],
-    "ordered-imports": [false],
-    "prefer-method-signature": false,
-    "prefer-template": [true, "allow-single-concat"],
-    "quotemark": [true, "single", "jsx-double"],
-    "semicolon": [true, "always", "ignore-bound-class-methods"],
-    "trailing-comma": [
-      true,
-      {
-        "singleline": "never",
-        "multiline": {
-          "objects": "always",
-          "arrays": "always",
-          "functions": "ignore",
-          "typeLiterals": "ignore"
-        },
-        "esSpecCompliant": true
-      }
-    ],
-    "triple-equals": [true, "allow-null-check"],
-    "type-literal-delimiter": true,
-    "typedef": [true, "parameter", "property-declaration"],
-    "variable-name": [
-      true,
-      "ban-keywords",
-      "check-format",
-      "allow-pascal-case",
-      "allow-leading-underscore"
-    ],
-    // tslint-react
-    "jsx-no-multiline-js": false,
-    "jsx-no-lambda": false
+    // you can further customize options here
   }
 }
 
@@ -1571,6 +1574,7 @@ type DispatchProps = ReturnType<typeof mapDispatchToProps>;
 [⇧ back to top](#table-of-contents)
 
 ## Jest
+https://jestjs.io/
 
 > Installation  
 `npm i -D jest ts-jest @types/jest`
@@ -1631,7 +1635,7 @@ Object.values = () => [];
 
 [⇧ back to top](#table-of-contents)
 
-## Living Style Guide
+## Style Guide
 ### ["react-styleguidist"](https://github.com/styleguidist/react-styleguidist)
 
 [⟩⟩⟩ styleguide.config.js](/playground/styleguide.config.js)  
@@ -1640,74 +1644,9 @@ Object.values = () => [];
 
 [⇧ back to top](#table-of-contents)
 
-## Common Npm Scripts
-> Common TS-related npm scripts shared across projects
-```
-"lint": "tslint -p ./",
-"tsc": "tsc -p ./ --noEmit",
-"tsc:watch": "tsc -p ./ --noEmit -w",
-"pretest": "npm run lint & npm run tsc",
-"test": "jest --config jest.config.json",
-"test:watch": "jest --config jest.config.json --watch",
-"test:update": "jest --config jest.config.json -u",
-```
-
-[⇧ back to top](#table-of-contents)
-
 ---
 
 # Recipes
-
-### Baseline tsconfig.json
-
-- Recommended baseline config carefully optimized for strict type-checking and optimal webpack workflow  
-- Install [`tslib`](https://www.npmjs.com/package/tslib) to cut on bundle size, by using external runtime helpers instead of adding them inline: `npm i tslib`  
-- Example "paths" setup for baseUrl relative imports with Webpack  
-
-<details><summary><i>Click to expand</i></summary><p>
-
-```tsx
-{
-  "compilerOptions": {
-    "baseUrl": "./", // relative paths base
-    "paths": {
-      // "@src/*": ["src/*"] // will enable import aliases -> import { ... } from '@src/components'
-      // WARNING: Require to add this to your webpack config -> resolve: { alias: { '@src': PATH_TO_SRC } }
-      // "redux": ["typings/redux"], // override library types with your alternative type-definitions in typings folder
-      "redux-thunk": ["typings/redux-thunk"] // override library types with your alternative type-definitions in typings folder
-    },
-    "outDir": "dist/", // target for compiled files
-    "allowSyntheticDefaultImports": true, // no errors with commonjs modules interop
-    "esModuleInterop": true, // enable to do "import React ..." instead of "import * as React ..."
-    "allowJs": true, // include js files
-    "checkJs": true, // typecheck js files
-    "declaration": false, // don't emit declarations
-    "emitDecoratorMetadata": true, // include only if using decorators
-    "experimentalDecorators": true, // include only if using decorators
-    "forceConsistentCasingInFileNames": true,
-    "importHelpers": true, // importing transpilation helpers from tslib
-    "noEmitHelpers": true, // disable inline transpilation helpers in each file
-    "jsx": "react", // transform JSX
-    "lib": ["dom", "es2017"], // you will need to include polyfills for es2017 manually
-    "types": ["jest"], // which global types to use
-    "target": "es5", // "es2015" for ES6+ engines
-    "module": "es2015", // "es2015" for tree-shaking
-    "moduleResolution": "node",
-    "noEmitOnError": true,
-    "noFallthroughCasesInSwitch": true,
-    "noUnusedLocals": true,
-    "strict": true,
-    "pretty": true,
-    "removeComments": true,
-    "sourceMap": true
-  },
-  "include": ["src", "typings"]
-}
-
-```
-</p></details>
-
-[⇧ back to top](#table-of-contents)
 
 ### General Tips
 
