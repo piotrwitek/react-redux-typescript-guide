@@ -7,7 +7,7 @@ import { FCCounterConnectedOwnProps as ConnectedCounter } from './fc-counter-con
 
 const reducer = combineReducers({
   counters: combineReducers({
-    reduxCounter: (state = 0, action: any) => {
+    reduxCounter: (state: number = 0, action: any) => {
       switch (action.type) {
         case 'counters/INCREMENT':
           return state + 1; // action: { type: "INCREMENT"; }

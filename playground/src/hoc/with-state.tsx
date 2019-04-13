@@ -33,7 +33,7 @@ export const withState = <BaseProps extends InjectedProps>(
     };
 
     render() {
-      const { ...restProps } = this.props as any;
+      const { ...restProps } = this.props as {};
       const { count } = this.state;
 
       return (
