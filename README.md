@@ -69,6 +69,7 @@ Issues can be funded by anyone and the money will be transparently distributed t
   - [TypeScript](#typescript)
   - [TSLib](#tslib)
   - [TSLint](#tslint)
+  - [ESLint](#eslint)
   - [Jest](#jest)
   - [Style Guide](#style-guide)
 - [Recipes](#recipes)
@@ -1578,6 +1579,31 @@ We have our own recommended config that you can easily add to your project thank
     "react-redux-typescript-scripts/tslint-recommended.json",
     "react-redux-typescript-scripts/tslint-react.json"
   ],
+  "rules": {
+    // you can further customize options here
+  }
+}
+
+```
+</p></details>
+
+[⇧ back to top](#table-of-contents)
+
+## ESLint
+https://eslint.org/  
+https://typescript-eslint.io
+
+> Installation  
+`npm i -D eslint @typescript-eslint/parser @typescript-eslint/eslint-plugin`
+
+We have our own recommended config that will automatically add a parser & plugin for TypeScript thanks to [`react-redux-typescript-scripts`](https://github.com/piotrwitek/react-redux-typescript-scripts) package.
+
+#### .eslintrc
+<details><summary><i>Click to expand</i></summary><p>
+
+```tsx
+{
+  "extends": ["./node_modules/react-redux-typescript-scripts/eslint.js"],
   "rules": {
     // you can further customize options here
   }
