@@ -6,7 +6,7 @@ import ClassCounter from '../components/class-counter.usage';
 import ClassCounterWithDefaultProps from '../components/class-counter-with-default-props.usage';
 import UserListUsage from '../components/generic-list.usage';
 
-export const Home = () => {
+export default () => {
   return (
     <section>
       <FCCounter />

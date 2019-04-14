@@ -2,14 +2,16 @@
 // Usefull to model domain concepts that are using primitive data type for it's value
 
 // Method 1: using "interface"
-interface Name extends String { _brand: 'Name'; }
+export interface Name extends String {
+  _brand: 'Name';
+}
 const createName = (name: string): Name => {
   // validation of business rules
   return name as any;
 };
 
 // Method 2: using "enum"
-enum SurnameBrand { }
+export enum SurnameBrand {}
 type Surname = SurnameBrand & string;
 // interface Surname extends String { _brand: 'Surname'; }
 const createSurname = (surname: string): Surname => {
@@ -36,6 +38,6 @@ person.name = createName('Karol'); // OK!
 person.surname = createSurname('Mate'); // OK!
 
 // easy casting to supertype
-let str: string;
+export let str: string;
 str = person.name.toString();
 str = person.surname;

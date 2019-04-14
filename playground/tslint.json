@@ -1,6 +1,6 @@
 {
   "extends": [
-    "react-redux-typescript-scripts/tslint-recommended.json",
+    "react-redux-typescript-scripts/tslint.json",
     "react-redux-typescript-scripts/tslint-react.json"
   ],
   "rules": {

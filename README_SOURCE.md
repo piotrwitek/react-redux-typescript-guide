@@ -22,8 +22,8 @@ _"This guide is a **living compendium** documenting the most important patterns 
 ### Playground Project
 [![Build Status](https://semaphoreci.com/api/v1/piotrekwitek/react-redux-typescript-guide/branches/master/shields_badge.svg)](https://semaphoreci.com/piotrekwitek/react-redux-typescript-guide)
 
-You should check out Playground Project located in the `/playground` folder. It is a source of all the code examples found in the guide. They are all tested with the most recent version of TypeScript and 3rd party type-definitions (like `@types/react` or `@types/react-redux`) to ensure the examples are up-to-date and not broken with updated definitions.
-> Playground was created in such a way that you can simply clone the repository locally and immediately play around on your own. It will help you to learn all the examples from this guide in a real project environment without the need to create some complicated environment setup by yourself.
+You should check out Playground Project located in the `/playground` folder. It is a source of all the code examples found in the guide. They are all tested with the most recent version of TypeScript and 3rd party type-definitions (like `@types/react` or `@types/react-redux`) to ensure the examples are up-to-date and not broken with updated definitions. It's based on `create-react-app --typescript`.
+> Playground project was created so that you can simply clone the repository locally and immediately play around with all the component patterns found in the guide. It will help you to learn all the examples from this guide in a real project environment without the need to create complicated environment setup by yourself.
 
 ## Contributing Guide
 We are open for contributions. If you're planning to contribute please make sure to read the contributing guide: [CONTRIBUTING.md](/CONTRIBUTING.md)
@@ -653,10 +653,10 @@ https://jestjs.io/
 `npm i -D jest ts-jest @types/jest`
 
 #### jest.config.json
-::expander='playground/jest.config.json'::
+::expander='configs/jest.config.json'::
 
 #### jest.stubs.js
-::expander='playground/jest.stubs.js'::
+::expander='configs/jest.stubs.js'::
 
 [⇧ back to top](#table-of-contents)
 

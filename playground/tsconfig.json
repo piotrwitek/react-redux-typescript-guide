@@ -1,7 +1,11 @@
 {
-  "include": ["src", "typings"],
+  "include": [
+    "src",
+    "typings"
+  ],
+  "exclude": [
+    "src/**/*.spec.*"
+  ],
   "extends": "./node_modules/react-redux-typescript-scripts/tsconfig.json",
-  "compilerOptions": {
-    // you can further customize options here
-  }
+  "compilerOptions": {}
 }
