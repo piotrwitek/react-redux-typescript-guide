@@ -7,10 +7,6 @@ export interface IUserDTO {
 }
 
 export interface IUser {
-  constructor: {
-    create(user: IUserDTO): IUser;
-  };
-
   id: string;
   firstName: string;
   lastName: string;
@@ -20,16 +16,14 @@ export interface IUser {
 }
 
 export class User implements IUser {
-  'constructor': typeof User;
-
   id: string = cuid();
   get fullName(): string {
     return `${this.firstName} ${this.lastName}`;
   }
 
-  constructor(public firstName: string, public lastName: string) { }
+  constructor(public firstName: string, public lastName: string) {}
 
-  static create(dto: IUserDTO): IUser {
+  static deserialize(dto: IUserDTO): IUser {
     const model = new User(dto.first_name, dto.last_name);
     model.id = dto.id;
 

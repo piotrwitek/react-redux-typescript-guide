@@ -14,5 +14,5 @@ declare interface System {
 }
 declare var System: System;
 
-declare const process: any;
-declare const require: any;
+// declare const process: any;
+// declare const require: any;
