@@ -580,13 +580,15 @@ type DispatchProps = ReturnType<typeof mapDispatchToProps>;
 ## Common Npm Scripts
 > Common TS-related npm scripts shared across projects
 ```
-"ci-check": "npm run lint && npm run tsc && npm run test",
+"prettier": "prettier --list-different 'src/**/*.ts' || (echo '\nPlease fix code formatting by running:\nnpm run prettier:fix\n'; exit 1)",
+"prettier:fix": "prettier --write 'src/**/*.ts'",
 "lint": "tslint -p ./",
 "tsc": "tsc -p ./ --noEmit",
 "tsc:watch": "tsc -p ./ --noEmit -w",
 "test": "jest --config jest.config.json",
 "test:watch": "jest --config jest.config.json --watch",
 "test:update": "jest --config jest.config.json -u"
+"ci-check": "npm run prettier && npm run lint && npm run tsc && npm run test",
 ```
 
 [⇧ back to top](#table-of-contents)
