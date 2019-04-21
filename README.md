@@ -1,25 +1,42 @@
+<div align="center">
+
 ## React & Redux in TypeScript - Static Typing Guide
 
 _"This guide is a **living compendium** documenting the most important patterns and recipes on how to use **React** (and its Ecosystem) in a **functional style** using **TypeScript**. It will help you make your code **completely type-safe** while focusing on **inferring the types from implementation** so there is less noise coming from excessive type annotations and it's easier to write and maintain correct types in the long run."_
 
 [![Join the chat at https://gitter.im/react-redux-typescript-guide/Lobby](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/react-redux-typescript-guide/Lobby)  
-> #### _Found it useful? Want more updates?_ [**Show your support by giving a :star:**](https://github.com/piotrwitek/react-redux-typescript-guide/stargazers)  
 
-:tada: _Now updated to be compatible with **TypeScript v3.1.6**_ :tada:  
+:star: _Found it useful? Want more updates?_ [**Show your support by giving a :star:**](https://github.com/piotrwitek/react-redux-typescript-guide/stargazers)  
 
-:computer: _Reference implementation of Todo-App with `typesafe-actions`: https://codesandbox.io/s/github/piotrwitek/typesafe-actions/tree/master/codesandbox_ :computer:  
+:tada: _Now updated to support **TypeScript v3.1**_ :tada:
 
-### Goals
+<a href="https://www.buymeacoffee.com/zh9guxbA5">
+  <img src="https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png" alt="Buy Me a Coffee">
+</a>
+<a href="https://www.patreon.com/piotrekwitek">
+  <img src="https://c5.patreon.com/external/logo/become_a_patron_button@2x.png" alt="Become a Patron" width="160">
+</a>
+
+</div>
+
+**Goals**
+
 - Complete type safety (with [`--strict`](https://www.typescriptlang.org/docs/handbook/compiler-options.html) flag) without losing type information downstream through all the layers of our application (e.g. no type assertions or hacking with `any` type)
 - Make type annotations concise by eliminating redundancy in types using advanced TypeScript Language features like **Type Inference** and **Control flow analysis**
 - Reduce repetition and complexity of types with TypeScript focused [complementary libraries](#complementary-libraries)
 
-### Complementary Libraries
-- [utility-types](https://github.com/piotrwitek/utility-types) - Collection of generic types for TypeScript, complementing built-in mapped types and aliases - think lodash for reusable types.  
-- [typesafe-actions](https://github.com/piotrwitek/typesafe-actions) - Typesafe utilities for "action-creators" in Redux / Flux Architecture  
-- [react-redux-typescript-scripts](https://github.com/piotrwitek/react-redux-typescript-scripts) - dev-tools configuration files shared between projects based on this guide
+**React, Redux, Typescript Ecosystem**
 
-### Playground Project
+- [typesafe-actions](https://github.com/piotrwitek/typesafe-actions) - Typesafe utilities for "action-creators" in Redux / Flux Architecture  
+- [utility-types](https://github.com/piotrwitek/utility-types) - Collection of generic types for TypeScript, complementing built-in mapped types and aliases - think lodash for reusable types.  
+- [react-redux-typescript-scripts](https://github.com/piotrwitek/react-redux-typescript-scripts) - dev-tools configuration files shared between projects based on this guide  
+
+**Codesandbox links**
+
+- Reference Todo-App implementation using **React, Redux, Typescript Guide**: [Link](https://codesandbox.io/s/github/piotrwitek/typesafe-actions/tree/master/codesandbox)
+
+**Playground Project**
+
 [![Build Status](https://semaphoreci.com/api/v1/piotrekwitek/react-redux-typescript-guide/branches/master/shields_badge.svg)](https://semaphoreci.com/piotrekwitek/react-redux-typescript-guide)
 
 You should check out Playground Project located in the `/playground` folder. It is a source of all the code examples found in the guide. They are all tested with the most recent version of TypeScript and 3rd party type-definitions (like `@types/react` or `@types/react-redux`) to ensure the examples are up-to-date and not broken with updated definitions. It's based on `create-react-app --typescript`.
@@ -28,19 +45,19 @@ You should check out Playground Project located in the `/playground` folder. It 
 ## Contributing Guide
 We are open for contributions. If you're planning to contribute please make sure to read the contributing guide: [CONTRIBUTING.md](/CONTRIBUTING.md)
 
-## Sponsor
+## Funding
 This is an independent open-source project created by people investing their free time for the benefit of our community.
 
 If you are using it please consider donating as this will guarantee the project will be updated and maintained in the long run.
 
-Issues can be funded by anyone and the money will be transparently distributed to the contributors handling a particular issue.
+Issues can be funded by anyone interested in them being resolved. Reward will be transparently distributed to the contributor handling the task through the IssueHunt platform.
 
 [![Let's fund issues in this repository](https://issuehunt.io/static/embed/issuehunt-button-v1.svg)](https://issuehunt.io/repos/76996763)
 
 ---
 
 ## Table of Contents
-- [Introduction](#introduction)
+- [Installation](#installation)
 - [React - Type-Definitions Cheatsheet](#react---type-definitions-cheatsheet)
 - [React - Typing Patterns](#react---typing-patterns)
   - [Function Components - FC](#function-components---fc)
@@ -61,10 +78,11 @@ Issues can be funded by anyone and the money will be transparently distributed t
   - [Async Flow with `redux-observable`](#async-flow-with-redux-observable)
     - [Typing Epics](#typing-epics)
     - [Testing Epics](#testing-epics)
-  - [Async Flow with `redux-thunk`](#async-flow-with-redux-thunk) 🌟 __NEW__
   - [Selectors with `reselect`](#selectors-with-reselect)
   - [Connect with `react-redux`](#connect-with-react-redux) 🌟 __NEW__
-- [Configuration & Dev Tools](#configuration-&-dev-tools)
+    - [Typing connected component](#typing-connected-component)
+    - [Typing connected component using `redux-thunk` action creators](#typing-connected-component-using-redux-thunk-action-creators) 🌟 __NEW__
+- [Configuration & Dev Tools](#configuration--dev-tools)
   - [Common Npm Scripts](#common-npm-scripts)
   - [TypeScript](#typescript)
   - [TSLib](#tslib)
@@ -82,7 +100,7 @@ Issues can be funded by anyone and the money will be transparently distributed t
 
 ---
 
-# Introduction
+# Installation
 
 ### Type-Definitions for React & Redux
 ```
