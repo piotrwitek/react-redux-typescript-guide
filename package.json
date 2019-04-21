@@ -1,20 +1,22 @@
 {
-    "devDependencies": {
-        "@types/node": "8.5.1",
-        "all-contributors-cli": "5.4.0",
-        "husky": "1.3.1"
-    },
-    "scripts": {
-        "ci-check": "npm run readme:generate",
-        "readme:generate": "node generate-readme",
-        "contributors:check": "all-contributors check",
-        "contributors:add": "all-contributors add",
-        "contributors:generate": "all-contributors generate",
-        "is-clean": "if output=$(git status --porcelain) && [ -z \"$output\" ]; then echo 'Success!'; else (echo '>>> Please check CONTRIBUTING.md to learn how to properly amend README.md <<<' && false); fi"
-    },
-    "husky": {
-        "hooks": {
-            "pre-push": "npm run readme:generate && npm run is-clean"
-        }
+  "devDependencies": {
+    "@types/node": "8.5.1",
+    "all-contributors-cli": "5.4.0",
+    "doctoc": "1.4.0",
+    "husky": "1.3.1"
+  },
+  "scripts": {
+    "ci-check": "npm run readme:generate",
+    "doctoc": "doctoc --maxlevel=4 README_SOURCE.md",
+    "readme:generate": "node generate-readme",
+    "contributors:check": "all-contributors check",
+    "contributors:add": "all-contributors add",
+    "contributors:generate": "all-contributors generate",
+    "is-clean": "if output=$(git status --porcelain) && [ -z \"$output\" ]; then echo 'Success!'; else (echo '>>> Please check CONTRIBUTING.md to learn how to properly amend README.md <<<' && false); fi"
+  },
+  "husky": {
+    "hooks": {
+      "pre-push": "npm run ci-check && npm run is-clean"
     }
+  }
 }
