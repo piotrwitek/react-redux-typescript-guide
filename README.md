@@ -491,8 +491,11 @@ interface InjectedProps {
 }
 
 export const withState = <BaseProps extends InjectedProps>(
-  BaseComponent: React.ComponentType<BaseProps>
+  _BaseComponent: React.ComponentType<BaseProps>
 ) => {
+  // fix for TypeScript issues: https://github.com/piotrwitek/react-redux-typescript-guide/issues/111
+  const BaseComponent = _BaseComponent as React.ComponentType<InjectedProps>;
+
   type HocProps = Subtract<BaseProps, InjectedProps> & {
     // here you can extend hoc with new props
     initialCount?: number;
@@ -516,7 +519,7 @@ export const withState = <BaseProps extends InjectedProps>(
     };
 
     render() {
-      const { ...restProps } = this.props as {};
+      const { ...restProps } = this.props;
       const { count } = this.state;
 
       return (
@@ -563,8 +566,11 @@ interface InjectedProps {
 }
 
 export const withErrorBoundary = <BaseProps extends InjectedProps>(
-  BaseComponent: React.ComponentType<BaseProps>
+  _BaseComponent: React.ComponentType<BaseProps>
 ) => {
+  // fix for TypeScript issues: https://github.com/piotrwitek/react-redux-typescript-guide/issues/111
+  const BaseComponent = _BaseComponent as React.ComponentType<InjectedProps>;
+
   type HocProps = Subtract<BaseProps, InjectedProps> & {
     // here you can extend hoc with new props
   };
@@ -596,9 +602,7 @@ export const withErrorBoundary = <BaseProps extends InjectedProps>(
     };
 
     render() {
-      const { children, ...restProps } = this.props as {
-        children: React.ReactNode;
-      };
+      const { children, ...restProps } = this.props;
       const { error } = this.state;
 
       if (error) {
