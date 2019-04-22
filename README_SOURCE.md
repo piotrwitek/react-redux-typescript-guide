@@ -56,6 +56,8 @@ Issues can be funded by anyone interested in them being resolved. Reward will be
 
 ---
 
+🌟 - _New or updated section_
+
 ## Table of Contents
 - [Installation](#installation)
 - [React - Type-Definitions Cheatsheet](#react---type-definitions-cheatsheet)
@@ -66,29 +68,29 @@ Issues can be funded by anyone interested in them being resolved. Reward will be
   - [Render Props](#render-props)
   - [Higher-Order Components](#higher-order-components)
   - [Redux Connected Components](#redux-connected-components)
-  - [Context](#context) 🌟 __NEW__
-  - [Hooks](#hooks) 🌟 __NEW__
+  - [Context](#context)
+  - [Hooks](#hooks) 🌟
 - [Redux - Typing Patterns](#redux---typing-patterns)
   - [Store Configuration](#store-configuration)
   - [Action Creators](#action-creators)
   - [Reducers](#reducers)
     - [State with Type-level Immutability](#state-with-type-level-immutability)
     - [Typing regular reducer](#typing-regular-reducer)
-    - [Typing reducer with `typesafe-actions`](#typing-reducer-with-typesafe-actions)
+    - [Typing reducer with `typesafe-actions`](#typing-reducer-with-typesafe-actions) 🌟
     - [Testing reducer](#testing-reducer)
   - [Async Flow with `redux-observable`](#async-flow-with-redux-observable)
     - [Typing Epics](#typing-epics)
     - [Testing Epics](#testing-epics)
   - [Selectors with `reselect`](#selectors-with-reselect)
-  - [Connect with `react-redux`](#connect-with-react-redux) 🌟 __NEW__
+  - [Connect with `react-redux`](#connect-with-react-redux)
     - [Typing connected component](#typing-connected-component)
-    - [Typing connected component using `redux-thunk` action creators](#typing-connected-component-using-redux-thunk-action-creators) 🌟 __NEW__
+    - [Typing connected component using `redux-thunk` action creators](#typing-connected-component-using-redux-thunk-action-creators) 🌟
 - [Configuration & Dev Tools](#configuration--dev-tools)
   - [Common Npm Scripts](#common-npm-scripts)
   - [TypeScript](#typescript)
   - [TSLib](#tslib)
   - [TSLint](#tslint)
-  - [ESLint](#eslint)
+  - [ESLint](#eslint) 🌟
   - [Jest](#jest)
   - [Style Guide](#style-guide)
 - [Recipes](#recipes)
