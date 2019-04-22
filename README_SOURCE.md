@@ -149,7 +149,7 @@ const withState = <P extends WrappedComponentProps>(
 ) => { ...
 ```
 
-#### `React.ReactElement<P>` or `JSX.Element`
+#### `React.ReactElement` or `JSX.Element`
 Type representing a concept of React Element - representation of a native DOM component (e.g. `<div />`), or a user-defined composite component (e.g. `<MyComponent />`)
 ```tsx
 const elementOnly: React.ReactElement = <div /> || <MyComponent />;
