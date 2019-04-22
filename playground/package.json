@@ -46,8 +46,8 @@
     "rxjs": "6.4.0",
     "tslib": "1.9.3",
     "tslint": "5.15.0",
-    "typesafe-actions": "4.0.0",
-    "typescript": "3.1.6",
+    "typesafe-actions": "4.1.0",
+    "typescript": "3.4.4",
     "utility-types": "3.5.0"
   },
   "browserslist": [

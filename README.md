@@ -8,7 +8,7 @@ _"This guide is a **living compendium** documenting the most important patterns 
 
 :star: _Found it useful? Want more updates?_ [**Show your support by giving a :star:**](https://github.com/piotrwitek/react-redux-typescript-guide/stargazers)  
 
-:tada: _Now updated to support **TypeScript v3.1**_ :tada:
+:tada: _Now updated to support **TypeScript v3.4**_ :tada:
 
 <a href="https://www.buymeacoffee.com/zh9guxbA5">
   <img src="https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png" alt="Buy Me a Coffee">
@@ -73,7 +73,8 @@ Issues can be funded by anyone interested in them being resolved. Reward will be
   - [Action Creators](#action-creators)
   - [Reducers](#reducers)
     - [State with Type-level Immutability](#state-with-type-level-immutability)
-    - [Typing reducer](#typing-reducer)
+    - [Typing regular reducer](#typing-regular-reducer)
+    - [Typing reducer with `typesafe-actions`](#typing-reducer-with-typesafe-actions)
     - [Testing reducer](#testing-reducer)
   - [Async Flow with `redux-observable`](#async-flow-with-redux-observable)
     - [Typing Epics](#typing-epics)
@@ -1041,11 +1042,16 @@ Can be imported in connected components to provide type-safety to Redux `connect
 Can be imported in various layers receiving or sending redux actions like: reducers, sagas or redux-observables epics
 
 ```tsx
+import { StateType, ActionType } from 'typesafe-actions';
+
 declare module 'MyTypes' {
-  import { StateType, ActionType } from 'typesafe-actions';
   export type Store = StateType<typeof import('./index').default>;
   export type RootAction = ActionType<typeof import('./root-action').default>;
   export type RootState = StateType<typeof import('./root-reducer').default>;
+}
+
+declare module 'typesafe-actions' {
+  export type RootAction = ActionType<typeof import('./root-action').default>;
 }
 
 ```
@@ -1101,7 +1107,7 @@ export default store;
 > We'll be using a battle-tested library [![NPM Downloads](https://img.shields.io/npm/dm/typesafe-actions.svg)](https://www.npmjs.com/package/typesafe-actions)
  that'll help retain complete type soundness and simplify maintenace of **types in Redux Architectures** [`typesafe-actions`](https://github.com/piotrwitek/typesafe-actions#typesafe-actions)
 
-> You can find more real-world examples and in-depth tutorial in: [Typesafe-Actions - The Mighty Tutorial](https://github.com/piotrwitek/typesafe-actions#behold-the-mighty-tutorial)!
+> You can find more real-world examples and in-depth tutorial in: [Typesafe-Actions - Tutorial](https://github.com/piotrwitek/typesafe-actions#tutorial)!
 
 A solution below is using a simple factory function to automate the creation of type-safe action creators. The goal is to decrease maintenance effort and reduce code repetition of type annotations for actions and creators. The result is completely typesafe action-creators and their actions.
 
@@ -1229,15 +1235,19 @@ import { Todo, TodosFilter } from './models';
 import * as actions from './actions';
 import { ADD, CHANGE_FILTER, TOGGLE } from './constants';
 
-export type TodosState = {
-  readonly todos: Todo[];
-  readonly todosFilter: TodosFilter;
-};
-
 export type TodosAction = ActionType<typeof actions>;
 
+export type TodosState = Readonly<{
+  todos: Todo[];
+  todosFilter: TodosFilter;
+}>;
+const initialState: TodosState = {
+  todos: [],
+  todosFilter: TodosFilter.All,
+};
+
 export default combineReducers<TodosState, TodosAction>({
-  todos: (state = [], action) => {
+  todos: (state = initialState.todos, action) => {
     switch (action.type) {
       case ADD:
         return [...state, action.payload];
@@ -1253,7 +1263,7 @@ export default combineReducers<TodosState, TodosAction>({
         return state;
     }
   },
-  todosFilter: (state = TodosFilter.All, action) => {
+  todosFilter: (state = initialState.todosFilter, action) => {
     switch (action.type) {
       case CHANGE_FILTER:
         return action.payload;
@@ -1262,6 +1272,49 @@ export default combineReducers<TodosState, TodosAction>({
         return state;
     }
   },
+});
+
+```
+
+[⇧ back to top](#table-of-contents)
+
+### Typing reducer with `typesafe-actions`
+> Notice we are not required to use any generic type parameter in the API. Try to compare it with regular reducer as they are equivalent.
+
+```tsx
+import { combineReducers } from 'redux';
+import { createReducer } from 'typesafe-actions';
+
+import { Todo, TodosFilter } from './models';
+import { ADD, CHANGE_FILTER, TOGGLE } from './constants';
+
+export type TodosState = Readonly<{
+  todos: Todo[];
+  todosFilter: TodosFilter;
+}>;
+const initialState: TodosState = {
+  todos: [],
+  todosFilter: TodosFilter.All,
+};
+
+const todos = createReducer(initialState.todos)
+  .handleAction(ADD, (state, action) => [...state, action.payload])
+  .handleAction(TOGGLE, (state, action) =>
+    state.map(item =>
+      item.id === action.payload
+        ? { ...item, completed: !item.completed }
+        : item
+    )
+  );
+
+const todosFilter = createReducer(initialState.todosFilter).handleAction(
+  CHANGE_FILTER,
+  (state, action) => action.payload
+);
+
+export default combineReducers({
+  todos,
+  todosFilter,
 });
 
 ```

@@ -8,7 +8,7 @@ _"This guide is a **living compendium** documenting the most important patterns 
 
 :star: _Found it useful? Want more updates?_ [**Show your support by giving a :star:**](https://github.com/piotrwitek/react-redux-typescript-guide/stargazers)  
 
-:tada: _Now updated to support **TypeScript v3.1**_ :tada:
+:tada: _Now updated to support **TypeScript v3.4**_ :tada:
 
 <a href="https://www.buymeacoffee.com/zh9guxbA5">
   <img src="https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png" alt="Buy Me a Coffee">
@@ -73,7 +73,8 @@ Issues can be funded by anyone interested in them being resolved. Reward will be
   - [Action Creators](#action-creators)
   - [Reducers](#reducers)
     - [State with Type-level Immutability](#state-with-type-level-immutability)
-    - [Typing reducer](#typing-reducer)
+    - [Typing regular reducer](#typing-regular-reducer)
+    - [Typing reducer with `typesafe-actions`](#typing-reducer-with-typesafe-actions)
     - [Testing reducer](#testing-reducer)
   - [Async Flow with `redux-observable`](#async-flow-with-redux-observable)
     - [Typing Epics](#typing-epics)
@@ -396,7 +397,7 @@ When creating a store instance we don't need to provide any additional types. It
 > We'll be using a battle-tested library [![NPM Downloads](https://img.shields.io/npm/dm/typesafe-actions.svg)](https://www.npmjs.com/package/typesafe-actions)
  that'll help retain complete type soundness and simplify maintenace of **types in Redux Architectures** [`typesafe-actions`](https://github.com/piotrwitek/typesafe-actions#typesafe-actions)
 
-> You can find more real-world examples and in-depth tutorial in: [Typesafe-Actions - The Mighty Tutorial](https://github.com/piotrwitek/typesafe-actions#behold-the-mighty-tutorial)!
+> You can find more real-world examples and in-depth tutorial in: [Typesafe-Actions - Tutorial](https://github.com/piotrwitek/typesafe-actions#tutorial)!
 
 A solution below is using a simple factory function to automate the creation of type-safe action creators. The goal is to decrease maintenance effort and reduce code repetition of type annotations for actions and creators. The result is completely typesafe action-creators and their actions.
 
@@ -478,6 +479,13 @@ state.containerObject.numbers.push(1); // TS Error: cannot use mutator methods
 > to understand following section make sure to learn about [Type Inference](https://www.typescriptlang.org/docs/handbook/type-inference.html), [Control flow analysis](https://github.com/Microsoft/TypeScript/wiki/What%27s-new-in-TypeScript#control-flow-based-type-analysis) and [Tagged union types](https://github.com/Microsoft/TypeScript/wiki/What%27s-new-in-TypeScript#tagged-union-types)
 
 ::codeblock='playground/src/features/todos/reducer.ts'::
+
+[⇧ back to top](#table-of-contents)
+
+### Typing reducer with `typesafe-actions`
+> Notice we are not required to use any generic type parameter in the API. Try to compare it with regular reducer as they are equivalent.
+
+::codeblock='playground/src/features/todos/reducer-ta.ts'::
 
 [⇧ back to top](#table-of-contents)
 

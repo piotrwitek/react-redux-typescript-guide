@@ -5,15 +5,19 @@ import { Todo, TodosFilter } from './models';
 import * as actions from './actions';
 import { ADD, CHANGE_FILTER, TOGGLE } from './constants';
 
-export type TodosState = {
-  readonly todos: Todo[];
-  readonly todosFilter: TodosFilter;
-};
-
 export type TodosAction = ActionType<typeof actions>;
 
+export type TodosState = Readonly<{
+  todos: Todo[];
+  todosFilter: TodosFilter;
+}>;
+const initialState: TodosState = {
+  todos: [],
+  todosFilter: TodosFilter.All,
+};
+
 export default combineReducers<TodosState, TodosAction>({
-  todos: (state = [], action) => {
+  todos: (state = initialState.todos, action) => {
     switch (action.type) {
       case ADD:
         return [...state, action.payload];
@@ -29,7 +33,7 @@ export default combineReducers<TodosState, TodosAction>({
         return state;
     }
   },
-  todosFilter: (state = TodosFilter.All, action) => {
+  todosFilter: (state = initialState.todosFilter, action) => {
     switch (action.type) {
       case CHANGE_FILTER:
         return action.payload;
