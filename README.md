@@ -123,33 +123,33 @@ npm i -D @types/react @types/react-dom @types/react-redux
 
 # React - Type-Definitions Cheatsheet
 
-#### `React.FunctionComponent<P>` or `React.FC<P>`
+#### `React.FC<Props>` | `React.FunctionComponent<Props>`
 Type representing a functional component
 ```tsx
 const MyComponent: React.FC<Props> = ...
 ```
 
-#### `React.Component<P, S>`
+#### `React.Component<Props, State>`
 Type representing a class component
 ```tsx
 class MyComponent extends React.Component<Props, State> { ...
 ```
 
-#### `React.ComponentProps<typeof Component>`
-Gets type of Component Props, so you don't need to export Props from your component ever! (Works for both FC and Class components)
-```tsx
-type MyComponentProps = React.ComponentProps<typeof MyComponent>;
-```
-
-#### `React.ComponentType<P>`
-Type representing union type of (React.FC | React.Component)
+#### `React.ComponentType<Props>`
+Type representing union of (React.FC<Props> | React.Component<Props>) - used in HOC
 ```tsx
 const withState = <P extends WrappedComponentProps>(
   WrappedComponent: React.ComponentType<P>,
 ) => { ...
 ```
 
-#### `React.ReactElement` or `JSX.Element`
+#### `React.ComponentProps<typeof XXX>`
+Gets Props type of a specified component XXX (WARNING: does not work with statically declared default props and generic props)
+```tsx
+type MyComponentProps = React.ComponentProps<typeof MyComponent>;
+```
+
+#### `React.ReactElement` | `JSX.Element`
 Type representing a concept of React Element - representation of a native DOM component (e.g. `<div />`), or a user-defined composite component (e.g. `<MyComponent />`)
 ```tsx
 const elementOnly: React.ReactElement = <div /> || <MyComponent />;
@@ -163,22 +163,30 @@ const Component = ({ children: React.ReactNode }) => ...
 ```
 
 #### `React.CSSProperties`
-Type representing style object in JSX (useful for css-in-js styles)
+Type representing style object in JSX - for css-in-js styles
 ```tsx
 const styles: React.CSSProperties = { flexDirection: 'row', ...
 const element = <div style={styles} ...
 ```
 
-#### `React.ReactEventHandler<E>`
-Type representing generic event handler
+#### `React.HTMLProps<HTMLXXXElement>`
+Type representing Props of specified HTML Element - for extending HTML Elements
+```tsx
+const Input: React.FC<Props & React.HTMLProps<HTMLInputElement>> = props => { ... }
+
+<Input about={...} accept={...} alt={...} ... />
+```
+
+#### `React.ReactEventHandler<HTMLXXXElement>`
+Type representing generic event handler - for declaring event handlers
 ```tsx
 const handleChange: React.ReactEventHandler<HTMLInputElement> = (ev) => { ... } 
 
 <input onChange={handleChange} ... />
 ```
 
-#### `React.MouseEvent<E>` | `React.KeyboardEvent<E>` | `React.TouchEvent<E>` etc...
-Type representing more specific event handler
+#### `React.XXXEvent<HTMLXXXElement>`
+Type representing more specific event handler. Some common event examples: `ChangeEvent, FormEvent, FocusEvent, KeyboardEvent, MouseEvent, DragEvent, PointerEvent, WheelEvent, TouchEvent`.
 ```tsx
 const handleChange = (ev: React.MouseEvent<HTMLDivElement>) => { ... }
 
