@@ -803,7 +803,7 @@ declare module 'rxjs/Subject' {
 }
 ```
 
-When creating 3rd party type-definitions all the imports should be kept inside the module decleration, otherwise it will be treated as augmentation and show error
+When creating 3rd party type-definitions all the imports should be kept inside the module declaration, otherwise it will be treated as augmentation and show error
 
 ```ts
 declare module "react-custom-scrollbars" {
