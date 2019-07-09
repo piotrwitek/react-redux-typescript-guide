@@ -1,5 +1,5 @@
 import { combineReducers } from 'redux';
-import { History } from 'history'
+import { History } from 'history';
 
 import { connectRouter } from 'connected-react-router';
 import todosReducer from '../features/todos/reducer';

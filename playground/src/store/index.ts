@@ -1,7 +1,7 @@
 import { RootAction, RootState, Services } from 'MyTypes';
 import { createStore, applyMiddleware } from 'redux';
 import { createEpicMiddleware } from 'redux-observable';
-import { createBrowserHistory } from 'history'
+import { createBrowserHistory } from 'history';
 
 import { composeEnhancers } from './utils';
 import rootReducer from './root-reducer';
@@ -26,7 +26,7 @@ const enhancer = composeEnhancers(applyMiddleware(...middlewares));
 const initialState = {};
 
 // browser history
-const history = createBrowserHistory()
+const history = createBrowserHistory();
 
 // create store
 const store = createStore(rootReducer(history), initialState, enhancer);
