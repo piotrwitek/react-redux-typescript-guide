@@ -1,11 +1,12 @@
 import { combineReducers } from 'redux';
+import { History } from 'history';
 
-import { routerReducer } from 'react-router-redux';
+import { connectRouter } from 'connected-react-router';
 import todosReducer from '../features/todos/reducer';
 import countersReducer from '../features/counters/reducer';
 
-const rootReducer = combineReducers({
-  router: routerReducer,
+const rootReducer = (history: History) => combineReducers({
+  router: connectRouter(history),
   todos: todosReducer,
   counters: countersReducer,
 });

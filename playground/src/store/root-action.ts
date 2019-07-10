@@ -1,4 +1,4 @@
-import { routerActions } from 'react-router-redux';
+import { routerActions } from 'connected-react-router';
 import * as todosActions from '../features/todos/actions';
 import * as countersActions from '../features/counters/actions';
 

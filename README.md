@@ -1079,7 +1079,7 @@ import { StateType, ActionType } from 'typesafe-actions';
 declare module 'MyTypes' {
   export type Store = StateType<typeof import('./index').default>;
   export type RootAction = ActionType<typeof import('./root-action').default>;
-  export type RootState = StateType<typeof import('./root-reducer').default>;
+  export type RootState = StateType<ReturnType<typeof import('./root-reducer').default>>;
 }
 
 declare module 'typesafe-actions' {
@@ -1101,6 +1101,7 @@ When creating a store instance we don't need to provide any additional types. It
 import { RootAction, RootState, Services } from 'MyTypes';
 import { createStore, applyMiddleware } from 'redux';
 import { createEpicMiddleware } from 'redux-observable';
+import { createBrowserHistory } from 'history';
 
 import { composeEnhancers } from './utils';
 import rootReducer from './root-reducer';
@@ -1124,8 +1125,11 @@ const enhancer = composeEnhancers(applyMiddleware(...middlewares));
 // rehydrate state on app start
 const initialState = {};
 
+// browser history
+const history = createBrowserHistory();
+
 // create store
-const store = createStore(rootReducer, initialState, enhancer);
+const store = createStore(rootReducer(history), initialState, enhancer);
 
 epicMiddleware.run(rootEpic);
 
