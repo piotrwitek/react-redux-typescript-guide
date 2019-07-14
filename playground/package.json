@@ -59,9 +59,12 @@
   "devDependencies": {
     "@storybook/addon-actions": "5.1.9",
     "@storybook/addon-links": "5.1.9",
+    "@storybook/addon-storyshots": "5.1.9",
     "@storybook/addons": "5.1.9",
     "@storybook/react": "5.1.9",
-    "@types/storybook__react": "^4.0.2",
+    "@types/storybook__addon-storyshots": "^.0.1",
+    "@types/storybook__react": "4.0.2",
+    "react-test-renderer": "16.8.6",
     "require-context.macro": "1.0.4"
   }
 }

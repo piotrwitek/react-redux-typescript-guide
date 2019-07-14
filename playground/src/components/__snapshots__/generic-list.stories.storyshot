@@ -1,0 +1,15 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Storyshots GenericList default 1`] = `
+<div>
+  <div>
+    Rosamonte Especial
+  </div>
+  <div>
+    Aguantadora Despalada
+  </div>
+  <div>
+    Taragui Vitality
+  </div>
+</div>
+`;

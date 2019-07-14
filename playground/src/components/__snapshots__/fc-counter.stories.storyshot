@@ -1,0 +1,17 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Storyshots FCCounter default 1`] = `
+<div>
+  <span>
+    FCCounter
+    : 
+    0
+  </span>
+  <button
+    onClick={[Function]}
+    type="button"
+  >
+    Increment
+  </button>
+</div>
+`;

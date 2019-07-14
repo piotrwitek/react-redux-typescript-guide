@@ -1,0 +1,33 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Storyshots ClassCounterWithDefaultProps with defaut initial count 1`] = `
+<div>
+  <span>
+    ClassCounterWithDefaultProps
+    : 
+    0
+  </span>
+  <button
+    onClick={[Function]}
+    type="button"
+  >
+    Increment
+  </button>
+</div>
+`;
+
+exports[`Storyshots ClassCounterWithDefaultProps with initial count set 1`] = `
+<div>
+  <span>
+    ClassCounterWithDefaultProps
+    : 
+    5
+  </span>
+  <button
+    onClick={[Function]}
+    type="button"
+  >
+    Increment
+  </button>
+</div>
+`;

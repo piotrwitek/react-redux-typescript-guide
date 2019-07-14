@@ -1,0 +1,14 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Storyshots FCSpreadAttributes default 1`] = `
+<div
+  className="classy"
+  style={
+    Object {
+      "backgroundColor": "lightcyan",
+    }
+  }
+>
+  I'll spread every property you give me!
+</div>
+`;
