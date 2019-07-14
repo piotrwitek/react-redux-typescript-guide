@@ -38,3 +38,4 @@ jspm_packages
 
 temp/
 playground/dist
+playground/storybook-static
