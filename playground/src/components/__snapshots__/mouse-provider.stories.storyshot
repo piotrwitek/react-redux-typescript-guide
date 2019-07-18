@@ -1,0 +1,19 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Storyshots MouseProvider default 1`] = `
+<div
+  onMouseMove={[Function]}
+  style={
+    Object {
+      "height": "100%",
+    }
+  }
+>
+  <p>
+    The mouse position is 
+    0
+    , 
+    0
+  </p>
+</div>
+`;

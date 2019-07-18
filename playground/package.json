@@ -16,7 +16,9 @@
     "ci-check": "npm run lint && npm run tsc && npm run test",
     "lint": "tslint -p ./",
     "tsc": "tsc -p ./ --noEmit",
-    "tsc:watch": "tsc -p ./ --noEmit -w"
+    "tsc:watch": "tsc -p ./ --noEmit -w",
+    "storybook": "start-storybook -p 9009 -s public",
+    "build-storybook": "build-storybook -s public"
   },
   "dependencies": {
     "@types/jest": "24.0.11",
@@ -53,5 +55,16 @@
     "not dead",
     "not ie <= 11",
     "not op_mini all"
-  ]
+  ],
+  "devDependencies": {
+    "@storybook/addon-actions": "5.1.9",
+    "@storybook/addon-links": "5.1.9",
+    "@storybook/addon-storyshots": "5.1.9",
+    "@storybook/addons": "5.1.9",
+    "@storybook/react": "5.1.9",
+    "@types/storybook__addon-storyshots": "4.0.1",
+    "@types/storybook__react": "4.0.2",
+    "react-test-renderer": "16.8.6",
+    "require-context.macro": "1.0.4"
+  }
 }
