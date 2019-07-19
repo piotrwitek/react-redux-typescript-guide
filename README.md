@@ -1110,7 +1110,7 @@ import rootEpic from './root-epic';
 import services from '../services';
 
 // browser history
-const history = createBrowserHistory();
+export const history = createBrowserHistory();
 
 export const epicMiddleware = createEpicMiddleware<
   RootAction,
