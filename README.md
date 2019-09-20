@@ -1164,7 +1164,7 @@ export const add = (amount: number) => action(ADD, amount);
 // ALTERNATIVE API - allow to use reference to "action-creator" function instead of "type constant"
 // e.g. case getType(increment): return { ... }
 // This will allow to completely eliminate need for "constants" in your application, more info here:
-// https://github.com/piotrwitek/typesafe-actions#behold-the-mighty-tutorial
+// https://github.com/piotrwitek/typesafe-actions#constants
 
 // OPTION 1 (with generics):
 // import { createStandardAction } from 'typesafe-actions';
