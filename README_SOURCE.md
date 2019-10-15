@@ -186,12 +186,14 @@ const handleChange: React.ReactEventHandler<HTMLInputElement> = (ev) => { ... }
 ```
 
 #### `React.XXXEvent<HTMLXXXElement>`
-Type representing more specific event handler. Some common event examples: `ChangeEvent, FormEvent, FocusEvent, KeyboardEvent, MouseEvent, DragEvent, PointerEvent, WheelEvent, TouchEvent`.
+Type representing more specific event. Some common event examples: `ChangeEvent, FormEvent, FocusEvent, KeyboardEvent, MouseEvent, DragEvent, PointerEvent, WheelEvent, TouchEvent`.
 ```tsx
 const handleChange = (ev: React.MouseEvent<HTMLDivElement>) => { ... }
 
 <div onMouseMove={handleChange} ... />
 ```
+
+In code above `React.MouseEvent<HTMLDivElement>` is type of mouse event, and this event happened on `HTMLDivElement`
 
 [⇧ back to top](#table-of-contents)
 
