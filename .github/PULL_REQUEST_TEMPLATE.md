@@ -12,7 +12,7 @@
 * [ ] I have edited `README_SOURCE.md` (NOT `README.md`)
 * [ ] I have run `sh ./generate-readme.sh` script to generate an updated `README.md` (alternatively you can run `node ./generate-readme.js`)
 
-* [ ] I have read [CONTRIBUTING.md](../CONTRIBUTING.md)
+* [ ] I have read [CONTRIBUTING.md](https://github.com/piotrwitek/react-redux-typescript-guide/blob/master/CONTRIBUTING.md)
 * [ ] I have linked all related issues above
 * [ ] I have rebased my branch
 
