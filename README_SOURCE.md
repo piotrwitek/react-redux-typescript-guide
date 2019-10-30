@@ -10,7 +10,7 @@ _"This guide is a **living compendium** documenting the most important patterns 
 
 :tada: _Now updated to support **TypeScript v3.4**_ :tada:
 
-<a href="https://www.buymeacoffee.com/zh9guxbA5">
+<a href="https://www.buymeacoffee.com/piotrekwitek">
   <img src="https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png" alt="Buy Me a Coffee">
 </a>
 <a href="https://www.patreon.com/piotrekwitek">
