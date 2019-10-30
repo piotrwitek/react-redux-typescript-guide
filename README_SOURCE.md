@@ -4,11 +4,12 @@
 
 _"This guide is a **living compendium** documenting the most important patterns and recipes on how to use **React** (and its Ecosystem) in a **functional style** using **TypeScript**. It will help you make your code **completely type-safe** while focusing on **inferring the types from implementation** so there is less noise coming from excessive type annotations and it's easier to write and maintain correct types in the long run."_
 
-[![Join the chat at https://gitter.im/react-redux-typescript-guide/Lobby](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/react-redux-typescript-guide/Lobby)  
+[![Join the community on Spectrum](https://withspectrum.github.io/badge/badge.svg)](https://spectrum.chat/react-redux-ts)
+[![Join the chat at https://gitter.im/react-redux-typescript-guide/Lobby](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/react-redux-typescript-guide/Lobby)
 
-:star: _Found it useful? Want more updates?_ [**Show your support by giving a :star:**](https://github.com/piotrwitek/react-redux-typescript-guide/stargazers)  
+_Found it useful? Want more updates?_
 
-:tada: _Now updated to support **TypeScript v3.4**_ :tada:
+[**Show your support by giving a :star:**](https://github.com/piotrwitek/react-redux-typescript-guide/stargazers)
 
 <a href="https://www.buymeacoffee.com/piotrekwitek">
   <img src="https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png" alt="Buy Me a Coffee">
@@ -16,6 +17,12 @@ _"This guide is a **living compendium** documenting the most important patterns 
 <a href="https://www.patreon.com/piotrekwitek">
   <img src="https://c5.patreon.com/external/logo/become_a_patron_button@2x.png" alt="Become a Patron" width="160">
 </a>
+
+<br/><hr/>
+
+:tada: _Now updated to support **TypeScript v3.4**_ :tada:
+
+<hr/><br/>
 
 </div>
 
