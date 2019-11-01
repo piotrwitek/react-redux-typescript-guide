@@ -162,6 +162,20 @@ Type representing a concept of React Element - representation of a native DOM co
 const elementOnly: React.ReactElement = <div /> || <MyComponent />;
 ```
 
+#### `React.Ref<React.ReactElement<P>>`
+Type representing a React ref given as a second argument to a component by `forwardRef`, pointing to a native DOM component (e.g. `<div />`), or a user-defined composite component (e.g. `<MyComponent />`)
+```tsx
+const Component = forwardRef((props: P, ref: React.Ref<React.ReactElement<P>>) => <Something />);
+```
+[⇧ back to top](#table-of-contents)
+
+#### `React.RefObject<P>`
+Type representing a React ref returned from `createRef`, pointing to a native DOM component (e.g. `<div />`), or a user-defined composite component (e.g. `<MyComponent />`)
+```tsx
+const ref: React.RefObject<P> = React.createRef<P>();
+```
+[⇧ back to top](#table-of-contents)
+
 #### `React.ReactNode`
 Type representing any possible type of React node (basically ReactElement (including Fragments and Portals) + primitive JS types)
 ```tsx
