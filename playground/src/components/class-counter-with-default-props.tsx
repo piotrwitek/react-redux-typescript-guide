@@ -21,12 +21,6 @@ export class ClassCounterWithDefaultProps extends React.Component<
     count: this.props.initialCount,
   };
 
-  componentWillReceiveProps({ initialCount }: Props) {
-    if (initialCount != null && initialCount !== this.props.initialCount) {
-      this.setState({ count: initialCount });
-    }
-  }
-
   handleIncrement = () => {
     this.setState({ count: this.state.count + 1 });
   };

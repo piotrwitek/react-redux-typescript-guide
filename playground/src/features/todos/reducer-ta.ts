@@ -14,8 +14,8 @@ const initialState: TodosState = {
 };
 
 const todos = createReducer(initialState.todos)
-  .handleAction(ADD, (state, action) => [...state, action.payload])
-  .handleAction(TOGGLE, (state, action) =>
+  .handleType(ADD, (state, action) => [...state, action.payload])
+  .handleType(TOGGLE, (state, action) =>
     state.map(item =>
       item.id === action.payload
         ? { ...item, completed: !item.completed }
@@ -23,7 +23,7 @@ const todos = createReducer(initialState.todos)
     )
   );
 
-const todosFilter = createReducer(initialState.todosFilter).handleAction(
+const todosFilter = createReducer(initialState.todosFilter).handleType(
   CHANGE_FILTER,
   (state, action) => action.payload
 );
