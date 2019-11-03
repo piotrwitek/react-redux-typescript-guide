@@ -1,19 +1,16 @@
-import * as React from 'react';
-import { Subtract } from 'utility-types';
+import React from 'react';
+import { Diff } from 'utility-types';
 
-// These props will be subtracted from base component props
+// These props will be injected into the base component
 interface InjectedProps {
   count: number;
   onIncrement: () => void;
 }
 
 export const withState = <BaseProps extends InjectedProps>(
-  _BaseComponent: React.ComponentType<BaseProps>
+  BaseComponent: React.ComponentType<BaseProps>
 ) => {
-  // fix for TypeScript issues: https://github.com/piotrwitek/react-redux-typescript-guide/issues/111
-  const BaseComponent = _BaseComponent as React.ComponentType<InjectedProps>;
-
-  type HocProps = Subtract<BaseProps, InjectedProps> & {
+  type HocProps = Diff<BaseProps, InjectedProps> & {
     // here you can extend hoc with new props
     initialCount?: number;
   };
@@ -43,7 +40,7 @@ export const withState = <BaseProps extends InjectedProps>(
         <BaseComponent
           count={count} // injected
           onIncrement={this.handleIncrement} // injected
-          {...restProps}
+          {...(restProps as BaseProps)}
         />
       );
     }

@@ -1,20 +1,11 @@
-import * as React from 'react';
-import { Subtract } from 'utility-types';
+import React from 'react';
 
 const MISSING_ERROR = 'Error was swallowed during propagation.';
 
-// These props will be subtracted from base component props
-interface InjectedProps {
-  onReset: () => void;
-}
-
-export const withErrorBoundary = <BaseProps extends InjectedProps>(
-  _BaseComponent: React.ComponentType<BaseProps>
+export const withErrorBoundary = <BaseProps extends {}>(
+  BaseComponent: React.ComponentType<BaseProps>
 ) => {
-  // fix for TypeScript issues: https://github.com/piotrwitek/react-redux-typescript-guide/issues/111
-  const BaseComponent = _BaseComponent as React.ComponentType<InjectedProps>;
-
-  type HocProps = Subtract<BaseProps, InjectedProps> & {
+  type HocProps = {
     // here you can extend hoc with new props
   };
   type HocState = {
@@ -40,21 +31,12 @@ export const withErrorBoundary = <BaseProps extends InjectedProps>(
       // TODO: send error report to service provider
     };
 
-    handleReset = () => {
-      this.setState({ error: undefined });
-    };
-
     render() {
       const { children, ...restProps } = this.props;
       const { error } = this.state;
 
       if (error) {
-        return (
-          <BaseComponent
-            onReset={this.handleReset} // injected
-            {...restProps}
-          />
-        );
+        return <BaseComponent {...(restProps as BaseProps)} />;
       }
 
       return children;
