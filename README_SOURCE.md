@@ -1,6 +1,6 @@
 <div align="center">
 
-# React & Redux in TypeScript Guide
+# React & Redux in TypeScript - Complete Guide
 
 _"This guide is a **living compendium** documenting the most important patterns and recipes on how to use **React** (and its Ecosystem) in a **functional style** using **TypeScript**. It will help you make your code **completely type-safe** while focusing on **inferring the types from implementation** so there is less noise coming from excessive type annotations and it's easier to write and maintain correct types in the long run."_
 
@@ -23,6 +23,7 @@ _Found it useful? Want more updates?_
 ### **What's new?**
 
 :tada: _Now updated to support **TypeScript v3.7**_ :tada:
+:rocket: _Updated to `typesafe-actions@5.x.x` :rocket:
 
 <hr/><br/>
 
@@ -71,47 +72,85 @@ I highly recommend to add a bounty to the issue that you're waiting for to incre
 
 ## Table of Contents
 
-- [Installation](#installation)
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+
+
 - [React - Type-Definitions Cheatsheet](#react---type-definitions-cheatsheet)
+    - [`React.FC<Props>` | `React.FunctionComponent<Props>`](#reactfcprops--reactfunctioncomponentprops)
+    - [`React.Component<Props, State>`](#reactcomponentprops-state)
+    - [`React.ComponentType<Props>`](#reactcomponenttypeprops)
+    - [`React.ComponentProps<typeof XXX>`](#reactcomponentpropstypeof-xxx)
+    - [`React.ReactElement` | `JSX.Element`](#reactreactelement--jsxelement)
+    - [`React.ReactNode`](#reactreactnode)
+    - [`React.CSSProperties`](#reactcssproperties)
+    - [`React.HTMLProps<HTMLXXXElement>`](#reacthtmlpropshtmlxxxelement)
+    - [`React.ReactEventHandler<HTMLXXXElement>`](#reactreacteventhandlerhtmlxxxelement)
+    - [`React.XXXEvent<HTMLXXXElement>`](#reactxxxeventhtmlxxxelement)
 - [React - Typing Patterns](#react---typing-patterns)
   - [Function Components - FC](#function-components---fc)
-  - [Class Components ](#class-components)
+    - [- Counter Component](#--counter-component)
+    - [- Spreading attributes in Component](#--spreading-attributes-in-component)
+  - [Class Components](#class-components)
+    - [- Class Counter Component](#--class-counter-component)
+    - [- Class Component with default props](#--class-component-with-default-props)
   - [Generic Components](#generic-components)
+    - [- Generic List Component](#--generic-list-component)
   - [Render Props](#render-props)
+    - [- Name Provider Component](#--name-provider-component)
+    - [- Mouse Provider Component](#--mouse-provider-component)
   - [Higher-Order Components](#higher-order-components)
+    - [- HOC wrapping a component](#--hoc-wrapping-a-component)
+    - [- HOC wrapping a component and injecting props](#--hoc-wrapping-a-component-and-injecting-props)
+    - [- Nested HOC - wrapping a component, injecting props and connecting to redux 🌟](#--nested-hoc---wrapping-a-component-injecting-props-and-connecting-to-redux-)
   - [Redux Connected Components](#redux-connected-components)
+    - [- Redux connected counter](#--redux-connected-counter)
+    - [- Redux connected counter with own props](#--redux-connected-counter-with-own-props)
+    - [- Redux connected counter with `redux-thunk` integration](#--redux-connected-counter-with-redux-thunk-integration)
   - [Context](#context)
-  - [Hooks](#hooks) 🌟
+    - [ThemeContext](#themecontext)
+    - [ThemeProvider](#themeprovider)
+    - [ThemeConsumer](#themeconsumer)
+    - [ThemeConsumer in class component](#themeconsumer-in-class-component)
+  - [Hooks](#hooks)
+    - [- useState](#--usestate)
+    - [- useReducer](#--usereducer)
+    - [- useContext](#--usecontext)
 - [Redux - Typing Patterns](#redux---typing-patterns)
   - [Store Configuration](#store-configuration)
-  - [Action Creators](#action-creators)
+    - [Create Global Store Types](#create-global-store-types)
+    - [Create Store](#create-store)
+  - [Action Creators 🌟](#action-creators-)
   - [Reducers](#reducers)
     - [State with Type-level Immutability](#state-with-type-level-immutability)
-    - [Typing regular reducer](#typing-regular-reducer)
-    - [Typing reducer with `typesafe-actions`](#typing-reducer-with-typesafe-actions) 🌟
+    - [Typing reducer](#typing-reducer)
+    - [Typing reducer with `typesafe-actions`](#typing-reducer-with-typesafe-actions)
     - [Testing reducer](#testing-reducer)
   - [Async Flow with `redux-observable`](#async-flow-with-redux-observable)
-    - [Typing Epics](#typing-epics)
-    - [Testing Epics](#testing-epics)
+    - [Typing epics](#typing-epics)
+    - [Testing epics](#testing-epics)
   - [Selectors with `reselect`](#selectors-with-reselect)
   - [Connect with `react-redux`](#connect-with-react-redux)
     - [Typing connected component](#typing-connected-component)
-    - [Typing connected component using `redux-thunk` action creators](#typing-connected-component-using-redux-thunk-action-creators) 🌟
+    - [Typing connected component with `redux-thunk` integration](#typing-connected-component-with-redux-thunk-integration)
 - [Configuration & Dev Tools](#configuration--dev-tools)
   - [Common Npm Scripts](#common-npm-scripts)
-  - [TypeScript](#typescript)
+  - [tsconfig.json](#tsconfigjson)
   - [TSLib](#tslib)
   - [TSLint](#tslint)
-  - [ESLint](#eslint) 🌟
+  - [ESLint](#eslint)
   - [Jest](#jest)
-  - [Style Guide](#style-guide)
+  - [Style Guides](#style-guides)
+    - ["react-styleguidist"](#react-styleguidist)
 - [Recipes](#recipes)
-  - [General Tips](#general-tips)
-  - [Ambient Modules Tips](#ambient-modules-tips)
-  - [Type-Definitions Tips](#type-definitions-tips)
-  - [Type Augmentation Tips](#type-augmentation-tips)
-- [Tutorials & Articles](#tutorials--articles)
-- [Contributors](#contributors)
+    - [General Tips](#general-tips)
+    - [Ambient Modules Tips](#ambient-modules-tips)
+    - [Type-Definitions Tips](#type-definitions-tips)
+    - [Type Augmentation Tips](#type-augmentation-tips)
+  - [Tutorials & Articles](#tutorials--articles)
+  - [Contributors](#contributors)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 ---
 
@@ -135,19 +174,19 @@ npm i -D @types/react @types/react-dom @types/react-redux
 
 # React - Type-Definitions Cheatsheet
 
-#### `React.FC<Props>` | `React.FunctionComponent<Props>`
+### `React.FC<Props>` | `React.FunctionComponent<Props>`
 Type representing a functional component
 ```tsx
 const MyComponent: React.FC<Props> = ...
 ```
 
-#### `React.Component<Props, State>`
+### `React.Component<Props, State>`
 Type representing a class component
 ```tsx
 class MyComponent extends React.Component<Props, State> { ...
 ```
 
-#### `React.ComponentType<Props>`
+### `React.ComponentType<Props>`
 Type representing union of (React.FC<Props> | React.Component<Props>) - used in HOC
 ```tsx
 const withState = <P extends WrappedComponentProps>(
@@ -155,33 +194,33 @@ const withState = <P extends WrappedComponentProps>(
 ) => { ...
 ```
 
-#### `React.ComponentProps<typeof XXX>`
+### `React.ComponentProps<typeof XXX>`
 Gets Props type of a specified component XXX (WARNING: does not work with statically declared default props and generic props)
 ```tsx
 type MyComponentProps = React.ComponentProps<typeof MyComponent>;
 ```
 
-#### `React.ReactElement` | `JSX.Element`
+### `React.ReactElement` | `JSX.Element`
 Type representing a concept of React Element - representation of a native DOM component (e.g. `<div />`), or a user-defined composite component (e.g. `<MyComponent />`)
 ```tsx
 const elementOnly: React.ReactElement = <div /> || <MyComponent />;
 ```
 
-#### `React.ReactNode`
+### `React.ReactNode`
 Type representing any possible type of React node (basically ReactElement (including Fragments and Portals) + primitive JS types)
 ```tsx
 const elementOrPrimitive: React.ReactNode = 'string' || 0 || false || null || undefined || <div /> || <MyComponent />;
 const Component = ({ children: React.ReactNode }) => ...
 ```
 
-#### `React.CSSProperties`
+### `React.CSSProperties`
 Type representing style object in JSX - for css-in-js styles
 ```tsx
 const styles: React.CSSProperties = { flexDirection: 'row', ...
 const element = <div style={styles} ...
 ```
 
-#### `React.HTMLProps<HTMLXXXElement>`
+### `React.HTMLProps<HTMLXXXElement>`
 Type representing Props of specified HTML Element - for extending HTML Elements
 ```tsx
 const Input: React.FC<Props & React.HTMLProps<HTMLInputElement>> = props => { ... }
@@ -189,7 +228,7 @@ const Input: React.FC<Props & React.HTMLProps<HTMLInputElement>> = props => { ..
 <Input about={...} accept={...} alt={...} ... />
 ```
 
-#### `React.ReactEventHandler<HTMLXXXElement>`
+### `React.ReactEventHandler<HTMLXXXElement>`
 Type representing generic event handler - for declaring event handlers
 ```tsx
 const handleChange: React.ReactEventHandler<HTMLInputElement> = (ev) => { ... } 
@@ -197,7 +236,7 @@ const handleChange: React.ReactEventHandler<HTMLInputElement> = (ev) => { ... }
 <input onChange={handleChange} ... />
 ```
 
-#### `React.XXXEvent<HTMLXXXElement>`
+### `React.XXXEvent<HTMLXXXElement>`
 Type representing more specific event. Some common event examples: `ChangeEvent, FormEvent, FocusEvent, KeyboardEvent, MouseEvent, DragEvent, PointerEvent, WheelEvent, TouchEvent`.
 ```tsx
 const handleChange = (ev: React.MouseEvent<HTMLDivElement>) => { ... }
@@ -215,7 +254,7 @@ In code above `React.MouseEvent<HTMLDivElement>` is type of mouse event, and thi
 
 ## Function Components - FC
 
-#### - FC counter
+### - Counter Component
 
 ::codeblock='playground/src/components/fc-counter.tsx'::
 
@@ -223,7 +262,7 @@ In code above `React.MouseEvent<HTMLDivElement>` is type of mouse event, and thi
 
 [⇧ back to top](#table-of-contents)
 
-#### - spread attributes [link](https://facebook.github.io/react/docs/jsx-in-depth.html#spread-attributes)
+### - [Spreading attributes](https://facebook.github.io/react/docs/jsx-in-depth.html#spread-attributes) in Component
 
 ::codeblock='playground/src/components/fc-spread-attributes.tsx'::
 
@@ -235,7 +274,7 @@ In code above `React.MouseEvent<HTMLDivElement>` is type of mouse event, and thi
 
 ## Class Components
 
-#### - class counter
+### - Class Counter Component
 
 ::codeblock='playground/src/components/class-counter.tsx'::
 
@@ -243,7 +282,7 @@ In code above `React.MouseEvent<HTMLDivElement>` is type of mouse event, and thi
 
 [⇧ back to top](#table-of-contents)
 
-#### - with default props
+### - Class Component with default props
 
 ::codeblock='playground/src/components/class-counter-with-default-props.tsx'::
 
@@ -257,7 +296,7 @@ In code above `React.MouseEvent<HTMLDivElement>` is type of mouse event, and thi
 - easily create typed component variations and reuse common logic
 - common use case is a generic list components
 
-#### - generic list
+### - Generic List Component
 
 ::codeblock='playground/src/components/generic-list.tsx'::
 
@@ -270,7 +309,7 @@ In code above `React.MouseEvent<HTMLDivElement>` is type of mouse event, and thi
 ## Render Props
 > https://reactjs.org/docs/render-props.html
 
-#### - name provider
+### - Name Provider Component
 > simple component using children as a render prop
 
 ::codeblock='playground/src/components/name-provider.tsx'::
@@ -279,7 +318,7 @@ In code above `React.MouseEvent<HTMLDivElement>` is type of mouse event, and thi
 
 [⇧ back to top](#table-of-contents)
 
-#### - mouse provider
+### - Mouse Provider Component
 > `Mouse` component found in [Render Props React Docs](https://reactjs.org/docs/render-props.html#use-render-props-for-cross-cutting-concerns)
 
 ::codeblock='playground/src/components/mouse-provider.tsx'::
@@ -293,7 +332,7 @@ In code above `React.MouseEvent<HTMLDivElement>` is type of mouse event, and thi
 ## Higher-Order Components
 > https://reactjs.org/docs/higher-order-components.html
 
-#### - withState
+### - HOC wrapping a component
 Adds state to a stateless counter
 
 ::codeblock='playground/src/hoc/with-state.tsx'::
@@ -301,7 +340,7 @@ Adds state to a stateless counter
 
 [⇧ back to top](#table-of-contents)
 
-#### - withErrorBoundary
+### - HOC wrapping a component and injecting props
 Adds error handling using componentDidCatch to any component
 
 ::codeblock='playground/src/hoc/with-error-boundary.tsx'::
@@ -309,25 +348,33 @@ Adds error handling using componentDidCatch to any component
 
 [⇧ back to top](#table-of-contents)
 
+### - Nested HOC - wrapping a component, injecting props and connecting to redux 🌟
+Adds error handling using componentDidCatch to any component
+
+::codeblock='playground/src/hoc/with-connected-count.tsx'::
+::expander='playground/src/hoc/with-connected-count.usage.tsx'::
+
+[⇧ back to top](#table-of-contents)
+
 ---
 
 ## Redux Connected Components
 
-#### - redux connected counter
+### - Redux connected counter
 
 ::codeblock='playground/src/connected/fc-counter-connected.tsx'::
 ::expander='playground/src/connected/fc-counter-connected.usage.tsx'::
 
 [⇧ back to top](#table-of-contents)
 
-#### - redux connected counter with own props
+### - Redux connected counter with own props
 
 ::codeblock='playground/src/connected/fc-counter-connected-own-props.tsx'::
 ::expander='playground/src/connected/fc-counter-connected-own-props.usage.tsx'::
 
 [⇧ back to top](#table-of-contents)
 
-#### - redux connected counter with `redux-thunk` integration
+### - Redux connected counter with `redux-thunk` integration
 
 ::codeblock='playground/src/connected/fc-counter-connected-bind-action-creators.tsx'::
 ::expander='playground/src/connected/fc-counter-connected-bind-action-creators.usage.tsx'::
@@ -338,23 +385,23 @@ Adds error handling using componentDidCatch to any component
 
 > https://reactjs.org/docs/context.html
 
-#### ThemeContext
+### ThemeContext
 
 ::codeblock='playground/src/context/theme-context.ts'::
 
 [⇧ back to top](#table-of-contents)
 
-#### ThemeProvider
+### ThemeProvider
 
 ::codeblock='playground/src/context/theme-provider.tsx'::
 
 [⇧ back to top](#table-of-contents)
 
-#### ThemeConsumer
+### ThemeConsumer
 
 ::codeblock='playground/src/context/theme-consumer.tsx'::
 
-#### ThemeConsumer in class component
+### ThemeConsumer in class component
 
 ::codeblock='playground/src/context/theme-consumer-class.tsx'::
 
@@ -366,7 +413,7 @@ Adds error handling using componentDidCatch to any component
 
 > https://reactjs.org/docs/hooks-intro.html
 
-#### - useState
+### - useState
 
 > https://reactjs.org/docs/hooks-reference.html#usestate
 
@@ -374,14 +421,14 @@ Adds error handling using componentDidCatch to any component
 
 [⇧ back to top](#table-of-contents)
 
-#### - useReducer
+### - useReducer
 Hook for state management like Redux in a function component.
 
 ::codeblock='playground/src/hooks/use-reducer.tsx'::
 
 [⇧ back to top](#table-of-contents)
 
-#### - useContext
+### - useContext
 
 > https://reactjs.org/docs/hooks-reference.html#usecontext
 
@@ -395,7 +442,7 @@ Hook for state management like Redux in a function component.
 
 ## Store Configuration
 
-### Create Global RootState and RootAction Types
+### Create Global Store Types
 
 #### `RootState` - type representing root state-tree
 Can be imported in connected components to provide type-safety to Redux `connect` function
@@ -416,12 +463,11 @@ When creating a store instance we don't need to provide any additional types. It
 
 ---
 
-## Action Creators
+## Action Creators 🌟
 
-> We'll be using a battle-tested library [![NPM Downloads](https://img.shields.io/npm/dm/typesafe-actions.svg)](https://www.npmjs.com/package/typesafe-actions)
- that'll help retain complete type soundness and simplify maintenace of **types in Redux Architectures** [`typesafe-actions`](https://github.com/piotrwitek/typesafe-actions#typesafe-actions)
+> We'll be using a battle-tested helper library [`typesafe-actions`](https://github.com/piotrwitek/typesafe-actions#typesafe-actions) [![Latest Stable Version](https://img.shields.io/npm/v/typesafe-actions.svg)](https://www.npmjs.com/package/typesafe-actions) [![NPM Downloads](https://img.shields.io/npm/dt/typesafe-actions.svg)](https://www.npmjs.com/package/typesafe-actions) that's designed to make it easy and fun working with **Redux** in **TypeScript**.
 
-> You can find more real-world examples and in-depth tutorial in: [Typesafe-Actions - Tutorial](https://github.com/piotrwitek/typesafe-actions#tutorial)!
+> To learn more please check this in-depth tutorial: [Typesafe-Actions - Tutorial](https://github.com/piotrwitek/typesafe-actions#tutorial)!
 
 A solution below is using a simple factory function to automate the creation of type-safe action creators. The goal is to decrease maintenance effort and reduce code repetition of type annotations for actions and creators. The result is completely typesafe action-creators and their actions.
 
@@ -595,7 +641,7 @@ const mapDispatchToProps = (dispatch: Dispatch<MyTypes.RootAction>) =>
 
 ```
 
-### Typing connected component using `redux-thunk` action creators
+### Typing connected component with `redux-thunk` integration
 
 *__NOTE__: When using thunk action creators you need to use `bindActionCreators`. Only this way you can get corrected dispatch props type signature like below.*
 
@@ -643,11 +689,10 @@ type DispatchProps = ReturnType<typeof mapDispatchToProps>;
 
 [⇧ back to top](#table-of-contents)
 
-### TypeScript
+## tsconfig.json
 
 We have our own recommended `tsconfig.json` that you can easily add to your project thanks to [`react-redux-typescript-scripts`](https://github.com/piotrwitek/react-redux-typescript-scripts) package.
 
-#### tsconfig.json
 ::expander='playground/tsconfig.json'::
 
 [⇧ back to top](#table-of-contents)
@@ -712,7 +757,8 @@ https://jestjs.io/
 
 [⇧ back to top](#table-of-contents)
 
-## Style Guide
+## Style Guides
+
 ### ["react-styleguidist"](https://github.com/styleguidist/react-styleguidist)
 
 [⟩⟩⟩ styleguide.config.js](/playground/styleguide.config.js)  
