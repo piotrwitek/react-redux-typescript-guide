@@ -1806,8 +1806,8 @@ We have our own recommended config that you can easily add to your project thank
 ```tsx
 {
   "extends": [
-    "react-redux-typescript-scripts/tslint.json",
-    "react-redux-typescript-scripts/tslint-react.json"
+    "./node_modules/react-redux-typescript-scripts/tslint.json",
+    "./node_modules/react-redux-typescript-scripts/tslint-react.json"
   ],
   "rules": {
     // you can further customize options here

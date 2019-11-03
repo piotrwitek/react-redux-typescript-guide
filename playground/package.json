@@ -46,6 +46,7 @@
     "rxjs": "6.5.3",
     "tslib": "1.10.0",
     "tslint": "5.20.0",
+    "tslint-react": "4.1.0",
     "typesafe-actions": "5.1.0",
     "typescript": "3.7.1-rc",
     "utility-types": "3.9.0"
