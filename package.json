@@ -6,7 +6,7 @@
     "husky": "3.0.9"
   },
   "scripts": {
-    "ci-check": "npm run readme:generate",
+    "ci-check": "npm run doctoc && npm run readme:generate",
     "doctoc": "doctoc --maxlevel=4 README_SOURCE.md",
     "readme:generate": "node generate-readme",
     "contributors:check": "all-contributors check",

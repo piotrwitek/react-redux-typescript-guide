@@ -1,6 +1,6 @@
 <div align="center">
 
-## React & Redux in TypeScript - Static Typing Guide
+# React & Redux in TypeScript Guide
 
 _"This guide is a **living compendium** documenting the most important patterns and recipes on how to use **React** (and its Ecosystem) in a **functional style** using **TypeScript**. It will help you make your code **completely type-safe** while focusing on **inferring the types from implementation** so there is less noise coming from excessive type annotations and it's easier to write and maintain correct types in the long run."_
 
@@ -20,44 +20,48 @@ _Found it useful? Want more updates?_
 
 <br/><hr/>
 
-:tada: _Now updated to support **TypeScript v3.4**_ :tada:
+### **What's new?**
+
+:tada: _Now updated to support **TypeScript v3.7**_ :tada:
 
 <hr/><br/>
 
 </div>
 
-**Goals**
+### **Goals**
 
 - Complete type safety (with [`--strict`](https://www.typescriptlang.org/docs/handbook/compiler-options.html) flag) without losing type information downstream through all the layers of our application (e.g. no type assertions or hacking with `any` type)
 - Make type annotations concise by eliminating redundancy in types using advanced TypeScript Language features like **Type Inference** and **Control flow analysis**
 - Reduce repetition and complexity of types with TypeScript focused [complementary libraries](#complementary-libraries)
 
-**React, Redux, Typescript Ecosystem**
+### **React, Redux, Typescript Ecosystem**
 
 - [typesafe-actions](https://github.com/piotrwitek/typesafe-actions) - Typesafe utilities for "action-creators" in Redux / Flux Architecture  
 - [utility-types](https://github.com/piotrwitek/utility-types) - Collection of generic types for TypeScript, complementing built-in mapped types and aliases - think lodash for reusable types.  
 - [react-redux-typescript-scripts](https://github.com/piotrwitek/react-redux-typescript-scripts) - dev-tools configuration files shared between projects based on this guide  
 
-**Codesandbox links**
+### **Examples**
 
-- Reference Todo-App implementation using **React, Redux, Typescript Guide**: [Link](https://codesandbox.io/s/github/piotrwitek/typesafe-actions/tree/master/codesandbox)
+- Todo-App playground: [Codesandbox](https://codesandbox.io/s/github/piotrwitek/typesafe-actions/tree/master/codesandbox)
+- React, Redux, TypeScript - RealWorld App: [Github](https://github.com/piotrwitek/react-redux-typescript-realworld-app) | [Demo](https://react-redux-typescript-realworld-app.netlify.com/)
 
-**Playground Project**
+### **Playground Project**
 
 [![Build Status](https://semaphoreci.com/api/v1/piotrekwitek/react-redux-typescript-guide/branches/master/shields_badge.svg)](https://semaphoreci.com/piotrekwitek/react-redux-typescript-guide)
 
-You should check out Playground Project located in the `/playground` folder. It is a source of all the code examples found in the guide. They are all tested with the most recent version of TypeScript and 3rd party type-definitions (like `@types/react` or `@types/react-redux`) to ensure the examples are up-to-date and not broken with updated definitions. It's based on `create-react-app --typescript`.
+Check out our Playground Project located in the `/playground` folder. It contains all source files of the code examples found in the guide. They are all tested with the most recent version of TypeScript and 3rd party type-definitions (like `@types/react` or `@types/react-redux`) to ensure the examples are up-to-date and not broken with updated definitions (It's based on `create-react-app --typescript`).
 > Playground project was created so that you can simply clone the repository locally and immediately play around with all the component patterns found in the guide. It will help you to learn all the examples from this guide in a real project environment without the need to create complicated environment setup by yourself.
 
 ## Contributing Guide
-We are open for contributions. If you're planning to contribute please make sure to read the contributing guide: [CONTRIBUTING.md](/CONTRIBUTING.md)
+
+You can help make this project better by contributing. If you're planning to contribute please make sure to check our contributing guide: [CONTRIBUTING.md](/CONTRIBUTING.md)
 
 ## Funding
-This is an independent open-source project created by people investing their free time for the benefit of our community.
 
-If you are using it please consider donating as this will guarantee the project will be updated and maintained in the long run.
+You can also help by funding issues.
+Issues like bug fixes or feature requests can be very quickly resolved when funded through the IssueHunt platform.
 
-Issues can be funded by anyone interested in them being resolved. Reward will be transparently distributed to the contributor handling the task through the IssueHunt platform.
+I highly recommend to add a bounty to the issue that you're waiting for to increase priority and attract contributors willing to work on it.
 
 [![Let's fund issues in this repository](https://issuehunt.io/static/embed/issuehunt-button-v1.svg)](https://issuehunt.io/repos/76996763)
 
@@ -66,6 +70,7 @@ Issues can be funded by anyone interested in them being resolved. Reward will be
 🌟 - _New or updated section_
 
 ## Table of Contents
+
 - [Installation](#installation)
 - [React - Type-Definitions Cheatsheet](#react---type-definitions-cheatsheet)
 - [React - Typing Patterns](#react---typing-patterns)
