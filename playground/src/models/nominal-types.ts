@@ -10,10 +10,8 @@ const createName = (name: string): Name => {
   return name as any;
 };
 
-// Method 2: using "enum"
-export enum SurnameBrand {}
-type Surname = SurnameBrand & string;
-// interface Surname extends String { _brand: 'Surname'; }
+// Method 2: using "type"
+type Surname = string & { _brand: 'Surname' };
 const createSurname = (surname: string): Surname => {
   // validation of business rules
   return surname as any;
@@ -39,5 +37,5 @@ person.surname = createSurname('Mate'); // OK!
 
 // easy casting to supertype
 export let str: string;
-str = person.name.toString();
-str = person.surname;
+str = person.name.toString(); // Method 1 & Method 2
+str = person.surname; // Method 2 only

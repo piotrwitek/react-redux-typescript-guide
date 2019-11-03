@@ -2,23 +2,27 @@ import { action } from 'typesafe-actions';
 
 import { ADD, INCREMENT } from './constants';
 
-// CLASSIC API
+/* SIMPLE API */
+
 export const increment = () => action(INCREMENT);
 export const add = (amount: number) => action(ADD, amount);
 
-// ALTERNATIVE API - allow to use reference to "action-creator" function instead of "type constant"
-// e.g. case getType(increment): return { ... }
+/* ADVANCED API */
+
+// More flexible allowing to create complex actions more easily
+// use can use "action-creator" instance in place of "type constant"
+// e.g. case getType(increment): return action.payload;
 // This will allow to completely eliminate need for "constants" in your application, more info here:
 // https://github.com/piotrwitek/typesafe-actions#constants
 
-// OPTION 1 (with generics):
-// import { createStandardAction } from 'typesafe-actions';
-// export const increment = createStandardAction(INCREMENT)<void>();
-// export const add = createStandardAction(ADD)<number>();
+import { createAction } from 'typesafe-actions';
+import { Todo } from '../todos/models';
 
-// OPTION 2 (with resolve callback):
-// import { createAction } from 'typesafe-actions';
-// export const increment = createAction(INCREMENT);
-// export const add = createAction(ADD, resolve => {
-//   return (amount: number) => resolve(amount);
-// });
+export const emptyAction = createAction(INCREMENT)<void>();
+export const payloadAction = createAction(ADD)<number>();
+export const payloadMetaAction = createAction(ADD)<number, string>();
+
+export const payloadCreatorAction = createAction(
+  'TOGGLE_TODO',
+  (todo: Todo) => todo.id
+)<string>();
