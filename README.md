@@ -753,7 +753,7 @@ export const withConnectedCount = <BaseProps extends InjectedProps>(
 
   const ConnectedHoc = connect<
     ReturnType<typeof mapStateToProps>,
-    typeof dispatchProps,
+    typeof dispatchProps, // use "undefined" if NOT using dispatchProps
     HocProps,
     RootState
   >(

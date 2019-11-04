@@ -6,5 +6,5 @@ import { FCCounter } from '../components';
 const FCCounterWithConnectedCount = withConnectedCount(FCCounter);
 
 export default () => (
-  <FCCounterWithConnectedCount initialCount={5} label={'FCCounterWithState'} />
+  <FCCounterWithConnectedCount overrideCount={5} label={'FCCounterWithState'} />
 );
