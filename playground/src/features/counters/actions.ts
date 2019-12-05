@@ -2,6 +2,9 @@ import { action } from 'typesafe-actions';
 
 import { ADD, INCREMENT } from './constants';
 
+import { createAction } from 'typesafe-actions';
+import { Todo } from '../todos/models';
+
 /* SIMPLE API */
 
 export const increment = () => action(INCREMENT);
@@ -14,9 +17,6 @@ export const add = (amount: number) => action(ADD, amount);
 // e.g. case getType(increment): return action.payload;
 // This will allow to completely eliminate need for "constants" in your application, more info here:
 // https://github.com/piotrwitek/typesafe-actions#constants
-
-import { createAction } from 'typesafe-actions';
-import { Todo } from '../todos/models';
 
 export const emptyAction = createAction(INCREMENT)<void>();
 export const payloadAction = createAction(ADD)<number>();
