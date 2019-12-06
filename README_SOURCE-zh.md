@@ -1,15 +1,15 @@
 <div align="center">
 
-# React & Redux in TypeScript - Complete Guide
+# 用 TypeScript 写 React & Redux - 完全指南
 
-_"This guide is a **living compendium** documenting the most important patterns and recipes on how to use **React** (and its Ecosystem) in a **functional style** using **TypeScript**. It will help you make your code **completely type-safe** while focusing on **inferring the types from implementation** so there is less noise coming from excessive type annotations and it's easier to write and maintain correct types in the long run."_
+_"这个指南是一个**最新的摘要**，记录了关于如何用 **TypeScript** 以**函数式风格**使用 **React**（以及相关生态）最重要的模式和示例。它会使你的代码在**从具体实现中进行类型推导**时绝对是**类型安全**的，这样就能减少来自过度类型声明的信息噪音，并更容易写出易于长期维护的正确类型声明。"_
 
 [![Join the community on Spectrum](https://withspectrum.github.io/badge/badge.svg)](https://spectrum.chat/react-redux-ts)
 [![Join the chat at https://gitter.im/react-redux-typescript-guide/Lobby](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/react-redux-typescript-guide/Lobby)
 
-_Found it useful? Want more updates?_
+_觉得有帮助？想要更多更新？_
 
-[**Show your support by giving a :star:**](https://github.com/piotrwitek/react-redux-typescript-guide/stargazers)
+[**点个 :star: 支持一下吧**](https://github.com/piotrwitek/react-redux-typescript-guide/stargazers)
 
 <a href="https://www.buymeacoffee.com/piotrekwitek">
   <img src="https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png" alt="Buy Me a Coffee">
@@ -20,63 +20,74 @@ _Found it useful? Want more updates?_
 
 <br/><hr/>
 
-### **What's new?**
+### **更新了什么？**
 
-:tada: _Now updated to support **TypeScript v3.7**_ :tada:
-:rocket: _Updated to `typesafe-actions@5.x.x` :rocket:
+:tada: _现在更新支持到 **TypeScript v3.7**_ :tada:
+:rocket: _升级到 `typesafe-actions@5.x.x` :rocket:
 
 <hr/><br/>
 
 </div>
 
-### **Goals**
+### **目标**
 
-- Complete type safety (with [`--strict`](https://www.typescriptlang.org/docs/handbook/compiler-options.html) flag) without losing type information downstream through all the layers of our application (e.g. no type assertions or hacking with `any` type)
-- Make type annotations concise by eliminating redundancy in types using advanced TypeScript Language features like **Type Inference** and **Control flow analysis**
-- Reduce repetition and complexity of types with TypeScript focused [complementary libraries](#complementary-libraries)
+- 完全的类型安全（支持 [`--strict`](https://www.typescriptlang.org/docs/handbook/compiler-options.html) 模式），并且在向应用的下游代码传递时，不会丢失类型信息（比如：缺少类型断言或用 `any` 来强行使用）
+- 使用高级 TypeScript 语言特性（诸如**类型推论**和**控制流分析**）来消除类型冗余、使类型声明简明扼要
+- 使用专门的 TypeScript [补充库](#complementary-libraries) 来减少类型代码的重复性和复杂度
 
-### **React, Redux, Typescript Ecosystem**
+### **React、Redux、Typescript 生态系统**
 
-- [typesafe-actions](https://github.com/piotrwitek/typesafe-actions) - Typesafe utilities for "action-creators" in Redux / Flux Architecture  
-- [utility-types](https://github.com/piotrwitek/utility-types) - Collection of generic types for TypeScript, complementing built-in mapped types and aliases - think lodash for reusable types.  
-- [react-redux-typescript-scripts](https://github.com/piotrwitek/react-redux-typescript-scripts) - dev-tools configuration files shared between projects based on this guide  
+- [typesafe-actions](https://github.com/piotrwitek/typesafe-actions) - 为 Redux / Flux 架构中 "action-creators" 创造的类型安全实用工具集  
+- [utility-types](https://github.com/piotrwitek/utility-types) - TypeScript 常用泛型集合，能够补充 TS 自带的映射类型和别名 - 把它当成类型复用的 lodash。  
+- [react-redux-typescript-scripts](https://github.com/piotrwitek/react-redux-typescript-scripts) - 开发者工具配置文件，可用于遵循本指南的项目
 
-### **Examples**
+### **示例**
 
 - Todo-App playground: [Codesandbox](https://codesandbox.io/s/github/piotrwitek/typesafe-actions/tree/master/codesandbox)
 - React, Redux, TypeScript - RealWorld App: [Github](https://github.com/piotrwitek/react-redux-typescript-realworld-app) | [Demo](https://react-redux-typescript-realworld-app.netlify.com/)
 
-### **Playground Project**
+### **Playground 项目**
 
 [![Build Status](https://semaphoreci.com/api/v1/piotrekwitek/react-redux-typescript-guide/branches/master/shields_badge.svg)](https://semaphoreci.com/piotrekwitek/react-redux-typescript-guide)
 
-Check out our Playground Project located in the `/playground` folder. It contains all source files of the code examples found in the guide. They are all tested with the most recent version of TypeScript and 3rd party type-definitions (like `@types/react` or `@types/react-redux`) to ensure the examples are up-to-date and not broken with updated definitions (It's based on `create-react-app --typescript`).
-> Playground project was created so that you can simply clone the repository locally and immediately play around with all the component patterns found in the guide. It will help you to learn all the examples from this guide in a real project environment without the need to create complicated environment setup by yourself.
+查看位于 `/playground` 文件夹中的 Playground 项目。它包含本指南所有的代码示例的源文件。它们都已使用最新版本的 TypeScript 和第三方类型定义包（诸如 `@types/react` 和 `@types/react-redux`）进行了测试，以确保示例是最新的，且没有随着类型定义升级而失效（基于 `create-react-app --typescript`）。
+> 我们创建了该 Playground 项目以便你可以简单地克隆到本地，并立即尝试本指南中所有的组件模式。它可以使你无需自己创建复杂的环境配置，直接在真实的项目环境中学习本指南的所有示例。
 
-## Contributing Guide
+## 贡献指南
 
-You can help make this project better by contributing. If you're planning to contribute please make sure to check our contributing guide: [CONTRIBUTING.md](/CONTRIBUTING.md)
+你能贡献并帮助改进本项目，如果你计划做出贡献，请查看我们的贡献指南：[CONTRIBUTING.md](/CONTRIBUTING.md)
 
-## Funding
+## 赞助
 
-You can also help by funding issues.
-Issues like bug fixes or feature requests can be very quickly resolved when funded through the IssueHunt platform.
+你也能通过赞助 issues 提供帮助。
+通过 IssueHunt 平台进行赞助，bug 修复或功能请求之类的 issues 可以更快得到解决。
 
-I highly recommend to add a bounty to the issue that you're waiting for to increase priority and attract contributors willing to work on it.
+我强烈建议你赞助自己期待解决的 issue，以便增加它的优先级并吸引贡献者解决。
 
 [![Let's fund issues in this repository](https://issuehunt.io/static/embed/issuehunt-button-v1.svg)](https://issuehunt.io/repos/76996763)
 
 ---
 
-🌟 - _New or updated section_
+🌟 - _新内容及更新板块_
 
-## Table of Contents
+## 目录
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
 
-- [React - Type-Definitions Cheatsheet](#react---type-definitions-cheatsheet)
+- [用 TypeScript 写 React & Redux - 完全指南](#%e7%94%a8-typescript-%e5%86%99-react--redux---%e5%ae%8c%e5%85%a8%e6%8c%87%e5%8d%97)
+    - [**更新了什么？**](#%e6%9b%b4%e6%96%b0%e4%ba%86%e4%bb%80%e4%b9%88)
+    - [**目标**](#%e7%9b%ae%e6%a0%87)
+    - [**React、Redux、Typescript 生态系统**](#reactreduxtypescript-%e7%94%9f%e6%80%81%e7%b3%bb%e7%bb%9f)
+    - [**示例**](#%e7%a4%ba%e4%be%8b)
+    - [**Playground 项目**](#playground-%e9%a1%b9%e7%9b%ae)
+  - [贡献指南](#%e8%b4%a1%e7%8c%ae%e6%8c%87%e5%8d%97)
+  - [赞助](#%e8%b5%9e%e5%8a%a9)
+  - [目录](#%e7%9b%ae%e5%bd%95)
+- [安装](#%e5%ae%89%e8%a3%85)
+    - [React & Redux 的类型定义](#react--redux-%e7%9a%84%e7%b1%bb%e5%9e%8b%e5%ae%9a%e4%b9%89)
+- [React - 类型定义速查表](#react---%e7%b1%bb%e5%9e%8b%e5%ae%9a%e4%b9%89%e9%80%9f%e6%9f%a5%e8%a1%a8)
     - [`React.FC<Props>` | `React.FunctionComponent<Props>`](#reactfcprops--reactfunctioncomponentprops)
     - [`React.Component<Props, State>`](#reactcomponentprops-state)
     - [`React.ComponentType<Props>`](#reactcomponenttypeprops)
@@ -87,76 +98,94 @@ I highly recommend to add a bounty to the issue that you're waiting for to incre
     - [`React.HTMLProps<HTMLXXXElement>`](#reacthtmlpropshtmlxxxelement)
     - [`React.ReactEventHandler<HTMLXXXElement>`](#reactreacteventhandlerhtmlxxxelement)
     - [`React.XXXEvent<HTMLXXXElement>`](#reactxxxeventhtmlxxxelement)
-- [React - Typing Patterns](#react---typing-patterns)
+- [React - 类型模式](#react---%e7%b1%bb%e5%9e%8b%e6%a8%a1%e5%bc%8f)
   - [Function Components - FC](#function-components---fc)
-    - [- Counter Component](#--counter-component)
-    - [- Spreading attributes in Component](#--spreading-attributes-in-component)
+    - [- 计数器组件](#%e8%ae%a1%e6%95%b0%e5%99%a8%e7%bb%84%e4%bb%b6)
+    - [- 组件的 属性展开](#%e7%bb%84%e4%bb%b6%e7%9a%84-%e5%b1%9e%e6%80%a7%e5%b1%95%e5%bc%80)
   - [Class Components](#class-components)
-    - [- Class Counter Component](#--class-counter-component)
-    - [- Class Component with default props](#--class-component-with-default-props)
-  - [Generic Components](#generic-components)
-    - [- Generic List Component](#--generic-list-component)
+    - [- 计数器组件 Class 版](#%e8%ae%a1%e6%95%b0%e5%99%a8%e7%bb%84%e4%bb%b6-class-%e7%89%88)
+    - [- Class 组件和 default props](#class-%e7%bb%84%e4%bb%b6%e5%92%8c-default-props)
+  - [泛型组件](#%e6%b3%9b%e5%9e%8b%e7%bb%84%e4%bb%b6)
+    - [- 泛型列表组件](#%e6%b3%9b%e5%9e%8b%e5%88%97%e8%a1%a8%e7%bb%84%e4%bb%b6)
   - [Render Props](#render-props)
-    - [- Name Provider Component](#--name-provider-component)
-    - [- Mouse Provider Component](#--mouse-provider-component)
-  - [Higher-Order Components](#higher-order-components)
-    - [- HOC wrapping a component](#--hoc-wrapping-a-component)
-    - [- HOC wrapping a component and injecting props](#--hoc-wrapping-a-component-and-injecting-props)
-    - [- Nested HOC - wrapping a component, injecting props and connecting to redux 🌟](#--nested-hoc---wrapping-a-component-injecting-props-and-connecting-to-redux-)
-  - [Redux Connected Components](#redux-connected-components)
-    - [- Redux connected counter](#--redux-connected-counter)
-    - [- Redux connected counter with own props](#--redux-connected-counter-with-own-props)
-    - [- Redux connected counter with `redux-thunk` integration](#--redux-connected-counter-with-redux-thunk-integration)
+    - [- Name Provider 组件](#name-provider-%e7%bb%84%e4%bb%b6)
+    - [- Mouse Provider 组件](#mouse-provider-%e7%bb%84%e4%bb%b6)
+  - [高阶组件](#%e9%ab%98%e9%98%b6%e7%bb%84%e4%bb%b6)
+    - [- 用 HOC 封装一个组件](#%e7%94%a8-hoc-%e5%b0%81%e8%a3%85%e4%b8%80%e4%b8%aa%e7%bb%84%e4%bb%b6)
+    - [- 用 HOC 封装组件并注入 props](#%e7%94%a8-hoc-%e5%b0%81%e8%a3%85%e7%bb%84%e4%bb%b6%e5%b9%b6%e6%b3%a8%e5%85%a5-props)
+    - [- 嵌套 HOC - 封装组件，props 注入，连接到 redux 🌟](#%e5%b5%8c%e5%a5%97-hoc---%e5%b0%81%e8%a3%85%e7%bb%84%e4%bb%b6props-%e6%b3%a8%e5%85%a5%e8%bf%9e%e6%8e%a5%e5%88%b0-redux-%f0%9f%8c%9f)
+  - [Redux 连接组件](#redux-%e8%bf%9e%e6%8e%a5%e7%bb%84%e4%bb%b6)
+    - [- Redux 版计数器](#redux-%e7%89%88%e8%ae%a1%e6%95%b0%e5%99%a8)
+    - [- Redux 版计数器，带自定义 props](#redux-%e7%89%88%e8%ae%a1%e6%95%b0%e5%99%a8%e5%b8%a6%e8%87%aa%e5%ae%9a%e4%b9%89-props)
+    - [- Redux 版计数器，集成 `redux-thunk`](#redux-%e7%89%88%e8%ae%a1%e6%95%b0%e5%99%a8%e9%9b%86%e6%88%90-redux-thunk)
   - [Context](#context)
     - [ThemeContext](#themecontext)
     - [ThemeProvider](#themeprovider)
     - [ThemeConsumer](#themeconsumer)
-    - [ThemeConsumer in class component](#themeconsumer-in-class-component)
+    - [ThemeConsumer Class 版](#themeconsumer-class-%e7%89%88)
   - [Hooks](#hooks)
-    - [- useState](#--usestate)
-    - [- useReducer](#--usereducer)
-    - [- useContext](#--usecontext)
-- [Redux - Typing Patterns](#redux---typing-patterns)
-  - [Store Configuration](#store-configuration)
-    - [Create Global Store Types](#create-global-store-types)
-    - [Create Store](#create-store)
-  - [Action Creators 🌟](#action-creators-)
+    - [- useState](#usestate)
+    - [- useReducer](#usereducer)
+    - [- useContext](#usecontext)
+- [Redux - 类型模式](#redux---%e7%b1%bb%e5%9e%8b%e6%a8%a1%e5%bc%8f)
+  - [Store 配置](#store-%e9%85%8d%e7%bd%ae)
+    - [创建全局 Store 类型](#%e5%88%9b%e5%bb%ba%e5%85%a8%e5%b1%80-store-%e7%b1%bb%e5%9e%8b)
+      - [`RootState` - 表示根 state 树的类型](#rootstate---%e8%a1%a8%e7%a4%ba%e6%a0%b9-state-%e6%a0%91%e7%9a%84%e7%b1%bb%e5%9e%8b)
+      - [`RootAction` - 表示所有 action 对象集合的类型](#rootaction---%e8%a1%a8%e7%a4%ba%e6%89%80%e6%9c%89-action-%e5%af%b9%e8%b1%a1%e9%9b%86%e5%90%88%e7%9a%84%e7%b1%bb%e5%9e%8b)
+    - [创建 Store](#%e5%88%9b%e5%bb%ba-store)
+  - [Action Creators 🌟](#action-creators-%f0%9f%8c%9f)
   - [Reducers](#reducers)
-    - [State with Type-level Immutability](#state-with-type-level-immutability)
-    - [Typing reducer](#typing-reducer)
-    - [Typing reducer with `typesafe-actions`](#typing-reducer-with-typesafe-actions)
-    - [Testing reducer](#testing-reducer)
-  - [Async Flow with `redux-observable`](#async-flow-with-redux-observable)
-    - [Typing epics](#typing-epics)
-    - [Testing epics](#testing-epics)
-  - [Selectors with `reselect`](#selectors-with-reselect)
-  - [Connect with `react-redux`](#connect-with-react-redux)
-    - [Typing connected component](#typing-connected-component)
-    - [Typing connected component with `redux-thunk` integration](#typing-connected-component-with-redux-thunk-integration)
-- [Configuration & Dev Tools](#configuration--dev-tools)
-  - [Common Npm Scripts](#common-npm-scripts)
+    - [拥有 Type 层面不可变性的 State](#%e6%8b%a5%e6%9c%89-type-%e5%b1%82%e9%9d%a2%e4%b8%8d%e5%8f%af%e5%8f%98%e6%80%a7%e7%9a%84-state)
+      - [警告 - `Readonly` 不是递归的](#%e8%ad%a6%e5%91%8a---readonly-%e4%b8%8d%e6%98%af%e9%80%92%e5%bd%92%e7%9a%84)
+      - [解决方案 - `Readonly` 的递归版本是 `DeepReadonly`](#%e8%a7%a3%e5%86%b3%e6%96%b9%e6%a1%88---readonly-%e7%9a%84%e9%80%92%e5%bd%92%e7%89%88%e6%9c%ac%e6%98%af-deepreadonly)
+    - [reducer 类型声明](#reducer-%e7%b1%bb%e5%9e%8b%e5%a3%b0%e6%98%8e)
+    - [使用 `typesafe-actions` 进行 reducer 类型声明](#%e4%bd%bf%e7%94%a8-typesafe-actions-%e8%bf%9b%e8%a1%8c-reducer-%e7%b1%bb%e5%9e%8b%e5%a3%b0%e6%98%8e)
+    - [测试 reducer](#%e6%b5%8b%e8%af%95-reducer)
+  - [使用 `redux-observable` 编写异步流](#%e4%bd%bf%e7%94%a8-redux-observable-%e7%bc%96%e5%86%99%e5%bc%82%e6%ad%a5%e6%b5%81)
+    - [epics 类型声明](#epics-%e7%b1%bb%e5%9e%8b%e5%a3%b0%e6%98%8e)
+    - [测试 epics](#%e6%b5%8b%e8%af%95-epics)
+  - [使用 `reselect` 生成 Selectors](#%e4%bd%bf%e7%94%a8-reselect-%e7%94%9f%e6%88%90-selectors)
+  - [使用 `react-redux` 的 connect 方法](#%e4%bd%bf%e7%94%a8-react-redux-%e7%9a%84-connect-%e6%96%b9%e6%b3%95)
+    - [连接组件类型声明](#%e8%bf%9e%e6%8e%a5%e7%bb%84%e4%bb%b6%e7%b1%bb%e5%9e%8b%e5%a3%b0%e6%98%8e)
+    - [连接组件类型声明，并集成 `redux-thunk`](#%e8%bf%9e%e6%8e%a5%e7%bb%84%e4%bb%b6%e7%b1%bb%e5%9e%8b%e5%a3%b0%e6%98%8e%e5%b9%b6%e9%9b%86%e6%88%90-redux-thunk)
+- [配置和开发者工具](#%e9%85%8d%e7%bd%ae%e5%92%8c%e5%bc%80%e5%8f%91%e8%80%85%e5%b7%a5%e5%85%b7)
+  - [通用 Npm Scripts](#%e9%80%9a%e7%94%a8-npm-scripts)
   - [tsconfig.json](#tsconfigjson)
   - [TSLib](#tslib)
   - [TSLint](#tslint)
+      - [tslint.json](#tslintjson)
   - [ESLint](#eslint)
+      - [.eslintrc](#eslintrc)
   - [Jest](#jest)
-  - [Style Guides](#style-guides)
-    - ["react-styleguidist"](#react-styleguidist)
-- [Recipes](#recipes)
-    - [General Tips](#general-tips)
-    - [Ambient Modules Tips](#ambient-modules-tips)
-    - [Type-Definitions Tips](#type-definitions-tips)
-    - [Type Augmentation Tips](#type-augmentation-tips)
-  - [Tutorials & Articles](#tutorials--articles)
-  - [Contributors](#contributors)
+      - [jest.config.json](#jestconfigjson)
+      - [jest.stubs.js](#jeststubsjs)
+  - [风格指南](#%e9%a3%8e%e6%a0%bc%e6%8c%87%e5%8d%97)
+    - ["react-styleguidist"](#%22react-styleguidist%22)
+- [食谱](#%e9%a3%9f%e8%b0%b1)
+    - [通用小贴士](#%e9%80%9a%e7%94%a8%e5%b0%8f%e8%b4%b4%e5%a3%ab)
+      - [- 使用 TS 时我还需要使用 React.PropTypes 吗？](#%e4%bd%bf%e7%94%a8-ts-%e6%97%b6%e6%88%91%e8%bf%98%e9%9c%80%e8%a6%81%e4%bd%bf%e7%94%a8-reactproptypes-%e5%90%97)
+      - [- 什么时候使用 `interface` 声明，什么时候使用 `type` 别名?](#%e4%bb%80%e4%b9%88%e6%97%b6%e5%80%99%e4%bd%bf%e7%94%a8-interface-%e5%a3%b0%e6%98%8e%e4%bb%80%e4%b9%88%e6%97%b6%e5%80%99%e4%bd%bf%e7%94%a8-type-%e5%88%ab%e5%90%8d)
+      - [- 具名 exports 和 default export 那个比较好？](#%e5%85%b7%e5%90%8d-exports-%e5%92%8c-default-export-%e9%82%a3%e4%b8%aa%e6%af%94%e8%be%83%e5%a5%bd)
+      - [- 什么是初始化 class 实例或静态属性的最佳实践？](#%e4%bb%80%e4%b9%88%e6%98%af%e5%88%9d%e5%a7%8b%e5%8c%96-class-%e5%ae%9e%e4%be%8b%e6%88%96%e9%9d%99%e6%80%81%e5%b1%9e%e6%80%a7%e7%9a%84%e6%9c%80%e4%bd%b3%e5%ae%9e%e8%b7%b5)
+      - [- 什么是声明组件 handler 方法的最佳实践？](#%e4%bb%80%e4%b9%88%e6%98%af%e5%a3%b0%e6%98%8e%e7%bb%84%e4%bb%b6-handler-%e6%96%b9%e6%b3%95%e7%9a%84%e6%9c%80%e4%bd%b3%e5%ae%9e%e8%b7%b5)
+    - [module 环境声明小贴士](#module-%e7%8e%af%e5%a2%83%e5%a3%b0%e6%98%8e%e5%b0%8f%e8%b4%b4%e5%a3%ab)
+      - [环境声明中的 imports](#%e7%8e%af%e5%a2%83%e5%a3%b0%e6%98%8e%e4%b8%ad%e7%9a%84-imports)
+    - [类型定义小贴士](#%e7%b1%bb%e5%9e%8b%e5%ae%9a%e4%b9%89%e5%b0%8f%e8%b4%b4%e5%a3%ab)
+      - [缺少类型定义的错误](#%e7%bc%ba%e5%b0%91%e7%b1%bb%e5%9e%8b%e5%ae%9a%e4%b9%89%e7%9a%84%e9%94%99%e8%af%af)
+      - [为 npm 模块使用自定义 `d.ts` 文件](#%e4%b8%ba-npm-%e6%a8%a1%e5%9d%97%e4%bd%bf%e7%94%a8%e8%87%aa%e5%ae%9a%e4%b9%89-dts-%e6%96%87%e4%bb%b6)
+    - [类型扩展小贴士](#%e7%b1%bb%e5%9e%8b%e6%89%a9%e5%b1%95%e5%b0%8f%e8%b4%b4%e5%a3%ab)
+      - [对库的内部声明进行扩展 - 使用相对路径 import](#%e5%af%b9%e5%ba%93%e7%9a%84%e5%86%85%e9%83%a8%e5%a3%b0%e6%98%8e%e8%bf%9b%e8%a1%8c%e6%89%a9%e5%b1%95---%e4%bd%bf%e7%94%a8%e7%9b%b8%e5%af%b9%e8%b7%af%e5%be%84-import)
+      - [对库的公开声明进行扩展 - 使用 node_modules import](#%e5%af%b9%e5%ba%93%e7%9a%84%e5%85%ac%e5%bc%80%e5%a3%b0%e6%98%8e%e8%bf%9b%e8%a1%8c%e6%89%a9%e5%b1%95---%e4%bd%bf%e7%94%a8-nodemodules-import)
+  - [教程和文章](#%e6%95%99%e7%a8%8b%e5%92%8c%e6%96%87%e7%ab%a0)
+  - [贡献者](#%e8%b4%a1%e7%8c%ae%e8%80%85)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 ---
 
-# Installation
+# 安装
 
-### Type-Definitions for React & Redux
+### React & Redux 的类型定义
 ```
 npm i -D @types/react @types/react-dom @types/react-redux
 ```
@@ -166,28 +195,28 @@ npm i -D @types/react @types/react-dom @types/react-redux
 "redux" - (types included with npm package)*  
 "react-redux" - `@types/react-redux`  
 
-> *NB: Guide is based on types for Redux >= v4.x.x. To make it work with Redux v3.x.x please refer to [this config](https://github.com/piotrwitek/react-redux-typescript-guide/blob/master/playground/tsconfig.json#L5))  
+> *提示: 本指南的类型系统适用于 Redux >= v4.x.x。如果想用于 Redux v3.x.x 请查看 [这个配置](https://github.com/piotrwitek/react-redux-typescript-guide/blob/master/playground/tsconfig.json#L5))  
 
-[⇧ back to top](#table-of-contents)
+[⇧ 返回顶部](#目录)
 
 ---
 
-# React - Type-Definitions Cheatsheet
+# React - 类型定义速查表
 
 ### `React.FC<Props>` | `React.FunctionComponent<Props>`
-Type representing a functional component
+表示函数组件的类型
 ```tsx
 const MyComponent: React.FC<Props> = ...
 ```
 
 ### `React.Component<Props, State>`
-Type representing a class component
+表示 class 组件的类型
 ```tsx
 class MyComponent extends React.Component<Props, State> { ...
 ```
 
 ### `React.ComponentType<Props>`
-Type representing union of (React.FC<Props> | React.Component<Props>) - used in HOC
+表示 (React.FC<Props> | React.Component<Props>) 集合的类型 - 用于 HOC
 ```tsx
 const withState = <P extends WrappedComponentProps>(
   WrappedComponent: React.ComponentType<P>,
@@ -195,33 +224,33 @@ const withState = <P extends WrappedComponentProps>(
 ```
 
 ### `React.ComponentProps<typeof XXX>`
-Gets Props type of a specified component XXX (WARNING: does not work with statically declared default props and generic props)
+取得组件 XXX 的 Props 类型（警告：无法用于静态声明的 default props 以及泛型 props）
 ```tsx
 type MyComponentProps = React.ComponentProps<typeof MyComponent>;
 ```
 
 ### `React.ReactElement` | `JSX.Element`
-Type representing a concept of React Element - representation of a native DOM component (e.g. `<div />`), or a user-defined composite component (e.g. `<MyComponent />`)
+表示 React 中 Element 概念的类型 - 表示一个原生 DOM 组件（比如 `<div />`）或用户自定义的复合组件 （比如 `<MyComponent />`）
 ```tsx
 const elementOnly: React.ReactElement = <div /> || <MyComponent />;
 ```
 
 ### `React.ReactNode`
-Type representing any possible type of React node (basically ReactElement (including Fragments and Portals) + primitive JS types)
+表示任意类型的 React 节点（相当于 ReactElement (包括 Fragments 和 Portals) + 原始 JS 类型）
 ```tsx
 const elementOrPrimitive: React.ReactNode = 'string' || 0 || false || null || undefined || <div /> || <MyComponent />;
 const Component = ({ children: React.ReactNode }) => ...
 ```
 
 ### `React.CSSProperties`
-Type representing style object in JSX - for css-in-js styles
+表示 JSX 中样式对象的类型 - 实现 css-in-js 风格
 ```tsx
 const styles: React.CSSProperties = { flexDirection: 'row', ...
 const element = <div style={styles} ...
 ```
 
 ### `React.HTMLProps<HTMLXXXElement>`
-Type representing Props of specified HTML Element - for extending HTML Elements
+表示指定 HTML 元素的类型 - 用于扩展 HTML 元素
 ```tsx
 const Input: React.FC<Props & React.HTMLProps<HTMLInputElement>> = props => { ... }
 
@@ -229,7 +258,7 @@ const Input: React.FC<Props & React.HTMLProps<HTMLInputElement>> = props => { ..
 ```
 
 ### `React.ReactEventHandler<HTMLXXXElement>`
-Type representing generic event handler - for declaring event handlers
+表示 event handler 的泛型类型 - 用于声明 event handlers
 ```tsx
 const handleChange: React.ReactEventHandler<HTMLInputElement> = (ev) => { ... } 
 
@@ -237,227 +266,227 @@ const handleChange: React.ReactEventHandler<HTMLInputElement> = (ev) => { ... }
 ```
 
 ### `React.XXXEvent<HTMLXXXElement>`
-Type representing more specific event. Some common event examples: `ChangeEvent, FormEvent, FocusEvent, KeyboardEvent, MouseEvent, DragEvent, PointerEvent, WheelEvent, TouchEvent`.
+表示更多特殊 event。一些常见的 event 例如：`ChangeEvent, FormEvent, FocusEvent, KeyboardEvent, MouseEvent, DragEvent, PointerEvent, WheelEvent, TouchEvent`。
 ```tsx
 const handleChange = (ev: React.MouseEvent<HTMLDivElement>) => { ... }
 
 <div onMouseMove={handleChange} ... />
 ```
 
-In code above `React.MouseEvent<HTMLDivElement>` is type of mouse event, and this event happened on `HTMLDivElement`
+上一段代码中的 `React.MouseEvent<HTMLDivElement>` 表示鼠标事件的类型，这个事件挂载在 `HTMLDivElement` 上。
 
-[⇧ back to top](#table-of-contents)
+[⇧ 返回顶部](#目录)
 
 ---
 
-# React - Typing Patterns
+# React - 类型模式
 
 ## Function Components - FC
 
-### - Counter Component
+### - 计数器组件
 
 ::codeblock='playground/src/components/fc-counter.tsx'::
 
 [⟩⟩⟩ demo](https://piotrwitek.github.io/react-redux-typescript-guide/#fccounter)
 
-[⇧ back to top](#table-of-contents)
+[⇧ 返回顶部](#目录)
 
-### - [Spreading attributes](https://facebook.github.io/react/docs/jsx-in-depth.html#spread-attributes) in Component
+### - 组件的 [属性展开](https://zh-hans.reactjs.org/docs/jsx-in-depth.html#spread-attributes)
 
 ::codeblock='playground/src/components/fc-spread-attributes.tsx'::
 
 [⟩⟩⟩ demo](https://piotrwitek.github.io/react-redux-typescript-guide/#fcspreadattributes)
 
-[⇧ back to top](#table-of-contents)
+[⇧ 返回顶部](#目录)
 
 ---
 
 ## Class Components
 
-### - Class Counter Component
+### - 计数器组件 Class 版
 
 ::codeblock='playground/src/components/class-counter.tsx'::
 
 [⟩⟩⟩ demo](https://piotrwitek.github.io/react-redux-typescript-guide/#classcounter)
 
-[⇧ back to top](#table-of-contents)
+[⇧ 返回顶部](#目录)
 
-### - Class Component with default props
+### - Class 组件和 default props
 
 ::codeblock='playground/src/components/class-counter-with-default-props.tsx'::
 
 [⟩⟩⟩ demo](https://piotrwitek.github.io/react-redux-typescript-guide/#classcounterwithdefaultprops)
 
-[⇧ back to top](#table-of-contents)
+[⇧ 返回顶部](#目录)
 
 ---
 
-## Generic Components
-- easily create typed component variations and reuse common logic
-- common use case is a generic list components
+## 泛型组件
+- 易于生成不同类型的变种组件，同时复用公共逻辑
+- 常见的用例是泛型列表组件
 
-### - Generic List Component
+### - 泛型列表组件
 
 ::codeblock='playground/src/components/generic-list.tsx'::
 
 [⟩⟩⟩ demo](https://piotrwitek.github.io/react-redux-typescript-guide/#genericlist)
 
-[⇧ back to top](#table-of-contents)
+[⇧ 返回顶部](#目录)
 
 ---
 
 ## Render Props
-> https://reactjs.org/docs/render-props.html
+> https://zh-hans.reactjs.org/docs/render-props.html
 
-### - Name Provider Component
-> simple component using children as a render prop
+### - Name Provider 组件
+> 将 children 用作 render prop 的简单组件
 
 ::codeblock='playground/src/components/name-provider.tsx'::
 
 [⟩⟩⟩ demo](https://piotrwitek.github.io/react-redux-typescript-guide/#nameprovider)
 
-[⇧ back to top](#table-of-contents)
+[⇧ 返回顶部](#目录)
 
-### - Mouse Provider Component
-> `Mouse` component found in [Render Props React Docs](https://reactjs.org/docs/render-props.html#use-render-props-for-cross-cutting-concerns)
+### - Mouse Provider 组件
+> `Mouse` 组件的例子来源于 [Render Props - React 文档](https://zh-hans.reactjs.org/docs/render-props.html#use-render-props-for-cross-cutting-concerns)
 
 ::codeblock='playground/src/components/mouse-provider.tsx'::
 
 [⟩⟩⟩ demo](https://piotrwitek.github.io/react-redux-typescript-guide/#mouseprovider)
 
-[⇧ back to top](#table-of-contents)
+[⇧ 返回顶部](#目录)
 
 ---
 
-## Higher-Order Components
-> https://reactjs.org/docs/higher-order-components.html
+## 高阶组件
+> https://zh-hans.reactjs.org/docs/higher-order-components.html
 
-### - HOC wrapping a component
-Adds state to a stateless counter
+### - 用 HOC 封装一个组件
+给无状态的计数器加上状态
 
 ::codeblock='playground/src/hoc/with-state.tsx'::
 ::expander='playground/src/hoc/with-state.usage.tsx'::
 
-[⇧ back to top](#table-of-contents)
+[⇧ 返回顶部](#目录)
 
-### - HOC wrapping a component and injecting props
-Adds error handling using componentDidCatch to any component
+### - 用 HOC 封装组件并注入 props
+用 componentDidCatch 给任意组件加上错误处理功能
 
 ::codeblock='playground/src/hoc/with-error-boundary.tsx'::
 ::expander='playground/src/hoc/with-error-boundary.usage.tsx'::
 
-[⇧ back to top](#table-of-contents)
+[⇧ 返回顶部](#目录)
 
-### - Nested HOC - wrapping a component, injecting props and connecting to redux 🌟
-Adds error handling using componentDidCatch to any component
+### - 嵌套 HOC - 封装组件，props 注入，连接到 redux 🌟
+用 componentDidCatch 给任意组件加上错误处理功能
 
 ::codeblock='playground/src/hoc/with-connected-count.tsx'::
 ::expander='playground/src/hoc/with-connected-count.usage.tsx'::
 
-[⇧ back to top](#table-of-contents)
+[⇧ 返回顶部](#目录)
 
 ---
 
-## Redux Connected Components
+## Redux 连接组件
 
-### - Redux connected counter
+### - Redux 版计数器
 
 ::codeblock='playground/src/connected/fc-counter-connected.tsx'::
 ::expander='playground/src/connected/fc-counter-connected.usage.tsx'::
 
-[⇧ back to top](#table-of-contents)
+[⇧ 返回顶部](#目录)
 
-### - Redux connected counter with own props
+### - Redux 版计数器，带自定义 props
 
 ::codeblock='playground/src/connected/fc-counter-connected-own-props.tsx'::
 ::expander='playground/src/connected/fc-counter-connected-own-props.usage.tsx'::
 
-[⇧ back to top](#table-of-contents)
+[⇧ 返回顶部](#目录)
 
-### - Redux connected counter with `redux-thunk` integration
+### - Redux 版计数器，集成 `redux-thunk`
 
 ::codeblock='playground/src/connected/fc-counter-connected-bind-action-creators.tsx'::
 ::expander='playground/src/connected/fc-counter-connected-bind-action-creators.usage.tsx'::
 
-[⇧ back to top](#table-of-contents)
+[⇧ 返回顶部](#目录)
 
 ## Context
 
-> https://reactjs.org/docs/context.html
+> https://zh-hans.reactjs.org/docs/context.html
 
 ### ThemeContext
 
 ::codeblock='playground/src/context/theme-context.ts'::
 
-[⇧ back to top](#table-of-contents)
+[⇧ 返回顶部](#目录)
 
 ### ThemeProvider
 
 ::codeblock='playground/src/context/theme-provider.tsx'::
 
-[⇧ back to top](#table-of-contents)
+[⇧ 返回顶部](#目录)
 
 ### ThemeConsumer
 
 ::codeblock='playground/src/context/theme-consumer.tsx'::
 
-### ThemeConsumer in class component
+### ThemeConsumer Class 版
 
 ::codeblock='playground/src/context/theme-consumer-class.tsx'::
 
 [Implementation with Hooks](#--usecontext)
 
-[⇧ back to top](#table-of-contents)
+[⇧ 返回顶部](#目录)
 
 ## Hooks
 
-> https://reactjs.org/docs/hooks-intro.html
+> https://zh-hans.reactjs.org/docs/hooks-intro.html
 
 ### - useState
 
-> https://reactjs.org/docs/hooks-reference.html#usestate
+> https://zh-hans.reactjs.org/docs/hooks-reference.html#usestate
 
 ::codeblock='playground/src/hooks/use-state.tsx'::
 
-[⇧ back to top](#table-of-contents)
+[⇧ 返回顶部](#目录)
 
 ### - useReducer
-Hook for state management like Redux in a function component.
+用于函数组件的状态管理 Hook （类似 Redux）。
 
 ::codeblock='playground/src/hooks/use-reducer.tsx'::
 
-[⇧ back to top](#table-of-contents)
+[⇧ 返回顶部](#目录)
 
 ### - useContext
 
-> https://reactjs.org/docs/hooks-reference.html#usecontext
+> https://zh-hans.reactjs.org/docs/hooks-reference.html#usecontext
 
 ::codeblock='playground/src/hooks/use-theme-context.tsx'::
 
-[⇧ back to top](#table-of-contents)
+[⇧ 返回顶部](#目录)
 
 ---
 
-# Redux - Typing Patterns
+# Redux - 类型模式
 
-## Store Configuration
+## Store 配置
 
-### Create Global Store Types
+### 创建全局 Store 类型
 
-#### `RootState` - type representing root state-tree
-Can be imported in connected components to provide type-safety to Redux `connect` function
+#### `RootState` - 表示根 state 树的类型
+可以作为 import，使用 Redux `connect` 方法连接组件时，能够确保类型安全性
 
-#### `RootAction` - type representing union type of all action objects
-Can be imported in various layers receiving or sending redux actions like: reducers, sagas or redux-observables epics
+#### `RootAction` - 表示所有 action 对象集合的类型
+可以作为 import，用于不同层次中（reducers, sagas 或 redux-observables epics）接收和发送 redux actions
 
 ::codeblock='playground/src/store/types.d.ts'::
 
-[⇧ back to top](#table-of-contents)
+[⇧ 返回顶部](#目录)
 
-### Create Store
+### 创建 Store
 
-When creating a store instance we don't need to provide any additional types. It will set-up a **type-safe Store instance** using type inference.
-> The resulting store instance methods like `getState` or `dispatch` will be type checked and will expose all type errors
+当创建 store 实例时，我们不需要编写任何额外的类型，它会通过类型推断自动建立一个**类型安全的 Store 实例**。
+> 生成的 store 实例中的方法（像 `getState` 和 `dispatch`）将支持类型检查，并能够暴露所有的类型错误。
 
 ::codeblock='playground/src/store/index.ts'::
 
@@ -465,23 +494,23 @@ When creating a store instance we don't need to provide any additional types. It
 
 ## Action Creators 🌟
 
-> We'll be using a battle-tested helper library [`typesafe-actions`](https://github.com/piotrwitek/typesafe-actions#typesafe-actions) [![Latest Stable Version](https://img.shields.io/npm/v/typesafe-actions.svg)](https://www.npmjs.com/package/typesafe-actions) [![NPM Downloads](https://img.shields.io/npm/dt/typesafe-actions.svg)](https://www.npmjs.com/package/typesafe-actions) that's designed to make it easy and fun working with **Redux** in **TypeScript**.
+> 我们将使用成熟的辅助库 [`typesafe-actions`](https://github.com/piotrwitek/typesafe-actions#typesafe-actions) [![Latest Stable Version](https://img.shields.io/npm/v/typesafe-actions.svg)](https://www.npmjs.com/package/typesafe-actions) [![NPM Downloads](https://img.shields.io/npm/dt/typesafe-actions.svg)](https://www.npmjs.com/package/typesafe-actions) 它被设计成便于使用 **TypeScript** 来写 **Redux**。
 
-> To learn more please check this in-depth tutorial: [Typesafe-Actions - Tutorial](https://github.com/piotrwitek/typesafe-actions#tutorial)!
+> 查看这个进阶教程来学习更多：[Typesafe-Actions - Tutorial](https://github.com/piotrwitek/typesafe-actions#tutorial)!
 
-A solution below is using a simple factory function to automate the creation of type-safe action creators. The goal is to decrease maintenance effort and reduce code repetition of type annotations for actions and creators. The result is completely typesafe action-creators and their actions.
+下面的方案用一个简单的工厂函数来自动创建类型安全的 action creators。目的是减少重复的 actions 和 creators 类型声明代码，并减少代码维护工作。生成结果是绝对类型安全的 action-creators 及其 actions。
 
 ::codeblock='playground/src/features/counters/actions.ts'::
 ::expander='playground/src/features/counters/actions.usage.ts'::
 
-[⇧ back to top](#table-of-contents)
+[⇧ 返回顶部](#目录)
 
 ---
 
 ## Reducers
 
-### State with Type-level Immutability
-Declare reducer `State` type with `readonly` modifier to get compile time immutability
+### 拥有 Type 层面不可变性的 State
+用 `readonly` 修饰符声明 reducer 中 `State` 的类型，可以获得编译时的不可变性
 ```ts
 export type State = {
   readonly counter: number;
@@ -489,7 +518,7 @@ export type State = {
 };
 ```
 
-Readonly modifier allow initialization, but will not allow reassignment by highlighting compiler errors
+Readonly 修饰符允许初始化，但不允许重新赋值（编译器会提示错误）
 ```ts
 export const initialState: State = {
   counter: 0,
@@ -498,16 +527,16 @@ export const initialState: State = {
 initialState.counter = 3; // TS Error: cannot be mutated
 ```
 
-It's great for **Arrays in JS** because it will error when using mutator methods like (`push`, `pop`, `splice`, ...), but it'll still allow immutable methods like (`concat`, `map`, `slice`,...).
+这对 **JS 中的 数组** 很起效，因为用 (`push`, `pop`, `splice`, ...) 这样的赋值方法将会报错，但是 (`concat`, `map`, `slice`,...) 这样的不可变方法依然是允许的。
 ```ts
 state.todos.push('Learn about tagged union types') // TS Error: Property 'push' does not exist on type 'ReadonlyArray<string>'
 const newTodos = state.todos.concat('Learn about tagged union types') // OK
 ```
 
-#### Caveat - `Readonly` is not recursive
-This means that the `readonly` modifier doesn't propagate immutability down the nested structure of objects. You'll need to mark each property on each level explicitly.
+#### 警告 - `Readonly` 不是递归的
+这意味着 `readonly` 修饰符在对象的嵌套结构中不会向下传递不变性。你需要标记每个层级的每个属性。（译注：`Readonly` 是浅比较的）
 
-> **TIP:** use `Readonly` or `ReadonlyArray` [Mapped types](https://www.typescriptlang.org/docs/handbook/advanced-types.html)
+> **小贴士：** 使用 `Readonly` 或 `ReadonlyArray` [映射类型](https://www.tslang.cn/docs/handbook/advanced-types.html)
 
 ```ts
 export type State = Readonly<{
@@ -522,9 +551,9 @@ state.counterPairs[0].immutableCounter1 = 1; // TS Error: cannot be mutated
 state.counterPairs[0].immutableCounter2 = 1; // TS Error: cannot be mutated
 ```
 
-#### Solution - recursive `Readonly` is called `DeepReadonly`
+#### 解决方案 - `Readonly` 的递归版本是 `DeepReadonly`
 
-To fix this we can use [`DeepReadonly`](https://github.com/piotrwitek/utility-types#deepreadonlyt) type (available from `utility-types`).
+为了解决上述问题，我们可以使用 [`DeepReadonly`](https://github.com/piotrwitek/utility-types#deepreadonlyt) 类型（来自 `utility-types`）。
 
 ```ts
 import { DeepReadonly } from 'utility-types';
@@ -542,60 +571,60 @@ state.containerObject.numbers.push(1); // TS Error: cannot use mutator methods
 ```
 
 
-[⇧ back to top](#table-of-contents)
+[⇧ 返回顶部](#目录)
 
-### Typing reducer
+### reducer 类型声明
 
-> to understand following section make sure to learn about [Type Inference](https://www.typescriptlang.org/docs/handbook/type-inference.html), [Control flow analysis](https://github.com/Microsoft/TypeScript/wiki/What%27s-new-in-TypeScript#control-flow-based-type-analysis) and [Tagged union types](https://github.com/Microsoft/TypeScript/wiki/What%27s-new-in-TypeScript#tagged-union-types)
+> 为了理解下一小节，请确保了解 [类型推论](https://www.tslang.cn/docs/handbook/type-inference.html)，[基于控制流的类型分析](https://www.tslang.cn/docs/release-notes/typescript-2.0.html) 以及 [标记联合类型](https://www.tslang.cn/docs/release-notes/typescript-2.0.html)
 
 ::codeblock='playground/src/features/todos/reducer.ts'::
 
-[⇧ back to top](#table-of-contents)
+[⇧ 返回顶部](#目录)
 
-### Typing reducer with `typesafe-actions`
-> Notice we are not required to use any generic type parameter in the API. Try to compare it with regular reducer as they are equivalent.
+### 使用 `typesafe-actions` 进行 reducer 类型声明
+> 请注意，我们不需要在 API 上使用任何泛型类型参数。可以和传统的 reducer 写法进行比较，它们是等价的。
 
 ::codeblock='playground/src/features/todos/reducer-ta.ts'::
 
-[⇧ back to top](#table-of-contents)
+[⇧ 返回顶部](#目录)
 
-### Testing reducer
+### 测试 reducer
 
 ::codeblock='playground/src/features/todos/reducer.spec.ts'::
 
-[⇧ back to top](#table-of-contents)
+[⇧ 返回顶部](#目录)
 
 ---
 
-## Async Flow with `redux-observable`
+## 使用 `redux-observable` 编写异步流
 
-### Typing epics
+### epics 类型声明
 
 ::codeblock='playground/src/features/todos/epics.ts'::
 
-[⇧ back to top](#table-of-contents)
+[⇧ 返回顶部](#目录)
 
-### Testing epics
+### 测试 epics
 
 ::codeblock='playground/src/features/todos/epics.spec.ts'::
 
-[⇧ back to top](#table-of-contents)
+[⇧ 返回顶部](#目录)
 
 ---
 
-## Selectors with `reselect`
+## 使用 `reselect` 生成 Selectors
 
 ::codeblock='playground/src/features/todos/selectors.ts'::
 
-[⇧ back to top](#table-of-contents)
+[⇧ 返回顶部](#目录)
 
 ---
 
-## Connect with `react-redux`
+## 使用 `react-redux` 的 connect 方法
 
-### Typing connected component
+### 连接组件类型声明
 
-*__NOTE__: Below you'll find only a short explanation of concepts behind typing `connect`. For more real-world examples please check [Redux Connected Components](#redux-connected-components) section.*
+*__注意__：在下面一段代码中，只有关于 connect 类型声明背后概念的简短说明。请查看 [Redux 连接组件](#redux-%e8%bf%9e%e6%8e%a5%e7%bb%84%e4%bb%b6) 章节了解更多更具体的例子*
 
 ```tsx
 import MyTypes from 'MyTypes';
@@ -641,11 +670,11 @@ const mapDispatchToProps = (dispatch: Dispatch<MyTypes.RootAction>) =>
 
 ```
 
-### Typing connected component with `redux-thunk` integration
+### 连接组件类型声明，并集成 `redux-thunk`
 
-*__NOTE__: When using thunk action creators you need to use `bindActionCreators`. Only this way you can get corrected dispatch props type signature like below.*
+*__注意__：使用 thunk action creators 时你需要使用 `bindActionCreators`。只有这样，你才能获得正确的 dispatch props 类型签名，如下所示。*
 
-*__WARNING__: As of now (Apr 2019) `bindActionCreators` signature of the latest `redux-thunk` release will not work as below, you need to use updated type definitions that you can find here [`/playground/typings/redux-thunk/index.d.ts`](./playground/typings/redux-thunk/index.d.ts) and then add `paths` overload in your tsconfig like this: [`"paths":{"redux-thunk":["typings/redux-thunk"]}`](./playground/tsconfig.json).*
+*__警告__: 目前（2019 四月）最新版 `redux-thunk` 中的 `bindActionCreators` 签名不会像下面那样正常工作，你需要使用 [`/playground/typings/redux-thunk/index.d.ts`](./playground/typings/redux-thunk/index.d.ts) 中改良的类型定义并覆写 tsconfig 中的 `paths` 字段，像这样： [`"paths":{"redux-thunk":["typings/redux-thunk"]}`](./playground/tsconfig.json)。*
 
 ```tsx
 const thunkAsyncAction = () => async (dispatch: Dispatch): Promise<void> => {
@@ -667,14 +696,14 @@ type DispatchProps = ReturnType<typeof mapDispatchToProps>;
 // { thunkAsyncAction: () => (dispatch: Dispatch<AnyAction>) => Promise<void>; }
 ```
 
-[⇧ back to top](#table-of-contents)
+[⇧ 返回顶部](#目录)
 
 ---
 
-# Configuration & Dev Tools
+# 配置和开发者工具
 
-## Common Npm Scripts
-> Common TS-related npm scripts shared across projects
+## 通用 Npm Scripts
+> 通用的、跨项目的、 TS 相关的 npm scripts
 ```
 "prettier": "prettier --list-different 'src/**/*.ts' || (echo '\nPlease fix code formatting by running:\nnpm run prettier:fix\n'; exit 1)",
 "prettier:fix": "prettier --write 'src/**/*.ts'",
@@ -687,66 +716,66 @@ type DispatchProps = ReturnType<typeof mapDispatchToProps>;
 "ci-check": "npm run prettier && npm run lint && npm run tsc && npm run test",
 ```
 
-[⇧ back to top](#table-of-contents)
+[⇧ 返回顶部](#目录)
 
 ## tsconfig.json
 
-We have our own recommended `tsconfig.json` that you can easily add to your project thanks to [`react-redux-typescript-scripts`](https://github.com/piotrwitek/react-redux-typescript-scripts) package.
+我们有推荐的 `tsconfig.json` 配置文件，你可以借助 [`react-redux-typescript-scripts`](https://github.com/piotrwitek/react-redux-typescript-scripts) 方便地把它添加到你的项目里。
 
 ::expander='playground/tsconfig.json'::
 
-[⇧ back to top](#table-of-contents)
+[⇧ 返回顶部](#目录)
 
 ## TSLib
 https://www.npmjs.com/package/tslib
 
-This library will cut down on your bundle size, thanks to using external runtime helpers instead of adding them per each file.
+这个库通过把运行时辅助函数外置化，而不是内嵌到每个文件中，来减少你的打包文件大小。
 
-> Installation  
+> 安装  
 `npm i tslib`
 
-Then add this to your `tsconfig.json`:
+把这行加到你的 `tsconfig.json` 中：
 ```ts
 "compilerOptions": {
   "importHelpers": true
 }
 ```
 
-[⇧ back to top](#table-of-contents)
+[⇧ 返回顶部](#目录)
 
 ## TSLint
 https://palantir.github.io/tslint/
 
-> Installation  
+> 安装  
 `npm i -D tslint`
 
-> For React project you should add additional `react` specific rules: `npm i -D tslint-react` https://github.com/palantir/tslint-react  
+> 如果用于 React 项目，你应该加上额外的 `react` 规则集：`npm i -D tslint-react` https://github.com/palantir/tslint-react  
 
-We have our own recommended config that you can easily add to your project thanks to [`react-redux-typescript-scripts`](https://github.com/piotrwitek/react-redux-typescript-scripts) package.
+我们有推荐配置文件，你可以借助 [`react-redux-typescript-scripts`](https://github.com/piotrwitek/react-redux-typescript-scripts) 方便地把它添加到你的项目里。
 
 #### tslint.json
 ::expander='playground/tslint.json'::
 
-[⇧ back to top](#table-of-contents)
+[⇧ 返回顶部](#目录)
 
 ## ESLint
 https://eslint.org/  
 https://typescript-eslint.io
 
-> Installation  
+> 安装  
 `npm i -D eslint @typescript-eslint/parser @typescript-eslint/eslint-plugin`
 
-We have our own recommended config that will automatically add a parser & plugin for TypeScript thanks to [`react-redux-typescript-scripts`](https://github.com/piotrwitek/react-redux-typescript-scripts) package.
+我们有推荐配置文件，他会自动添加 TypeScript 的解析器和插件，你可以借助 [`react-redux-typescript-scripts`](https://github.com/piotrwitek/react-redux-typescript-scripts) 方便地把它添加到你的项目里。
 
 #### .eslintrc
 ::expander='playground/.eslintrc'::
 
-[⇧ back to top](#table-of-contents)
+[⇧ 返回顶部](#目录)
 
 ## Jest
 https://jestjs.io/
 
-> Installation  
+> 安装  
 `npm i -D jest ts-jest @types/jest`
 
 #### jest.config.json
@@ -755,9 +784,9 @@ https://jestjs.io/
 #### jest.stubs.js
 ::expander='configs/jest.stubs.js'::
 
-[⇧ back to top](#table-of-contents)
+[⇧ 返回顶部](#目录)
 
-## Style Guides
+## 风格指南
 
 ### ["react-styleguidist"](https://github.com/styleguidist/react-styleguidist)
 
@@ -765,29 +794,29 @@ https://jestjs.io/
 
 [⟩⟩⟩ demo](https://piotrwitek.github.io/react-redux-typescript-guide/)
 
-[⇧ back to top](#table-of-contents)
+[⇧ 返回顶部](#目录)
 
 ---
 
-# Recipes
+# 食谱
 
-### General Tips
+### 通用小贴士
 
-#### - should I still use React.PropTypes in TS?
-No. With TypeScript, using PropTypes is an unnecessary overhead. When declaring Props and State interfaces, you will get complete intellisense and design-time safety with static type checking. This way you'll be safe from runtime errors and you will save a lot of time on debugging. Additional benefit is an elegant and standardized method of documenting your component public API in the source code.  
+#### - 使用 TS 时我还需要使用 React.PropTypes 吗？
+不。用了 TypeScript 之后，没有必要再使用 PropTypes。当声明 Props 和 State 接口后，你将通过静态类型检查获得完全的自动补全和编码时的安全性。这样，你就能直接避免运行时错误，并减少大量调试时间。额外的好处是，这也是一种用于在源码中解释组件公共 API 的优雅而标准化的方法。
 
-[⇧ back to top](#table-of-contents)
+[⇧ 返回顶部](#目录)
 
-#### - when to use `interface` declarations and when `type` aliases?
-From practical side, using `interface` declaration will create an identity (interface name) in compiler errors, on the contrary `type` aliases doesn't create an identity and will be unwinded to show all the properties and nested types it consists of.  
-Although I prefer to use `type` most of the time there are some places this can become too noisy when reading compiler errors and that's why I like to leverage this distinction to hide some of not so important type details in errors using interfaces identity.
-Related `ts-lint` rule: https://palantir.github.io/tslint/rules/interface-over-type-literal/  
+#### - 什么时候使用 `interface` 声明，什么时候使用 `type` 别名?
+从实际来看，使用 `interface` 声明在编译错误时会生成一个 interface 同名标识，相反 `type` 别名不会生成标识名，并且会展开显示所有属性和嵌套的类型。
+尽管我大部分时候更喜欢用 `type` ，但是有时候编译错误过于冗长影响排查，我会根据两者的差别，改用 interface 来隐藏报错中没那么重要的类型细节。
+相关的 `ts-lint` 规则：https://palantir.github.io/tslint/rules/interface-over-type-literal/
 
-[⇧ back to top](#table-of-contents)
+[⇧ 返回顶部](#目录)
 
-#### - what's better default or named exports?
-A common flexible solution is to use module folder pattern, because you can leverage both named and default import when you see fit.  
-With this solution you'll achieve better encapsulation and be able to safely refactor internal naming and folders structure without breaking your consumer code:
+#### - 具名 exports 和 default export 那个比较好？
+一个常见的适应性方案是使用文件夹模块模式，这样你可以根据情况同时使用具名和默认 import。
+这个方案的好处是你能实现更好的封装，以及能够安全地重构内部命名和文件夹结构，而不影响你的业务代码：
 
 ```ts
 // 1. create your component files (`select.tsx`) using default export in some folder:
@@ -812,10 +841,10 @@ import Select from '@src/components/select';
 ...
 ```
 
-[⇧ back to top](#table-of-contents)
+[⇧ 返回顶部](#目录)
 
-#### - how to best initialize class instance or static properties?
-Prefered modern syntax is to use class Property Initializers  
+#### - 什么是初始化 class 实例或静态属性的最佳实践？
+首选新语法来进行 class 属性初始化
 ```tsx
 class ClassCounterWithInitialCount extends React.Component<Props, State> {
   // default props using Property Initializers
@@ -832,10 +861,10 @@ class ClassCounterWithInitialCount extends React.Component<Props, State> {
 }
 ```
 
-[⇧ back to top](#table-of-contents)
+[⇧ 返回顶部](#目录)
 
-#### - how to best declare component handler functions?
-Prefered modern syntax is to use Class Fields with arrow functions  
+#### - 什么是声明组件 handler 方法的最佳实践？
+首选新语法，用箭头函数声明 class 方法字段
 ```tsx
 class ClassCounter extends React.Component<Props, State> {
 // handlers using Class Fields with arrow functions
@@ -846,12 +875,12 @@ class ClassCounter extends React.Component<Props, State> {
 }
 ```
 
-[⇧ back to top](#table-of-contents)
+[⇧ 返回顶部](#目录)
 
-### Ambient Modules Tips
-
-#### Imports in ambient modules
-For type augmentation imports should stay outside of module declaration.
+### module 环境声明小贴士
+（译注：[环境声明（ambient）](https://jkchao.github.io/typescript-book-chinese/typings/ambient.html) 和 [模块扩展（augmentation）](https://www.tslang.cn/docs/handbook/declaration-merging.html)）
+#### 环境声明中的 imports
+若要进行 module 扩展，import 应该位于 module 声明外部。
 ```ts
 import { Operator } from 'rxjs/Operator';
 import { Observable } from 'rxjs/Observable';
@@ -863,7 +892,7 @@ declare module 'rxjs/Subject' {
 }
 ```
 
-When creating 3rd party type-definitions all the imports should be kept inside the module declaration, otherwise it will be treated as augmentation and show error
+创建第三方类型定义时，所有 imports 应该位于 module 声明内部，否则 imports 将被视为扩展并报错。
 
 ```ts
 declare module "react-custom-scrollbars" {
@@ -872,17 +901,17 @@ declare module "react-custom-scrollbars" {
     ...
 ```
 
-[⇧ back to top](#table-of-contents)
+[⇧ 返回顶部](#目录)
 
-### Type-Definitions Tips
+### 类型定义小贴士
 
-#### Missing type-definitions error
-if you cannot find types for a third-party module you can provide your own types or disable type-checking for this module using [Shorthand Ambient Modules](https://github.com/Microsoft/TypeScript-Handbook/blob/master/pages/Modules.md#shorthand-ambient-modules)
+#### 缺少类型定义的错误
+如果你找不到第三方模块的类型声明，你可以自己写一个，或借助 [Shorthand Ambient Modules](https://github.com/Microsoft/TypeScript-Handbook/blob/master/pages/Modules.md#shorthand-ambient-modules) 禁用该模块的类型检查。
 
 ::codeblock='playground/typings/modules.d.ts'::
 
-#### Using custom `d.ts` files for npm modules
-If you want to use an alternative (customized) type-definitions for some npm module (that usually comes with it's own type-definitions), you can do it by adding an override in `paths` compiler option.
+#### 为 npm 模块使用自定义 `d.ts` 文件
+如果你想为（自带类型定义的）某些 npm 模块使用替代的（自定义的）类型定义，你可以通过覆写编译选项中 `paths` 字段来实现。
 
 ```ts
 {
@@ -897,12 +926,12 @@ If you want to use an alternative (customized) type-definitions for some npm mod
 }
 ```
 
-[⇧ back to top](#table-of-contents)
+[⇧ 返回顶部](#目录)
 
-### Type Augmentation Tips
-Strategies to fix issues coming from external type-definitions files (*.d.ts)
+### 类型扩展小贴士
+外部类型定义文件（*.d.ts）相关问题的处理策略
 
-#### Augmenting library internal declarations - using relative import
+#### 对库的内部声明进行扩展 - 使用相对路径 import
 
 ```ts
 // added missing autoFocus Prop on Input component in "antd@2.10.0" npm package
@@ -913,7 +942,7 @@ declare module '../node_modules/antd/lib/input/Input' {
 }
 ```
 
-#### Augmenting library public declarations - using node_modules import
+#### 对库的公开声明进行扩展 - 使用 node_modules import
 
 ```ts
 // fixed broken public type-definitions in "rxjs@5.4.1" npm package
@@ -927,26 +956,26 @@ declare module 'rxjs/Subject' {
 }
 ```
 
-> More advanced scenarios for working with vendor type-definitions can be found here [Official TypeScript Docs](https://github.com/Microsoft/TypeScript-Handbook/blob/master/pages/Modules.md#working-with-other-javascript-libraries)
+> 更多搭配第三方类型定义的进阶场景可以在 [TypeScript 官方文档](https://github.com/Microsoft/TypeScript-Handbook/blob/master/pages/Modules.md#working-with-other-javascript-libraries) 找到
 
-[⇧ back to top](#table-of-contents)
+[⇧ 返回顶部](#目录)
 
 ---
 
-## Tutorials & Articles
-> Curated list of relevant in-depth tutorials
+## 教程和文章
+> 相关进阶教程精选清单
 
-Higher-Order Components:
+高阶组件：
 - https://medium.com/@jrwebdev/react-higher-order-component-patterns-in-typescript-42278f7590fb
 
-[⇧ back to top](#table-of-contents)
+[⇧ 返回顶部](#目录)
 
 ---
 
 
-## Contributors
+## 贡献者
 
-Thanks goes to these wonderful people ([emoji key](https://github.com/kentcdodds/all-contributors#emoji-key)):
+感谢这些优秀的人 ([emoji key](https://github.com/kentcdodds/all-contributors#emoji-key)):
 
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
 <!-- prettier-ignore -->
@@ -956,7 +985,7 @@ Thanks goes to these wonderful people ([emoji key](https://github.com/kentcdodds
 | [<img src="https://avatars1.githubusercontent.com/u/14838850?v=4" width="100px;"/><br /><sub><b>Sosuke Suzuki</b></sub>](http://sosukesuzuki.github.io)<br />[💻](https://github.com/piotrwitek/react-redux-typescript-guide/commits?author=sosukesuzuki "Code") | [<img src="https://avatars0.githubusercontent.com/u/74433?v=4" width="100px;"/><br /><sub><b>Tom Rathbone</b></sub>](https://github.com/chillitom)<br />[📖](https://github.com/piotrwitek/react-redux-typescript-guide/commits?author=chillitom "Documentation") | [<img src="https://avatars3.githubusercontent.com/u/4654382?v=4" width="100px;"/><br /><sub><b>Arshad Kazmi</b></sub>](https://arshadkazmi42.github.io/)<br />[📖](https://github.com/piotrwitek/react-redux-typescript-guide/commits?author=arshadkazmi42 "Documentation") | [<img src="https://avatars1.githubusercontent.com/u/8815362?v=4" width="100px;"/><br /><sub><b>JeongUkJae</b></sub>](https://jeongukjae.github.io)<br />[📖](https://github.com/piotrwitek/react-redux-typescript-guide/commits?author=JeongUkJae "Documentation") |
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
-This project follows the [all-contributors](https://github.com/kentcdodds/all-contributors) specification. Contributions of any kind welcome!
+这个项目遵循 [all-contributors](https://github.com/kentcdodds/all-contributors) 规范。欢迎任意形式的贡献！
 
 ---
 
