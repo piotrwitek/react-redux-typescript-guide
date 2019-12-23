@@ -719,11 +719,6 @@ interface InjectedProps {
 export const withConnectedCount = <BaseProps extends InjectedProps>(
   BaseComponent: React.ComponentType<BaseProps>
 ) => {
-  type HocProps = Diff<BaseProps, InjectedProps> & {
-    // here you can extend hoc with new props
-    initialCount?: number;
-  };
-
   const mapStateToProps = (state: RootState) => ({
     count: countersSelectors.getReduxCounter(state.counters),
   });
@@ -732,18 +727,24 @@ export const withConnectedCount = <BaseProps extends InjectedProps>(
     onIncrement: countersActions.increment,
   };
 
-  class Hoc extends React.Component<InjectedProps> {
+  type HocProps = ReturnType<typeof mapStateToProps> &
+    typeof dispatchProps & {
+      // here you can extend ConnectedHoc with new props
+      overrideCount?: number;
+    };
+
+  class Hoc extends React.Component<HocProps> {
     // Enhance component name for debugging and React-Dev-Tools
     static displayName = `withConnectedCount(${BaseComponent.name})`;
     // reference to original wrapped component
     static readonly WrappedComponent = BaseComponent;
 
     render() {
-      const { count, onIncrement, ...restProps } = this.props;
+      const { count, onIncrement, overrideCount, ...restProps } = this.props;
 
       return (
         <BaseComponent
-          count={count} // injected
+          count={overrideCount || count} // injected
           onIncrement={onIncrement} // injected
           {...(restProps as BaseProps)}
         />
@@ -754,7 +755,7 @@ export const withConnectedCount = <BaseProps extends InjectedProps>(
   const ConnectedHoc = connect<
     ReturnType<typeof mapStateToProps>,
     typeof dispatchProps, // use "undefined" if NOT using dispatchProps
-    HocProps,
+    Diff<BaseProps, InjectedProps>,
     RootState
   >(
     mapStateToProps,
@@ -776,7 +777,7 @@ import { FCCounter } from '../components';
 const FCCounterWithConnectedCount = withConnectedCount(FCCounter);
 
 export default () => (
-  <FCCounterWithConnectedCount initialCount={5} label={'FCCounterWithState'} />
+  <FCCounterWithConnectedCount overrideCount={5} label={'FCCounterWithState'} />
 );
 
 ```
@@ -1262,6 +1263,7 @@ export default store;
 A solution below is using a simple factory function to automate the creation of type-safe action creators. The goal is to decrease maintenance effort and reduce code repetition of type annotations for actions and creators. The result is completely typesafe action-creators and their actions.
 
 ```tsx
+/* eslint-disable */
 import { action } from 'typesafe-actions';
 
 import { ADD, INCREMENT } from './constants';

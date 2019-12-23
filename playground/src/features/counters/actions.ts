@@ -1,3 +1,4 @@
+/* eslint-disable */
 import { action } from 'typesafe-actions';
 
 import { ADD, INCREMENT } from './constants';
