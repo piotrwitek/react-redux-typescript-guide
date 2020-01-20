@@ -1209,7 +1209,7 @@ When creating a store instance we don't need to provide any additional types. It
 > The resulting store instance methods like `getState` or `dispatch` will be type checked and will expose all type errors
 
 ```tsx
-import { RootAction, RootState, Services } from 'MyTypes';
+import { Store, RootAction, RootState, Services } from 'MyTypes';
 import { createStore, applyMiddleware } from 'redux';
 import { createEpicMiddleware } from 'redux-observable';
 import { createBrowserHistory } from 'history';
@@ -1224,7 +1224,7 @@ import services from '../services';
 export const history = createBrowserHistory();
 
 export const epicMiddleware = createEpicMiddleware<
-  RootAction,
+  Store,
   RootAction,
   RootState,
   Services
