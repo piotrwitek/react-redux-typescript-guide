@@ -879,26 +879,10 @@ export default () => (
 ### - Redux connected counter via hooks
 
 ```tsx
-import { Dispatch } from 'redux';
-import {
-  TypedUseSelectorHook,
-  useSelector as useGenericSelector,
-  useDispatch as useGenericDispatch
-} from 'react-redux';
-import { RootState, RootAction } from 'MyTypes';
-
-export const useSelector: TypedUseSelectorHook<RootState> = useGenericSelector;
-
-export const useDispatch: () => Dispatch<RootAction> = useGenericDispatch;
-
-```
-<details><summary><i>Click to expand</i></summary><p>
-
-```tsx
 import * as React from 'react';
 import { FCCounter } from '../components';
 import { increment } from '../features/counters/actions';
-import { useSelector, useDispatch } from './fc-counter-connected-hooks';
+import { useSelector, useDispatch } from '../store/hooks';
 
 const FCCounterConnectedHooksUsage: React.FC = () => {
   const counter = useSelector(state => state.counters.reduxCounter);
@@ -909,7 +893,6 @@ const FCCounterConnectedHooksUsage: React.FC = () => {
 export default FCCounterConnectedHooksUsage;
 
 ```
-</p></details>
 
 [⇧ back to top](#table-of-contents)
 

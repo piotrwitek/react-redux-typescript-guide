@@ -378,8 +378,7 @@ Adds error handling using componentDidCatch to any component
 
 ### - Redux connected counter via hooks
 
-::codeblock='playground/src/connected/fc-counter-connected-hooks.ts'::
-::expander='playground/src/connected/fc-counter-connected-hooks.usage.tsx'::
+::codeblock='playground/src/hooks/react-redux-hooks.tsx'::
 
 [⇧ back to top](#table-of-contents)
 
@@ -654,7 +653,7 @@ const mapDispatchToProps = (dispatch: Dispatch<MyTypes.RootAction>) =>
 
 ### Typing `useSelector` and `useDispatch`
 
-::codeblock='playground/src/connected/fc-counter-connected-hooks.ts'::
+::codeblock='playground/src/store/hooks.ts'::
 
 [⇧ back to top](#table-of-contents)
 
