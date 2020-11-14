@@ -1,12 +1,7 @@
 const path = require('path');
 const fs = require('fs');
-const { createConfig } = require('webpack-blocks');
-const typescript = require('@webpack-blocks/typescript');
-const webpackConfig = createConfig([typescript()]);
-webpackConfig.resolve.alias = { '@src': path.join(__dirname, 'src') };
 
 module.exports = {
-  showUsage: false,
   styleguideDir: '../docs/',
   title: 'React & Redux in TypeScript - Component Typing Patterns',
   ignore: ['**/*.usage.tsx'],
@@ -45,21 +40,36 @@ module.exports = {
     sidebarWidth: 300,
   },
   propsParser: require('react-docgen-typescript').parse,
-  webpackConfig: webpackConfig,
-  updateExample: function(props, exampleFilePath) {
+  webpackConfig: {
+    resolve: {
+      alias: { '@src': path.join(__dirname, 'src') },
+      extensions: ['.ts', '.tsx'],
+    },
+    module: {
+      rules: [
+        Object.assign({
+          test: /\.(ts|tsx)$/,
+          use: [
+            {
+              loader: 'ts-loader',
+            },
+          ],
+        }),
+      ],
+    },
+  },
+  updateExample: function (props, exampleFilePath) {
     if (typeof props.settings.filePath === 'string') {
       const {
         settings: { filePath },
       } = props;
       delete props.settings.filePath;
-
       props.content = fs.readFileSync(
         path.resolve(exampleFilePath, '..', filePath),
         { encoding: 'utf-8' }
       );
       props.settings.static = true;
     }
-
     return props;
   },
 };

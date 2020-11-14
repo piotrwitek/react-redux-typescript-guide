@@ -12,9 +12,9 @@
     "styleguide:build": "styleguidist build"
   },
   "dependencies": {
-    "react-docgen-typescript": "1.12.3",
-    "react-styleguidist": "8.0.6",
-    "typescript": "3.1.6",
-    "webpack-blocks": "1.0.0"
+    "react-docgen-typescript": "1.20.5",
+    "react-styleguidist": "11.1.2",
+    "ts-loader": "8.0.11",
+    "typescript": "4.0.5"
   }
 }
