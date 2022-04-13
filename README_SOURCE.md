@@ -106,6 +106,7 @@ I highly recommend to add a bounty to the issue that you're waiting for to incre
   - [Redux Connected Components](#redux-connected-components)
     - [- Redux connected counter](#--redux-connected-counter)
     - [- Redux connected counter with own props](#--redux-connected-counter-with-own-props)
+    - [- Redux connected counter via hooks](#--redux-connected-counter-via-hooks)
     - [- Redux connected counter with `redux-thunk` integration](#--redux-connected-counter-with-redux-thunk-integration)
   - [Context](#context)
     - [ThemeContext](#themecontext)
@@ -132,6 +133,7 @@ I highly recommend to add a bounty to the issue that you're waiting for to incre
   - [Selectors with `reselect`](#selectors-with-reselect)
   - [Connect with `react-redux`](#connect-with-react-redux)
     - [Typing connected component](#typing-connected-component)
+    - [Typing `useSelector` and `useDispatch`](#typing-useselector-and-usedispatch)
     - [Typing connected component with `redux-thunk` integration](#typing-connected-component-with-redux-thunk-integration)
 - [Configuration & Dev Tools](#configuration--dev-tools)
   - [Common Npm Scripts](#common-npm-scripts)
@@ -371,6 +373,12 @@ Adds error handling using componentDidCatch to any component
 
 ::codeblock='playground/src/connected/fc-counter-connected-own-props.tsx'::
 ::expander='playground/src/connected/fc-counter-connected-own-props.usage.tsx'::
+
+[⇧ back to top](#table-of-contents)
+
+### - Redux connected counter via hooks
+
+::codeblock='playground/src/hooks/react-redux-hooks.tsx'::
 
 [⇧ back to top](#table-of-contents)
 
@@ -640,6 +648,14 @@ const mapDispatchToProps = (dispatch: Dispatch<MyTypes.RootAction>) =>
   }, dispatch);
 
 ```
+
+[⇧ back to top](#table-of-contents)
+
+### Typing `useSelector` and `useDispatch`
+
+::codeblock='playground/src/store/hooks.ts'::
+
+[⇧ back to top](#table-of-contents)
 
 ### Typing connected component with `redux-thunk` integration
 

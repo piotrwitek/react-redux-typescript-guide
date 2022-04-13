@@ -106,6 +106,7 @@ I highly recommend to add a bounty to the issue that you're waiting for to incre
   - [Redux Connected Components](#redux-connected-components)
     - [- Redux connected counter](#--redux-connected-counter)
     - [- Redux connected counter with own props](#--redux-connected-counter-with-own-props)
+    - [- Redux connected counter via hooks](#--redux-connected-counter-via-hooks)
     - [- Redux connected counter with `redux-thunk` integration](#--redux-connected-counter-with-redux-thunk-integration)
   - [Context](#context)
     - [ThemeContext](#themecontext)
@@ -132,6 +133,7 @@ I highly recommend to add a bounty to the issue that you're waiting for to incre
   - [Selectors with `reselect`](#selectors-with-reselect)
   - [Connect with `react-redux`](#connect-with-react-redux)
     - [Typing connected component](#typing-connected-component)
+    - [Typing `useSelector` and `useDispatch`](#typing-useselector-and-usedispatch)
     - [Typing connected component with `redux-thunk` integration](#typing-connected-component-with-redux-thunk-integration)
 - [Configuration & Dev Tools](#configuration--dev-tools)
   - [Common Npm Scripts](#common-npm-scripts)
@@ -871,6 +873,26 @@ export default () => (
 
 ```
 </p></details>
+
+[⇧ back to top](#table-of-contents)
+
+### - Redux connected counter via hooks
+
+```tsx
+import * as React from 'react';
+import { FCCounter } from '../components';
+import { increment } from '../features/counters/actions';
+import { useSelector, useDispatch } from '../store/hooks';
+
+const FCCounterConnectedHooksUsage: React.FC = () => {
+  const counter = useSelector(state => state.counters.reduxCounter);
+  const dispatch = useDispatch();
+  return <FCCounter label="Use selector" count={counter} onIncrement={() => dispatch(increment())}/>;
+};
+
+export default FCCounterConnectedHooksUsage;
+
+```
 
 [⇧ back to top](#table-of-contents)
 
@@ -1702,6 +1724,27 @@ const mapDispatchToProps = (dispatch: Dispatch<MyTypes.RootAction>) =>
   }, dispatch);
 
 ```
+
+[⇧ back to top](#table-of-contents)
+
+### Typing `useSelector` and `useDispatch`
+
+```tsx
+import { Dispatch } from 'redux';
+import {
+  TypedUseSelectorHook,
+  useSelector as useGenericSelector,
+  useDispatch as useGenericDispatch
+} from 'react-redux';
+import { RootState, RootAction } from 'MyTypes';
+
+export const useSelector: TypedUseSelectorHook<RootState> = useGenericSelector;
+
+export const useDispatch: () => Dispatch<RootAction> = useGenericDispatch;
+
+```
+
+[⇧ back to top](#table-of-contents)
 
 ### Typing connected component with `redux-thunk` integration
 
