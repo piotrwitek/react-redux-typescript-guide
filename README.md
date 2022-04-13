@@ -33,7 +33,7 @@ _Found it useful? Want more updates?_
 
 - Complete type safety (with [`--strict`](https://www.typescriptlang.org/docs/handbook/compiler-options.html) flag) without losing type information downstream through all the layers of our application (e.g. no type assertions or hacking with `any` type)
 - Make type annotations concise by eliminating redundancy in types using advanced TypeScript Language features like **Type Inference** and **Control flow analysis**
-- Reduce repetition and complexity of types with TypeScript focused [complementary libraries](#complementary-libraries)
+- Reduce repetition and complexity of types with TypeScript focused [complementary libraries](#react-redux-typescript-ecosystem)
 
 ### **React, Redux, Typescript Ecosystem**
 
