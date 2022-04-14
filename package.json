@@ -6,7 +6,7 @@
   },
   "scripts": {
     "ci-check": "npm run doctoc && npm run readme:generate",
-    "doctoc": "doctoc --maxlevel=3 README_SOURCE.md",
+    "doctoc": "doctoc --maxlevel=3 README_SOURCE.md README_SOURCE-zh.md",
     "readme:generate": "node generate-readme",
     "contributors:check": "all-contributors check",
     "contributors:add": "all-contributors add",
