@@ -7,7 +7,8 @@ const outputFile = ROOT_PATH + 'README.md';
 const result = inputFiles
     .map(filePath => fs.readFileSync(filePath, 'utf8'))
     .map(injectCodeBlocks)
-    .map(injectExpanders);
+    .map(injectExpanders)
+    .toString();
 
 fs.writeFileSync(outputFile, result, 'utf8');
 
