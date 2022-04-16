@@ -1,9 +1,0 @@
-{
-  "extends": [
-    "./node_modules/react-redux-typescript-scripts/tslint.json",
-    "./node_modules/react-redux-typescript-scripts/tslint-react.json"
-  ],
-  "rules": {
-    // you can further customize options here
-  }
-}

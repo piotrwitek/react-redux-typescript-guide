@@ -1,9 +1,0 @@
-{
-  "extends": [
-    "react-app",
-    "./node_modules/react-redux-typescript-scripts/eslint.js"
-  ],
-  "rules": {
-    // you can further customize options here
-  }
-}
