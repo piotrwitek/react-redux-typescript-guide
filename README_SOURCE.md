@@ -20,7 +20,7 @@ _Found it useful? Want more updates?_
 
 <br/><hr/>
 
-### **What's new?**
+## **What's new?**
 
 :tada: _Now updated to support **TypeScript v3.7**_ :tada:
 :rocket: _Updated to `typesafe-actions@5.x.x` :rocket:
@@ -76,7 +76,7 @@ I highly recommend to add a bounty to the issue that you're waiting for to incre
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
 
-- [React - Type-Definitions Cheatsheet](#react---type-definitions-cheatsheet)
+  - [React Types Cheatsheet](#react-types-cheatsheet)
     - [`React.FC<Props>` | `React.FunctionComponent<Props>`](#reactfcprops--reactfunctioncomponentprops)
     - [`React.Component<Props, State>`](#reactcomponentprops-state)
     - [`React.ComponentType<Props>`](#reactcomponenttypeprops)
@@ -84,10 +84,10 @@ I highly recommend to add a bounty to the issue that you're waiting for to incre
     - [`React.ReactElement` | `JSX.Element`](#reactreactelement--jsxelement)
     - [`React.ReactNode`](#reactreactnode)
     - [`React.CSSProperties`](#reactcssproperties)
-    - [`React.HTMLProps<HTMLXXXElement>`](#reacthtmlpropshtmlxxxelement)
+    - [`React.XXXHTMLAttributes<HTMLXXXElement>`](#reactxxxhtmlattributeshtmlxxxelement)
     - [`React.ReactEventHandler<HTMLXXXElement>`](#reactreacteventhandlerhtmlxxxelement)
     - [`React.XXXEvent<HTMLXXXElement>`](#reactxxxeventhtmlxxxelement)
-- [React - Typing Patterns](#react---typing-patterns)
+- [React](#react)
   - [Function Components - FC](#function-components---fc)
     - [- Counter Component](#--counter-component)
     - [- Spreading attributes in Component](#--spreading-attributes-in-component)
@@ -96,6 +96,10 @@ I highly recommend to add a bounty to the issue that you're waiting for to incre
     - [- Class Component with default props](#--class-component-with-default-props)
   - [Generic Components](#generic-components)
     - [- Generic List Component](#--generic-list-component)
+  - [Hooks](#hooks)
+    - [- useState](#--usestate)
+    - [- useContext](#--usecontext)
+    - [- useReducer](#--usereducer)
   - [Render Props](#render-props)
     - [- Name Provider Component](#--name-provider-component)
     - [- Mouse Provider Component](#--mouse-provider-component)
@@ -113,11 +117,7 @@ I highly recommend to add a bounty to the issue that you're waiting for to incre
     - [ThemeProvider](#themeprovider)
     - [ThemeConsumer](#themeconsumer)
     - [ThemeConsumer in class component](#themeconsumer-in-class-component)
-  - [Hooks](#hooks)
-    - [- useState](#--usestate)
-    - [- useReducer](#--usereducer)
-    - [- useContext](#--usecontext)
-- [Redux - Typing Patterns](#redux---typing-patterns)
+- [Redux](#redux)
   - [Store Configuration](#store-configuration)
     - [Create Global Store Types](#create-global-store-types)
     - [Create Store](#create-store)
@@ -139,18 +139,30 @@ I highly recommend to add a bounty to the issue that you're waiting for to incre
   - [Common Npm Scripts](#common-npm-scripts)
   - [tsconfig.json](#tsconfigjson)
   - [TSLib](#tslib)
-  - [TSLint](#tslint)
   - [ESLint](#eslint)
+    - [.eslintrc.js](#eslintrcjs)
   - [Jest](#jest)
+    - [jest.config.json](#jestconfigjson)
+    - [jest.stubs.js](#jeststubsjs)
   - [Style Guides](#style-guides)
-    - ["react-styleguidist"](#react-styleguidist)
-- [Recipes](#recipes)
-    - [General Tips](#general-tips)
-    - [Ambient Modules Tips](#ambient-modules-tips)
-    - [Type-Definitions Tips](#type-definitions-tips)
-    - [Type Augmentation Tips](#type-augmentation-tips)
-  - [Tutorials & Articles](#tutorials--articles)
-  - [Contributors](#contributors)
+    - [react-styleguidist](#react-styleguidist)
+- [FAQ](#faq)
+  - [Ambient Modules](#ambient-modules)
+    - [Imports in ambient modules](#imports-in-ambient-modules)
+  - [Type-Definitions](#type-definitions)
+    - [Missing type-definitions error](#missing-type-definitions-error)
+    - [Using custom `d.ts` files for npm modules](#using-custom-dts-files-for-npm-modules)
+  - [Type Augmentation](#type-augmentation)
+    - [Augmenting library internal declarations - using relative import](#augmenting-library-internal-declarations---using-relative-import)
+    - [Augmenting library public declarations - using node_modules import](#augmenting-library-public-declarations---using-node_modules-import)
+  - [Misc](#misc)
+    - [- should I still use React.PropTypes in TS?](#--should-i-still-use-reactproptypes-in-ts)
+    - [- when to use `interface` declarations and when `type` aliases?](#--when-to-use-interface-declarations-and-when-type-aliases)
+    - [- what's better default or named exports?](#--whats-better-default-or-named-exports)
+    - [- how to best initialize class instance or static properties?](#--how-to-best-initialize-class-instance-or-static-properties)
+    - [- how to best declare component handler functions?](#--how-to-best-declare-component-handler-functions)
+- [Tutorials & Articles](#tutorials--articles)
+- [Contributors](#contributors)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -158,7 +170,8 @@ I highly recommend to add a bounty to the issue that you're waiting for to incre
 
 # Installation
 
-### Type-Definitions for React & Redux
+## Types for React & Redux
+
 ```
 npm i -D @types/react @types/react-dom @types/react-redux
 ```
@@ -168,28 +181,34 @@ npm i -D @types/react @types/react-dom @types/react-redux
 "redux" - (types included with npm package)*  
 "react-redux" - `@types/react-redux`  
 
-> *NB: Guide is based on types for Redux >= v4.x.x. To make it work with Redux v3.x.x please refer to [this config](https://github.com/piotrwitek/react-redux-typescript-guide/blob/master/playground/tsconfig.json#L5))  
+> *NB: Guide is based on types for Redux >= v4.x.x.
 
 [⇧ back to top](#table-of-contents)
 
 ---
 
-# React - Type-Definitions Cheatsheet
+## React Types Cheatsheet
 
 ### `React.FC<Props>` | `React.FunctionComponent<Props>`
+
 Type representing a functional component
+
 ```tsx
 const MyComponent: React.FC<Props> = ...
 ```
 
 ### `React.Component<Props, State>`
+
 Type representing a class component
+
 ```tsx
 class MyComponent extends React.Component<Props, State> { ...
 ```
 
 ### `React.ComponentType<Props>`
-Type representing union of (React.FC<Props> | React.Component<Props>) - used in HOC
+
+Type representing union of (`React.FC<Props> | React.Component<Props>`) - used in HOC
+
 ```tsx
 const withState = <P extends WrappedComponentProps>(
   WrappedComponent: React.ComponentType<P>,
@@ -197,41 +216,53 @@ const withState = <P extends WrappedComponentProps>(
 ```
 
 ### `React.ComponentProps<typeof XXX>`
+
 Gets Props type of a specified component XXX (WARNING: does not work with statically declared default props and generic props)
+
 ```tsx
 type MyComponentProps = React.ComponentProps<typeof MyComponent>;
 ```
 
 ### `React.ReactElement` | `JSX.Element`
+
 Type representing a concept of React Element - representation of a native DOM component (e.g. `<div />`), or a user-defined composite component (e.g. `<MyComponent />`)
+
 ```tsx
 const elementOnly: React.ReactElement = <div /> || <MyComponent />;
 ```
 
 ### `React.ReactNode`
+
 Type representing any possible type of React node (basically ReactElement (including Fragments and Portals) + primitive JS types)
+
 ```tsx
 const elementOrPrimitive: React.ReactNode = 'string' || 0 || false || null || undefined || <div /> || <MyComponent />;
 const Component = ({ children: React.ReactNode }) => ...
 ```
 
 ### `React.CSSProperties`
+
 Type representing style object in JSX - for css-in-js styles
+
 ```tsx
 const styles: React.CSSProperties = { flexDirection: 'row', ...
 const element = <div style={styles} ...
 ```
 
-### `React.HTMLProps<HTMLXXXElement>`
-Type representing Props of specified HTML Element - for extending HTML Elements
+### `React.XXXHTMLAttributes<HTMLXXXElement>`
+
+Type representing HTML attributes of specified HTML Element - for extending HTML Elements
+
 ```tsx
-const Input: React.FC<Props & React.HTMLProps<HTMLInputElement>> = props => { ... }
+const Input: React.FC<Props & React.InputHTMLAttributes<HTMLInputElement>> = props => { ... }
 
 <Input about={...} accept={...} alt={...} ... />
 ```
 
 ### `React.ReactEventHandler<HTMLXXXElement>`
+
 Type representing generic event handler - for declaring event handlers
+
 ```tsx
 const handleChange: React.ReactEventHandler<HTMLInputElement> = (ev) => { ... } 
 
@@ -239,7 +270,9 @@ const handleChange: React.ReactEventHandler<HTMLInputElement> = (ev) => { ... }
 ```
 
 ### `React.XXXEvent<HTMLXXXElement>`
+
 Type representing more specific event. Some common event examples: `ChangeEvent, FormEvent, FocusEvent, KeyboardEvent, MouseEvent, DragEvent, PointerEvent, WheelEvent, TouchEvent`.
+
 ```tsx
 const handleChange = (ev: React.MouseEvent<HTMLDivElement>) => { ... }
 
@@ -252,7 +285,7 @@ In code above `React.MouseEvent<HTMLDivElement>` is type of mouse event, and thi
 
 ---
 
-# React - Typing Patterns
+# React
 
 ## Function Components - FC
 
@@ -295,6 +328,7 @@ In code above `React.MouseEvent<HTMLDivElement>` is type of mouse event, and thi
 ---
 
 ## Generic Components
+
 - easily create typed component variations and reuse common logic
 - common use case is a generic list components
 
@@ -308,11 +342,43 @@ In code above `React.MouseEvent<HTMLDivElement>` is type of mouse event, and thi
 
 ---
 
+## Hooks
+
+> <https://reactjs.org/docs/hooks-intro.html>
+
+### - useState
+
+> <https://reactjs.org/docs/hooks-reference.html#usestate>
+
+::codeblock='playground/src/hooks/use-state.tsx'::
+
+[⇧ back to top](#table-of-contents)
+
+### - useContext
+
+> <https://reactjs.org/docs/hooks-reference.html#usecontext>
+
+::codeblock='playground/src/hooks/use-theme-context.tsx'::
+
+[⇧ back to top](#table-of-contents)
+
+### - useReducer
+
+> <https://reactjs.org/docs/hooks-reference.html#usereducer>
+
+::codeblock='playground/src/hooks/use-reducer.tsx'::
+
+[⇧ back to top](#table-of-contents)
+
+---
+
 ## Render Props
-> https://reactjs.org/docs/render-props.html
+
+> <https://reactjs.org/docs/render-props.html>
 
 ### - Name Provider Component
-> simple component using children as a render prop
+
+Simple component using children as a render prop
 
 ::codeblock='playground/src/components/name-provider.tsx'::
 
@@ -321,7 +387,8 @@ In code above `React.MouseEvent<HTMLDivElement>` is type of mouse event, and thi
 [⇧ back to top](#table-of-contents)
 
 ### - Mouse Provider Component
-> `Mouse` component found in [Render Props React Docs](https://reactjs.org/docs/render-props.html#use-render-props-for-cross-cutting-concerns)
+
+`Mouse` component found in [Render Props React Docs](https://reactjs.org/docs/render-props.html#use-render-props-for-cross-cutting-concerns)
 
 ::codeblock='playground/src/components/mouse-provider.tsx'::
 
@@ -332,9 +399,11 @@ In code above `React.MouseEvent<HTMLDivElement>` is type of mouse event, and thi
 ---
 
 ## Higher-Order Components
-> https://reactjs.org/docs/higher-order-components.html
+
+> <https://reactjs.org/docs/higher-order-components.html>
 
 ### - HOC wrapping a component
+
 Adds state to a stateless counter
 
 ::codeblock='playground/src/hoc/with-state.tsx'::
@@ -343,6 +412,7 @@ Adds state to a stateless counter
 [⇧ back to top](#table-of-contents)
 
 ### - HOC wrapping a component and injecting props
+
 Adds error handling using componentDidCatch to any component
 
 ::codeblock='playground/src/hoc/with-error-boundary.tsx'::
@@ -351,6 +421,7 @@ Adds error handling using componentDidCatch to any component
 [⇧ back to top](#table-of-contents)
 
 ### - Nested HOC - wrapping a component, injecting props and connecting to redux 🌟
+
 Adds error handling using componentDidCatch to any component
 
 ::codeblock='playground/src/hoc/with-connected-count.tsx'::
@@ -391,7 +462,7 @@ Adds error handling using componentDidCatch to any component
 
 ## Context
 
-> https://reactjs.org/docs/context.html
+> <https://reactjs.org/docs/context.html>
 
 ### ThemeContext
 
@@ -417,45 +488,21 @@ Adds error handling using componentDidCatch to any component
 
 [⇧ back to top](#table-of-contents)
 
-## Hooks
-
-> https://reactjs.org/docs/hooks-intro.html
-
-### - useState
-
-> https://reactjs.org/docs/hooks-reference.html#usestate
-
-::codeblock='playground/src/hooks/use-state.tsx'::
-
-[⇧ back to top](#table-of-contents)
-
-### - useReducer
-Hook for state management like Redux in a function component.
-
-::codeblock='playground/src/hooks/use-reducer.tsx'::
-
-[⇧ back to top](#table-of-contents)
-
-### - useContext
-
-> https://reactjs.org/docs/hooks-reference.html#usecontext
-
-::codeblock='playground/src/hooks/use-theme-context.tsx'::
-
-[⇧ back to top](#table-of-contents)
 
 ---
 
-# Redux - Typing Patterns
+# Redux
 
 ## Store Configuration
 
 ### Create Global Store Types
 
 #### `RootState` - type representing root state-tree
+
 Can be imported in connected components to provide type-safety to Redux `connect` function
 
 #### `RootAction` - type representing union type of all action objects
+
 Can be imported in various layers receiving or sending redux actions like: reducers, sagas or redux-observables epics
 
 ::codeblock='playground/src/store/types.d.ts'::
@@ -489,7 +536,9 @@ A solution below is using a simple factory function to automate the creation of 
 ## Reducers
 
 ### State with Type-level Immutability
+
 Declare reducer `State` type with `readonly` modifier to get compile time immutability
+
 ```ts
 export type State = {
   readonly counter: number;
@@ -498,6 +547,7 @@ export type State = {
 ```
 
 Readonly modifier allow initialization, but will not allow reassignment by highlighting compiler errors
+
 ```ts
 export const initialState: State = {
   counter: 0,
@@ -507,12 +557,14 @@ initialState.counter = 3; // TS Error: cannot be mutated
 ```
 
 It's great for **Arrays in JS** because it will error when using mutator methods like (`push`, `pop`, `splice`, ...), but it'll still allow immutable methods like (`concat`, `map`, `slice`,...).
+
 ```ts
 state.todos.push('Learn about tagged union types') // TS Error: Property 'push' does not exist on type 'ReadonlyArray<string>'
 const newTodos = state.todos.concat('Learn about tagged union types') // OK
 ```
 
 #### Caveat - `Readonly` is not recursive
+
 This means that the `readonly` modifier doesn't propagate immutability down the nested structure of objects. You'll need to mark each property on each level explicitly.
 
 > **TIP:** use `Readonly` or `ReadonlyArray` [Mapped types](https://www.typescriptlang.org/docs/handbook/advanced-types.html)
@@ -549,7 +601,6 @@ state.containerObject.innerValue = 1; // TS Error: cannot be mutated
 state.containerObject.numbers.push(1); // TS Error: cannot use mutator methods
 ```
 
-
 [⇧ back to top](#table-of-contents)
 
 ### Typing reducer
@@ -561,6 +612,7 @@ state.containerObject.numbers.push(1); // TS Error: cannot use mutator methods
 [⇧ back to top](#table-of-contents)
 
 ### Typing reducer with `typesafe-actions`
+
 > Notice we are not required to use any generic type parameter in the API. Try to compare it with regular reducer as they are equivalent.
 
 ::codeblock='playground/src/features/todos/reducer-ta.ts'::
@@ -603,7 +655,7 @@ state.containerObject.numbers.push(1); // TS Error: cannot use mutator methods
 
 ### Typing connected component
 
-*__NOTE__: Below you'll find only a short explanation of concepts behind typing `connect`. For more real-world examples please check [Redux Connected Components](#redux-connected-components) section.*
+_**NOTE**: Below you'll find a short explanation of concepts behind using `connect` with TypeScript. For more detailed examples please check [Redux Connected Components](#redux-connected-components) section._
 
 ```tsx
 import MyTypes from 'MyTypes';
@@ -659,9 +711,9 @@ const mapDispatchToProps = (dispatch: Dispatch<MyTypes.RootAction>) =>
 
 ### Typing connected component with `redux-thunk` integration
 
-*__NOTE__: When using thunk action creators you need to use `bindActionCreators`. Only this way you can get corrected dispatch props type signature like below.*
+_**NOTE**: When using thunk action creators you need to use `bindActionCreators`. Only this way you can get corrected dispatch props type signature like below.*_
 
-*__WARNING__: As of now (Apr 2019) `bindActionCreators` signature of the latest `redux-thunk` release will not work as below, you need to use updated type definitions that you can find here [`/playground/typings/redux-thunk/index.d.ts`](./playground/typings/redux-thunk/index.d.ts) and then add `paths` overload in your tsconfig like this: [`"paths":{"redux-thunk":["typings/redux-thunk"]}`](./playground/tsconfig.json).*
+_**WARNING**: As of now (Apr 2019) `bindActionCreators` signature of the latest `redux-thunk` release will not work as below, you need to use our modified type definitions that you can find here [`/playground/typings/redux-thunk/index.d.ts`](./playground/typings/redux-thunk/index.d.ts) and then add `paths` overload in your tsconfig like this: [`"paths":{"redux-thunk":["typings/redux-thunk"]}`](./playground/tsconfig.json)._
 
 ```tsx
 const thunkAsyncAction = () => async (dispatch: Dispatch): Promise<void> => {
@@ -690,11 +742,13 @@ type DispatchProps = ReturnType<typeof mapDispatchToProps>;
 # Configuration & Dev Tools
 
 ## Common Npm Scripts
+
 > Common TS-related npm scripts shared across projects
-```
+
+```json
 "prettier": "prettier --list-different 'src/**/*.ts' || (echo '\nPlease fix code formatting by running:\nnpm run prettier:fix\n'; exit 1)",
 "prettier:fix": "prettier --write 'src/**/*.ts'",
-"lint": "tslint -p ./",
+"lint": "eslint ./src --ext .js,.jsx,.ts,.tsx",
 "tsc": "tsc -p ./ --noEmit",
 "tsc:watch": "tsc -p ./ --noEmit -w",
 "test": "jest --config jest.config.json",
@@ -707,21 +761,24 @@ type DispatchProps = ReturnType<typeof mapDispatchToProps>;
 
 ## tsconfig.json
 
-We have our own recommended `tsconfig.json` that you can easily add to your project thanks to [`react-redux-typescript-scripts`](https://github.com/piotrwitek/react-redux-typescript-scripts) package.
+We have recommended `tsconfig.json` that you can easily add to your project thanks to [`react-redux-typescript-scripts`](https://github.com/piotrwitek/react-redux-typescript-scripts) package.
 
 ::expander='playground/tsconfig.json'::
 
 [⇧ back to top](#table-of-contents)
 
 ## TSLib
-https://www.npmjs.com/package/tslib
 
 This library will cut down on your bundle size, thanks to using external runtime helpers instead of adding them per each file.
+
+> <https://www.npmjs.com/package/tslib>
 
 > Installation  
 `npm i tslib`
 
+
 Then add this to your `tsconfig.json`:
+
 ```ts
 "compilerOptions": {
   "importHelpers": true
@@ -730,52 +787,42 @@ Then add this to your `tsconfig.json`:
 
 [⇧ back to top](#table-of-contents)
 
-## TSLint
-https://palantir.github.io/tslint/
-
-> Installation  
-`npm i -D tslint`
-
-> For React project you should add additional `react` specific rules: `npm i -D tslint-react` https://github.com/palantir/tslint-react  
-
-We have our own recommended config that you can easily add to your project thanks to [`react-redux-typescript-scripts`](https://github.com/piotrwitek/react-redux-typescript-scripts) package.
-
-#### tslint.json
-::expander='playground/tslint.json'::
-
-[⇧ back to top](#table-of-contents)
-
 ## ESLint
-https://eslint.org/  
-https://typescript-eslint.io
 
-> Installation  
+We have recommended config that will automatically add a parser & plugin for TypeScript thanks to [`react-redux-typescript-scripts`](https://github.com/piotrwitek/react-redux-typescript-scripts) package.
+
+> <https://typescript-eslint.io>
+
+> Installation
 `npm i -D eslint @typescript-eslint/parser @typescript-eslint/eslint-plugin`
 
-We have our own recommended config that will automatically add a parser & plugin for TypeScript thanks to [`react-redux-typescript-scripts`](https://github.com/piotrwitek/react-redux-typescript-scripts) package.
 
-#### .eslintrc
-::expander='playground/.eslintrc'::
+### .eslintrc.js
+
+::expander='playground/.eslintrc.js'::
 
 [⇧ back to top](#table-of-contents)
 
 ## Jest
-https://jestjs.io/
+
+> <https://jestjs.io/>
 
 > Installation  
 `npm i -D jest ts-jest @types/jest`
 
-#### jest.config.json
+### jest.config.json
+
 ::expander='configs/jest.config.json'::
 
-#### jest.stubs.js
+### jest.stubs.js
+
 ::expander='configs/jest.stubs.js'::
 
 [⇧ back to top](#table-of-contents)
 
 ## Style Guides
 
-### ["react-styleguidist"](https://github.com/styleguidist/react-styleguidist)
+### [react-styleguidist](https://github.com/styleguidist/react-styleguidist)
 
 [⟩⟩⟩ styleguide.config.js](/playground/styleguide.config.js)  
 
@@ -785,23 +832,115 @@ https://jestjs.io/
 
 ---
 
-# Recipes
+# FAQ
 
-### General Tips
 
-#### - should I still use React.PropTypes in TS?
+## Ambient Modules
+
+### Imports in ambient modules
+
+For type augmentation imports should stay outside of module declaration.
+
+```ts
+import { Operator } from 'rxjs/Operator';
+import { Observable } from 'rxjs/Observable';
+
+declare module 'rxjs/Subject' {
+  interface Subject<T> {
+    lift<R>(operator: Operator<T, R>): Observable<R>;
+  }
+}
+```
+
+When creating 3rd party type-definitions all the imports should be kept inside the module declaration, otherwise it will be treated as augmentation and show error
+
+```ts
+declare module "react-custom-scrollbars" {
+    import * as React from "react";
+    export interface positionValues {
+    ...
+```
+
+[⇧ back to top](#table-of-contents)
+
+## Type-Definitions
+
+### Missing type-definitions error
+
+if you cannot find types for a third-party module you can provide your own types or disable type-checking for this module using [Shorthand Ambient Modules](https://github.com/Microsoft/TypeScript-Handbook/blob/master/pages/Modules.md#shorthand-ambient-modules)
+
+::codeblock='playground/typings/modules.d.ts'::
+
+### Using custom `d.ts` files for npm modules
+
+If you want to use an alternative (customized) type-definitions for some npm module (that usually comes with it's own type-definitions), you can do it by adding an override in `paths` compiler option.
+
+```ts
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "redux": ["typings/redux"], // use an alternative type-definitions instead of the included one
+      ...
+    },
+    ...,
+  }
+}
+```
+
+[⇧ back to top](#table-of-contents)
+
+## Type Augmentation
+
+Strategies to fix issues coming from external type-definitions files (*.d.ts)
+
+### Augmenting library internal declarations - using relative import
+
+```ts
+// added missing autoFocus Prop on Input component in "antd@2.10.0" npm package
+declare module '../node_modules/antd/lib/input/Input' {
+  export interface InputProps {
+    autoFocus?: boolean;
+  }
+}
+```
+
+### Augmenting library public declarations - using node_modules import
+
+```ts
+// fixed broken public type-definitions in "rxjs@5.4.1" npm package
+import { Operator } from 'rxjs/Operator';
+import { Observable } from 'rxjs/Observable';
+
+declare module 'rxjs/Subject' {
+  interface Subject<T> {
+    lift<R>(operator: Operator<T, R>): Observable<R>;
+  }
+}
+```
+
+> More advanced scenarios for working with vendor type-definitions can be found here [Official TypeScript Docs](https://github.com/Microsoft/TypeScript-Handbook/blob/master/pages/Modules.md#working-with-other-javascript-libraries)
+
+[⇧ back to top](#table-of-contents)
+
+## Misc
+
+### - should I still use React.PropTypes in TS?
+
 No. With TypeScript, using PropTypes is an unnecessary overhead. When declaring Props and State interfaces, you will get complete intellisense and design-time safety with static type checking. This way you'll be safe from runtime errors and you will save a lot of time on debugging. Additional benefit is an elegant and standardized method of documenting your component public API in the source code.  
 
 [⇧ back to top](#table-of-contents)
 
-#### - when to use `interface` declarations and when `type` aliases?
+### - when to use `interface` declarations and when `type` aliases?
+
 From practical side, using `interface` declaration will create an identity (interface name) in compiler errors, on the contrary `type` aliases doesn't create an identity and will be unwinded to show all the properties and nested types it consists of.  
 Although I prefer to use `type` most of the time there are some places this can become too noisy when reading compiler errors and that's why I like to leverage this distinction to hide some of not so important type details in errors using interfaces identity.
-Related `ts-lint` rule: https://palantir.github.io/tslint/rules/interface-over-type-literal/  
+Related `ts-lint` rule: <https://palantir.github.io/tslint/rules/interface-over-type-literal/>  
 
 [⇧ back to top](#table-of-contents)
 
-#### - what's better default or named exports?
+### - what's better default or named exports?
+
 A common flexible solution is to use module folder pattern, because you can leverage both named and default import when you see fit.  
 With this solution you'll achieve better encapsulation and be able to safely refactor internal naming and folders structure without breaking your consumer code:
 
@@ -830,8 +969,10 @@ import Select from '@src/components/select';
 
 [⇧ back to top](#table-of-contents)
 
-#### - how to best initialize class instance or static properties?
+### - how to best initialize class instance or static properties?
+
 Prefered modern syntax is to use class Property Initializers  
+
 ```tsx
 class ClassCounterWithInitialCount extends React.Component<Props, State> {
   // default props using Property Initializers
@@ -850,8 +991,10 @@ class ClassCounterWithInitialCount extends React.Component<Props, State> {
 
 [⇧ back to top](#table-of-contents)
 
-#### - how to best declare component handler functions?
+### - how to best declare component handler functions?
+
 Prefered modern syntax is to use Class Fields with arrow functions  
+
 ```tsx
 class ClassCounter extends React.Component<Props, State> {
 // handlers using Class Fields with arrow functions
@@ -864,103 +1007,21 @@ class ClassCounter extends React.Component<Props, State> {
 
 [⇧ back to top](#table-of-contents)
 
-### Ambient Modules Tips
-
-#### Imports in ambient modules
-For type augmentation imports should stay outside of module declaration.
-```ts
-import { Operator } from 'rxjs/Operator';
-import { Observable } from 'rxjs/Observable';
-
-declare module 'rxjs/Subject' {
-  interface Subject<T> {
-    lift<R>(operator: Operator<T, R>): Observable<R>;
-  }
-}
-```
-
-When creating 3rd party type-definitions all the imports should be kept inside the module declaration, otherwise it will be treated as augmentation and show error
-
-```ts
-declare module "react-custom-scrollbars" {
-    import * as React from "react";
-    export interface positionValues {
-    ...
-```
-
-[⇧ back to top](#table-of-contents)
-
-### Type-Definitions Tips
-
-#### Missing type-definitions error
-if you cannot find types for a third-party module you can provide your own types or disable type-checking for this module using [Shorthand Ambient Modules](https://github.com/Microsoft/TypeScript-Handbook/blob/master/pages/Modules.md#shorthand-ambient-modules)
-
-::codeblock='playground/typings/modules.d.ts'::
-
-#### Using custom `d.ts` files for npm modules
-If you want to use an alternative (customized) type-definitions for some npm module (that usually comes with it's own type-definitions), you can do it by adding an override in `paths` compiler option.
-
-```ts
-{
-  "compilerOptions": {
-    "baseUrl": ".",
-    "paths": {
-      "redux": ["typings/redux"], // use an alternative type-definitions instead of the included one
-      ...
-    },
-    ...,
-  }
-}
-```
-
-[⇧ back to top](#table-of-contents)
-
-### Type Augmentation Tips
-Strategies to fix issues coming from external type-definitions files (*.d.ts)
-
-#### Augmenting library internal declarations - using relative import
-
-```ts
-// added missing autoFocus Prop on Input component in "antd@2.10.0" npm package
-declare module '../node_modules/antd/lib/input/Input' {
-  export interface InputProps {
-    autoFocus?: boolean;
-  }
-}
-```
-
-#### Augmenting library public declarations - using node_modules import
-
-```ts
-// fixed broken public type-definitions in "rxjs@5.4.1" npm package
-import { Operator } from 'rxjs/Operator';
-import { Observable } from 'rxjs/Observable';
-
-declare module 'rxjs/Subject' {
-  interface Subject<T> {
-    lift<R>(operator: Operator<T, R>): Observable<R>;
-  }
-}
-```
-
-> More advanced scenarios for working with vendor type-definitions can be found here [Official TypeScript Docs](https://github.com/Microsoft/TypeScript-Handbook/blob/master/pages/Modules.md#working-with-other-javascript-libraries)
-
-[⇧ back to top](#table-of-contents)
-
 ---
 
-## Tutorials & Articles
+# Tutorials & Articles
+
 > Curated list of relevant in-depth tutorials
 
 Higher-Order Components:
-- https://medium.com/@jrwebdev/react-higher-order-component-patterns-in-typescript-42278f7590fb
+
+- <https://medium.com/@jrwebdev/react-higher-order-component-patterns-in-typescript-42278f7590fb>
 
 [⇧ back to top](#table-of-contents)
 
 ---
 
-
-## Contributors
+# Contributors
 
 Thanks goes to these wonderful people ([emoji key](https://github.com/kentcdodds/all-contributors#emoji-key)):
 
@@ -978,4 +1039,4 @@ This project follows the [all-contributors](https://github.com/kentcdodds/all-co
 
 MIT License
 
-Copyright (c) 2017 Piotr Witek <piotrek.witek@gmail.com> (http://piotrwitek.github.io)
+Copyright (c) 2017 Piotr Witek <piotrek.witek@gmail.com> (<https://piotrwitek.github.io>)
