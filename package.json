@@ -7,15 +7,15 @@
   "scripts": {
     "ci-check": "npm run doctoc && npm run readme:generate",
     "doctoc": "doctoc --maxlevel=3 README_SOURCE.md",
-    "readme:generate": "node generate-readme",
+    "readme:generate": "node generate-readme.js",
     "contributors:check": "all-contributors check",
     "contributors:add": "all-contributors add",
     "contributors:generate": "all-contributors generate",
-    "is-clean": "sh ./is-clean.sh"
+    "is-git-status-clean": "sh ./is-git-status-clean.sh"
   },
   "husky": {
     "hooks": {
-      "pre-push": "npm run ci-check && npm run is-clean"
+      "pre-push": "npm run ci-check && npm run is-git-status-clean "
     }
   }
 }
