@@ -38,9 +38,9 @@ export const withConnectedCount = <BaseProps extends InjectedProps>(
 
       return (
         <BaseComponent
+          {...(restProps as BaseProps)}
           count={overrideCount || count} // injected
           onIncrement={onIncrement} // injected
-          {...(restProps as BaseProps)}
         />
       );
     }

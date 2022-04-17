@@ -1,5 +1,5 @@
 import { StateObservable, ActionsObservable } from 'redux-observable';
-import { RootState, Services, RootAction } from 'MyTypes';
+import { RootState, RootAction } from 'MyTypes';
 import { Subject } from 'rxjs';
 
 import { add } from './actions';
@@ -9,11 +9,11 @@ import { logAddAction } from './epics';
 // It is decoupled and reusable for all your tests, just put it in a separate file
 const services = {
   logger: {
-    log: jest.fn<Services['logger']['log']>(),
+    log: jest.fn(),
   },
   localStorage: {
-    loadState: jest.fn<Services['localStorage']['loadState']>(),
-    saveState: jest.fn<Services['localStorage']['saveState']>(),
+    loadState: jest.fn(),
+    saveState: jest.fn(),
   },
 };
 

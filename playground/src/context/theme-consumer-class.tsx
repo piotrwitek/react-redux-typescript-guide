@@ -5,7 +5,7 @@ type Props = {};
 
 export class ToggleThemeButtonClass extends React.Component<Props> {
   static contextType = ThemeContext;
-  context!: React.ContextType<typeof ThemeContext>;
+  declare context: React.ContextType<typeof ThemeContext>;
 
   render() {
     const { theme, toggleTheme } = this.context;

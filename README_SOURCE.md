@@ -22,8 +22,8 @@ _Found it useful? Want more updates?_
 
 ## **What's new?**
 
-:tada: _Now updated to support **TypeScript v3.7**_ :tada:
-:rocket: _Updated to `typesafe-actions@5.x.x` :rocket:
+:tada: _Now updated to support **TypeScript v4.6**_ :tada:
+:rocket: _Updated to `typesafe-actions@5.x` :rocket:
 
 <hr/><br/>
 

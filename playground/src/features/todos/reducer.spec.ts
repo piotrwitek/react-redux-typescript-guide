@@ -1,8 +1,8 @@
 import {
   todosReducer as reducer,
   todosActions as actions,
-  TodosState,
 } from './';
+import { TodosState } from './reducer';
 
 /**
  * FIXTURES

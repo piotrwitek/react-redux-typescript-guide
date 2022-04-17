@@ -38,9 +38,9 @@ export const withState = <BaseProps extends InjectedProps>(
 
       return (
         <BaseComponent
+        {...(restProps as BaseProps)}
           count={count} // injected
           onIncrement={this.handleIncrement} // injected
-          {...(restProps as BaseProps)}
         />
       );
     }

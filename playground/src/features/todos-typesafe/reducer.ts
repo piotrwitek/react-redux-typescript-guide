@@ -4,10 +4,10 @@ import { ActionType, getType } from 'typesafe-actions';
 import { Todo, TodosFilter } from './models';
 import * as todos from './actions';
 
-export type TodosState = {
-  readonly todos: Todo[];
-  readonly todosFilter: TodosFilter;
-};
+export type TodosState = Readonly<{
+  todos: Todo[];
+  todosFilter: TodosFilter;
+}>;
 
 export type TodosAction = ActionType<typeof todos>;
 

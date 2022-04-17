@@ -1,11 +1,16 @@
 {
+  "extends": "./node_modules/react-redux-typescript-scripts/tsconfig.json",
   "include": [
     "src",
     "typings"
   ],
   "exclude": [
-    "src/**/*.spec.*"
   ],
-  "extends": "./node_modules/react-redux-typescript-scripts/tsconfig.json",
-  "compilerOptions": {}
+  "compilerOptions": {
+    "module": "ESNext",
+    "target": "ESNext",
+    "moduleResolution": "Node",
+    "jsx": "preserve",
+    "strict": true
+  }
 }

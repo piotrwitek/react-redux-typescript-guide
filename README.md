@@ -22,8 +22,8 @@ _Found it useful? Want more updates?_
 
 ## **What's new?**
 
-:tada: _Now updated to support **TypeScript v3.7**_ :tada:
-:rocket: _Updated to `typesafe-actions@5.x.x` :rocket:
+:tada: _Now updated to support **TypeScript v4.6**_ :tada:
+:rocket: _Updated to `typesafe-actions@5.x` :rocket:
 
 <hr/><br/>
 
@@ -330,12 +330,12 @@ export const FCCounter: React.FC<Props> = props => {
 ```tsx
 import * as React from 'react';
 
-type Props = {
+type Props = React.PropsWithChildren<{
   className?: string;
   style?: React.CSSProperties;
-};
+}>;
 
-export const FCSpreadAttributes: React.FC<Props> = props => {
+export const FCSpreadAttributes: React.FC<Props> = (props) => {
   const { children, ...restProps } = props;
 
   return <div {...restProps}>{children}</div>;
@@ -722,9 +722,9 @@ export const withState = <BaseProps extends InjectedProps>(
 
       return (
         <BaseComponent
+        {...(restProps as BaseProps)}
           count={count} // injected
           onIncrement={this.handleIncrement} // injected
-          {...(restProps as BaseProps)}
         />
       );
     }
@@ -761,9 +761,9 @@ const MISSING_ERROR = 'Error was swallowed during propagation.';
 export const withErrorBoundary = <BaseProps extends {}>(
   BaseComponent: React.ComponentType<BaseProps>
 ) => {
-  type HocProps = {
+  type HocProps = React.PropsWithChildren<{
     // here you can extend hoc with new props
-  };
+  }>;
   type HocState = {
     readonly error: Error | null | undefined;
   };
@@ -892,9 +892,9 @@ export const withConnectedCount = <BaseProps extends InjectedProps>(
 
       return (
         <BaseComponent
+          {...(restProps as BaseProps)}
           count={overrideCount || count} // injected
           onIncrement={onIncrement} // injected
-          {...(restProps as BaseProps)}
         />
       );
     }
@@ -1218,7 +1218,7 @@ type Props = {};
 
 export class ToggleThemeButtonClass extends React.Component<Props> {
   static contextType = ThemeContext;
-  context!: React.ContextType<typeof ThemeContext>;
+  declare context: React.ContextType<typeof ThemeContext>;
 
   render() {
     const { theme, toggleTheme } = this.context;
@@ -1557,8 +1557,8 @@ export default combineReducers({
 import {
   todosReducer as reducer,
   todosActions as actions,
-  TodosState,
 } from './';
+import { TodosState } from './reducer';
 
 /**
  * FIXTURES
@@ -1640,7 +1640,7 @@ export const logAddAction: Epic<RootAction, RootAction, RootState, Services> = (
 
 ```tsx
 import { StateObservable, ActionsObservable } from 'redux-observable';
-import { RootState, Services, RootAction } from 'MyTypes';
+import { RootState, RootAction } from 'MyTypes';
 import { Subject } from 'rxjs';
 
 import { add } from './actions';
@@ -1650,11 +1650,11 @@ import { logAddAction } from './epics';
 // It is decoupled and reusable for all your tests, just put it in a separate file
 const services = {
   logger: {
-    log: jest.fn<Services['logger']['log']>(),
+    log: jest.fn(),
   },
   localStorage: {
-    loadState: jest.fn<Services['localStorage']['loadState']>(),
-    saveState: jest.fn<Services['localStorage']['saveState']>(),
+    loadState: jest.fn(),
+    saveState: jest.fn(),
   },
 };
 
@@ -1856,16 +1856,19 @@ We have recommended `tsconfig.json` that you can easily add to your project than
 
 ```tsx
 {
+  "extends": "./node_modules/react-redux-typescript-scripts/tsconfig.json",
   "include": [
     "src",
     "typings"
   ],
   "exclude": [
-    "src/**/*.spec.*"
   ],
-  "extends": "./node_modules/react-redux-typescript-scripts/tsconfig.json",
   "compilerOptions": {
-    "types": ["jest"], // which global types to use
+    "module": "ESNext",
+    "target": "ESNext",
+    "moduleResolution": "Node",
+    "jsx": "preserve",
+    "strict": true
   }
 }
 
@@ -1912,16 +1915,9 @@ We have recommended config that will automatically add a parser & plugin for Typ
 module.exports = {
   root: true,
   parser: '@typescript-eslint/parser',
-  plugins: [
-    '@typescript-eslint',
-  ],
-  extends: [
-    'eslint:recommended',
-    'plugin:@typescript-eslint/recommended',
-    "plugin:react/recommended",
-    "plugin:react-hooks/recommended",
-    'prettier'
-  ],
+  plugins: ['@typescript-eslint'],
+  extends: ['react-app', 'prettier'],
+  rules: { 'import/no-anonymous-default-export': 0 },
 };
 
 ```
@@ -2047,6 +2043,7 @@ if you cannot find types for a third-party module you can provide your own types
 // typings/modules.d.ts
 declare module 'MyTypes';
 declare module 'react-test-renderer';
+declare module '@storybook/addon-storyshots'
 
 ```
 

@@ -24,8 +24,8 @@
     "@testing-library/react": "9.3.1",
     "@types/jest": "27.4.1",
     "@types/node": "17.0.24",
-    "@types/react": "18.0.5",
-    "@types/react-dom": "18.0.1",
+    "@types/react": "17.0.44",
+    "@types/react-dom": "17.0.15",
     "@types/react-redux": "7.1.24",
     "@types/react-router-dom": "5.3.3",
     "axios": "0.26.1",
@@ -42,7 +42,7 @@
     "redux-thunk": "2.4.1",
     "reselect": "4.0.0",
     "rxjs": "6.5.3",
-    "tslib": "1.10.0",
+    "tslib": "2.3.1",
     "typesafe-actions": "5.1.0",
     "utility-types": "3.10.0"
   },
@@ -58,14 +58,12 @@
     "@storybook/addon-storyshots": "5.2.5",
     "@storybook/addons": "5.2.5",
     "@storybook/react": "5.2.5",
-    "@types/storybook__addon-storyshots": "5.3.1",
-    "@types/storybook__react": "4.0.2",
     "@typescript-eslint/eslint-plugin": "5.19.0",
     "@typescript-eslint/parser": "5.19.0",
     "eslint": "8.13.0",
     "eslint-config-prettier": "8.5.0",
     "react-test-renderer": "18.0.0",
     "require-context.macro": "1.2.2",
-    "typescript": "3.7.1-rc"
+    "typescript": "4.6.3"
   }
 }

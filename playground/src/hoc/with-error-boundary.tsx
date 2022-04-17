@@ -5,9 +5,9 @@ const MISSING_ERROR = 'Error was swallowed during propagation.';
 export const withErrorBoundary = <BaseProps extends {}>(
   BaseComponent: React.ComponentType<BaseProps>
 ) => {
-  type HocProps = {
+  type HocProps = React.PropsWithChildren<{
     // here you can extend hoc with new props
-  };
+  }>;
   type HocState = {
     readonly error: Error | null | undefined;
   };
