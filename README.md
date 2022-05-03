@@ -1257,7 +1257,7 @@ Can be imported in various layers receiving or sending redux actions like: reduc
 import { StateType, ActionType } from 'typesafe-actions';
 
 declare module 'MyTypes' {
-  export type Store = StateType<typeof import('./index').default>;
+  export type Store = StateType<typeof import('./store').default>;
   export type RootAction = ActionType<typeof import('./root-action').default>;
   export type RootState = StateType<ReturnType<typeof import('./root-reducer').default>>;
 }
@@ -1279,20 +1279,16 @@ When creating a store instance we don't need to provide any additional types. It
 
 ```tsx
 import { RootAction, RootState, Services } from 'MyTypes';
-import { createStore, applyMiddleware } from 'redux';
+import { applyMiddleware, createStore } from 'redux';
 import { createEpicMiddleware } from 'redux-observable';
-import { createBrowserHistory } from 'history';
-import { routerMiddleware as createRouterMiddleware } from 'connected-react-router';
 
-import { composeEnhancers } from './utils';
-import rootReducer from './root-reducer';
-import rootEpic from './root-epic';
 import services from '../services';
+import { routerMiddleware } from './redux-router';
+import rootEpic from './root-epic';
+import rootReducer from './root-reducer';
+import { composeEnhancers } from './utils';
 
-// browser history
-export const history = createBrowserHistory();
-
-export const epicMiddleware = createEpicMiddleware<
+const epicMiddleware = createEpicMiddleware<
   RootAction,
   RootAction,
   RootState,
@@ -1300,8 +1296,6 @@ export const epicMiddleware = createEpicMiddleware<
 >({
   dependencies: services,
 });
-
-const routerMiddleware = createRouterMiddleware(history);
 
 // configure middlewares
 const middlewares = [epicMiddleware, routerMiddleware];
@@ -1312,7 +1306,11 @@ const enhancer = composeEnhancers(applyMiddleware(...middlewares));
 const initialState = {};
 
 // create store
-const store = createStore(rootReducer(history), initialState, enhancer);
+const store = createStore(
+  rootReducer,
+  initialState,
+  enhancer
+);
 
 epicMiddleware.run(rootEpic);
 
@@ -1366,7 +1364,7 @@ export const payloadCreatorAction = createAction(
 <details><summary><i>Click to expand</i></summary><p>
 
 ```tsx
-import store from '../../store';
+import { store } from '../../store/';
 import { countersActions as counter } from '../counters';
 
 // store.dispatch(counter.increment(1)); // Error: Expected 0 arguments, but got 1.
@@ -1856,20 +1854,31 @@ We have recommended `tsconfig.json` that you can easily add to your project than
 
 ```tsx
 {
-  "extends": "./node_modules/react-redux-typescript-scripts/tsconfig.json",
+  "compilerOptions": {
+    "target": "ES6",
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "noFallthroughCasesInSwitch": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "jsx": "react-jsx"
+  },
   "include": [
     "src",
     "typings"
-  ],
-  "exclude": [
-  ],
-  "compilerOptions": {
-    "module": "ESNext",
-    "target": "ESNext",
-    "moduleResolution": "Node",
-    "jsx": "preserve",
-    "strict": true
-  }
+  ]
 }
 
 ```
@@ -1916,7 +1925,7 @@ module.exports = {
   root: true,
   parser: '@typescript-eslint/parser',
   plugins: ['@typescript-eslint'],
-  extends: ['react-app', 'prettier'],
+  extends: ['react-app', 'react-app/jest', 'prettier'],
   rules: { 'import/no-anonymous-default-export': 0 },
 };
 

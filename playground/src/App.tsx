@@ -1,20 +1,35 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { Provider } from 'react-redux';
-import { ConnectedRouter } from 'connected-react-router';
+import { Outlet, Route, Routes } from 'react-router-dom';
+import { ReduxRouter } from '@lagunovsky/redux-react-router'
 
-import store, { history } from './store';
-import Home from './routes/Home';
+import { Layout } from './layout/layout';
+import { LayoutFooter } from './layout/layout-footer';
+import { LayoutHeader } from './layout/layout-header';
+import { Home } from './routes/home';
+import { NotFound } from './routes/not-found';
+import { history, store } from './store';
 
-class App extends Component {
-  render() {
-    return (
-      <Provider store={store}>
-        <ConnectedRouter history={history}>
-          <Home />
-        </ConnectedRouter>
-      </Provider>
-    );
-  }
+export function App() {
+  return (
+    <Provider store={store}>
+      <ReduxRouter history={history} store={store}>
+          <Routes>
+            <Route
+              path="/"
+              element={
+                <Layout
+                  renderHeader={() => <LayoutHeader />}
+                  renderFooter={() => <LayoutFooter />}
+                  renderContent={() => <Outlet />}
+                />
+              }
+            >
+              <Route index element={<Home />} />
+              <Route path="*" element={<NotFound />} />
+            </Route>
+          </Routes>
+      </ReduxRouter>
+    </Provider>
+  );
 }
-
-export default App;

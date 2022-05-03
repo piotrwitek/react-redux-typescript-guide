@@ -514,7 +514,7 @@ Can be imported in various layers receiving or sending redux actions like: reduc
 When creating a store instance we don't need to provide any additional types. It will set-up a **type-safe Store instance** using type inference.
 > The resulting store instance methods like `getState` or `dispatch` will be type checked and will expose all type errors
 
-::codeblock='playground/src/store/index.ts'::
+::codeblock='playground/src/store/store.ts'::
 
 ---
 

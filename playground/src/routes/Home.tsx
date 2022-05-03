@@ -1,5 +1,4 @@
-import * as React from 'react';
-
+import React from 'react'
 import FCCounterUsage from '../components/fc-counter.usage';
 import FCSpreadAttributesUsage from '../components/fc-spread-attributes.usage';
 import ClassCounterUsage from '../components/class-counter.usage';
@@ -9,7 +8,7 @@ import WithErrorBoundaryUsage from '../hoc/with-error-boundary.usage';
 import WithStateUsage from '../hoc/with-state.usage';
 import WithConnectedCountUsage from '../hoc/with-connected-count.usage';
 
-export default () => {
+export function Home() {
   return (
     <section>
       <FCCounterUsage />
