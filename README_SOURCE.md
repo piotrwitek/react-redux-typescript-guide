@@ -90,6 +90,7 @@ I highly recommend to add a bounty to the issue that you're waiting for to incre
 - [React](#react)
   - [Function Components - FC](#function-components---fc)
     - [- Counter Component](#--counter-component)
+    - [- Counter Component with default props](#--counter-component-with-default-props)
     - [- Spreading attributes in Component](#--spreading-attributes-in-component)
   - [Class Components](#class-components)
     - [- Class Counter Component](#--class-counter-component)
@@ -294,6 +295,14 @@ In code above `React.MouseEvent<HTMLDivElement>` is type of mouse event, and thi
 ::codeblock='playground/src/components/fc-counter.tsx'::
 
 [⟩⟩⟩ demo](https://piotrwitek.github.io/react-redux-typescript-guide/#fccounter)
+
+[⇧ back to top](#table-of-contents)
+
+### - Counter Component with default props
+
+::codeblock='playground/src/components/fc-counter-with-default-props.tsx'::
+
+[⟩⟩⟩ demo](https://piotrwitek.github.io/react-redux-typescript-guide/#fccounterwithdefaultprops)
 
 [⇧ back to top](#table-of-contents)
 
