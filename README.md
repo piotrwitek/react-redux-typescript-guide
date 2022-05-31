@@ -90,6 +90,7 @@ I highly recommend to add a bounty to the issue that you're waiting for to incre
 - [React](#react)
   - [Function Components - FC](#function-components---fc)
     - [- Counter Component](#--counter-component)
+    - [- Counter Component with default props](#--counter-component-with-default-props)
     - [- Spreading attributes in Component](#--spreading-attributes-in-component)
   - [Class Components](#class-components)
     - [- Class Counter Component](#--class-counter-component)
@@ -322,6 +323,46 @@ export const FCCounter: React.FC<Props> = props => {
 ```
 
 [⟩⟩⟩ demo](https://piotrwitek.github.io/react-redux-typescript-guide/#fccounter)
+
+[⇧ back to top](#table-of-contents)
+
+### - Counter Component with default props
+
+```tsx
+import * as React from 'react';
+
+type Props = {
+  label: string;
+  count: number;
+  onIncrement: () => void;
+};
+
+// React.FC is unaplicable here due not working properly with default props
+// https://github.com/facebook/create-react-app/pull/8177
+export const FCCounterWithDefaultProps = (props: Props): JSX.Element => {
+  const { label, count, onIncrement } = props;
+
+  const handleIncrement = () => {
+    onIncrement();
+  };
+
+  return (
+    <div>
+      <span>
+        {label}: {count}
+      </span>
+      <button type="button" onClick={handleIncrement}>
+        {`Increment`}
+      </button>
+    </div>
+  );
+};
+
+FCCounterWithDefaultProps.defaultProps = { count: 5 };
+
+```
+
+[⟩⟩⟩ demo](https://piotrwitek.github.io/react-redux-typescript-guide/#fccounterwithdefaultprops)
 
 [⇧ back to top](#table-of-contents)
 
