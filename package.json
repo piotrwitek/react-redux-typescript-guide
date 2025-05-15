@@ -1,7 +1,7 @@
 {
   "devDependencies": {
     "all-contributors-cli": "6.9.3",
-    "doctoc": "1.4.0",
+    "doctoc": "^1.4.0",
     "husky": "3.0.9"
   },
   "scripts": {
