@@ -1,3 +1,21 @@
+## Dispatched Action Types
+
+When you dispatch an action creator, the **type** of the action is inferred by TypeScript.  
+To see the actual string literal used under the hood, use the `getType` helper from `typesafe-actions`:
+
+```ts
+import { createAction, getType } from 'typesafe-actions';
+
+// Define an action
+const addTodo = createAction('todos/ADD', resolve => {
+  return (text: string) => resolve({ text });
+});
+
+// Infer its type
+type AddTodo = ReturnType<typeof addTodo>;
+console.log(getType(addTodo)); // logs: 'todos/ADD'
+
+
 <div align="center">
 
 # React & Redux in TypeScript - Complete Guide
