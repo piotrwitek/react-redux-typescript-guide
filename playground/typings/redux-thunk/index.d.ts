@@ -1,4 +1,27 @@
 import {
+
+// Auto-generated fix
+import { connect } from 'react-redux';
+import { GenericList } from './GenericList';
+
+interface GenericListProps<T> {
+  items: T[];
+}
+
+interface OwnProps {
+  // Define your own props type here if needed
+}
+
+const mapStateToProps = <T>(state: any): GenericListProps<T> => {
+  return {
+    items: state.items, // Adjust according to your state shape
+  };
+};
+
+export const ConnectedListExtended = connect<GenericListProps<any>, {}, OwnProps>(
+  mapStateToProps
+)(GenericList);
+
     Action,
     ActionCreatorsMapObject,
     AnyAction,
