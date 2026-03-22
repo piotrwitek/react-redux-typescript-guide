@@ -1,2 +1,2 @@
 #!/bin/bash
-cd playground && npm run styleguide:build
+cd playground/styleguide && npm run styleguide:build

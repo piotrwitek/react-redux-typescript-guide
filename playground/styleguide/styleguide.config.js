@@ -1,9 +1,5 @@
 const path = require('path');
 const fs = require('fs');
-const { createConfig } = require('webpack-blocks');
-const typescript = require('@webpack-blocks/typescript');
-const webpackConfig = createConfig([typescript()]);
-webpackConfig.resolve.alias = { '@src': path.join(__dirname, 'src') };
 
 module.exports = {
   showUsage: false,
@@ -44,8 +40,34 @@ module.exports = {
   theme: {
     sidebarWidth: 300,
   },
-  propsParser: require('react-docgen-typescript').parse,
-  webpackConfig: webpackConfig,
+  propsParser: require('react-docgen-typescript').withDefaultConfig({
+    shouldExtractLiteralValuesFromEnum: true,
+    propFilter: { skipPropsWithoutDoc: false },
+  }).parse,
+  webpackConfig: {
+    resolve: {
+      extensions: ['.ts', '.tsx', '.js', '.jsx'],
+      alias: {
+        '@src': path.join(__dirname, 'src'),
+      },
+    },
+    module: {
+      rules: [
+        {
+          test: /\.(ts|tsx)$/,
+          exclude: /node_modules/,
+          use: [
+            {
+              loader: 'ts-loader',
+              options: {
+                transpileOnly: true,
+              },
+            },
+          ],
+        },
+      ],
+    },
+  },
   updateExample: function(props, exampleFilePath) {
     if (typeof props.settings.filePath === 'string') {
       const {
