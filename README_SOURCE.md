@@ -125,6 +125,7 @@ I highly recommend to add a bounty to the issue that you're waiting for to incre
   - [Action Creators 🌟](#action-creators-)
   - [Reducers](#reducers)
     - [State with Type-level Immutability](#state-with-type-level-immutability)
+    - [Modelling async data with ADT](#modelling-async-data-with-adt)
     - [Typing reducer](#typing-reducer)
     - [Typing reducer with `typesafe-actions`](#typing-reducer-with-typesafe-actions)
     - [Testing reducer](#testing-reducer)
@@ -608,6 +609,118 @@ export type State = DeepReadonly<{
 state.containerObject = { innerValue: 1 }; // TS Error: cannot be mutated
 state.containerObject.innerValue = 1; // TS Error: cannot be mutated
 state.containerObject.numbers.push(1); // TS Error: cannot use mutator methods
+```
+
+[⇧ back to top](#table-of-contents)
+
+### Modelling async data with ADT
+
+When a reducer stores remote data with separate flags, it can represent states
+that should be impossible in the UI. For example, `isFetching: false`,
+`error: new Error(...)`, and `users: []` is ambiguous because the same state can
+mean "not requested yet", "failed", or "loaded an empty list".
+
+```ts
+type UsersState = {
+  readonly isFetching: boolean;
+  readonly error: Error | null;
+  readonly users: ReadonlyArray<User>;
+};
+```
+
+A safer pattern is to model remote data as a tagged union. The `status` field is
+the tag, and TypeScript will narrow the available fields for each branch.
+
+```ts
+type RemoteData<E, D> =
+  | { readonly status: 'INITIAL' }
+  | { readonly status: 'LOADING' }
+  | { readonly status: 'ERROR'; readonly error: E }
+  | { readonly status: 'SUCCESS'; readonly data: D };
+
+type User = {
+  readonly id: string;
+  readonly name: string;
+};
+
+type UsersState = RemoteData<Error, ReadonlyArray<User>>;
+
+const initialState: UsersState = { status: 'INITIAL' };
+
+type UsersAction =
+  | { readonly type: 'FETCH_USERS_REQUEST' }
+  | { readonly type: 'FETCH_USERS_SUCCESS'; readonly payload: ReadonlyArray<User> }
+  | { readonly type: 'FETCH_USERS_FAILURE'; readonly payload: Error };
+
+const usersReducer = (
+  state: UsersState = initialState,
+  action: UsersAction
+): UsersState => {
+  switch (action.type) {
+    case 'FETCH_USERS_REQUEST':
+      return { status: 'LOADING' };
+
+    case 'FETCH_USERS_SUCCESS':
+      return { status: 'SUCCESS', data: action.payload };
+
+    case 'FETCH_USERS_FAILURE':
+      return { status: 'ERROR', error: action.payload };
+
+    default:
+      return state;
+  }
+};
+```
+
+This makes incorrect combinations unrepresentable. A component can then handle
+every remote data state explicitly, and `assertNever` will fail the type check if
+a new `RemoteData` branch is added without updating the view.
+
+```tsx
+import * as React from 'react';
+import { connect } from 'react-redux';
+
+import MyTypes from 'MyTypes';
+
+type Props = {
+  readonly usersModel: UsersState;
+};
+
+const UsersView: React.FC<Props> = ({ usersModel }) => {
+  switch (usersModel.status) {
+    case 'INITIAL':
+      return null;
+
+    case 'LOADING':
+      return <div>Loading...</div>;
+
+    case 'ERROR':
+      return <div>An error has occurred: {usersModel.error.message}</div>;
+
+    case 'SUCCESS':
+      return (
+        <>
+          {usersModel.data.map(user => (
+            <div key={user.id}>{user.name}</div>
+          ))}
+        </>
+      );
+
+    default:
+      return assertNever(usersModel);
+  }
+};
+
+function assertNever(value: never): never {
+  throw new Error(`Unhandled remote data state: ${JSON.stringify(value)}`);
+}
+
+const usersModelSelector = (state: MyTypes.RootState): UsersState =>
+  state.users;
+
+export const UsersConnected = connect((state: MyTypes.RootState) => ({
+  usersModel: usersModelSelector(state),
+}))(UsersView);
 ```
 
 [⇧ back to top](#table-of-contents)
