@@ -83,6 +83,7 @@ I highly recommend to add a bounty to the issue that you're waiting for to incre
     - [`React.ComponentProps<typeof XXX>`](#reactcomponentpropstypeof-xxx)
     - [`React.ReactElement` | `JSX.Element`](#reactreactelement--jsxelement)
     - [`React.ReactNode`](#reactreactnode)
+    - [Typing JSX children and component props](#typing-jsx-children-and-component-props)
     - [`React.CSSProperties`](#reactcssproperties)
     - [`React.XXXHTMLAttributes<HTMLXXXElement>`](#reactxxxhtmlattributeshtmlxxxelement)
     - [`React.ReactEventHandler<HTMLXXXElement>`](#reactreacteventhandlerhtmlxxxelement)
@@ -240,6 +241,85 @@ Type representing any possible type of React node (basically ReactElement (inclu
 const elementOrPrimitive: React.ReactNode = 'string' || 0 || false || null || undefined || <div /> || <MyComponent />;
 const Component = ({ children: React.ReactNode }) => ...
 ```
+
+### Typing JSX children and component props
+
+Use `React.ReactNode` when a component accepts any renderable value. Use
+`React.ReactElement<Props>` when you want to constrain the props of a JSX child.
+Use `React.ComponentType<Props>` when the caller passes a component that you will
+render later.
+
+```tsx
+import * as React from 'react';
+
+type Account = {
+  readonly id: string;
+  readonly name: string;
+};
+
+type AvatarProps = {
+  readonly account: Account;
+  readonly onSelect: (account: Account) => void;
+};
+
+const DefaultAvatar: React.FC<AvatarProps> = ({ account, onSelect }) => (
+  <button onClick={() => onSelect(account)}>{account.name}</button>
+);
+
+type LoginProps = {
+  readonly accounts: ReadonlyArray<Account>;
+  readonly setFormType: (formType: 'login' | 'signup') => void;
+
+  // Component-as-prop: caller passes Avatar, Login renders <Avatar />
+  readonly Avatar: React.ComponentType<AvatarProps>;
+
+  // JSX children: caller passes <DefaultAvatar ... />
+  readonly children?:
+    | React.ReactElement<AvatarProps>
+    | React.ReactElement<AvatarProps>[]
+    | null;
+};
+
+class Login extends React.Component<LoginProps> {
+  render() {
+    const { accounts, Avatar, children, setFormType } = this.props;
+
+    return (
+      <>
+        {accounts.map(account => (
+          <Avatar
+            key={account.id}
+            account={account}
+            onSelect={() => setFormType('login')}
+          />
+        ))}
+        {children}
+      </>
+    );
+  }
+}
+
+const accounts: Account[] = [{ id: '1', name: 'Ada' }];
+const setFormType = (_formType: 'login' | 'signup') => undefined;
+const LinkAvatar: React.FC<{ href: string }> = ({ href }) => <a href={href} />;
+
+// OK: DefaultAvatar receives the AvatarProps required by Login
+<Login accounts={accounts} setFormType={setFormType} Avatar={DefaultAvatar}>
+  <DefaultAvatar account={accounts[0]} onSelect={() => undefined} />
+</Login>;
+
+// TS Error: the component passed to Avatar must accept AvatarProps
+<Login accounts={accounts} setFormType={setFormType} Avatar={LinkAvatar} />;
+
+// TS Error: a JSX child must receive AvatarProps
+<Login accounts={accounts} setFormType={setFormType} Avatar={DefaultAvatar}>
+  <DefaultAvatar />
+</Login>;
+```
+
+`React.ReactElement<AvatarProps>` validates the child element's props. If you
+also need to enforce a specific child component identity, check `child.type` at
+runtime with `React.Children`.
 
 ### `React.CSSProperties`
 
