@@ -134,6 +134,7 @@ I highly recommend to add a bounty to the issue that you're waiting for to incre
   - [Selectors with `reselect`](#selectors-with-reselect)
   - [Connect with `react-redux`](#connect-with-react-redux)
     - [Typing connected component](#typing-connected-component)
+    - [Typing factory functions for `connect`](#typing-factory-functions-for-connect)
     - [Typing `useSelector` and `useDispatch`](#typing-useselector-and-usedispatch)
     - [Typing connected component with `redux-thunk` integration](#typing-connected-component-with-redux-thunk-integration)
 - [Configuration & Dev Tools](#configuration--dev-tools)
@@ -1814,6 +1815,69 @@ const mapDispatchToProps = (dispatch: Dispatch<MyTypes.RootAction>) =>
     invalidActionCreator: () => 1, // Error: Type 'number' is not assignable to type '{ type: "todos/ADD"; payload: Todo; } | { ... }
   }, dispatch);
 
+```
+
+[⇧ back to top](#table-of-contents)
+
+### Typing factory functions for `connect`
+
+Factory functions let `connect` create a new `mapStateToProps` or `mapDispatchToProps`
+function for each component instance. This is useful when you need per-instance
+memoization with selectors. Annotate the factory with `MapStateToPropsFactory`
+and annotate the returned mapper with `MapStateToProps` when you want the whole
+chain to be checked strictly.
+
+```tsx
+import MyTypes from 'MyTypes';
+
+import {
+  connect,
+  MapStateToProps,
+  MapStateToPropsFactory,
+} from 'react-redux';
+
+import { countersActions, countersSelectors } from '../features/counters';
+import { FCCounter } from '../components';
+
+type StateProps = {
+  count: number;
+};
+
+type OwnProps = {
+  label: string;
+  initialCount?: number;
+};
+
+const makeCounterSelector = () => {
+  return (state: MyTypes.RootState, ownProps: OwnProps) =>
+    countersSelectors.getReduxCounter(state.counters) +
+    (ownProps.initialCount || 0);
+};
+
+const mapStateToPropsFactory: MapStateToPropsFactory<
+  StateProps,
+  OwnProps,
+  MyTypes.RootState
+> = () => {
+  const selectCount = makeCounterSelector();
+
+  const mapStateToProps: MapStateToProps<
+    StateProps,
+    OwnProps,
+    MyTypes.RootState
+  > = (state, ownProps) => ({
+    count: selectCount(state, ownProps),
+  });
+
+  return mapStateToProps;
+};
+
+const dispatchProps = {
+  onIncrement: countersActions.increment,
+};
+
+export const FCCounterConnectedFactory =
+  connect(mapStateToPropsFactory, dispatchProps)(FCCounter);
 ```
 
 [⇧ back to top](#table-of-contents)
