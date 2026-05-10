@@ -29,6 +29,34 @@ _Found it useful? Want more updates?_
 
 </div>
 
+### **What This Guide Is**
+
+This repository is a **practical guide and reference**, not a boilerplate or framework.
+It focuses on **typing patterns** for real React + Redux codebases in TypeScript:
+
+- how to type React components, hooks, events, refs, and context
+- how to type Redux actions, reducers, selectors, and store
+- how to compose these patterns in maintainable, scalable app architecture
+
+### **Who This Is For**
+
+- Developers using React + TypeScript in production projects
+- Teams that want stricter type-safety and consistent patterns
+- Learners who already know React basics and want stronger TypeScript fluency
+
+### **How To Use This Guide**
+
+1. Start with **React Types Cheatsheet** for the most common type building blocks.
+2. Continue with **React** and **Redux** sections based on your current task.
+3. Open the **Playground Project** to run and tweak examples locally.
+4. Use this guide as a reference while coding, not necessarily as a linear tutorial.
+
+### **Prerequisites**
+
+- Basic React knowledge (components, props, state, hooks)
+- Basic TypeScript syntax (`type`, `interface`, generics)
+- Basic Redux concepts are helpful for Redux-specific sections
+
 ### **Goals**
 
 - Complete type safety (with [`--strict`](https://www.typescriptlang.org/docs/handbook/compiler-options.html) flag) without losing type information downstream through all the layers of our application (e.g. no type assertions or hacking with `any` type)
