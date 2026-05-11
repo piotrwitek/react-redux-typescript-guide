@@ -1069,6 +1069,9 @@ export default () => (
 Class decorators can call `connect`, but TypeScript keeps the class declaration
 typed as the original component. Export the decorated class as a
 `React.ComponentType<OwnProps>` when consumers should only provide own props.
+This pattern needs casts because TypeScript cannot infer the transformed
+decorator type, so prefer hooks or higher-order components when you need the
+strongest type checking.
 
 ```tsx
 import Types from 'MyTypes';
