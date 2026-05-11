@@ -134,6 +134,7 @@ I highly recommend to add a bounty to the issue that you're waiting for to incre
   - [Selectors with `reselect`](#selectors-with-reselect)
   - [Connect with `react-redux`](#connect-with-react-redux)
     - [Typing connected component](#typing-connected-component)
+    - [Accessing the wrapped class instance with a ref](#accessing-the-wrapped-class-instance-with-a-ref)
     - [Typing `useSelector` and `useDispatch`](#typing-useselector-and-usedispatch)
     - [Typing connected component with `redux-thunk` integration](#typing-connected-component-with-redux-thunk-integration)
 - [Configuration & Dev Tools](#configuration--dev-tools)
@@ -1813,6 +1814,85 @@ const mapDispatchToProps = (dispatch: Dispatch<MyTypes.RootAction>) =>
   bindActionCreators<ActionCreatorsMapObject<Types.RootAction>>({
     invalidActionCreator: () => 1, // Error: Type 'number' is not assignable to type '{ type: "todos/ADD"; payload: Todo; } | { ... }
   }, dispatch);
+
+```
+
+[⇧ back to top](#table-of-contents)
+
+### Accessing the wrapped class instance with a ref
+
+When a class component is wrapped with `connect()`, a ref points to the connected wrapper by default. Enable `forwardRef` and type the connected component with `React.RefAttributes` when the parent needs to call public methods on the wrapped class instance.
+
+```tsx
+import * as React from 'react';
+import Types from 'MyTypes';
+import { connect } from 'react-redux';
+
+import { countersSelectors } from '../features/counters';
+
+type OwnProps = {
+  label: string;
+};
+
+type StateProps = {
+  count: number;
+};
+
+type Props = OwnProps & StateProps;
+
+export class ClassCounterWithHandle extends React.Component<Props> {
+  private readonly root = React.createRef<HTMLDivElement>();
+
+  focus = () => {
+    this.root.current?.focus();
+  };
+
+  render() {
+    const { count, label } = this.props;
+
+    return (
+      <div ref={this.root} tabIndex={-1}>
+        {label}: {count}
+      </div>
+    );
+  }
+}
+
+const mapStateToProps = (state: Types.RootState): StateProps => ({
+  count: countersSelectors.getReduxCounter(state.counters),
+});
+
+type ConnectedCounterProps = OwnProps &
+  React.RefAttributes<ClassCounterWithHandle>;
+
+export const ClassCounterWithHandleConnected = connect(
+  mapStateToProps,
+  null,
+  null,
+  { forwardRef: true }
+)(ClassCounterWithHandle) as React.ComponentType<ConnectedCounterProps>;
+
+export class ClassCounterWithHandleParent extends React.Component {
+  private readonly counterRef = React.createRef<ClassCounterWithHandle>();
+
+  handleFocus = () => {
+    this.counterRef.current?.focus();
+  };
+
+  render() {
+    return (
+      <div>
+        <ClassCounterWithHandleConnected
+          ref={this.counterRef}
+          label="Connected class counter"
+        />
+        <button type="button" onClick={this.handleFocus}>
+          Focus counter
+        </button>
+      </div>
+    );
+  }
+}
 
 ```
 

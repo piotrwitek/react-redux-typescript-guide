@@ -134,6 +134,7 @@ I highly recommend to add a bounty to the issue that you're waiting for to incre
   - [Selectors with `reselect`](#selectors-with-reselect)
   - [Connect with `react-redux`](#connect-with-react-redux)
     - [Typing connected component](#typing-connected-component)
+    - [Accessing the wrapped class instance with a ref](#accessing-the-wrapped-class-instance-with-a-ref)
     - [Typing `useSelector` and `useDispatch`](#typing-useselector-and-usedispatch)
     - [Typing connected component with `redux-thunk` integration](#typing-connected-component-with-redux-thunk-integration)
 - [Configuration & Dev Tools](#configuration--dev-tools)
@@ -709,6 +710,14 @@ const mapDispatchToProps = (dispatch: Dispatch<MyTypes.RootAction>) =>
   }, dispatch);
 
 ```
+
+[⇧ back to top](#table-of-contents)
+
+### Accessing the wrapped class instance with a ref
+
+When a class component is wrapped with `connect()`, a ref points to the connected wrapper by default. Enable `forwardRef` and type the connected component with `React.RefAttributes` when the parent needs to call public methods on the wrapped class instance.
+
+::codeblock='playground/src/connected/class-counter-with-ref.tsx'::
 
 [⇧ back to top](#table-of-contents)
 
