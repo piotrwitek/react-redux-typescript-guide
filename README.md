@@ -111,6 +111,7 @@ I highly recommend to add a bounty to the issue that you're waiting for to incre
   - [Redux Connected Components](#redux-connected-components)
     - [- Redux connected counter](#--redux-connected-counter)
     - [- Redux connected counter with own props](#--redux-connected-counter-with-own-props)
+    - [- Redux connected generic list](#--redux-connected-generic-list)
     - [- Redux connected counter via hooks](#--redux-connected-counter-via-hooks)
     - [- Redux connected counter with `redux-thunk` integration](#--redux-connected-counter-with-redux-thunk-integration)
   - [Context](#context)
@@ -1061,7 +1062,53 @@ export default () => (
 ```
 </p></details>
 
+### - Redux connected generic list
+
+```tsx
+import Types from 'MyTypes';
+import { connect } from 'react-redux';
+
+import { GenericList } from '../components';
+import { Todo } from '../features/todos/models';
+import { getFilteredTodos } from '../features/todos/selectors';
+
+type OwnProps = {
+  itemRenderer: (item: Todo) => JSX.Element;
+};
+
+const mapStateToProps = (state: Types.RootState) => ({
+  items: getFilteredTodos(state.todos),
+});
+
+export class TodoList extends GenericList<Todo> {}
+
+export const TodoListConnected = connect<
+  ReturnType<typeof mapStateToProps>,
+  {},
+  OwnProps,
+  Types.RootState
+>(mapStateToProps)(TodoList);
+
+```
+<details><summary><i>Click to expand</i></summary><p>
+
+```tsx
+import * as React from 'react';
+
+import { TodoListConnected } from '.';
+
+export default () => (
+  <TodoListConnected
+    itemRenderer={item => <div key={item.id}>{item.title}</div>}
+  />
+);
+
+```
+</p></details>
+
 [⇧ back to top](#table-of-contents)
+
+---
 
 ### - Redux connected counter via hooks
 

@@ -5,6 +5,7 @@ import FCSpreadAttributesUsage from '../components/fc-spread-attributes.usage';
 import ClassCounterUsage from '../components/class-counter.usage';
 import ClassCounterWithDefaultPropsUsage from '../components/class-counter-with-default-props.usage';
 import UserListUsage from '../components/generic-list.usage';
+import GenericListConnectedUsage from '../connected/generic-list-connected.usage';
 import WithErrorBoundaryUsage from '../hoc/with-error-boundary.usage';
 import WithStateUsage from '../hoc/with-state.usage';
 import WithConnectedCountUsage from '../hoc/with-connected-count.usage';
@@ -18,6 +19,7 @@ export function Home() {
       <ClassCounterUsage />
       <ClassCounterWithDefaultPropsUsage />
       <UserListUsage />
+      <GenericListConnectedUsage />
       <WithErrorBoundaryUsage />
       <WithStateUsage />
       <WithConnectedCountUsage />
