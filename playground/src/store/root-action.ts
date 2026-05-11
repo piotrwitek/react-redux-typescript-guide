@@ -1,5 +1,5 @@
-import * as todosActions from '../features/todos/actions';
-import * as countersActions from '../features/counters/actions';
+import { todosActions } from '../features/todos';
+import { countersActions } from '../features/counters';
 import { routerActions } from '@lagunovsky/redux-react-router'
 
 export default {

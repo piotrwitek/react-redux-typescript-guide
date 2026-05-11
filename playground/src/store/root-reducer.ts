@@ -1,7 +1,7 @@
 import { combineReducers } from 'redux';
 
-import countersReducer from '../features/counters/reducer';
-import todosReducer from '../features/todos/reducer';
+import { countersReducer } from '../features/counters';
+import { todosReducer } from '../features/todos';
 import { routerReducer } from './redux-router';
 
 const rootReducer = combineReducers({

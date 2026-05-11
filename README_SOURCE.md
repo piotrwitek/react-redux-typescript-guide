@@ -122,6 +122,10 @@ I highly recommend to add a bounty to the issue that you're waiting for to incre
   - [Store Configuration](#store-configuration)
     - [Create Global Store Types](#create-global-store-types)
     - [Create Store](#create-store)
+  - [Scalable Application Structure](#scalable-application-structure)
+    - [Feature public API](#feature-public-api)
+    - [Root composition](#root-composition)
+    - [Dependency direction](#dependency-direction)
   - [Action Creators 🌟](#action-creators-)
   - [Reducers](#reducers)
     - [State with Type-level Immutability](#state-with-type-level-immutability)
@@ -524,6 +528,73 @@ When creating a store instance we don't need to provide any additional types. It
 > The resulting store instance methods like `getState` or `dispatch` will be type checked and will expose all type errors
 
 ::codeblock='playground/src/store/store.ts'::
+
+---
+
+## Scalable Application Structure
+
+The playground follows a feature-first structure. Each feature owns its actions,
+reducer, selectors, models and side-effects, then exposes only a small public API
+from its `index.ts` file.
+
+```ts
+src/
+|-- components/          # reusable presentational components
+|-- connected/           # react-redux bindings for components
+|-- features/
+|   |-- counters/
+|   |   |-- actions.ts
+|   |   |-- constants.ts
+|   |   |-- index.ts
+|   |   |-- reducer.ts
+|   |   `-- selectors.ts
+|   `-- todos/
+|       |-- actions.ts
+|       |-- epics.ts
+|       |-- index.ts
+|       |-- models.ts
+|       |-- reducer.ts
+|       `-- selectors.ts
+`-- store/               # root composition only
+```
+
+### Feature public API
+
+Import feature APIs through the feature entry point instead of importing from
+internal files in consumers. This keeps refactors local to the feature folder.
+
+::codeblock='playground/src/features/counters/index.ts'::
+::codeblock='playground/src/features/todos/index.ts'::
+
+[⇧ back to top](#table-of-contents)
+
+### Root composition
+
+The store folder composes feature modules into root types, root reducer and root
+epic. Feature code does not need to import root store internals.
+
+::codeblock='playground/src/store/root-action.ts'::
+::codeblock='playground/src/store/root-reducer.ts'::
+::codeblock='playground/src/store/root-epic.ts'::
+
+[⇧ back to top](#table-of-contents)
+
+### Dependency direction
+
+Keep dependencies flowing from app-level composition into features and from
+connected components into feature public APIs:
+
+```ts
+components -> models
+connected -> components + features/*/index.ts
+features -> local models + local constants
+store -> features/*/index.ts + feature reducers/epics
+```
+
+This preserves type inference while avoiding a single large "ducks" file that
+mixes actions, reducer, selectors and effects into one module.
+
+[⇧ back to top](#table-of-contents)
 
 ---
 
