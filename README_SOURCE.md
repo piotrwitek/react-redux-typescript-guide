@@ -111,6 +111,7 @@ I highly recommend to add a bounty to the issue that you're waiting for to incre
   - [Redux Connected Components](#redux-connected-components)
     - [- Redux connected counter](#--redux-connected-counter)
     - [- Redux connected counter with own props](#--redux-connected-counter-with-own-props)
+    - [- Redux connected counter with `@connect` decorator](#--redux-connected-counter-with-connect-decorator)
     - [- Redux connected counter via hooks](#--redux-connected-counter-via-hooks)
     - [- Redux connected counter with `redux-thunk` integration](#--redux-connected-counter-with-redux-thunk-integration)
   - [Context](#context)
@@ -453,6 +454,17 @@ Adds error handling using componentDidCatch to any component
 
 ::codeblock='playground/src/connected/fc-counter-connected-own-props.tsx'::
 ::expander='playground/src/connected/fc-counter-connected-own-props.usage.tsx'::
+
+[⇧ back to top](#table-of-contents)
+
+### - Redux connected counter with `@connect` decorator
+
+Class decorators can call `connect`, but TypeScript keeps the class declaration
+typed as the original component. Export the decorated class as a
+`React.ComponentType<OwnProps>` when consumers should only provide own props.
+
+::codeblock='playground/src/connected/fc-counter-connected-decorator.tsx'::
+::expander='playground/src/connected/fc-counter-connected-decorator.usage.tsx'::
 
 [⇧ back to top](#table-of-contents)
 
