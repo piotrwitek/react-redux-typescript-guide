@@ -111,6 +111,7 @@ I highly recommend to add a bounty to the issue that you're waiting for to incre
   - [Redux Connected Components](#redux-connected-components)
     - [- Redux connected counter](#--redux-connected-counter)
     - [- Redux connected counter with own props](#--redux-connected-counter-with-own-props)
+    - [- Redux connected counter with `@connect` decorator](#--redux-connected-counter-with-connect-decorator)
     - [- Redux connected counter via hooks](#--redux-connected-counter-via-hooks)
     - [- Redux connected counter with `redux-thunk` integration](#--redux-connected-counter-with-redux-thunk-integration)
   - [Context](#context)
@@ -1063,6 +1064,74 @@ export default () => (
 
 [⇧ back to top](#table-of-contents)
 
+### - Redux connected counter with `@connect` decorator
+
+Class decorators can call `connect`, but TypeScript keeps the class declaration
+typed as the original component. Export the decorated class as a
+`React.ComponentType<OwnProps>` when consumers should only provide own props.
+This pattern needs casts because TypeScript cannot infer the transformed
+decorator type, so prefer hooks or higher-order components when you need the
+strongest type checking.
+
+```tsx
+import Types from 'MyTypes';
+import * as React from 'react';
+import { connect } from 'react-redux';
+
+import { FCCounter } from '../components';
+import { countersActions, countersSelectors } from '../features/counters';
+
+type OwnProps = {
+  label: string;
+};
+
+const mapStateToProps = (state: Types.RootState) => ({
+  count: countersSelectors.getReduxCounter(state.counters),
+});
+
+const dispatchProps = {
+  onIncrement: countersActions.increment,
+};
+
+type Props = OwnProps &
+  ReturnType<typeof mapStateToProps> &
+  typeof dispatchProps;
+
+const connectCounter = connect(
+  mapStateToProps,
+  dispatchProps
+) as unknown as ClassDecorator;
+
+@connectCounter
+class FCCounterDecorated extends React.Component<Props> {
+  render() {
+    return <FCCounter {...this.props} />;
+  }
+}
+
+// TypeScript class decorators do not change the declared class type, so expose
+// the decorated component with its real public props.
+export const FCCounterConnectedDecorator = FCCounterDecorated as unknown as React.ComponentType<
+  OwnProps
+>;
+
+```
+<details><summary><i>Click to expand</i></summary><p>
+
+```tsx
+import * as React from 'react';
+
+import { FCCounterConnectedDecorator } from '.';
+
+export default () => (
+  <FCCounterConnectedDecorator label={'FCCounterConnectedDecorator'} />
+);
+
+```
+</p></details>
+
+[⇧ back to top](#table-of-contents)
+
 ### - Redux connected counter via hooks
 
 ```tsx
@@ -1909,6 +1978,7 @@ We have recommended `tsconfig.json` that you can easily add to your project than
     "strict": true,
     "forceConsistentCasingInFileNames": true,
     "noFallthroughCasesInSwitch": true,
+    "experimentalDecorators": true,
     "module": "esnext",
     "moduleResolution": "node",
     "resolveJsonModule": true,
