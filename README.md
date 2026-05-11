@@ -118,6 +118,11 @@ I highly recommend to add a bounty to the issue that you're waiting for to incre
     - [ThemeProvider](#themeprovider)
     - [ThemeConsumer](#themeconsumer)
     - [ThemeConsumer in class component](#themeconsumer-in-class-component)
+  - [Recompose](#recompose)
+    - [- `withState`](#--withstate)
+    - [- `withHandlers`](#--withhandlers)
+    - [- `compose`](#--compose)
+    - [- `mapProps`](#--mapprops)
 - [Redux](#redux)
   - [Store Configuration](#store-configuration)
     - [Create Global Store Types](#create-global-store-types)
@@ -1274,6 +1279,123 @@ export class ToggleThemeButtonClass extends React.Component<Props> {
 ```
 
 [Implementation with Hooks](#--usecontext)
+
+[⇧ back to top](#table-of-contents)
+
+---
+
+## Recompose
+
+> <https://github.com/acdlite/recompose>
+
+> Note: `recompose` is no longer actively maintained and its author recommends [React Hooks](#hooks) for new code. The patterns below still help when typing or migrating existing `recompose`-based codebases. Each example links to its hooks equivalent.
+
+### - `withState`
+
+A small HOC that injects a piece of local state and an updater into the wrapped component. The TypeScript signature is `withState<OuterProps, TState, TStateName, TStateUpdaterName>(stateName, stateUpdaterName, initialState)`. The injected props are `{ [stateName]: TState; [stateUpdaterName]: (next: TState) => TState }`.
+
+```tsx
+import { withState } from 'recompose';
+
+type OuterProps = { label: string };
+
+const withCounterState = withState<OuterProps, number, 'count', 'setCount'>(
+  'count',
+  'setCount',
+  0
+);
+
+type InjectedProps = { count: number; setCount: (next: number) => number };
+
+const Counter: React.FC<OuterProps & InjectedProps> = ({ label, count, setCount }) => (
+  <div>
+    <span>{label}: {count}</span>
+    <button type="button" onClick={() => setCount(count + 1)}>Increment</button>
+  </div>
+);
+
+export const CounterWithState = withCounterState(Counter);
+// usage: <CounterWithState label="Clicks" />
+```
+
+[Hooks equivalent: `useState`](#--usestate)
+
+[⇧ back to top](#table-of-contents)
+
+### - `withHandlers`
+
+Use `withHandlers` to inject memoized, typed event handlers. The factory shape is `(props) => (event) => void`, which lets each handler close over the current props.
+
+```tsx
+import { withHandlers } from 'recompose';
+
+type InProps = { count: number; setCount: (next: number) => number };
+type OutProps = { onIncrement: () => void; onReset: () => void };
+
+const withCounterHandlers = withHandlers<InProps, OutProps>({
+  onIncrement: ({ count, setCount }) => () => setCount(count + 1),
+  onReset: ({ setCount }) => () => setCount(0),
+});
+```
+
+[Hooks equivalent: `useCallback`](https://reactjs.org/docs/hooks-reference.html#usecallback)
+
+[⇧ back to top](#table-of-contents)
+
+### - `compose`
+
+`compose` chains HOCs left-to-right at the call site (right-to-left at runtime) while preserving the inferred prop types between layers.
+
+```tsx
+import { compose } from 'recompose';
+
+type OuterProps = { label: string };
+type FinalProps = OuterProps & {
+  count: number;
+  onIncrement: () => void;
+  onReset: () => void;
+};
+
+const enhance = compose<FinalProps, OuterProps>(
+  withCounterState,
+  withCounterHandlers
+);
+
+const CounterView: React.FC<FinalProps> = ({ label, count, onIncrement, onReset }) => (
+  <div>
+    <span>{label}: {count}</span>
+    <button type="button" onClick={onIncrement}>Increment</button>
+    <button type="button" onClick={onReset}>Reset</button>
+  </div>
+);
+
+export const EnhancedCounter = enhance(CounterView);
+// usage: <EnhancedCounter label="Clicks" />
+```
+
+Note the two generic parameters on `compose<FinalProps, OuterProps>`: the first is the prop type the wrapped component receives, the second is the prop type the consumer must supply. Keeping these explicit gives clear errors when an HOC is added, removed, or reordered.
+
+[⇧ back to top](#table-of-contents)
+
+### - `mapProps`
+
+`mapProps` transforms incoming props into a new prop shape. It is useful for adapting a generic component to a more specific call site without an extra wrapper component.
+
+```tsx
+import { mapProps } from 'recompose';
+
+type InProps = { firstName: string; lastName: string };
+type OutProps = { fullName: string };
+
+const withFullName = mapProps<OutProps, InProps>(({ firstName, lastName }) => ({
+  fullName: `${firstName} ${lastName}`,
+}));
+
+const Greeting: React.FC<OutProps> = ({ fullName }) => <h1>Hello, {fullName}!</h1>;
+
+export const GreetingFromParts = withFullName(Greeting);
+// usage: <GreetingFromParts firstName="Ada" lastName="Lovelace" />
+```
 
 [⇧ back to top](#table-of-contents)
 
