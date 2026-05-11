@@ -111,6 +111,7 @@ I highly recommend to add a bounty to the issue that you're waiting for to incre
   - [Redux Connected Components](#redux-connected-components)
     - [- Redux connected counter](#--redux-connected-counter)
     - [- Redux connected counter with own props](#--redux-connected-counter-with-own-props)
+    - [- Redux connected counter with typed dispatch props](#--redux-connected-counter-with-typed-dispatch-props)
     - [- Redux connected counter via hooks](#--redux-connected-counter-via-hooks)
     - [- Redux connected counter with `redux-thunk` integration](#--redux-connected-counter-with-redux-thunk-integration)
   - [Context](#context)
@@ -1056,6 +1057,87 @@ export default () => (
     label={'FCCounterConnectedOwnProps'}
     initialCount={10}
   />
+);
+
+```
+</p></details>
+
+[⇧ back to top](#table-of-contents)
+
+### - Redux connected counter with typed dispatch props
+
+Use `typeof` to bind dispatch prop types to the action creators they expose.
+This keeps the connected component props in sync with action creator signatures.
+
+```tsx
+import Types from 'MyTypes';
+import { connect } from 'react-redux';
+import * as React from 'react';
+
+import { countersActions } from '../features/counters';
+
+type OwnProps = {
+  label: string;
+};
+
+type StateProps = {
+  count: number;
+};
+
+const dispatchProps = {
+  onIncrement: countersActions.increment,
+  onAdd: countersActions.add,
+};
+
+type DispatchProps = typeof dispatchProps;
+
+type Props = OwnProps & StateProps & DispatchProps;
+
+const FCCounterWithTypedDispatch: React.FC<Props> = props => {
+  const { label, count, onAdd, onIncrement } = props;
+
+  const handleIncrement = () => {
+    onIncrement();
+  };
+
+  const handleAdd = () => {
+    onAdd(5);
+  };
+
+  return (
+    <div>
+      <span>
+        {label}: {count}
+      </span>
+      <button type="button" onClick={handleIncrement}>
+        {`Increment`}
+      </button>
+      <button type="button" onClick={handleAdd}>
+        {`Add 5`}
+      </button>
+    </div>
+  );
+};
+
+const mapStateToProps = (state: Types.RootState): StateProps => ({
+  count: state.counters.reduxCounter,
+});
+
+export const FCCounterConnectedDispatchProps = connect(
+  mapStateToProps,
+  dispatchProps
+)(FCCounterWithTypedDispatch);
+
+```
+<details><summary><i>Click to expand</i></summary><p>
+
+```tsx
+import * as React from 'react';
+
+import { FCCounterConnectedDispatchProps } from '.';
+
+export default () => (
+  <FCCounterConnectedDispatchProps label={'FCCounterConnectedDispatchProps'} />
 );
 
 ```
