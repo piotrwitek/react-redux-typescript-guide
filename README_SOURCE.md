@@ -111,6 +111,7 @@ I highly recommend to add a bounty to the issue that you're waiting for to incre
   - [Redux Connected Components](#redux-connected-components)
     - [- Redux connected counter](#--redux-connected-counter)
     - [- Redux connected counter with own props](#--redux-connected-counter-with-own-props)
+    - [- Redux connected generic list](#--redux-connected-generic-list)
     - [- Redux connected counter via hooks](#--redux-connected-counter-via-hooks)
     - [- Redux connected counter with `redux-thunk` integration](#--redux-connected-counter-with-redux-thunk-integration)
   - [Context](#context)
@@ -453,6 +454,16 @@ Adds error handling using componentDidCatch to any component
 
 ::codeblock='playground/src/connected/fc-counter-connected-own-props.tsx'::
 ::expander='playground/src/connected/fc-counter-connected-own-props.usage.tsx'::
+
+[⇧ back to top](#table-of-contents)
+
+### - Redux connected generic list
+
+When connecting a generic component, create a small typed factory so each usage
+can bind the item type before passing the component to `connect`.
+
+::codeblock='playground/src/connected/generic-list-connected.tsx'::
+::expander='playground/src/connected/generic-list-connected.usage.tsx'::
 
 [⇧ back to top](#table-of-contents)
 

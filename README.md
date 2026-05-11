@@ -111,6 +111,7 @@ I highly recommend to add a bounty to the issue that you're waiting for to incre
   - [Redux Connected Components](#redux-connected-components)
     - [- Redux connected counter](#--redux-connected-counter)
     - [- Redux connected counter with own props](#--redux-connected-counter-with-own-props)
+    - [- Redux connected generic list](#--redux-connected-generic-list)
     - [- Redux connected counter via hooks](#--redux-connected-counter-via-hooks)
     - [- Redux connected counter with `redux-thunk` integration](#--redux-connected-counter-with-redux-thunk-integration)
   - [Context](#context)
@@ -1057,6 +1058,71 @@ export default () => (
     initialCount={10}
   />
 );
+
+```
+</p></details>
+
+[⇧ back to top](#table-of-contents)
+
+### - Redux connected generic list
+
+When connecting a generic component, create a small typed factory so each usage
+can bind the item type before passing the component to `connect`.
+
+```tsx
+import * as React from 'react';
+import Types from 'MyTypes';
+import { connect } from 'react-redux';
+
+import { GenericList, GenericListProps } from '../components';
+
+type StateProps<T> = Pick<GenericListProps<T>, 'items'>;
+
+export type OwnProps<T> = Pick<GenericListProps<T>, 'itemRenderer'> & {
+  selectItems: (state: Types.RootState) => T[];
+};
+
+export const createConnectedGenericList = <T,>() => {
+  const mapStateToProps = (
+    state: Types.RootState,
+    ownProps: OwnProps<T>
+  ): StateProps<T> => ({
+    items: ownProps.selectItems(state),
+  });
+
+  const TypedGenericList = GenericList as React.ComponentType<
+    GenericListProps<T>
+  >;
+
+  return connect<StateProps<T>, {}, OwnProps<T>, Types.RootState>(
+    mapStateToProps
+  )(TypedGenericList);
+};
+
+```
+<details><summary><i>Click to expand</i></summary><p>
+
+```tsx
+import * as React from 'react';
+import { Todo } from '../features/todos/models';
+import { todosSelectors } from '../features/todos';
+
+import { createConnectedGenericList } from '.';
+
+const TodoList = createConnectedGenericList<Todo>();
+
+export const GenericListConnectedUsage = () => (
+  <TodoList
+    selectItems={state => todosSelectors.getTodos(state.todos)}
+    itemRenderer={todo => (
+      <div key={todo.id}>
+        {todo.completed ? 'done' : 'todo'}: {todo.title}
+      </div>
+    )}
+  />
+);
+
+export default GenericListConnectedUsage;
 
 ```
 </p></details>
