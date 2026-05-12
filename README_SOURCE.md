@@ -108,6 +108,7 @@ I highly recommend to add a bounty to the issue that you're waiting for to incre
     - [- HOC wrapping a component](#--hoc-wrapping-a-component)
     - [- HOC wrapping a component and injecting props](#--hoc-wrapping-a-component-and-injecting-props)
     - [- Nested HOC - wrapping a component, injecting props and connecting to redux 🌟](#--nested-hoc---wrapping-a-component-injecting-props-and-connecting-to-redux-)
+    - [- Recompose (legacy) typed examples](#--recompose-legacy-typed-examples)
   - [Redux Connected Components](#redux-connected-components)
     - [- Redux connected counter](#--redux-connected-counter)
     - [- Redux connected counter with own props](#--redux-connected-counter-with-own-props)
@@ -435,6 +436,21 @@ Adds error handling using componentDidCatch to any component
 
 ::codeblock='playground/src/hoc/with-connected-count.tsx'::
 ::expander='playground/src/hoc/with-connected-count.usage.tsx'::
+
+[⇧ back to top](#table-of-contents)
+
+### - Recompose (legacy) typed examples
+
+> Recompose is archived/unmaintained, but you may still see it in older codebases. The examples below focus on **type-safe props injection** without `any`.
+
+Install for legacy projects:
+
+```bash
+npm i recompose
+npm i -D @types/recompose
+```
+
+::codeblock='playground/src/hoc/recompose-examples.tsx'::
 
 [⇧ back to top](#table-of-contents)
 

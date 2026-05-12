@@ -108,6 +108,7 @@ I highly recommend to add a bounty to the issue that you're waiting for to incre
     - [- HOC wrapping a component](#--hoc-wrapping-a-component)
     - [- HOC wrapping a component and injecting props](#--hoc-wrapping-a-component-and-injecting-props)
     - [- Nested HOC - wrapping a component, injecting props and connecting to redux 🌟](#--nested-hoc---wrapping-a-component-injecting-props-and-connecting-to-redux-)
+    - [- Recompose (legacy) typed examples](#--recompose-legacy-typed-examples)
   - [Redux Connected Components](#redux-connected-components)
     - [- Redux connected counter](#--redux-connected-counter)
     - [- Redux connected counter with own props](#--redux-connected-counter-with-own-props)
@@ -971,6 +972,88 @@ export default () => (
 
 ```
 </p></details>
+
+[⇧ back to top](#table-of-contents)
+
+### - Recompose (legacy) typed examples
+
+> Recompose is archived/unmaintained, but you may still see it in older codebases. The examples below focus on **type-safe props injection** without `any`.
+
+Install for legacy projects:
+
+```bash
+npm i recompose
+npm i -D @types/recompose
+```
+
+```tsx
+import * as React from "react";
+import type { ComponentType } from "react";
+import {
+  withHandlers,
+  withProps,
+  withState,
+  type InferableComponentEnhancerWithProps,
+} from "recompose";
+
+type OuterProps = {
+  initialCount?: number;
+};
+
+type CounterStateProps = {
+  count: number;
+  setCount: (next: number | ((prev: number) => number)) => void;
+};
+
+type CounterHandlers = {
+  onIncrement: () => void;
+  onDecrement: () => void;
+};
+
+type DerivedProps = {
+  label: string;
+};
+
+type InnerProps = OuterProps & CounterStateProps & CounterHandlers & DerivedProps;
+
+const CounterView: React.FC<InnerProps> = ({ label, onDecrement, onIncrement }) => (
+  <div>
+    <button type="button" onClick={onDecrement}>
+      -
+    </button>
+    <span style={{ padding: "0 8px" }}>{label}</span>
+    <button type="button" onClick={onIncrement}>
+      +
+    </button>
+  </div>
+);
+
+const withCounterState = withState<OuterProps, number, "count", "setCount">(
+  "count",
+  "setCount",
+  ({ initialCount = 0 }) => initialCount,
+);
+
+const withCounterHandlers = withHandlers<OuterProps & CounterStateProps, CounterHandlers>({
+  onIncrement: ({ setCount }) => () => setCount((n) => n + 1),
+  onDecrement: ({ setCount }) => () => setCount((n) => n - 1),
+});
+
+const withLabel = withProps<DerivedProps, OuterProps & CounterStateProps & CounterHandlers>(
+  ({ count }) => ({ label: `Count: ${count}` }),
+);
+
+type Enhance = InferableComponentEnhancerWithProps<
+  CounterStateProps & CounterHandlers & DerivedProps,
+  OuterProps
+>;
+
+const enhance: Enhance = (BaseComponent: ComponentType<InnerProps>) =>
+  withCounterState(withCounterHandlers(withLabel(BaseComponent)));
+
+export const RecomposeCounterExample = enhance(CounterView);
+
+```
 
 [⇧ back to top](#table-of-contents)
 
