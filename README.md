@@ -1002,7 +1002,7 @@ type OuterProps = {
 
 type CounterStateProps = {
   count: number;
-  setCount: (next: number) => void;
+  setCount: (next: number | ((prev: number) => number)) => void;
 };
 
 type CounterHandlers = {
@@ -1035,8 +1035,8 @@ const withCounterState = withState<OuterProps, number, "count", "setCount">(
 );
 
 const withCounterHandlers = withHandlers<OuterProps & CounterStateProps, CounterHandlers>({
-  onIncrement: ({ count, setCount }) => () => setCount(count + 1),
-  onDecrement: ({ count, setCount }) => () => setCount(count - 1),
+  onIncrement: ({ setCount }) => () => setCount((n) => n + 1),
+  onDecrement: ({ setCount }) => () => setCount((n) => n - 1),
 });
 
 const withLabel = withProps<DerivedProps, OuterProps & CounterStateProps & CounterHandlers>(
@@ -1052,7 +1052,6 @@ const enhance: Enhance = (BaseComponent: ComponentType<InnerProps>) =>
   withCounterState(withCounterHandlers(withLabel(BaseComponent)));
 
 export const RecomposeCounterExample = enhance(CounterView);
-
 
 ```
 
