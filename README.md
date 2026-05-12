@@ -111,6 +111,7 @@ I highly recommend to add a bounty to the issue that you're waiting for to incre
   - [Redux Connected Components](#redux-connected-components)
     - [- Redux connected counter](#--redux-connected-counter)
     - [- Redux connected counter with own props](#--redux-connected-counter-with-own-props)
+    - [- Redux connected generic list](#--redux-connected-generic-list)
     - [- Redux connected counter via hooks](#--redux-connected-counter-via-hooks)
     - [- Redux connected counter with `redux-thunk` integration](#--redux-connected-counter-with-redux-thunk-integration)
   - [Context](#context)
@@ -1055,6 +1056,64 @@ export default () => (
   <FCCounterConnectedOwnProps
     label={'FCCounterConnectedOwnProps'}
     initialCount={10}
+  />
+);
+
+```
+</p></details>
+
+[⇧ back to top](#table-of-contents)
+
+### - Redux connected generic list
+
+```tsx
+import Types from 'MyTypes';
+import { connect } from 'react-redux';
+
+import { GenericList, GenericListProps } from '../components';
+import { todosSelectors } from '../features/todos';
+import { Todo } from '../features/todos/models';
+
+type StateProps<T> = Pick<GenericListProps<T>, 'items'>;
+type OwnProps<T> = Pick<GenericListProps<T>, 'itemRenderer'>;
+
+export const createConnectedList = <T,>(
+  selectItems: (state: Types.RootState) => T[]
+) => {
+  class TypedGenericList extends GenericList<T> {}
+
+  const mapStateToProps = (state: Types.RootState): StateProps<T> => ({
+    items: selectItems(state),
+  });
+
+  return connect<
+    StateProps<T>,
+    {},
+    OwnProps<T>,
+    Types.RootState
+  >(mapStateToProps)(TypedGenericList);
+};
+
+export const TodoListConnected = createConnectedList<Todo>(
+  state => todosSelectors.getFilteredTodos(state.todos)
+);
+
+```
+<details><summary><i>Click to expand</i></summary><p>
+
+```tsx
+import * as React from 'react';
+
+import { TodoListConnected } from '.';
+
+export default () => (
+  <TodoListConnected
+    itemRenderer={item => (
+      <div key={item.id}>
+        {item.completed ? '✓ ' : ''}
+        {item.title}
+      </div>
+    )}
   />
 );
 
