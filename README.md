@@ -161,6 +161,7 @@ I highly recommend to add a bounty to the issue that you're waiting for to incre
     - [- when to use `interface` declarations and when `type` aliases?](#--when-to-use-interface-declarations-and-when-type-aliases)
     - [- what's better default or named exports?](#--whats-better-default-or-named-exports)
     - [- how to best initialize class instance or static properties?](#--how-to-best-initialize-class-instance-or-static-properties)
+    - [- how to safely access instance properties declared with `createRef()`?](#--how-to-safely-access-instance-properties-declared-with-createref)
     - [- how to best declare component handler functions?](#--how-to-best-declare-component-handler-functions)
 - [Tutorials & Articles](#tutorials--articles)
 - [Contributors](#contributors)
@@ -2212,6 +2213,56 @@ class ClassCounterWithInitialCount extends React.Component<Props, State> {
     count: this.props.initialCount,
   };
   ...
+}
+```
+
+[⇧ back to top](#table-of-contents)
+
+### - how to safely access instance properties declared with `createRef()`?
+
+Use `React.createRef<T>()` with the exact instance type you expect to receive, and always account for `current` being `null` before React attaches the ref or after it unmounts the component.
+
+```tsx
+type TextInputProps = {
+  label: string;
+};
+
+class TextInput extends React.Component<TextInputProps> {
+  focusInput() {
+    // focus implementation
+  }
+
+  render() {
+    return <label>{this.props.label}</label>;
+  }
+}
+
+class Form extends React.Component<{}, {}> {
+  private readonly textInputRef = React.createRef<TextInput>();
+
+  componentDidMount() {
+    this.textInputRef.current?.focusInput();
+  }
+
+  render() {
+    return <TextInput ref={this.textInputRef} label="Name" />;
+  }
+}
+```
+
+For DOM elements, use the corresponding DOM type instead:
+
+```tsx
+class SearchInput extends React.Component<{}, {}> {
+  private readonly inputRef = React.createRef<HTMLInputElement>();
+
+  componentDidMount() {
+    this.inputRef.current?.focus();
+  }
+
+  render() {
+    return <input ref={this.inputRef} />;
+  }
 }
 ```
 
