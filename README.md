@@ -121,6 +121,7 @@ I highly recommend to add a bounty to the issue that you're waiting for to incre
 - [Redux](#redux)
   - [Store Configuration](#store-configuration)
     - [Create Global Store Types](#create-global-store-types)
+    - [Types global namespace](#types-global-namespace)
     - [Create Store](#create-store)
   - [Action Creators 🌟](#action-creators-)
   - [Reducers](#reducers)
@@ -1310,6 +1311,53 @@ declare module 'typesafe-actions' {
 }
 
 ```
+
+[⇧ back to top](#table-of-contents)
+
+### Types global namespace
+
+In larger codebases it's useful to centralize app-wide types under one import:
+`import Types from 'Types'`.
+
+The key idea is inversion of control: each feature owns and exports its own
+types, then extends a shared global namespace via module augmentation. This
+keeps type ownership close to implementation while still giving one stable
+access point for consumers.
+
+```ts
+// playground/src/store/types.d.ts
+import { StateType, ActionType } from 'typesafe-actions';
+
+declare module 'MyTypes' {
+  export type RootState = StateType<typeof import('./root-reducer').default>;
+  export type RootAction = ActionType<typeof import('../features/root-action').default>;
+  export type Services = typeof import('./services').default;
+}
+```
+
+```ts
+// feature module (colocated with implementation)
+declare module 'MyTypes' {
+  export type TodosState = Readonly<{
+    items: string[];
+    loading: boolean;
+  }>;
+}
+```
+
+Consumers get a compact, consistent API:
+
+```ts
+import Types from 'MyTypes';
+import { Dispatch } from 'redux';
+
+const mapDispatchToProps = (dispatch: Dispatch<Types.RootAction>) => ({});
+```
+
+Why this pattern scales:
+- Easy extension: any module can augment `MyTypes` without central edits.
+- Easy cleanup: removing a feature removes its colocated augmentation.
+- Low coupling: app-wide consumers depend on stable aliases, not file paths.
 
 [⇧ back to top](#table-of-contents)
 
