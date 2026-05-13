@@ -710,6 +710,40 @@ const mapDispatchToProps = (dispatch: Dispatch<MyTypes.RootAction>) =>
 
 ```
 
+When you need to call class instance methods through `createRef` on a connected component, pass `{ forwardRef: true }` to `connect` and type the ref using the unconnected class:
+
+```tsx
+import React from 'react';
+import { connect } from 'react-redux';
+
+class Child extends React.Component {
+  foo() {
+    // do something
+  }
+}
+
+const ConnectedChild = connect(
+  null,
+  null,
+  null,
+  { forwardRef: true }
+)(Child);
+
+type ChildInstance = InstanceType<typeof Child>;
+
+class Parent extends React.Component {
+  private childRef = React.createRef<ChildInstance>();
+
+  callChild = () => {
+    this.childRef.current?.foo();
+  };
+
+  render() {
+    return <ConnectedChild ref={this.childRef} />;
+  }
+}
+```
+
 [⇧ back to top](#table-of-contents)
 
 ### Typing `useSelector` and `useDispatch`
