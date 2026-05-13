@@ -746,6 +746,40 @@ class ClassCounterConnected extends React.Component<PropsFromRedux> {
 
 _**NOTE**: Decorator syntax requires enabling `"experimentalDecorators": true` in `tsconfig.json` and a matching decorator transform in your build tooling._
 
+When you need to call class instance methods via `createRef` on a connected component, pass `{ forwardRef: true }` to `connect` and type the ref against the unconnected class:
+
+```tsx
+import React from 'react';
+import { connect } from 'react-redux';
+
+class Child extends React.Component {
+  foo() {
+    // do something
+  }
+}
+
+const ConnectedChild = connect(
+  null,
+  null,
+  null,
+  { forwardRef: true }
+)(Child);
+
+type ChildInstance = InstanceType<typeof Child>;
+
+class Parent extends React.Component {
+  private childRef = React.createRef<ChildInstance>();
+
+  callChild = () => {
+    this.childRef.current?.foo();
+  };
+
+  render() {
+    return <ConnectedChild ref={this.childRef} />;
+  }
+}
+```
+
 [⇧ back to top](#table-of-contents)
 
 ### Typing `useSelector` and `useDispatch`
