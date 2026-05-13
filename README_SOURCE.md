@@ -780,6 +780,39 @@ class Parent extends React.Component {
 }
 ```
 
+For connected **generic** components, a practical pattern is to create a typed factory that returns a connected component for each concrete type:
+
+```tsx
+import React from 'react';
+import { connect, ConnectedProps } from 'react-redux';
+
+import MyTypes from 'MyTypes';
+
+type OwnProps<T> = {
+  items: T[];
+  renderItem: (item: T) => React.ReactNode;
+};
+
+const GenericList = <T,>({ items, renderItem }: OwnProps<T>) => (
+  <ul>{items.map((item, index) => <li key={index}>{renderItem(item)}</li>)}</ul>
+);
+
+function createConnectedGenericList<T>() {
+  const mapStateToProps = (state: MyTypes.RootState, ownProps: OwnProps<T>) => ({
+    items: ownProps.items,
+  });
+
+  const connector = connect(mapStateToProps);
+  type PropsFromRedux = ConnectedProps<typeof connector>;
+  type Props = OwnProps<T> & PropsFromRedux;
+
+  const ConnectedGenericList: React.FC<Props> = props => <GenericList<T> {...props} />;
+  return connector(ConnectedGenericList);
+}
+
+export const ConnectedNumberList = createConnectedGenericList<number>();
+```
+
 [⇧ back to top](#table-of-contents)
 
 ### Typing `useSelector` and `useDispatch`
