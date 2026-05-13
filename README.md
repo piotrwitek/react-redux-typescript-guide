@@ -1816,6 +1816,42 @@ const mapDispatchToProps = (dispatch: Dispatch<MyTypes.RootAction>) =>
 
 ```
 
+If you prefer decorator syntax with class components, type it through `ConnectedProps` and apply `@connector`:
+
+```tsx
+import React from 'react';
+import { ConnectedProps, connect } from 'react-redux';
+
+import Types from 'MyTypes';
+import { countersActions, countersSelectors } from '../features/counters';
+
+const mapStateToProps = (state: Types.RootState) => ({
+  count: countersSelectors.getReduxCounter(state.counters),
+});
+
+const dispatchProps = {
+  onIncrement: countersActions.increment,
+};
+
+const connector = connect(mapStateToProps, dispatchProps);
+type PropsFromRedux = ConnectedProps<typeof connector>;
+
+@connector
+class ClassCounterConnected extends React.Component<PropsFromRedux> {
+  render() {
+    const { count, onIncrement } = this.props;
+
+    return (
+      <button type="button" onClick={onIncrement}>
+        {`Count: ${count}`}
+      </button>
+    );
+  }
+}
+```
+
+_**NOTE**: Decorator syntax requires enabling `"experimentalDecorators": true` in `tsconfig.json` and a matching decorator transform in your build tooling._
+
 [⇧ back to top](#table-of-contents)
 
 ### Typing `useSelector` and `useDispatch`
