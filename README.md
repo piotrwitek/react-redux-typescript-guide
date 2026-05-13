@@ -29,6 +29,29 @@ _Found it useful? Want more updates?_
 
 </div>
 
+### **Start Here (Fast Onboarding)**
+
+This repository is a **reference guide** for typing patterns in React + Redux with TypeScript.
+It is not a project boilerplate and it is not meant to be read strictly from top to bottom.
+
+If you are new to React + TypeScript, treat this document as a map:
+- `React.*` and `Redux` type names in this guide usually come from React/Redux and their type packages (for example `@types/react` and `@types/react-redux`)
+- each section is designed to be used while solving a specific real-world coding problem
+- the Playground provides runnable examples so you can verify behavior quickly
+
+### **Choose a Learning Path**
+
+1. **Quick orientation (15-30 min)**
+   - Read [Goals](#goals)
+   - Skim [React Types Cheatsheet](#react-types-cheatsheet)
+   - Run the [Playground Project](#playground-project) once
+2. **Component typing path**
+   - Focus on [React](#react) and [Redux Connected Components](#redux-connected-components)
+   - Jump to [FAQ](#faq) when a type edge case appears
+3. **State management typing path**
+   - Focus on [Redux](#redux)
+   - Combine with [Connect with `react-redux`](#connect-with-react-redux)
+
 ### **Goals**
 
 - Complete type safety (with [`--strict`](https://www.typescriptlang.org/docs/handbook/compiler-options.html) flag) without losing type information downstream through all the layers of our application (e.g. no type assertions or hacking with `any` type)
@@ -52,6 +75,8 @@ _Found it useful? Want more updates?_
 
 Check out our Playground Project located in the `/playground` folder. It contains all source files of the code examples found in the guide. They are all tested with the most recent version of TypeScript and 3rd party type-definitions (like `@types/react` or `@types/react-redux`) to ensure the examples are up-to-date and not broken with updated definitions (It's based on `create-react-app --typescript`).
 > Playground project was created so that you can simply clone the repository locally and immediately play around with all the component patterns found in the guide. It will help you to learn all the examples from this guide in a real project environment without the need to create complicated environment setup by yourself.
+
+If you are using the styleguide UI for the first time: examples are rendered from the guide demos and playground setup, so the UI structure will not mirror only a single `home` component file one-to-one.
 
 ## Contributing Guide
 
