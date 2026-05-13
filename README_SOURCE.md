@@ -716,10 +716,10 @@ If you prefer decorator syntax with class components, type it through `Connected
 import React from 'react';
 import { ConnectedProps, connect } from 'react-redux';
 
-import Types from 'MyTypes';
+import MyTypes from 'MyTypes';
 import { countersActions, countersSelectors } from '../features/counters';
 
-const mapStateToProps = (state: Types.RootState) => ({
+const mapStateToProps = (state: MyTypes.RootState) => ({
   count: countersSelectors.getReduxCounter(state.counters),
 });
 
