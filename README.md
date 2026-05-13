@@ -123,6 +123,7 @@ I highly recommend to add a bounty to the issue that you're waiting for to incre
     - [Create Global Store Types](#create-global-store-types)
     - [Create Store](#create-store)
   - [Action Creators 🌟](#action-creators-)
+  - [Modelling async data with ADT](#modelling-async-data-with-adt)
   - [Reducers](#reducers)
     - [State with Type-level Immutability](#state-with-type-level-immutability)
     - [Typing reducer](#typing-reducer)
@@ -1416,6 +1417,67 @@ store.dispatch(counter.add(1)); // OK
 
 ```
 </p></details>
+
+[⇧ back to top](#table-of-contents)
+
+---
+
+## Modelling async data with ADT
+
+Algebraic Data Types (tagged unions) make invalid UI states unrepresentable.
+Instead of multiple booleans (`loading`, `error`, `data`) that can drift into
+impossible combinations, model the async lifecycle as one discriminated union.
+
+```ts
+type AsyncData<T, E = string> =
+  | { type: 'idle' }
+  | { type: 'loading' }
+  | { type: 'success'; data: T }
+  | { type: 'failure'; error: E };
+
+type TodosState = Readonly<{
+  todos: AsyncData<ReadonlyArray<Todo>, string>;
+}>;
+```
+
+Reducer transitions become explicit and type-safe:
+
+```ts
+const initialState: TodosState = { todos: { type: 'idle' } };
+
+function todosReducer(
+  state: TodosState = initialState,
+  action: Types.RootAction
+): TodosState {
+  switch (action.type) {
+    case getType(fetchTodos.request):
+      return { ...state, todos: { type: 'loading' } };
+    case getType(fetchTodos.success):
+      return { ...state, todos: { type: 'success', data: action.payload } };
+    case getType(fetchTodos.failure):
+      return { ...state, todos: { type: 'failure', error: action.payload.message } };
+    default:
+      return state;
+  }
+}
+```
+
+Rendering can then use exhaustive checks:
+
+```tsx
+const TodosPanel: React.FC<{ todos: AsyncData<ReadonlyArray<Todo>> }> = ({ todos }) => {
+  switch (todos.type) {
+    case 'idle':
+      return <span>Start search</span>;
+    case 'loading':
+      return <span>Loading...</span>;
+    case 'failure':
+      return <span>{todos.error}</span>;
+    case 'success':
+      return <TodoList items={todos.data} />;
+  }
+};
+```
 
 [⇧ back to top](#table-of-contents)
 
