@@ -83,6 +83,7 @@ I highly recommend to add a bounty to the issue that you're waiting for to incre
     - [`React.ComponentProps<typeof XXX>`](#reactcomponentpropstypeof-xxx)
     - [`React.ReactElement` | `JSX.Element`](#reactreactelement--jsxelement)
     - [`React.ReactNode`](#reactreactnode)
+    - [Typing JSX children](#typing-jsx-children)
     - [`React.CSSProperties`](#reactcssproperties)
     - [`React.XXXHTMLAttributes<HTMLXXXElement>`](#reactxxxhtmlattributeshtmlxxxelement)
     - [`React.ReactEventHandler<HTMLXXXElement>`](#reactreacteventhandlerhtmlxxxelement)
@@ -239,6 +240,52 @@ Type representing any possible type of React node (basically ReactElement (inclu
 ```tsx
 const elementOrPrimitive: React.ReactNode = 'string' || 0 || false || null || undefined || <div /> || <MyComponent />;
 const Component = ({ children: React.ReactNode }) => ...
+```
+
+### Typing JSX children
+
+Use `ReactNode` for flexible composition. Use `ReactElement<Props>` (or tuple
+of elements) when component contracts require strict child shapes.
+
+```tsx
+type AvatarProps = { src: string };
+const Avatar = (_props: AvatarProps) => null;
+
+type LoginLayoutProps = {
+  // exactly one Avatar element
+  children: React.ReactElement<AvatarProps>;
+};
+
+const LoginLayout = ({ children }: LoginLayoutProps) => (
+  <section>{children}</section>
+);
+
+// ✅ valid
+<LoginLayout>
+  <Avatar src="/me.png" />
+</LoginLayout>;
+
+// ❌ invalid: child props/type mismatch
+<LoginLayout>
+  <div>not an avatar</div>
+</LoginLayout>;
+```
+
+For ordered multi-slot children, model with tuple types:
+
+```tsx
+type HeaderProps = { title: string };
+type BodyProps = { children?: React.ReactNode };
+
+const Header = (_props: HeaderProps) => null;
+const Body = (_props: BodyProps) => null;
+
+type CardProps = {
+  children: [
+    React.ReactElement<HeaderProps>,
+    React.ReactElement<BodyProps>,
+  ];
+};
 ```
 
 ### `React.CSSProperties`
