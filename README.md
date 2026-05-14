@@ -1854,6 +1854,23 @@ _**NOTE**: Decorator syntax requires enabling `"experimentalDecorators": true` i
 
 _**WARNING**: In TypeScript, class decorators do not transform the component's prop type for JSX consumers. For full call-site type safety, prefer `connect(mapStateToProps, dispatchProps)(Component)` export style._
 
+Preferred TypeScript export style:
+
+```tsx
+class ClassCounterBase extends React.Component<PropsFromRedux> {
+  render() {
+    const { count, onIncrement } = this.props;
+    return (
+      <button type="button" onClick={onIncrement}>
+        {`Count: ${count}`}
+      </button>
+    );
+  }
+}
+
+export const ClassCounterConnectedSafe = connector(ClassCounterBase);
+```
+
 [⇧ back to top](#table-of-contents)
 
 ### Typing `useSelector` and `useDispatch`
