@@ -741,8 +741,12 @@ const mapStateToPropsFactory: MapStateToPropsFactory<
   OwnProps,
   Types.RootState
 > = () => {
-  const makeSelectCount = () => (state: Types.RootState) =>
-    countersSelectors.getReduxCounter(state.counters);
+  const makeSelectCount = () => (
+    state: Types.RootState,
+    ownProps: OwnProps
+  ) =>
+    countersSelectors.getReduxCounter(state.counters) +
+    (ownProps.initialCount || 0);
   const selectCount = makeSelectCount();
 
   const mapStateToProps: MapStateToProps<
@@ -750,7 +754,7 @@ const mapStateToPropsFactory: MapStateToPropsFactory<
     OwnProps,
     Types.RootState
   > = (state, ownProps) => ({
-    count: selectCount(state) + (ownProps.initialCount || 0),
+    count: selectCount(state, ownProps),
   });
 
   return mapStateToProps;
