@@ -725,6 +725,7 @@ type OwnProps = {
 type GenericListProps<T> = {
   items: ReadonlyArray<T>;
   renderItem: (item: T) => React.ReactNode;
+  getItemKey: (item: T) => React.Key;
 };
 
 const mapStateToProps = (state: Types.RootState, ownProps: OwnProps) => ({
@@ -737,10 +738,10 @@ type ReduxProps = ConnectedProps<typeof connector>;
 export const createConnectedGenericList = <T,>() => {
   type Props = GenericListProps<T> & ReduxProps;
 
-  const GenericList: React.FC<Props> = ({ items, renderItem, selectedId }) => (
+  const GenericList: React.FC<Props> = ({ items, renderItem, getItemKey, selectedId }) => (
     <ul>
       {items.map((item, index) => (
-        <li key={index} data-selected={String(index) === selectedId}>
+        <li key={getItemKey(item)} data-selected={String(index) === selectedId}>
           {renderItem(item)}
         </li>
       ))}
@@ -749,6 +750,10 @@ export const createConnectedGenericList = <T,>() => {
 
   return connector(GenericList);
 };
+
+// Create once at module scope, not inside render, to avoid remounting
+// and extra connector work.
+const ConnectedNumberList = createConnectedGenericList<number>();
 ```
 
 [⇧ back to top](#table-of-contents)
