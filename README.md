@@ -886,6 +886,41 @@ export default () => (
 ```
 </p></details>
 
+**Legacy `recompose` interop (TypeScript)**
+
+If you still maintain a codebase that uses `recompose`, you can keep typings explicit by declaring outer props first and composing enhancers around them.
+
+```tsx
+import * as React from 'react';
+import { compose, withProps } from 'recompose';
+
+type OuterProps = {
+  title: string;
+};
+
+type InjectedProps = {
+  titleLength: number;
+};
+
+type Props = OuterProps & InjectedProps;
+
+const enhance = compose<Props, OuterProps>(
+  withProps<InjectedProps, OuterProps>((props) => ({
+    titleLength: props.title.length,
+  })),
+);
+
+const TitleMeta: React.FC<Props> = ({ title, titleLength }) => (
+  <p>
+    {title} ({titleLength})
+  </p>
+);
+
+export const EnhancedTitleMeta = enhance(TitleMeta);
+```
+
+This pattern keeps the public API (`OuterProps`) and injected props (`InjectedProps`) separated, which makes refactors safer in older HOC-heavy code.
+
 [⇧ back to top](#table-of-contents)
 
 ### - Nested HOC - wrapping a component, injecting props and connecting to redux 🌟
