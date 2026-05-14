@@ -76,7 +76,7 @@ If you are new to React + TypeScript, treat this document as a map:
 Check out our Playground Project located in the `/playground` folder. It contains all source files of the code examples found in the guide. They are all tested with the most recent version of TypeScript and 3rd party type-definitions (like `@types/react` or `@types/react-redux`) to ensure the examples are up-to-date and not broken with updated definitions (It's based on `create-react-app --typescript`).
 > The Playground project lets you clone the repository and immediately try all component patterns from this guide in a real project setup, without manual environment bootstrapping.
 
-If you are using the styleguide UI for the first time: examples are rendered from the guide demos and playground setup, so the UI structure will not mirror only a single `home` component file one-to-one.
+If you are using the styleguide UI for the first time: examples are rendered from the guide demos and playground setup, so the UI structure will not mirror a single component file one-to-one.
 
 ## Contributing Guide
 
