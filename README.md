@@ -1822,7 +1822,7 @@ When you need to call class instance methods through `createRef` on a connected 
 import React from 'react';
 import { connect } from 'react-redux';
 
-class Child extends React.Component {
+class Child extends React.Component<{}, {}> {
   foo() {
     // do something
   }
@@ -1835,10 +1835,8 @@ const ConnectedChild = connect(
   { forwardRef: true }
 )(Child);
 
-type ChildInstance = InstanceType<typeof Child>;
-
-class Parent extends React.Component {
-  private childRef = React.createRef<ChildInstance>();
+class Parent extends React.Component<{}, {}> {
+  private childRef = React.createRef<Child>();
 
   callChild = () => {
     this.childRef.current?.foo();
