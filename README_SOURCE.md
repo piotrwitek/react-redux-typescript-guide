@@ -553,7 +553,7 @@ declare module 'MyTypes' {
 Consumers get a compact, consistent API:
 
 ```ts
-import Types from 'MyTypes';
+import * as Types from 'MyTypes';
 import { Dispatch } from 'redux';
 
 const mapDispatchToProps = (dispatch: Dispatch<Types.RootAction>) => ({});
@@ -715,7 +715,7 @@ state.containerObject.numbers.push(1); // TS Error: cannot use mutator methods
 _**NOTE**: Below you'll find a short explanation of concepts behind using `connect` with TypeScript. For more detailed examples please check [Redux Connected Components](#redux-connected-components) section._
 
 ```tsx
-import MyTypes from 'MyTypes';
+import * as Types from 'MyTypes';
 
 import { bindActionCreators, Dispatch, ActionCreatorsMapObject } from 'redux';
 import { connect } from 'react-redux';
@@ -726,13 +726,13 @@ import { FCCounter } from '../components';
 // Type annotation for "state" argument is mandatory to check 
 // the correct shape of state object and injected props you can also
 // extend connected component Props interface by annotating `ownProps` argument
-const mapStateToProps = (state: MyTypes.RootState, ownProps: FCCounterProps) => ({
+const mapStateToProps = (state: Types.RootState, ownProps: FCCounterProps) => ({
   count: state.counters.reduxCounter,
 });
 
 // "dispatch" argument needs an annotation to check the correct shape
 //  of an action object when using dispatch function
-const mapDispatchToProps = (dispatch: Dispatch<MyTypes.RootAction>) =>
+const mapDispatchToProps = (dispatch: Dispatch<Types.RootAction>) =>
   bindActionCreators({
     onIncrement: countersActions.increment,
   }, dispatch);
@@ -751,7 +751,7 @@ export const FCCounterConnected =
 
 // You can add extra layer of validation of your action creators
 // by using bindActionCreators generic type parameter and RootAction type
-const mapDispatchToProps = (dispatch: Dispatch<MyTypes.RootAction>) =>
+const mapDispatchToProps = (dispatch: Dispatch<Types.RootAction>) =>
   bindActionCreators<ActionCreatorsMapObject<Types.RootAction>>({
     invalidActionCreator: () => 1, // Error: Type 'number' is not assignable to type '{ type: "todos/ADD"; payload: Todo; } | { ... }
   }, dispatch);
