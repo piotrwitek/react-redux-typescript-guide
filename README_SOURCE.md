@@ -447,7 +447,7 @@ If you still maintain codebases that use `recompose`, keep a strict split betwee
 external props and injected props so HOCs stay type-safe end-to-end.
 
 ```tsx
-import React from 'react';
+import * as React from 'react';
 import { compose, withHandlers, withProps } from 'recompose';
 
 type ExternalProps = {
@@ -468,9 +468,8 @@ const BaseItem: React.FC<BaseProps> = ({ id, label, onSelect }) => (
 );
 
 const enhance = compose<BaseProps, ExternalProps>(
-  withProps<InjectedProps, ExternalProps>(({ id }) => ({
+  withProps<Pick<InjectedProps, 'label'>, ExternalProps>(({ id }) => ({
     label: `Item-${id}`,
-    onSelect: () => {}, // placeholder, overridden by withHandlers below
   })),
   withHandlers<ExternalProps, Pick<InjectedProps, 'onSelect'>>({
     onSelect: ({ id }) => () => {

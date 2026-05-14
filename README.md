@@ -726,7 +726,7 @@ export class MouseProvider extends React.Component<MouseProviderProps, MouseProv
 Adds state to a stateless counter
 
 ```tsx
-import React from 'react';
+import * as React from 'react';
 import { Diff } from 'utility-types';
 
 // These props will be injected into the base component
@@ -1004,9 +1004,8 @@ const BaseItem: React.FC<BaseProps> = ({ id, label, onSelect }) => (
 );
 
 const enhance = compose<BaseProps, ExternalProps>(
-  withProps<InjectedProps, ExternalProps>(({ id }) => ({
+  withProps<Pick<InjectedProps, 'label'>, ExternalProps>(({ id }) => ({
     label: `Item-${id}`,
-    onSelect: () => {}, // placeholder, overridden by withHandlers below
   })),
   withHandlers<ExternalProps, Pick<InjectedProps, 'onSelect'>>({
     onSelect: ({ id }) => () => {
