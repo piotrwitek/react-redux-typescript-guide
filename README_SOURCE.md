@@ -286,6 +286,28 @@ type CardProps = {
     React.ReactElement<BodyProps>,
   ];
 };
+
+const Card = ({ children }: CardProps) => {
+  const [header, body] = children;
+  return (
+    <section>
+      {header}
+      {body}
+    </section>
+  );
+};
+
+// ✅ valid tuple order
+<Card>
+  <Header title="Profile" />
+  <Body>Content</Body>
+</Card>;
+
+// ❌ invalid: wrong order
+<Card>
+  <Body>Content</Body>
+  <Header title="Profile" />
+</Card>;
 ```
 
 ### `React.CSSProperties`
