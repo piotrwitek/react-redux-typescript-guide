@@ -134,6 +134,7 @@ I highly recommend to add a bounty to the issue that you're waiting for to incre
   - [Selectors with `reselect`](#selectors-with-reselect)
   - [Connect with `react-redux`](#connect-with-react-redux)
     - [Typing connected component](#typing-connected-component)
+    - [Typing `connect` factory functions](#typing-connect-factory-functions)
     - [Typing `useSelector` and `useDispatch`](#typing-useselector-and-usedispatch)
     - [Typing connected component with `redux-thunk` integration](#typing-connected-component-with-redux-thunk-integration)
 - [Configuration & Dev Tools](#configuration--dev-tools)
@@ -1773,7 +1774,7 @@ export const getFilteredTodos = createSelector(getTodos, getTodosFilter, (todos,
 _**NOTE**: Below you'll find a short explanation of concepts behind using `connect` with TypeScript. For more detailed examples please check [Redux Connected Components](#redux-connected-components) section._
 
 ```tsx
-import MyTypes from 'MyTypes';
+import * as Types from 'MyTypes';
 
 import { bindActionCreators, Dispatch, ActionCreatorsMapObject } from 'redux';
 import { connect } from 'react-redux';
@@ -1814,6 +1815,63 @@ const mapDispatchToProps = (dispatch: Dispatch<MyTypes.RootAction>) =>
     invalidActionCreator: () => 1, // Error: Type 'number' is not assignable to type '{ type: "todos/ADD"; payload: Todo; } | { ... }
   }, dispatch);
 
+```
+
+[⇧ back to top](#table-of-contents)
+
+### Typing `connect` factory functions
+
+Use a factory when each component instance needs a memoized selector that depends
+on `ownProps`. Type the factory with `MapStateToPropsFactory`, and type the
+returned mapper with `MapStateToProps` for strict checking end-to-end.
+
+```tsx
+import MyTypes from 'MyTypes';
+
+import { connect, MapStateToProps, MapStateToPropsFactory } from 'react-redux';
+
+import { countersActions, countersSelectors } from '../features/counters';
+import { FCCounter } from '../components';
+
+type StateProps = {
+  count: number;
+};
+
+type OwnProps = {
+  label: string;
+  initialCount?: number;
+};
+
+const mapStateToPropsFactory: MapStateToPropsFactory<
+  StateProps,
+  OwnProps,
+  Types.RootState
+> = () => {
+  const makeSelectCount = () => (
+    state: Types.RootState,
+    ownProps: OwnProps
+  ) =>
+    countersSelectors.getReduxCounter(state.counters) +
+    (ownProps.initialCount || 0);
+  const selectCount = makeSelectCount();
+
+  const mapStateToProps: MapStateToProps<
+    StateProps,
+    OwnProps,
+    Types.RootState
+  > = (state, ownProps) => ({
+    count: selectCount(state, ownProps),
+  });
+
+  return mapStateToProps;
+};
+
+const dispatchProps = {
+  onIncrement: countersActions.increment,
+};
+
+export const FCCounterConnectedFactory =
+  connect(mapStateToPropsFactory, dispatchProps)(FCCounter);
 ```
 
 [⇧ back to top](#table-of-contents)
