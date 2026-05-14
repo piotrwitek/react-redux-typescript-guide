@@ -36,8 +36,8 @@ It is not a project boilerplate and it is not meant to be read strictly from top
 
 If you are new to React + TypeScript, treat this document as a map:
 - `React.*` and `Redux` type names in this guide usually come from React/Redux and their type packages (for example `@types/react` and `@types/react-redux`)
-- each section is designed to be used while solving a specific real-world coding problem
-- the Playground provides runnable examples so you can verify behavior quickly
+- Each section is designed to be used while solving a specific real-world coding problem
+- The Playground provides runnable examples so you can verify behavior quickly
 
 ### **Choose a Learning Path**
 
@@ -74,7 +74,7 @@ If you are new to React + TypeScript, treat this document as a map:
 [![Build Status](https://semaphoreci.com/api/v1/piotrekwitek/react-redux-typescript-guide/branches/master/shields_badge.svg)](https://semaphoreci.com/piotrekwitek/react-redux-typescript-guide)
 
 Check out our Playground Project located in the `/playground` folder. It contains all source files of the code examples found in the guide. They are all tested with the most recent version of TypeScript and 3rd party type-definitions (like `@types/react` or `@types/react-redux`) to ensure the examples are up-to-date and not broken with updated definitions (It's based on `create-react-app --typescript`).
-> Playground project was created so that you can simply clone the repository locally and immediately play around with all the component patterns found in the guide. It will help you to learn all the examples from this guide in a real project environment without the need to create complicated environment setup by yourself.
+> The Playground project lets you clone the repository and immediately try all component patterns from this guide in a real project setup, without manual environment bootstrapping.
 
 If you are using the styleguide UI for the first time: examples are rendered from the guide demos and playground setup, so the UI structure will not mirror only a single `home` component file one-to-one.
 
