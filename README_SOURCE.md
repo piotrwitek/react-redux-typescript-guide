@@ -522,7 +522,7 @@ Can be imported in various layers receiving or sending redux actions like: reduc
 ### Types global namespace
 
 In larger codebases it's useful to centralize app-wide types under one import:
-`import Types from 'Types'`.
+`import * as Types from 'MyTypes'`.
 
 The key idea is inversion of control: each feature owns and exports its own
 types, then extends a shared global namespace via module augmentation. This
@@ -534,9 +534,9 @@ access point for consumers.
 import { StateType, ActionType } from 'typesafe-actions';
 
 declare module 'MyTypes' {
-  export type RootState = StateType<typeof import('./root-reducer').default>;
-  export type RootAction = ActionType<typeof import('../features/root-action').default>;
-  export type Services = typeof import('./services').default;
+  export type Store = StateType<typeof import('./store').default>;
+  export type RootAction = ActionType<typeof import('./root-action').default>;
+  export type RootState = StateType<ReturnType<typeof import('./root-reducer').default>>;
 }
 ```
 
