@@ -472,7 +472,7 @@ const enhance = compose<BaseProps, ExternalProps>(
     label: `Item-${id}`,
     onSelect: () => {}, // placeholder, overridden by withHandlers below
   })),
-  withHandlers<InjectedProps, ExternalProps>({
+  withHandlers<ExternalProps, Pick<InjectedProps, 'onSelect'>>({
     onSelect: ({ id }) => () => {
       console.log('selected', id);
     },
