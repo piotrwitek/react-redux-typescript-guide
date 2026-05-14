@@ -236,7 +236,7 @@ type SearchInputProps = {
   onChange: (value: string) => void;
 };
 
-const SearchInput = React.forwardRef<HTMLInputElement, SearchInputProps>(
+const SearchInput = React.forwardRef<HTMLInputElement, SearchInputProps>( // <RefType, PropsType>
   ({ value, onChange }, ref) => (
     <input
       ref={ref}
