@@ -443,13 +443,13 @@ type InjectedProps = {
   titleLength: number;
 };
 
-const enhance = compose<InjectedProps, OuterProps>(
+type Props = OuterProps & InjectedProps;
+
+const enhance = compose<Props, OuterProps>(
   withProps<InjectedProps, OuterProps>((props) => ({
     titleLength: props.title.length,
   })),
 );
-
-type Props = OuterProps & InjectedProps;
 
 const TitleMeta: React.FC<Props> = ({ title, titleLength }) => (
   <p>
