@@ -1774,7 +1774,7 @@ export const getFilteredTodos = createSelector(getTodos, getTodosFilter, (todos,
 _**NOTE**: Below you'll find a short explanation of concepts behind using `connect` with TypeScript. For more detailed examples please check [Redux Connected Components](#redux-connected-components) section._
 
 ```tsx
-import MyTypes from 'MyTypes';
+import * as Types from 'MyTypes';
 
 import { bindActionCreators, Dispatch, ActionCreatorsMapObject } from 'redux';
 import { connect } from 'react-redux';
@@ -1845,16 +1845,18 @@ type OwnProps = {
 const mapStateToPropsFactory: MapStateToPropsFactory<
   StateProps,
   OwnProps,
-  MyTypes.RootState
+  Types.RootState
 > = () => {
-  const selectCount = countersSelectors.getReduxCounter;
+  const makeSelectCount = () => (state: Types.RootState) =>
+    countersSelectors.getReduxCounter(state.counters);
+  const selectCount = makeSelectCount();
 
   const mapStateToProps: MapStateToProps<
     StateProps,
     OwnProps,
-    MyTypes.RootState
+    Types.RootState
   > = (state, ownProps) => ({
-    count: selectCount(state.counters) + (ownProps.initialCount || 0),
+    count: selectCount(state) + (ownProps.initialCount || 0),
   });
 
   return mapStateToProps;
