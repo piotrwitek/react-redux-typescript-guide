@@ -75,7 +75,8 @@ I highly recommend to add a bounty to the issue that you're waiting for to incre
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
-
+- [Installation](#installation)
+  - [Types for React & Redux](#types-for-react--redux)
   - [React Types Cheatsheet](#react-types-cheatsheet)
     - [`React.FC<Props>` | `React.FunctionComponent<Props>`](#reactfcprops--reactfunctioncomponentprops)
     - [`React.Component<Props, State>`](#reactcomponentprops-state)
@@ -108,6 +109,7 @@ I highly recommend to add a bounty to the issue that you're waiting for to incre
     - [- HOC wrapping a component](#--hoc-wrapping-a-component)
     - [- HOC wrapping a component and injecting props](#--hoc-wrapping-a-component-and-injecting-props)
     - [- Nested HOC - wrapping a component, injecting props and connecting to redux 🌟](#--nested-hoc---wrapping-a-component-injecting-props-and-connecting-to-redux-)
+    - [- Recompose example with typed compose / withProps / withHandlers 🌟](#--recompose-example-with-typed-compose--withprops--withhandlers-)
   - [Redux Connected Components](#redux-connected-components)
     - [- Redux connected counter](#--redux-connected-counter)
     - [- Redux connected counter with own props](#--redux-connected-counter-with-own-props)
@@ -166,6 +168,7 @@ I highly recommend to add a bounty to the issue that you're waiting for to incre
 - [Contributors](#contributors)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 
 ---
 
@@ -971,6 +974,51 @@ export default () => (
 
 ```
 </p></details>
+
+[⇧ back to top](#table-of-contents)
+
+### - Recompose example with typed compose / withProps / withHandlers 🌟
+
+If you still maintain codebases that use `recompose`, keep a strict split between
+external props and injected props so HOCs stay type-safe end-to-end.
+
+```tsx
+import React from 'react';
+import { compose, withHandlers, withProps } from 'recompose';
+
+type ExternalProps = {
+  id: string;
+};
+
+type InjectedProps = {
+  label: string;
+  onSelect: () => void;
+};
+
+type BaseProps = ExternalProps & InjectedProps;
+
+const BaseItem: React.FC<BaseProps> = ({ id, label, onSelect }) => (
+  <button type="button" onClick={onSelect}>
+    {`${id}: ${label}`}
+  </button>
+);
+
+const enhance = compose<BaseProps, ExternalProps>(
+  withProps<InjectedProps, ExternalProps>(({ id }) => ({
+    label: `Item-${id}`,
+    onSelect: () => {}, // placeholder, overridden by withHandlers below
+  })),
+  withHandlers<InjectedProps, ExternalProps>({
+    onSelect: ({ id }) => () => {
+      console.log('selected', id);
+    },
+  })
+);
+
+export const EnhancedItem = enhance(BaseItem);
+```
+
+_**NOTE**: `recompose` is no longer actively maintained. Prefer React hooks for new features, and use patterns like this when you need to keep existing HOC-based modules type-safe._
 
 [⇧ back to top](#table-of-contents)
 
