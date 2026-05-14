@@ -1819,13 +1819,13 @@ const mapDispatchToProps = (dispatch: Dispatch<MyTypes.RootAction>) =>
 If you prefer decorator syntax with class components, type it through `ConnectedProps` and apply `@connector`:
 
 ```tsx
-import React from 'react';
+import * as React from 'react';
 import { ConnectedProps, connect } from 'react-redux';
 
-import Types from 'MyTypes';
+import MyTypes from 'MyTypes';
 import { countersActions, countersSelectors } from '../features/counters';
 
-const mapStateToProps = (state: Types.RootState) => ({
+const mapStateToProps = (state: MyTypes.RootState) => ({
   count: countersSelectors.getReduxCounter(state.counters),
 });
 
@@ -1851,6 +1851,8 @@ class ClassCounterConnected extends React.Component<PropsFromRedux> {
 ```
 
 _**NOTE**: Decorator syntax requires enabling `"experimentalDecorators": true` in `tsconfig.json` and a matching decorator transform in your build tooling._
+
+_**WARNING**: In TypeScript, class decorators do not transform the component's prop type for JSX consumers. For full call-site type safety, prefer `connect(mapStateToProps, dispatchProps)(Component)` export style._
 
 [⇧ back to top](#table-of-contents)
 
