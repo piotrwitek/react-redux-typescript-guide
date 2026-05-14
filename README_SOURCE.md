@@ -121,6 +121,7 @@ I highly recommend to add a bounty to the issue that you're waiting for to incre
 - [Redux](#redux)
   - [Store Configuration](#store-configuration)
     - [Create Global Store Types](#create-global-store-types)
+    - [Types global namespace](#types-global-namespace)
     - [Create Store](#create-store)
   - [Action Creators 🌟](#action-creators-)
   - [Reducers](#reducers)
@@ -518,6 +519,53 @@ Can be imported in various layers receiving or sending redux actions like: reduc
 
 [⇧ back to top](#table-of-contents)
 
+### Types global namespace
+
+In larger codebases it's useful to centralize app-wide types under one import:
+`import * as Types from 'MyTypes'`.
+
+The key idea is inversion of control: each feature owns and exports its own
+types, then extends a shared global namespace via module augmentation. This
+keeps type ownership close to implementation while still giving one stable
+access point for consumers.
+
+```ts
+// playground/src/store/types.d.ts
+import { StateType, ActionType } from 'typesafe-actions';
+
+declare module 'MyTypes' {
+  export type Store = StateType<typeof import('./store').default>;
+  export type RootAction = ActionType<typeof import('./root-action').default>;
+  export type RootState = StateType<ReturnType<typeof import('./root-reducer').default>>;
+}
+```
+
+```ts
+// feature module (colocated with implementation)
+declare module 'MyTypes' {
+  export type TodosState = Readonly<{
+    items: string[];
+    loading: boolean;
+  }>;
+}
+```
+
+Consumers get a compact, consistent API:
+
+```ts
+import * as Types from 'MyTypes';
+import { Dispatch } from 'redux';
+
+const mapDispatchToProps = (dispatch: Dispatch<Types.RootAction>) => ({});
+```
+
+Why this pattern scales:
+- Easy extension: any module can augment `MyTypes` without central edits.
+- Easy cleanup: removing a feature removes its colocated augmentation.
+- Low coupling: app-wide consumers depend on stable aliases, not file paths.
+
+[⇧ back to top](#table-of-contents)
+
 ### Create Store
 
 When creating a store instance we don't need to provide any additional types. It will set-up a **type-safe Store instance** using type inference.
@@ -667,7 +715,7 @@ state.containerObject.numbers.push(1); // TS Error: cannot use mutator methods
 _**NOTE**: Below you'll find a short explanation of concepts behind using `connect` with TypeScript. For more detailed examples please check [Redux Connected Components](#redux-connected-components) section._
 
 ```tsx
-import MyTypes from 'MyTypes';
+import * as Types from 'MyTypes';
 
 import { bindActionCreators, Dispatch, ActionCreatorsMapObject } from 'redux';
 import { connect } from 'react-redux';
@@ -678,13 +726,13 @@ import { FCCounter } from '../components';
 // Type annotation for "state" argument is mandatory to check 
 // the correct shape of state object and injected props you can also
 // extend connected component Props interface by annotating `ownProps` argument
-const mapStateToProps = (state: MyTypes.RootState, ownProps: FCCounterProps) => ({
+const mapStateToProps = (state: Types.RootState, ownProps: FCCounterProps) => ({
   count: state.counters.reduxCounter,
 });
 
 // "dispatch" argument needs an annotation to check the correct shape
 //  of an action object when using dispatch function
-const mapDispatchToProps = (dispatch: Dispatch<MyTypes.RootAction>) =>
+const mapDispatchToProps = (dispatch: Dispatch<Types.RootAction>) =>
   bindActionCreators({
     onIncrement: countersActions.increment,
   }, dispatch);
@@ -703,7 +751,7 @@ export const FCCounterConnected =
 
 // You can add extra layer of validation of your action creators
 // by using bindActionCreators generic type parameter and RootAction type
-const mapDispatchToProps = (dispatch: Dispatch<MyTypes.RootAction>) =>
+const mapDispatchToProps = (dispatch: Dispatch<Types.RootAction>) =>
   bindActionCreators<ActionCreatorsMapObject<Types.RootAction>>({
     invalidActionCreator: () => 1, // Error: Type 'number' is not assignable to type '{ type: "todos/ADD"; payload: Todo; } | { ... }
   }, dispatch);
