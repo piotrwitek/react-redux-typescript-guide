@@ -586,7 +586,7 @@ function todosReducer(
 Rendering can then use exhaustive checks:
 
 ```tsx
-const TodosPanel: React.FC<{ todos: AsyncData<ReadonlyArray<Todo>> }> = ({ todos }) => {
+const TodosPanel: React.FC<{ todos: AsyncData<ReadonlyArray<Todo>, string> }> = ({ todos }) => {
   switch (todos.type) {
     case 'idle':
       return <span>Start search</span>;
