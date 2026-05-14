@@ -1475,6 +1475,10 @@ const TodosPanel: React.FC<{ todos: AsyncData<ReadonlyArray<Todo>> }> = ({ todos
       return <span>{todos.error}</span>;
     case 'success':
       return <TodoList items={todos.data} />;
+    default: {
+      const _exhaustiveCheck: never = todos;
+      return _exhaustiveCheck;
+    }
   }
 };
 ```
