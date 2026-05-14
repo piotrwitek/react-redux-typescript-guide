@@ -81,6 +81,7 @@ I highly recommend to add a bounty to the issue that you're waiting for to incre
     - [`React.Component<Props, State>`](#reactcomponentprops-state)
     - [`React.ComponentType<Props>`](#reactcomponenttypeprops)
     - [`React.ComponentProps<typeof XXX>`](#reactcomponentpropstypeof-xxx)
+    - [`React.forwardRef`](#reactforwardref)
     - [`React.ReactElement` | `JSX.Element`](#reactreactelement--jsxelement)
     - [`React.ReactNode`](#reactreactnode)
     - [`React.CSSProperties`](#reactcssproperties)
@@ -222,6 +223,34 @@ Gets Props type of a specified component XXX (WARNING: does not work with static
 
 ```tsx
 type MyComponentProps = React.ComponentProps<typeof MyComponent>;
+```
+
+### `React.forwardRef`
+
+Use `forwardRef` when a parent needs to access an inner DOM node or imperative
+API. Type both the ref target and props explicitly:
+
+```tsx
+type SearchInputProps = {
+  value: string;
+  onChange: (value: string) => void;
+};
+
+const SearchInput = React.forwardRef<HTMLInputElement, SearchInputProps>( // <RefType, PropsType>
+  ({ value, onChange }, ref) => (
+    <input
+      ref={ref}
+      value={value}
+      onChange={(e) => onChange(e.target.value)}
+    />
+  )
+);
+```
+
+To preserve display names in DevTools:
+
+```tsx
+SearchInput.displayName = 'SearchInput';
 ```
 
 ### `React.ReactElement` | `JSX.Element`
