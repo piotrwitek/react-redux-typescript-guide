@@ -710,6 +710,47 @@ const mapDispatchToProps = (dispatch: Dispatch<MyTypes.RootAction>) =>
 
 ```
 
+If you need to connect a **generic** component, prefer a small factory and infer
+Redux props through `ConnectedProps`:
+
+```tsx
+import * as React from 'react';
+import { connect, ConnectedProps } from 'react-redux';
+import * as Types from 'MyTypes';
+
+type OwnProps = {
+  selectedId?: string;
+};
+
+type GenericListProps<T> = {
+  items: ReadonlyArray<T>;
+  renderItem: (item: T) => React.ReactNode;
+};
+
+const mapStateToProps = (state: Types.RootState, ownProps: OwnProps) => ({
+  selectedId: ownProps.selectedId ?? String(state.counters.reduxCounter),
+});
+
+const connector = connect(mapStateToProps);
+type ReduxProps = ConnectedProps<typeof connector>;
+
+export const createConnectedGenericList = <T,>() => {
+  type Props = GenericListProps<T> & ReduxProps;
+
+  const GenericList: React.FC<Props> = ({ items, renderItem, selectedId }) => (
+    <ul>
+      {items.map((item, index) => (
+        <li key={index} data-selected={String(index) === selectedId}>
+          {renderItem(item)}
+        </li>
+      ))}
+    </ul>
+  );
+
+  return connector(GenericList);
+};
+```
+
 [⇧ back to top](#table-of-contents)
 
 ### Typing `useSelector` and `useDispatch`
