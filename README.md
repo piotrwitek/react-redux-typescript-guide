@@ -35,6 +35,29 @@ _Found it useful? Want more updates?_
 - Make type annotations concise by eliminating redundancy in types using advanced TypeScript Language features like **Type Inference** and **Control flow analysis**
 - Reduce repetition and complexity of types with TypeScript focused [complementary libraries](#react-redux-typescript-ecosystem)
 
+### **What This Guide Is**
+
+This repository is a reference guide and recipe collection for using React, Redux, and TypeScript together. It is **not** a boilerplate, starter kit, or library that introduces its own replacement APIs for React.
+
+Most of the types shown in this guide come from the official React and React Redux type packages such as `@types/react` and `@types/react-redux`. When you see names like `React.FC`, `React.ComponentType`, or `React.ReactNode`, they are existing React types that this guide explains and uses in examples.
+
+### **How to Use This Guide**
+
+If you are new to React, read this guide in the following order:
+
+1. Start with the [Playground Project](#playground-project) to see where the examples live.
+2. Read the [React Types Cheatsheet](#react-types-cheatsheet) before diving into the component recipes.
+3. Work through the [React](#react) section from top to bottom, then move on to [Redux](#redux).
+4. Use later sections like [Configuration & Dev Tools](#configuration--dev-tools) and [FAQ](#faq) as reference material when you need them.
+
+If you already know React, you can treat each section as an independent recipe and jump directly to the pattern you need.
+
+### **Understanding the Playground and Style Guide**
+
+The `/playground` folder is the runnable sample app for this repository. The examples shown on the home page come from files such as `*.usage.tsx`, and the app route in `playground/src/routes/home.tsx` stitches those usage examples together into one screen.
+
+The Styleguidist demo is a separate view over the same source files. It renders markdown docs and live examples from `playground/src`, organized by `playground/styleguide/styleguide.config.js`. That is why the browser output can look different from the `/playground` app even though both are driven by the same example components.
+
 ### **React, Redux, Typescript Ecosystem**
 
 - [typesafe-actions](https://github.com/piotrwitek/typesafe-actions) - Typesafe utilities for "action-creators" in Redux / Flux Architecture  
@@ -76,6 +99,9 @@ I highly recommend to add a bounty to the issue that you're waiting for to incre
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
 
+  - [What This Guide Is](#what-this-guide-is)
+  - [How to Use This Guide](#how-to-use-this-guide)
+  - [Understanding the Playground and Style Guide](#understanding-the-playground-and-style-guide)
   - [React Types Cheatsheet](#react-types-cheatsheet)
     - [`React.FC<Props>` | `React.FunctionComponent<Props>`](#reactfcprops--reactfunctioncomponentprops)
     - [`React.Component<Props, State>`](#reactcomponentprops-state)
