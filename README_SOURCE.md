@@ -726,7 +726,7 @@ type OwnProps = {
 type Props = OwnProps & DispatchProps;
 
 const CounterButton: React.FC<Props> = ({ label, onIncrement }) => (
-  <button onClick={onIncrement}>{label}</button>
+  <button onClick={() => onIncrement()}>{label}</button>
 );
 
 export const CounterButtonConnected = connect(
