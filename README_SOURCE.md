@@ -671,11 +671,11 @@ const initialState: TodosState = {
 
 const reducer = (state = initialState, action: RootAction): TodosState => {
   switch (action.type) {
-    case getType(fetchTodos.request):
+    case fetchTodos.request.type:
       return { ...state, result: { type: 'loading' } };
-    case getType(fetchTodos.success):
+    case fetchTodos.success.type:
       return { ...state, result: { type: 'success', data: action.payload } };
-    case getType(fetchTodos.failure):
+    case fetchTodos.failure.type:
       return { ...state, result: { type: 'failure', error: action.payload } };
     default:
       return state;
