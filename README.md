@@ -1824,30 +1824,29 @@ import * as React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import * as Types from 'MyTypes';
 
-type OwnProps = {
-  selectedId?: string;
-};
-
 type GenericListProps<T> = {
   items: ReadonlyArray<T>;
   renderItem: (item: T) => React.ReactNode;
   getItemKey: (item: T) => React.Key;
 };
 
-const mapStateToProps = (state: Types.RootState, ownProps: OwnProps) => ({
-  selectedId: ownProps.selectedId ?? String(state.counters.reduxCounter),
-});
-
-const connector = connect(mapStateToProps);
-type ReduxProps = ConnectedProps<typeof connector>;
-
 export const createConnectedGenericList = <T,>() => {
+  type OwnProps = GenericListProps<T> & {
+    selectedKey?: React.Key;
+  };
+
+  const mapStateToProps = (state: Types.RootState, ownProps: OwnProps) => ({
+    selectedKey: ownProps.selectedKey ?? state.counters.reduxCounter,
+  });
+
+  const connector = connect(mapStateToProps);
+  type ReduxProps = ConnectedProps<typeof connector>;
   type Props = GenericListProps<T> & ReduxProps;
 
-  const GenericList: React.FC<Props> = ({ items, renderItem, getItemKey, selectedId }) => (
+  const GenericList: React.FC<Props> = ({ items, renderItem, getItemKey, selectedKey }) => (
     <ul>
-      {items.map((item, index) => (
-        <li key={getItemKey(item)} data-selected={String(index) === selectedId}>
+      {items.map(item => (
+        <li key={getItemKey(item)} data-selected={String(getItemKey(item)) === String(selectedKey)}>
           {renderItem(item)}
         </li>
       ))}
