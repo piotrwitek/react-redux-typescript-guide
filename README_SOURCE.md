@@ -108,6 +108,7 @@ I highly recommend to add a bounty to the issue that you're waiting for to incre
     - [- HOC wrapping a component](#--hoc-wrapping-a-component)
     - [- HOC wrapping a component and injecting props](#--hoc-wrapping-a-component-and-injecting-props)
     - [- Nested HOC - wrapping a component, injecting props and connecting to redux 🌟](#--nested-hoc---wrapping-a-component-injecting-props-and-connecting-to-redux-)
+    - [- Legacy Recompose examples](#--legacy-recompose-examples)
   - [Redux Connected Components](#redux-connected-components)
     - [- Redux connected counter](#--redux-connected-counter)
     - [- Redux connected counter with own props](#--redux-connected-counter-with-own-props)
@@ -435,6 +436,19 @@ Adds error handling using componentDidCatch to any component
 
 ::codeblock='playground/src/hoc/with-connected-count.tsx'::
 ::expander='playground/src/hoc/with-connected-count.usage.tsx'::
+
+[⇧ back to top](#table-of-contents)
+
+### - Legacy Recompose examples
+
+[`recompose`](https://github.com/acdlite/recompose) is no longer actively maintained.
+Prefer [Hooks](#hooks) for new code and use these examples when maintaining or migrating older HOC-based code.
+For projects that already depend on `recompose`, install the matching type declarations with `npm i -D @types/recompose`.
+
+The examples keep consumer props separate from props injected by `compose`, `withState`, `withHandlers`, `withProps`, and `withStateHandlers`.
+
+::codeblock='playground/src/hoc/recompose-examples.tsx'::
+::expander='playground/src/hoc/recompose-examples.usage.tsx'::
 
 [⇧ back to top](#table-of-contents)
 

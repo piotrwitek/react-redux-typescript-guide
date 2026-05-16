@@ -108,6 +108,7 @@ I highly recommend to add a bounty to the issue that you're waiting for to incre
     - [- HOC wrapping a component](#--hoc-wrapping-a-component)
     - [- HOC wrapping a component and injecting props](#--hoc-wrapping-a-component-and-injecting-props)
     - [- Nested HOC - wrapping a component, injecting props and connecting to redux 🌟](#--nested-hoc---wrapping-a-component-injecting-props-and-connecting-to-redux-)
+    - [- Legacy Recompose examples](#--legacy-recompose-examples)
   - [Redux Connected Components](#redux-connected-components)
     - [- Redux connected counter](#--redux-connected-counter)
     - [- Redux connected counter with own props](#--redux-connected-counter-with-own-props)
@@ -967,6 +968,154 @@ const FCCounterWithConnectedCount = withConnectedCount(FCCounter);
 
 export default () => (
   <FCCounterWithConnectedCount overrideCount={5} label={'FCCounterWithState'} />
+);
+
+```
+</p></details>
+
+[⇧ back to top](#table-of-contents)
+
+### - Legacy Recompose examples
+
+[`recompose`](https://github.com/acdlite/recompose) is no longer actively maintained.
+Prefer [Hooks](#hooks) for new code and use these examples when maintaining or migrating older HOC-based code.
+For projects that already depend on `recompose`, install the matching type declarations with `npm i -D @types/recompose`.
+
+The examples keep consumer props separate from props injected by `compose`, `withState`, `withHandlers`, `withProps`, and `withStateHandlers`.
+
+```tsx
+import * as React from 'react';
+import { compose, withHandlers, withProps, withState, withStateHandlers } from 'recompose';
+
+type CounterOuterProps = {
+  title: string;
+  initialCount?: number;
+  step?: number;
+};
+
+type CounterStateProps = {
+  count: number;
+  setCount: (count: number) => void;
+};
+
+type CounterHandlers = {
+  onIncrement: () => void;
+  onReset: () => void;
+};
+
+type CounterLabelProps = {
+  label: string;
+};
+
+type CounterProps = CounterOuterProps & CounterStateProps & CounterHandlers & CounterLabelProps;
+
+const CounterView: React.FC<CounterProps> = ({ count, label, onIncrement, onReset }) => (
+  <section>
+    <h3>{label}</h3>
+    <p>Current count: {count}</p>
+    <button type="button" onClick={onIncrement}>
+      Increment
+    </button>
+    <button type="button" onClick={onReset}>
+      Reset
+    </button>
+  </section>
+);
+
+const withCounterState = withState<CounterOuterProps, number, 'count', 'setCount'>(
+  'count',
+  'setCount',
+  ({ initialCount = 0 }) => initialCount
+);
+
+const withCounterHandlers = withHandlers<CounterOuterProps & CounterStateProps, CounterHandlers>({
+  onIncrement:
+    ({ count, setCount, step = 1 }) =>
+    () => {
+      setCount(count + step);
+    },
+  onReset:
+    ({ initialCount = 0, setCount }) =>
+    () => {
+      setCount(initialCount);
+    },
+});
+
+const withCounterLabel = withProps<
+  CounterLabelProps,
+  CounterOuterProps & CounterStateProps & CounterHandlers
+>(({ count, title }) => ({
+  label: `${title}: ${count}`,
+}));
+
+const enhanceCounter = compose<CounterProps, CounterOuterProps>(
+  withCounterState,
+  withCounterHandlers,
+  withCounterLabel
+);
+
+export const RecomposeCounter = enhanceCounter(CounterView);
+
+type ToggleOuterProps = {
+  label: string;
+  initiallyOpen?: boolean;
+};
+
+type ToggleState = {
+  isOpen: boolean;
+};
+
+type ToggleUpdaters = {
+  toggle: () => Partial<ToggleState>;
+  close: () => Partial<ToggleState>;
+};
+
+type ToggleProps = ToggleOuterProps & ToggleState & ToggleUpdaters;
+
+const ToggleView: React.FC<ToggleProps> = ({ close, isOpen, label, toggle }) => (
+  <section>
+    <button type="button" onClick={toggle}>
+      {label}
+    </button>
+    {isOpen && (
+      <button type="button" onClick={close}>
+        Close
+      </button>
+    )}
+  </section>
+);
+
+const withToggleState = withStateHandlers<ToggleState, ToggleUpdaters, ToggleOuterProps>(
+  ({ initiallyOpen = false }) => ({
+    isOpen: initiallyOpen,
+  }),
+  {
+    toggle:
+      ({ isOpen }) =>
+      () => ({
+        isOpen: !isOpen,
+      }),
+    close: () => () => ({
+      isOpen: false,
+    }),
+  }
+);
+
+export const RecomposeToggle = withToggleState(ToggleView);
+
+```
+<details><summary><i>Click to expand</i></summary><p>
+
+```tsx
+import * as React from 'react';
+
+import { RecomposeCounter, RecomposeToggle } from './recompose-examples';
+
+export default () => (
+  <>
+    <RecomposeCounter title="Recompose counter" initialCount={3} step={2} />
+    <RecomposeToggle label="Show details" initiallyOpen />
+  </>
 );
 
 ```

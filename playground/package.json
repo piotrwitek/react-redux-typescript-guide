@@ -29,6 +29,7 @@
     "@types/node": "16.11.33",
     "@types/react": "18.0.8",
     "@types/react-dom": "18.0.3",
+    "@types/recompose": "0.30.15",
     "@types/react-redux": "7.1.24",
     "@types/react-router-dom": "5.3.3",
     "axios": "0.26.1",
