@@ -1774,6 +1774,7 @@ _**NOTE**: Below you'll find a short explanation of concepts behind using `conne
 
 ```tsx
 import MyTypes from 'MyTypes';
+import React from 'react';
 
 import { bindActionCreators, Dispatch, ActionCreatorsMapObject } from 'redux';
 import { connect } from 'react-redux';
@@ -1813,6 +1814,31 @@ const mapDispatchToProps = (dispatch: Dispatch<MyTypes.RootAction>) =>
   bindActionCreators<ActionCreatorsMapObject<Types.RootAction>>({
     invalidActionCreator: () => 1, // Error: Type 'number' is not assignable to type '{ type: "todos/ADD"; payload: Todo; } | { ... }
   }, dispatch);
+
+// When using object shorthand in connect, use "typeof" action creators
+// to explicitly type dispatched props.
+type DispatchProps = {
+  onIncrement: typeof countersActions.increment;
+};
+
+const dispatchProps: DispatchProps = {
+  onIncrement: countersActions.increment,
+};
+
+type OwnProps = {
+  label: string;
+};
+
+type Props = OwnProps & DispatchProps;
+
+const CounterButton: React.FC<Props> = ({ label, onIncrement }) => (
+  <button onClick={() => onIncrement()}>{label}</button>
+);
+
+export const CounterButtonConnected = connect(
+  null,
+  dispatchProps
+)(CounterButton);
 
 ```
 
