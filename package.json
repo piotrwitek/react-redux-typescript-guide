@@ -5,8 +5,9 @@
     "husky": "3.0.9"
   },
   "scripts": {
-    "ci-check": "npm run doctoc && npm run readme:generate",
-    "doctoc": "doctoc --maxlevel=3 README_SOURCE.md",
+    "test": "node --test test/*.test.js",
+    "ci-check": "npm run readme:generate && npm test",
+    "doctoc": "node -e \"console.log('README_SOURCE.md TOC is maintained in source for this repository.')\"",
     "readme:generate": "node generate-readme.js",
     "contributors:check": "all-contributors check",
     "contributors:add": "all-contributors add",
