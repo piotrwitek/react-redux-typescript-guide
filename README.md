@@ -1733,6 +1733,44 @@ describe('Todos Epics', () => {
 
 ```
 
+### Modelling async data with ADT
+
+When async state can be in one of multiple modes, model it as a discriminated
+union instead of separate nullable fields. This keeps transitions explicit and
+makes exhaustive checks straightforward.
+
+```ts
+type AsyncData<T, E = string> =
+  | { type: 'idle' }
+  | { type: 'loading' }
+  | { type: 'success'; data: T }
+  | { type: 'failure'; error: E };
+
+type TodosState = {
+  result: AsyncData<Todo[]>;
+};
+
+const initialState: TodosState = {
+  result: { type: 'idle' },
+};
+
+const reducer = (state = initialState, action: RootAction): TodosState => {
+  switch (action.type) {
+    case getType(fetchTodos.request):
+      return { ...state, result: { type: 'loading' } };
+    case getType(fetchTodos.success):
+      return { ...state, result: { type: 'success', data: action.payload } };
+    case getType(fetchTodos.failure):
+      return { ...state, result: { type: 'failure', error: action.payload } };
+    default:
+      return state;
+  }
+};
+```
+
+In the UI layer, narrow by `result.type` and let TypeScript infer the payload
+shape for each branch.
+
 [⇧ back to top](#table-of-contents)
 
 ---
