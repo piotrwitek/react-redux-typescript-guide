@@ -1822,40 +1822,91 @@ const mapDispatchToProps = (dispatch: Dispatch<MyTypes.RootAction>) =>
 
 ```tsx
 import * as React from 'react';
+import Types from 'MyTypes';
 import { connect, ConnectedProps } from 'react-redux';
 
-const mapState = (state: MyTypes.RootState) => ({
-  count: state.counters.reduxCounter,
-});
-
-const connector = connect(mapState, null, null, { forwardRef: true });
-type ReduxProps = ConnectedProps<typeof connector>;
+import { countersActions, countersSelectors } from '../features/counters';
 
 type OwnProps = {
   label: string;
 };
 
+const mapStateToProps = (state: Types.RootState) => ({
+  count: countersSelectors.getReduxCounter(state.counters),
+});
+
+const dispatchProps = {
+  onIncrement: countersActions.increment,
+};
+
+const connector = connect(mapStateToProps, dispatchProps, null, {
+  forwardRef: true,
+});
+
+type ReduxProps = ConnectedProps<typeof connector>;
 type Props = OwnProps & ReduxProps;
 
-class CounterInner extends React.Component<Props> {
-  focus() {
-    // imperative API exposed via ref
-  }
+class FCCounterConnectedForwardRefBase extends React.Component<Props> {
+  focus = () => {
+    // imperative API exposed via forwarded ref
+  };
 
   render() {
-    const { label, count } = this.props;
-    return <span>{label}: {count}</span>;
+    const { label, count, onIncrement } = this.props;
+
+    return (
+      <div>
+        <span>
+          {label}: {count}
+        </span>
+        <button type="button" onClick={onIncrement}>
+          {`Increment`}
+        </button>
+      </div>
+    );
   }
 }
 
-const ConnectedCounter = connector(CounterInner);
+const FCCounterConnected = connector(FCCounterConnectedForwardRefBase);
 
-type CounterRef = CounterInner;
+export type FCCounterConnectedForwardRefInstance =
+  FCCounterConnectedForwardRefBase;
 
-export const CounterWithRef = React.forwardRef<CounterRef, OwnProps>((props, ref) => (
-  <ConnectedCounter {...props} ref={ref} />
+export const FCCounterConnectedForwardRef = React.forwardRef<
+  FCCounterConnectedForwardRefInstance,
+  OwnProps
+>((props, ref) => (
+  <FCCounterConnected {...props} {...(ref ? { ref } : {})} />
 ));
+
 ```
+<details><summary><i>Click to expand</i></summary><p>
+
+```tsx
+import * as React from 'react';
+
+import {
+  FCCounterConnectedForwardRef,
+  FCCounterConnectedForwardRefInstance,
+} from './fc-counter-connected-forward-ref';
+
+export default () => {
+  const counterRef = React.useRef<FCCounterConnectedForwardRefInstance>(null);
+
+  React.useEffect(() => {
+    counterRef.current?.focus();
+  }, []);
+
+  return (
+    <FCCounterConnectedForwardRef
+      label="Forward ref connected counter"
+      ref={counterRef}
+    />
+  );
+};
+
+```
+</p></details>
 
 [⇧ back to top](#table-of-contents)
 

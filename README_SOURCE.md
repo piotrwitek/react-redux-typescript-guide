@@ -714,42 +714,8 @@ const mapDispatchToProps = (dispatch: Dispatch<MyTypes.RootAction>) =>
 
 ### Typing connected component with `forwardRef`
 
-```tsx
-import * as React from 'react';
-import { connect, ConnectedProps } from 'react-redux';
-
-const mapState = (state: MyTypes.RootState) => ({
-  count: state.counters.reduxCounter,
-});
-
-const connector = connect(mapState, null, null, { forwardRef: true });
-type ReduxProps = ConnectedProps<typeof connector>;
-
-type OwnProps = {
-  label: string;
-};
-
-type Props = OwnProps & ReduxProps;
-
-class CounterInner extends React.Component<Props> {
-  focus() {
-    // imperative API exposed via ref
-  }
-
-  render() {
-    const { label, count } = this.props;
-    return <span>{label}: {count}</span>;
-  }
-}
-
-const ConnectedCounter = connector(CounterInner);
-
-type CounterRef = CounterInner;
-
-export const CounterWithRef = React.forwardRef<CounterRef, OwnProps>((props, ref) => (
-  <ConnectedCounter {...props} ref={ref} />
-));
-```
+::codeblock='playground/src/connected/fc-counter-connected-forward-ref.tsx'::
+::expander='playground/src/connected/fc-counter-connected-forward-ref.usage.tsx'::
 
 [⇧ back to top](#table-of-contents)
 
