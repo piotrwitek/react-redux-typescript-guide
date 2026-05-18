@@ -70,6 +70,8 @@ When the app grows, organizing files by feature helps keep module boundaries cle
 src/
   app/
     store.ts
+    root-action.ts
+    root-epic.ts
     root-reducer.ts
   features/
     todos/
@@ -78,7 +80,7 @@ src/
       epics.ts
       reducer.ts
       selectors.ts
-      types.ts
+      types.ts # or models.ts
       components/
       containers/
       index.ts
@@ -95,6 +97,13 @@ This structure keeps each feature self-contained and exposes only the public API
 - services -> feature static types
 
 If you keep this direction stable, refactoring internals (renaming files, moving private helpers, splitting modules) does not leak outside of the feature module.
+
+### Cross-feature communication rules
+
+- Cross-feature reads should happen via exported selectors only
+- Cross-feature writes should happen via exported actions only
+- Avoid importing internal files from another feature (import from `index.ts` public API)
+- Keep selector dependencies one-way to prevent cyclic coupling between features
 
 ## Contributing Guide
 
