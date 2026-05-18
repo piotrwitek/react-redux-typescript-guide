@@ -53,6 +53,23 @@ _Found it useful? Want more updates?_
 Check out our Playground Project located in the `/playground` folder. It contains all source files of the code examples found in the guide. They are all tested with the most recent version of TypeScript and 3rd party type-definitions (like `@types/react` or `@types/react-redux`) to ensure the examples are up-to-date and not broken with updated definitions (It's based on `create-react-app --typescript`).
 > Playground project was created so that you can simply clone the repository locally and immediately play around with all the component patterns found in the guide. It will help you to learn all the examples from this guide in a real project environment without the need to create complicated environment setup by yourself.
 
+### Selectors in Playground
+
+Selectors are defined in each feature module and consumed from connected components and hooks.
+Because feature selectors accept feature state, adapt from `RootState` in one place:
+
+```ts
+const mapStateToProps = (state: Types.RootState) => ({
+  count: countersSelectors.getReduxCounter(state.counters),
+});
+```
+
+Example files in playground:
+
+- `src/connected/fc-counter-connected.tsx`
+- `src/connected/fc-counter-connected-own-props.tsx`
+- `src/hooks/react-redux-hooks.tsx`
+
 ## Contributing Guide
 
 You can help make this project better by contributing. If you're planning to contribute please make sure to check our contributing guide: [CONTRIBUTING.md](/CONTRIBUTING.md)
@@ -1068,11 +1085,11 @@ export default () => (
 ```tsx
 import * as React from 'react';
 import { FCCounter } from '../components';
-import { increment } from '../features/counters/actions';
+import { countersSelectors, increment } from '../features/counters';
 import { useSelector, useDispatch } from '../store/hooks';
 
 const FCCounterConnectedHooksUsage: React.FC = () => {
-  const counter = useSelector(state => state.counters.reduxCounter);
+  const counter = useSelector(state => countersSelectors.getReduxCounter(state.counters));
   const dispatch = useDispatch();
   return <FCCounter label="Use selector" count={counter} onIncrement={() => dispatch(increment())}/>;
 };
