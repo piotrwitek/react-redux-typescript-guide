@@ -53,6 +53,60 @@ _Found it useful? Want more updates?_
 Check out our Playground Project located in the `/playground` folder. It contains all source files of the code examples found in the guide. They are all tested with the most recent version of TypeScript and 3rd party type-definitions (like `@types/react` or `@types/react-redux`) to ensure the examples are up-to-date and not broken with updated definitions (It's based on `create-react-app --typescript`).
 > Playground project was created so that you can simply clone the repository locally and immediately play around with all the component patterns found in the guide. It will help you to learn all the examples from this guide in a real project environment without the need to create complicated environment setup by yourself.
 
+## Scalable Application Structure
+
+When the app grows, organizing files by feature helps keep module boundaries clear and keeps dependencies directional.
+
+### Goals
+
+- Group files by feature, not by technical type
+- Add or remove features with minimal change outside the feature folder
+- Enable or disable optional features on demand
+- Keep features reusable and pluggable across different Redux applications
+
+### Feature module layout
+
+```bash
+src/
+  app/
+    store.ts
+    root-action.ts
+    root-epic.ts
+    root-reducer.ts
+  features/
+    todos/
+      actions.ts
+      constants.ts
+      epics.ts
+      reducer.ts
+      selectors.ts
+      services.ts
+      models.ts
+      components/
+      containers/
+      index.ts
+```
+
+This structure keeps each feature self-contained and exposes only the public API through `features/<feature>/index.ts`.
+
+### Import dependency direction
+
+- dumb components -> feature models
+- smart/connected components -> feature selectors + actions -> feature models
+- selectors -> feature models
+- reducer -> feature actions -> feature models
+- side-effects (epics/thunks/sagas) -> feature actions + selectors + services -> feature models
+- services -> feature models
+
+If you keep this direction stable, refactoring internals (renaming files, moving private helpers, splitting modules) does not leak outside of the feature module.
+
+### Cross-feature communication rules
+
+- Cross-feature reads should happen via exported selectors only
+- Cross-feature writes should happen via exported actions only
+- Avoid importing internal files from another feature (import from `index.ts` public API)
+- Keep selector dependencies one-way to prevent cyclic coupling between features
+
 ## Contributing Guide
 
 You can help make this project better by contributing. If you're planning to contribute please make sure to check our contributing guide: [CONTRIBUTING.md](/CONTRIBUTING.md)
