@@ -53,5 +53,5 @@ export const FCCounterConnectedForwardRef = React.forwardRef<
   FCCounterConnectedForwardRefInstance,
   OwnProps
 >((props, ref) => (
-  <FCCounterConnected {...props} {...(ref ? { ref } : {})} />
+  <FCCounterConnected {...props} {...{ ref }} />
 ));
