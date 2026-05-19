@@ -80,7 +80,8 @@ src/
       epics.ts
       reducer.ts
       selectors.ts
-      types.ts # or models.ts
+      services.ts
+      models.ts
       components/
       containers/
       index.ts
@@ -90,11 +91,12 @@ This structure keeps each feature self-contained and exposes only the public API
 
 ### Import dependency direction
 
-- dumb components -> feature static types
-- smart/connected components -> feature selectors + actions -> feature static types
-- reducer -> feature actions -> feature static types
-- side-effects (epics/thunks/sagas) -> feature actions + selectors + services -> feature static types
-- services -> feature static types
+- dumb components -> feature models
+- smart/connected components -> feature selectors + actions -> feature models
+- selectors -> feature models
+- reducer -> feature actions -> feature models
+- side-effects (epics/thunks/sagas) -> feature actions + selectors + services -> feature models
+- services -> feature models
 
 If you keep this direction stable, refactoring internals (renaming files, moving private helpers, splitting modules) does not leak outside of the feature module.
 
