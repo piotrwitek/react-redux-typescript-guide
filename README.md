@@ -1818,6 +1818,98 @@ const mapDispatchToProps = (dispatch: Dispatch<MyTypes.RootAction>) =>
 
 [⇧ back to top](#table-of-contents)
 
+### Typing connected component with `forwardRef`
+
+```tsx
+import * as React from 'react';
+import Types from 'MyTypes';
+import { connect, ConnectedProps } from 'react-redux';
+
+import { countersActions, countersSelectors } from '../features/counters';
+
+type OwnProps = {
+  label: string;
+};
+
+const mapStateToProps = (state: Types.RootState) => ({
+  count: countersSelectors.getReduxCounter(state.counters),
+});
+
+const dispatchProps = {
+  onIncrement: countersActions.increment,
+};
+
+const connector = connect(mapStateToProps, dispatchProps, null, {
+  forwardRef: true,
+});
+
+type ReduxProps = ConnectedProps<typeof connector>;
+type Props = OwnProps & ReduxProps;
+
+class FCCounterConnectedForwardRefBase extends React.Component<Props> {
+  focus = () => {
+    // imperative API exposed via forwarded ref
+  };
+
+  render() {
+    const { label, count, onIncrement } = this.props;
+
+    return (
+      <div>
+        <span>
+          {label}: {count}
+        </span>
+        <button type="button" onClick={onIncrement}>
+          {`Increment`}
+        </button>
+      </div>
+    );
+  }
+}
+
+const FCCounterConnected = connector(FCCounterConnectedForwardRefBase);
+
+export type FCCounterConnectedForwardRefInstance =
+  FCCounterConnectedForwardRefBase;
+
+export const FCCounterConnectedForwardRef = React.forwardRef<
+  FCCounterConnectedForwardRefInstance,
+  OwnProps
+>((props, ref) => (
+  <FCCounterConnected {...props} {...{ ref }} />
+));
+
+```
+<details><summary><i>Click to expand</i></summary><p>
+
+```tsx
+import * as React from 'react';
+
+import {
+  FCCounterConnectedForwardRef,
+  FCCounterConnectedForwardRefInstance,
+} from './fc-counter-connected-forward-ref';
+
+export default () => {
+  const counterRef = React.useRef<FCCounterConnectedForwardRefInstance>(null);
+
+  React.useEffect(() => {
+    counterRef.current?.focus();
+  }, []);
+
+  return (
+    <FCCounterConnectedForwardRef
+      label="Forward ref connected counter"
+      ref={counterRef}
+    />
+  );
+};
+
+```
+</p></details>
+
+[⇧ back to top](#table-of-contents)
+
 ### Typing `useSelector` and `useDispatch`
 
 ```tsx

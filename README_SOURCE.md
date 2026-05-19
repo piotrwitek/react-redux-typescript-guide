@@ -712,6 +712,13 @@ const mapDispatchToProps = (dispatch: Dispatch<MyTypes.RootAction>) =>
 
 [⇧ back to top](#table-of-contents)
 
+### Typing connected component with `forwardRef`
+
+::codeblock='playground/src/connected/fc-counter-connected-forward-ref.tsx'::
+::expander='playground/src/connected/fc-counter-connected-forward-ref.usage.tsx'::
+
+[⇧ back to top](#table-of-contents)
+
 ### Typing `useSelector` and `useDispatch`
 
 ::codeblock='playground/src/store/hooks.ts'::
