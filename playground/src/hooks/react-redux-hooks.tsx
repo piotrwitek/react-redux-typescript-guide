@@ -1,12 +1,13 @@
 import * as React from 'react';
 import { FCCounter } from '../components';
-import { countersActions, countersSelectors } from '../features/counters';
+import { countersSelectors } from '../features/counters';
+import { increment } from '../features/counters/actions';
 import { useSelector, useDispatch } from '../store/hooks';
 
 const FCCounterConnectedHooksUsage: React.FC = () => {
   const counter = useSelector(state => countersSelectors.getReduxCounter(state.counters));
   const dispatch = useDispatch();
-  return <FCCounter label="Use selector" count={counter} onIncrement={() => dispatch(countersActions.increment())}/>;
+  return <FCCounter label="Use selector" count={counter} onIncrement={() => dispatch(increment())}/>;
 };
 
 export default FCCounterConnectedHooksUsage;
