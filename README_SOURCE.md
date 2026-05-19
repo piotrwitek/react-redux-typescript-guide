@@ -710,7 +710,7 @@ const mapDispatchToProps = (dispatch: Dispatch<MyTypes.RootAction>) =>
 
 ```
 
-If you prefer decorator syntax with class components, type it through `ConnectedProps` and apply `@connector`:
+For TypeScript, the safest class-component pattern is to keep `connector` as a function and export `connector(Component)`:
 
 ```tsx
 import * as React from 'react';
@@ -730,8 +730,26 @@ const dispatchProps = {
 const connector = connect(mapStateToProps, dispatchProps);
 type PropsFromRedux = ConnectedProps<typeof connector>;
 
+class ClassCounterBase extends React.Component<PropsFromRedux> {
+  render() {
+    const { count, onIncrement } = this.props;
+
+    return (
+      <button type="button" onClick={onIncrement}>
+        {`Count: ${count}`}
+      </button>
+    );
+  }
+}
+
+export const ClassCounterConnected = connector(ClassCounterBase);
+```
+
+Decorator syntax can still be shown for JavaScript-oriented codebases, but it has call-site typing limitations in TypeScript:
+
+```tsx
 @connector
-class ClassCounterConnected extends React.Component<PropsFromRedux> {
+class ClassCounterDecorated extends React.Component<PropsFromRedux> {
   render() {
     const { count, onIncrement } = this.props;
 
@@ -746,24 +764,7 @@ class ClassCounterConnected extends React.Component<PropsFromRedux> {
 
 _**NOTE**: Decorator syntax requires enabling `"experimentalDecorators": true` in `tsconfig.json` and a matching decorator transform in your build tooling._
 
-_**WARNING**: In TypeScript, class decorators do not transform the component's prop type for JSX consumers. For full call-site type safety, prefer `connect(mapStateToProps, dispatchProps)(Component)` export style._
-
-Preferred TypeScript export style:
-
-```tsx
-class ClassCounterBase extends React.Component<PropsFromRedux> {
-  render() {
-    const { count, onIncrement } = this.props;
-    return (
-      <button type="button" onClick={onIncrement}>
-        {`Count: ${count}`}
-      </button>
-    );
-  }
-}
-
-export const ClassCounterConnectedSafe = connector(ClassCounterBase);
-```
+_**WARNING**: In TypeScript, class decorators do not transform the component's prop type for JSX consumers. Prefer `connector(Component)` export style above for full call-site type safety._
 
 [⇧ back to top](#table-of-contents)
 
