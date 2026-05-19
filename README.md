@@ -1816,6 +1816,62 @@ const mapDispatchToProps = (dispatch: Dispatch<MyTypes.RootAction>) =>
 
 ```
 
+For TypeScript, the safest class-component pattern is to keep `connector` as a function and export `connector(Component)`:
+
+```tsx
+import * as React from 'react';
+import { ConnectedProps, connect } from 'react-redux';
+
+import MyTypes from 'MyTypes';
+import { countersActions, countersSelectors } from '../features/counters';
+
+const mapStateToProps = (state: MyTypes.RootState) => ({
+  count: countersSelectors.getReduxCounter(state.counters),
+});
+
+const dispatchProps = {
+  onIncrement: countersActions.increment,
+};
+
+const connector = connect(mapStateToProps, dispatchProps);
+type PropsFromRedux = ConnectedProps<typeof connector>;
+
+class ClassCounterBase extends React.Component<PropsFromRedux> {
+  render() {
+    const { count, onIncrement } = this.props;
+
+    return (
+      <button type="button" onClick={onIncrement}>
+        {`Count: ${count}`}
+      </button>
+    );
+  }
+}
+
+export const ClassCounterConnected = connector(ClassCounterBase);
+```
+
+Decorator syntax can still be shown for JavaScript-oriented codebases, but it has call-site typing limitations in TypeScript:
+
+```tsx
+@connector
+class ClassCounterDecorated extends React.Component<PropsFromRedux> {
+  render() {
+    const { count, onIncrement } = this.props;
+
+    return (
+      <button type="button" onClick={onIncrement}>
+        {`Count: ${count}`}
+      </button>
+    );
+  }
+}
+```
+
+_**NOTE**: Decorator syntax requires enabling `"experimentalDecorators": true` in `tsconfig.json` and a matching decorator transform in your build tooling._
+
+_**WARNING**: In TypeScript, class decorators do not transform the component's prop type for JSX consumers. Prefer `connector(Component)` export style above for full call-site type safety._
+
 [⇧ back to top](#table-of-contents)
 
 ### Typing `useSelector` and `useDispatch`
