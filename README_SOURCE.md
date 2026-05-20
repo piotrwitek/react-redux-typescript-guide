@@ -656,6 +656,17 @@ state.containerObject.numbers.push(1); // TS Error: cannot use mutator methods
 
 ::codeblock='playground/src/features/todos/selectors.ts'::
 
+Feature selectors receive only their own feature state. When using them from the
+Redux root state, adapt the root state by passing the matching feature slice:
+
+```tsx
+const mapStateToProps = (state: Types.RootState) => ({
+  todos: todosSelectors.getFilteredTodos(state.todos),
+});
+```
+
+::codeblock='playground/src/connected/todos-list-connected.tsx'::
+
 [⇧ back to top](#table-of-contents)
 
 ---
@@ -672,14 +683,14 @@ import MyTypes from 'MyTypes';
 import { bindActionCreators, Dispatch, ActionCreatorsMapObject } from 'redux';
 import { connect } from 'react-redux';
 
-import { countersActions } from '../features/counters';
+import { countersActions, countersSelectors } from '../features/counters';
 import { FCCounter } from '../components';
 
 // Type annotation for "state" argument is mandatory to check 
 // the correct shape of state object and injected props you can also
 // extend connected component Props interface by annotating `ownProps` argument
 const mapStateToProps = (state: MyTypes.RootState, ownProps: FCCounterProps) => ({
-  count: state.counters.reduxCounter,
+  count: countersSelectors.getReduxCounter(state.counters),
 });
 
 // "dispatch" argument needs an annotation to check the correct shape
