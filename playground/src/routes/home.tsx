@@ -8,6 +8,7 @@ import UserListUsage from '../components/generic-list.usage';
 import WithErrorBoundaryUsage from '../hoc/with-error-boundary.usage';
 import WithStateUsage from '../hoc/with-state.usage';
 import WithConnectedCountUsage from '../hoc/with-connected-count.usage';
+import TodosListConnectedUsage from '../connected/todos-list-connected.usage';
 
 export function Home() {
   return (
@@ -21,6 +22,7 @@ export function Home() {
       <WithErrorBoundaryUsage />
       <WithStateUsage />
       <WithConnectedCountUsage />
+      <TodosListConnectedUsage />
     </section>
   );
 };

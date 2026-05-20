@@ -1068,13 +1068,22 @@ export default () => (
 ```tsx
 import * as React from 'react';
 import { FCCounter } from '../components';
+import { countersSelectors } from '../features/counters';
 import { increment } from '../features/counters/actions';
 import { useSelector, useDispatch } from '../store/hooks';
 
 const FCCounterConnectedHooksUsage: React.FC = () => {
-  const counter = useSelector(state => state.counters.reduxCounter);
+  const counter = useSelector(state =>
+    countersSelectors.getReduxCounter(state.counters)
+  );
   const dispatch = useDispatch();
-  return <FCCounter label="Use selector" count={counter} onIncrement={() => dispatch(increment())}/>;
+  return (
+    <FCCounter
+      label="Use selector"
+      count={counter}
+      onIncrement={() => dispatch(increment())}
+    />
+  );
 };
 
 export default FCCounterConnectedHooksUsage;
@@ -1091,7 +1100,7 @@ import { bindActionCreators, Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import * as React from 'react';
 
-import { countersActions } from '../features/counters';
+import { countersActions, countersSelectors } from '../features/counters';
 
 // Thunk Action
 const incrementWithDelay = () => async (dispatch: Dispatch): Promise<void> => {
@@ -1099,7 +1108,7 @@ const incrementWithDelay = () => async (dispatch: Dispatch): Promise<void> => {
 };
 
 const mapStateToProps = (state: Types.RootState) => ({
-  count: state.counters.reduxCounter,
+  count: countersSelectors.getReduxCounter(state.counters),
 });
 
 const mapDispatchToProps = (dispatch: Dispatch<Types.RootAction>) =>
@@ -1762,6 +1771,104 @@ export const getFilteredTodos = createSelector(getTodos, getTodosFilter, (todos,
 
 ```
 
+Feature selectors receive only their own feature state. When using them from the
+Redux root state, adapt the root state by passing the matching feature slice:
+
+```tsx
+const mapStateToProps = (state: Types.RootState) => ({
+  todos: todosSelectors.getFilteredTodos(state.todos),
+});
+```
+
+```tsx
+import Types from 'MyTypes';
+import * as React from 'react';
+import { connect } from 'react-redux';
+
+import { todosActions, todosSelectors } from '../features/todos';
+import { TodosFilter } from '../features/todos/models';
+
+const mapStateToProps = (state: Types.RootState) => ({
+  todos: todosSelectors.getFilteredTodos(state.todos),
+  filter: todosSelectors.getTodosFilter(state.todos),
+});
+
+const dispatchProps = {
+  onAdd: todosActions.add,
+  onToggle: todosActions.toggle,
+  onChangeFilter: todosActions.changeFilter,
+};
+
+type Props = ReturnType<typeof mapStateToProps> & typeof dispatchProps;
+
+const TodosList: React.FC<Props> = ({
+  todos,
+  filter,
+  onAdd,
+  onToggle,
+  onChangeFilter,
+}) => {
+  const [title, setTitle] = React.useState('');
+
+  const handleAdd = (event: React.FormEvent) => {
+    event.preventDefault();
+
+    const nextTitle = title.trim();
+
+    if (!nextTitle) {
+      return;
+    }
+
+    onAdd(nextTitle);
+    setTitle('');
+  };
+
+  return (
+    <section>
+      <form onSubmit={handleAdd}>
+        <input
+          value={title}
+          onChange={event => setTitle(event.target.value)}
+          aria-label="Todo title"
+          placeholder="New todo"
+        />
+        <button type="submit">Add</button>
+      </form>
+      <select
+        value={filter}
+        onChange={event => onChangeFilter(event.target.value as TodosFilter)}
+        aria-label="Todo filter"
+      >
+        <option value={TodosFilter.All}>All</option>
+        <option value={TodosFilter.Active}>Active</option>
+        <option value={TodosFilter.Completed}>Completed</option>
+      </select>
+      <ul>
+        {todos.map(todo => (
+          <li key={todo.id}>
+            <button
+              type="button"
+              onClick={() => onToggle(todo.id)}
+              style={{
+                textDecoration: todo.completed ? 'line-through' : 'none',
+              }}
+            >
+              {todo.title}
+            </button>
+          </li>
+        ))}
+      </ul>
+    </section>
+  );
+};
+
+export const TodosListConnected = connect(
+  mapStateToProps,
+  dispatchProps
+)(TodosList);
+
+```
+
 [⇧ back to top](#table-of-contents)
 
 ---
@@ -1778,14 +1885,14 @@ import MyTypes from 'MyTypes';
 import { bindActionCreators, Dispatch, ActionCreatorsMapObject } from 'redux';
 import { connect } from 'react-redux';
 
-import { countersActions } from '../features/counters';
+import { countersActions, countersSelectors } from '../features/counters';
 import { FCCounter } from '../components';
 
 // Type annotation for "state" argument is mandatory to check 
 // the correct shape of state object and injected props you can also
 // extend connected component Props interface by annotating `ownProps` argument
 const mapStateToProps = (state: MyTypes.RootState, ownProps: FCCounterProps) => ({
-  count: state.counters.reduxCounter,
+  count: countersSelectors.getReduxCounter(state.counters),
 });
 
 // "dispatch" argument needs an annotation to check the correct shape

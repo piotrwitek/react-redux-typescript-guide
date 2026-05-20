@@ -3,7 +3,7 @@ import { bindActionCreators, Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import * as React from 'react';
 
-import { countersActions } from '../features/counters';
+import { countersActions, countersSelectors } from '../features/counters';
 
 // Thunk Action
 const incrementWithDelay = () => async (dispatch: Dispatch): Promise<void> => {
@@ -11,7 +11,7 @@ const incrementWithDelay = () => async (dispatch: Dispatch): Promise<void> => {
 };
 
 const mapStateToProps = (state: Types.RootState) => ({
-  count: state.counters.reduxCounter,
+  count: countersSelectors.getReduxCounter(state.counters),
 });
 
 const mapDispatchToProps = (dispatch: Dispatch<Types.RootAction>) =>
