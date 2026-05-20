@@ -121,6 +121,7 @@ I highly recommend to add a bounty to the issue that you're waiting for to incre
 - [Redux](#redux)
   - [Store Configuration](#store-configuration)
     - [Create Global Store Types](#create-global-store-types)
+    - [Types Global Namespace](#types-global-namespace)
     - [Create Store](#create-store)
   - [Action Creators 🌟](#action-creators-)
   - [Reducers](#reducers)
@@ -515,6 +516,33 @@ Can be imported in connected components to provide type-safety to Redux `connect
 Can be imported in various layers receiving or sending redux actions like: reducers, sagas or redux-observables epics
 
 ::codeblock='playground/src/store/types.d.ts'::
+
+[⇧ back to top](#table-of-contents)
+
+### Types Global Namespace
+
+The playground keeps app-wide types behind a single ambient module named
+`MyTypes`. Files can import that module as a compact type namespace when they
+need cross-cutting Redux, service, or application types:
+
+```ts
+import type * as Types from 'MyTypes';
+```
+
+The important design point is inversion of control. Each owner extends the
+shared module from the place that owns the type, instead of collecting every app
+type in one central file. The store owns `Store`, `RootAction`, and `RootState`;
+the services layer owns `Services`.
+
+::codeblock='playground/src/services/types.d.ts'::
+
+That keeps maintenance simple: adding a new module means adding its own
+augmentation near the implementation, and deleting that module removes the
+extension point with it.
+
+Consumers still get one readable access point:
+
+::codeblock='playground/src/store/types-global-namespace.usage.ts'::
 
 [⇧ back to top](#table-of-contents)
 
