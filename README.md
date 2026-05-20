@@ -121,6 +121,7 @@ I highly recommend to add a bounty to the issue that you're waiting for to incre
 - [Redux](#redux)
   - [Store Configuration](#store-configuration)
     - [Create Global Store Types](#create-global-store-types)
+    - [Types Global Namespace](#types-global-namespace)
     - [Create Store](#create-store)
   - [Action Creators 🌟](#action-creators-)
   - [Reducers](#reducers)
@@ -1308,6 +1309,54 @@ declare module 'typesafe-actions' {
     RootAction: ActionType<typeof import('./root-action').default>;
   }
 }
+
+```
+
+[⇧ back to top](#table-of-contents)
+
+### Types Global Namespace
+
+The playground keeps app-wide types behind a single ambient module named
+`MyTypes`. Files can import that module as a compact type namespace when they
+need cross-cutting Redux, service, or application types:
+
+```ts
+import type * as Types from 'MyTypes';
+```
+
+The important design point is inversion of control. Each owner extends the
+shared module from the place that owns the type, instead of collecting every app
+type in one central file. The store owns `Store`, `RootAction`, and `RootState`;
+the services layer owns `Services`.
+
+```tsx
+declare module 'MyTypes' {
+  export type Services = typeof import('./index').default;
+}
+
+```
+
+That keeps maintenance simple: adding a new module means adding its own
+augmentation near the implementation, and deleting that module removes the
+extension point with it.
+
+Consumers still get one readable access point:
+
+```tsx
+import type * as Types from 'MyTypes';
+import type { Dispatch } from 'redux';
+
+import services from '../services';
+
+export const selectReduxCounter = (state: Types.RootState) =>
+  state.counters.reduxCounter;
+
+export const dispatchRootAction = (
+  dispatch: Dispatch<Types.RootAction>,
+  action: Types.RootAction
+) => dispatch(action);
+
+export const configuredServices: Types.Services = services;
 
 ```
 
