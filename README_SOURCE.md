@@ -121,6 +121,7 @@ I highly recommend to add a bounty to the issue that you're waiting for to incre
 - [Redux](#redux)
   - [Store Configuration](#store-configuration)
     - [Create Global Store Types](#create-global-store-types)
+    - [Types Global Namespace](#types-global-namespace)
     - [Create Store](#create-store)
   - [Action Creators 🌟](#action-creators-)
   - [Reducers](#reducers)
@@ -515,6 +516,27 @@ Can be imported in connected components to provide type-safety to Redux `connect
 Can be imported in various layers receiving or sending redux actions like: reducers, sagas or redux-observables epics
 
 ::codeblock='playground/src/store/types.d.ts'::
+
+### Types Global Namespace
+
+The playground uses a project-wide ambient module named `MyTypes` as a single import point for cross-cutting application types. It is a type-only module: it does not create runtime code, and it is not a package that needs to exist in `node_modules`.
+
+Each application area extends this module from the place that owns the type. The store owns `RootState`, `RootAction`, and `Store`, so those declarations live next to the store setup. The services layer owns the `Services` dependency container used by epics, so it adds that type from the services folder:
+
+::codeblock='playground/src/services/types.d.ts'::
+
+The store declaration also augments `typesafe-actions` with the same `RootAction` through its `Types` interface. That lets helpers from `typesafe-actions` understand the app's root action union without each feature re-declaring it.
+
+This keeps the dependency direction simple. Feature modules export their own action, state, selector, and service types. The root store or service barrel composes those exports into application-wide types, and consumers import only the stable names they need. This section uses named imports for root-level aliases; the guide's existing namespace-style examples remain useful when grouped access to the ambient module is clearer:
+
+```tsx
+import { RootAction, RootState, Services } from 'MyTypes';
+
+// reducer(state: RootState, action: RootAction)
+// Epic<RootAction, RootAction, RootState, Services>
+```
+
+The main benefit is that ownership stays local. When a feature is removed, its local exports and the corresponding root composition can be removed with it. Components, reducers, epics, and tests still get a consistent type vocabulary without every file needing to know where each root type is assembled.
 
 [⇧ back to top](#table-of-contents)
 
