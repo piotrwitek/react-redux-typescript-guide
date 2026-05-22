@@ -656,6 +656,27 @@ state.containerObject.numbers.push(1); // TS Error: cannot use mutator methods
 
 ::codeblock='playground/src/features/todos/selectors.ts'::
 
+```tsx
+import Types from 'MyTypes';
+import * as React from 'react';
+
+import { countersSelectors } from '../features/counters';
+import { useSelector } from '../store/hooks';
+
+const selectReduxCounter = (state: Types.RootState) =>
+  countersSelectors.getReduxCounter(state.counters);
+
+const CounterValue: React.FC = () => {
+  const counter = useSelector(selectReduxCounter);
+
+  return <span>{counter}</span>;
+};
+```
+
+The selector still belongs to the feature module, but the adapter function lives at
+the composition layer. This keeps the feature selector reusable while making the
+root-state-to-feature-state mapping explicit.
+
 [⇧ back to top](#table-of-contents)
 
 ---
@@ -715,6 +736,18 @@ const mapDispatchToProps = (dispatch: Dispatch<MyTypes.RootAction>) =>
 ### Typing `useSelector` and `useDispatch`
 
 ::codeblock='playground/src/store/hooks.ts'::
+
+::expander='playground/src/hooks/react-redux-hooks.tsx'::
+
+When a selector accepts feature state instead of root state, adapt it once at the
+call site:
+
+```tsx
+const selectReduxCounter = (state: RootState) =>
+  countersSelectors.getReduxCounter(state.counters);
+
+const counter = useSelector(selectReduxCounter);
+```
 
 [⇧ back to top](#table-of-contents)
 

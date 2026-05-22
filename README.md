@@ -1069,10 +1069,13 @@ export default () => (
 import * as React from 'react';
 import { FCCounter } from '../components';
 import { increment } from '../features/counters/actions';
+import { countersSelectors } from '../features/counters';
 import { useSelector, useDispatch } from '../store/hooks';
 
 const FCCounterConnectedHooksUsage: React.FC = () => {
-  const counter = useSelector(state => state.counters.reduxCounter);
+  const counter = useSelector(state =>
+    countersSelectors.getReduxCounter(state.counters)
+  );
   const dispatch = useDispatch();
   return <FCCounter label="Use selector" count={counter} onIncrement={() => dispatch(increment())}/>;
 };
@@ -1762,6 +1765,27 @@ export const getFilteredTodos = createSelector(getTodos, getTodosFilter, (todos,
 
 ```
 
+```tsx
+import Types from 'MyTypes';
+import * as React from 'react';
+
+import { countersSelectors } from '../features/counters';
+import { useSelector } from '../store/hooks';
+
+const selectReduxCounter = (state: Types.RootState) =>
+  countersSelectors.getReduxCounter(state.counters);
+
+const CounterValue: React.FC = () => {
+  const counter = useSelector(selectReduxCounter);
+
+  return <span>{counter}</span>;
+};
+```
+
+The selector still belongs to the feature module, but the adapter function lives at
+the composition layer. This keeps the feature selector reusable while making the
+root-state-to-feature-state mapping explicit.
+
 [⇧ back to top](#table-of-contents)
 
 ---
@@ -1833,6 +1857,38 @@ export const useSelector: TypedUseSelectorHook<RootState> = useGenericSelector;
 
 export const useDispatch: () => Dispatch<RootAction> = useGenericDispatch;
 
+```
+
+<details><summary><i>Click to expand</i></summary><p>
+
+```tsx
+import * as React from 'react';
+import { FCCounter } from '../components';
+import { increment } from '../features/counters/actions';
+import { countersSelectors } from '../features/counters';
+import { useSelector, useDispatch } from '../store/hooks';
+
+const FCCounterConnectedHooksUsage: React.FC = () => {
+  const counter = useSelector(state =>
+    countersSelectors.getReduxCounter(state.counters)
+  );
+  const dispatch = useDispatch();
+  return <FCCounter label="Use selector" count={counter} onIncrement={() => dispatch(increment())}/>;
+};
+
+export default FCCounterConnectedHooksUsage;
+
+```
+</p></details>
+
+When a selector accepts feature state instead of root state, adapt it once at the
+call site:
+
+```tsx
+const selectReduxCounter = (state: RootState) =>
+  countersSelectors.getReduxCounter(state.counters);
+
+const counter = useSelector(selectReduxCounter);
 ```
 
 [⇧ back to top](#table-of-contents)
