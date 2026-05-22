@@ -135,6 +135,7 @@ I highly recommend to add a bounty to the issue that you're waiting for to incre
   - [Connect with `react-redux`](#connect-with-react-redux)
     - [Typing connected component](#typing-connected-component)
     - [Typing `useSelector` and `useDispatch`](#typing-useselector-and-usedispatch)
+    - [Typing `connect` factory functions](#typing-connect-factory-functions)
     - [Typing connected component with `redux-thunk` integration](#typing-connected-component-with-redux-thunk-integration)
 - [Configuration & Dev Tools](#configuration--dev-tools)
   - [Common Npm Scripts](#common-npm-scripts)
@@ -1834,6 +1835,65 @@ export const useSelector: TypedUseSelectorHook<RootState> = useGenericSelector;
 export const useDispatch: () => Dispatch<RootAction> = useGenericDispatch;
 
 ```
+
+[⇧ back to top](#table-of-contents)
+
+### Typing `connect` factory functions
+
+When `connect` needs per-instance memoization, use a `MapStateToPropsFactory` so
+the factory and returned mapper are both type-checked.
+
+```tsx
+import Types from 'MyTypes';
+import { connect, MapStateToPropsFactory } from 'react-redux';
+
+import { countersActions, countersSelectors } from '../features/counters';
+import { FCCounter } from '../components';
+
+type OwnProps = {
+  initialCount?: number;
+};
+
+type StateProps = {
+  count: number;
+};
+
+const makeMapStateToProps: MapStateToPropsFactory<
+  StateProps,
+  OwnProps,
+  Types.RootState
+> = (_, initialOwnProps) => {
+  const offset = initialOwnProps.initialCount || 0;
+
+  return state => ({
+    count: countersSelectors.getReduxCounter(state.counters) + offset,
+  });
+};
+
+const dispatchProps = {
+  onIncrement: countersActions.increment,
+};
+
+export const FCCounterConnectedFactory = connect(
+  makeMapStateToProps,
+  dispatchProps
+)(FCCounter);
+```
+
+<details><summary><i>Click to expand</i></summary><p>
+
+```tsx
+import * as React from 'react';
+
+import { FCCounterConnectedFactory } from './fc-counter-connected-factory';
+
+const FCCounterConnectedFactoryUsage: React.FC = () => (
+  <FCCounterConnectedFactory label="Factory props" initialCount={10} />
+);
+
+export default FCCounterConnectedFactoryUsage;
+```
+</p></details>
 
 [⇧ back to top](#table-of-contents)
 

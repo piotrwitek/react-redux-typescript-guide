@@ -135,6 +135,7 @@ I highly recommend to add a bounty to the issue that you're waiting for to incre
   - [Connect with `react-redux`](#connect-with-react-redux)
     - [Typing connected component](#typing-connected-component)
     - [Typing `useSelector` and `useDispatch`](#typing-useselector-and-usedispatch)
+    - [Typing `connect` factory functions](#typing-connect-factory-functions)
     - [Typing connected component with `redux-thunk` integration](#typing-connected-component-with-redux-thunk-integration)
 - [Configuration & Dev Tools](#configuration--dev-tools)
   - [Common Npm Scripts](#common-npm-scripts)
@@ -715,6 +716,17 @@ const mapDispatchToProps = (dispatch: Dispatch<MyTypes.RootAction>) =>
 ### Typing `useSelector` and `useDispatch`
 
 ::codeblock='playground/src/store/hooks.ts'::
+
+[⇧ back to top](#table-of-contents)
+
+### Typing `connect` factory functions
+
+When `connect` needs per-instance memoization, use a `MapStateToPropsFactory` so
+the factory and returned mapper are both type-checked.
+
+::codeblock='playground/src/connected/fc-counter-connected-factory.tsx'::
+
+::expander='playground/src/connected/fc-counter-connected-factory.usage.tsx'::
 
 [⇧ back to top](#table-of-contents)
 
