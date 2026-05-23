@@ -1,6 +1,7 @@
 import { RootAction, RootState, Services } from 'MyTypes';
 import { applyMiddleware, createStore } from 'redux';
 import { createEpicMiddleware } from 'redux-observable';
+import thunk from 'redux-thunk';
 
 import services from '../services';
 import { routerMiddleware } from './redux-router';
@@ -18,7 +19,7 @@ const epicMiddleware = createEpicMiddleware<
 });
 
 // configure middlewares
-const middlewares = [epicMiddleware, routerMiddleware];
+const middlewares = [thunk, epicMiddleware, routerMiddleware];
 // compose enhancers
 const enhancer = composeEnhancers(applyMiddleware(...middlewares));
 
