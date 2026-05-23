@@ -930,10 +930,11 @@ export const withConnectedCount = <BaseProps extends InjectedProps>(
 
     render() {
       const { count, onIncrement, overrideCount, ...restProps } = this.props;
+      const ownProps = restProps as unknown as Diff<BaseProps, InjectedProps>;
 
       return (
         <BaseComponent
-          {...(restProps as BaseProps)}
+          {...(ownProps as BaseProps)}
           count={overrideCount || count} // injected
           onIncrement={onIncrement} // injected
         />
