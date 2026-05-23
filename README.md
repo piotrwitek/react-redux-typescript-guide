@@ -966,7 +966,7 @@ import { FCCounter } from '../components';
 const FCCounterWithConnectedCount = withConnectedCount(FCCounter);
 
 export default () => (
-  <FCCounterWithConnectedCount overrideCount={5} label={'FCCounterWithState'} />
+  <FCCounterWithConnectedCount label={'FCCounterWithConnectedCount'} />
 );
 
 ```
