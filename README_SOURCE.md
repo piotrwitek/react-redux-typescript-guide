@@ -669,44 +669,34 @@ _**NOTE**: Below you'll find a short explanation of concepts behind using `conne
 ```tsx
 import MyTypes from 'MyTypes';
 
-import { bindActionCreators, Dispatch, ActionCreatorsMapObject } from 'redux';
 import { connect } from 'react-redux';
 
 import { countersActions } from '../features/counters';
 import { FCCounter } from '../components';
 
-// Type annotation for "state" argument is mandatory to check 
-// the correct shape of state object and injected props you can also
-// extend connected component Props interface by annotating `ownProps` argument
+// Annotating the `state` argument checks the root-state shape.
+// You can also extend the connected component props interface by
+// annotating the `ownProps` argument.
 const mapStateToProps = (state: MyTypes.RootState, ownProps: FCCounterProps) => ({
   count: state.counters.reduxCounter,
 });
 
-// "dispatch" argument needs an annotation to check the correct shape
-//  of an action object when using dispatch function
-const mapDispatchToProps = (dispatch: Dispatch<MyTypes.RootAction>) =>
-  bindActionCreators({
-    onIncrement: countersActions.increment,
-  }, dispatch);
-
-// shorter alternative is to use an object instead of mapDispatchToProps function
-const dispatchToProps = {
-    onIncrement: countersActions.increment,
+// Prefer the object shorthand for plain action creators.
+// It keeps the example aligned with current react-redux usage and
+// still infers the injected prop types correctly.
+const dispatchProps = {
+  onIncrement: countersActions.increment,
 };
 
-// Notice we don't need to pass any generic type parameters to neither
-// the connect function below nor map functions declared above
-// because type inference will infer types from arguments annotations automatically
-// This is much cleaner and idiomatic approach
+// Notice that we do not need to pass explicit generic parameters to
+// `connect` or to the mapping functions declared above.
+// Type inference derives them automatically from the annotated inputs,
+// which keeps the example cleaner and more idiomatic.
 export const FCCounterConnected =
-  connect(mapStateToProps, mapDispatchToProps)(FCCounter);
+  connect(mapStateToProps, dispatchProps)(FCCounter);
 
-// You can add extra layer of validation of your action creators
-// by using bindActionCreators generic type parameter and RootAction type
-const mapDispatchToProps = (dispatch: Dispatch<MyTypes.RootAction>) =>
-  bindActionCreators<ActionCreatorsMapObject<Types.RootAction>>({
-    invalidActionCreator: () => 1, // Error: Type 'number' is not assignable to type '{ type: "todos/ADD"; payload: Todo; } | { ... }
-  }, dispatch);
+// Keep the function form when you need access to `dispatch`
+// directly (for example in the thunk integration example below).
 
 ```
 
