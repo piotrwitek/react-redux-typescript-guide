@@ -2250,6 +2250,77 @@ Higher-Order Components:
 # Contributors
 
 Thanks goes to these wonderful people ([emoji key](https://github.com/kentcdodds/all-contributors#emoji-key)):
+---
+
+## Modelling Async Data with Algebraic Data Types (ADTs)
+
+Algebraic Data Types (ADTs) are a powerful pattern for making invalid states unrepresentable. When working with asynchronous operations in TypeScript, a `RemoteData` discriminated union captures every possible state — including the initial "not yet requested" state that a simple `loading: boolean` flag misses.
+
+### The RemoteData Type
+
+```typescript
+type RemoteData<T, E = string> =
+  | { status: 'initial' }
+  | { status: 'loading' }
+  | { status: 'failure'; error: E }
+  | { status: 'success'; data: T };
+```
+
+The `status` field is the **discriminant**. TypeScript's control flow analysis uses it to narrow the type automatically — no custom type guard functions needed.
+
+### Rendering Async State in a React Component
+
+```tsx
+type UserState = RemoteData<User>;
+
+const UserProfile: React.FC<{ state: UserState }> = ({ state }) => {
+  switch (state.status) {
+    case 'initial':
+      return <p>Nothing loaded yet.</p>;
+    case 'loading':
+      return <Spinner />;
+    case 'failure':
+      return <ErrorMessage message={state.error} />;  // `state.error` is safe here
+    case 'success':
+      return <Profile user={state.data} />;  // `state.data` is safe here
+  }
+};
+```
+
+The `switch` is exhaustive — add a new status variant and TypeScript will error until you handle it.
+
+### Using in a Redux Reducer
+
+```typescript
+import { createReducer } from 'typesafe-actions';
+import { fetchUserRequest, fetchUserSuccess, fetchUserFailure } from './actions';
+
+type UserState = RemoteData<User>;
+
+const initialState: UserState = { status: 'initial' };
+
+const userReducer = createReducer<UserState>(initialState)
+  .handleAction(fetchUserRequest, () => ({ status: 'loading' }))
+  .handleAction(fetchUserSuccess, (_, action) => ({
+    status: 'success',
+    data: action.payload,
+  }))
+  .handleAction(fetchUserFailure, (_, action) => ({
+    status: 'failure',
+    error: action.payload.message,
+  }));
+```
+
+### Benefits Over `{ loading, data, error }` Objects
+
+| Approach | Invalid states possible? |
+|---|---|
+| `{ loading: boolean; data?: T; error?: string }` | Yes — `loading: true` with `data` set is valid TypeScript |
+| `RemoteData<T>` | No — each variant is mutually exclusive |
+
+The ADT approach eliminates entire classes of bugs at compile time.
+
+
 
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
 <!-- prettier-ignore -->
