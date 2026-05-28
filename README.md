@@ -2247,6 +2247,157 @@ Higher-Order Components:
 
 ---
 
+---
+
+## Scalable Application Structure
+
+When building large React + Redux + TypeScript applications, a **feature-based** folder structure scales far better than organizing by type. Each self-contained feature module exports its own Redux pieces, making features easy to add, remove, or reuse across projects.
+
+### Folder Layout
+
+```
+src/
+├── app/
+│   ├── store.ts          # configure Redux store, register feature reducers
+│   ├── rootReducer.ts    # combineReducers from all feature slices
+│   └── App.tsx
+└── features/
+    ├── counter/
+    │   ├── index.ts       # public API — export only what other features need
+    │   ├── counterSlice.ts
+    │   ├── Counter.tsx
+    │   └── counterSelectors.ts
+    └── auth/
+        ├── index.ts
+        ├── authSlice.ts
+        ├── LoginForm.tsx
+        └── authSelectors.ts
+```
+
+Each feature owns its state, actions, selectors, and UI. Nothing leaks out except through `index.ts`.
+
+### Feature Module Interface
+
+```typescript
+// features/counter/counterSlice.ts
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+
+interface CounterState {
+  value: number;
+  status: 'idle' | 'loading' | 'failed';
+}
+
+const initialState: CounterState = { value: 0, status: 'idle' };
+
+export const counterSlice = createSlice({
+  name: 'counter',
+  initialState,
+  reducers: {
+    increment: (state) => { state.value += 1; },
+    decrement: (state) => { state.value -= 1; },
+    incrementByAmount: (state, action: PayloadAction<number>) => {
+      state.value += action.payload;
+    },
+  },
+});
+
+export const { increment, decrement, incrementByAmount } = counterSlice.actions;
+export default counterSlice.reducer;
+```
+
+```typescript
+// features/counter/counterSelectors.ts
+import type { RootState } from '../../app/store';
+
+export const selectCount  = (state: RootState) => state.counter.value;
+export const selectStatus = (state: RootState) => state.counter.status;
+```
+
+```typescript
+// features/counter/index.ts  — the feature's public API
+export { default as counterReducer } from './counterSlice';
+export { increment, decrement, incrementByAmount } from './counterSlice';
+export { selectCount, selectStatus } from './counterSelectors';
+export { Counter } from './Counter';
+```
+
+### Registering Features in the Store
+
+```typescript
+// app/rootReducer.ts
+import { combineReducers } from '@reduxjs/toolkit';
+import { counterReducer } from '../features/counter';
+import { authReducer }    from '../features/auth';
+
+const rootReducer = combineReducers({
+  counter: counterReducer,
+  auth:    authReducer,
+  // Add a new feature: just import and add one line here.
+  // Remove a feature: delete the import and this line.
+});
+
+export type RootState = ReturnType<typeof rootReducer>;
+export default rootReducer;
+```
+
+### Enabling / Disabling Features at Runtime
+
+For features that should be conditionally loaded (e.g. by role or config flag), inject the reducer dynamically:
+
+```typescript
+// app/store.ts
+import { configureStore, Reducer, AnyAction, combineReducers } from '@reduxjs/toolkit';
+import rootReducer, { RootState } from './rootReducer';
+
+export type { RootState };
+
+const store = configureStore({ reducer: rootReducer });
+
+/** Inject a reducer after store creation — useful for lazy-loaded feature modules. */
+export function injectReducer(key: string, reducer: Reducer<any, AnyAction>) {
+  const currentReducers = (store as any).asyncReducers ?? {};
+  if (currentReducers[key]) return;  // already registered
+  (store as any).asyncReducers = { ...currentReducers, [key]: reducer };
+  store.replaceReducer(
+    combineReducers({ ...rootReducer, ...(store as any).asyncReducers })
+  );
+}
+```
+
+```typescript
+// Lazy-load the analytics feature only for admin users
+if (user.isAdmin) {
+  import('../features/analytics').then(({ analyticsReducer }) => {
+    injectReducer('analytics', analyticsReducer);
+  });
+}
+```
+
+### Rules for Scalable Features
+
+| Rule | Why |
+|---|---|
+| Export only through `index.ts` | Prevents cross-feature implementation coupling |
+| No cross-feature imports (use shared/) | Features stay independently removable |
+| Selectors live in the feature | Co-located with the state shape they read |
+| Feature types are self-contained | Rename/remove without touching other features |
+
+### Shared Utilities
+
+Code used by multiple features goes in `src/shared/` or `src/common/`:
+
+```
+src/
+├── shared/
+│   ├── components/   # Button, Modal, etc.
+│   ├── hooks/        # useDebounce, usePrevious, etc.
+│   └── utils/        # formatDate, parseAmount, etc.
+└── features/
+    └── ...
+```
+
+Features may import from `shared/`; they must not import from each other directly.
+
 # Contributors
 
 Thanks goes to these wonderful people ([emoji key](https://github.com/kentcdodds/all-contributors#emoji-key)):
