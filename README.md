@@ -2247,6 +2247,159 @@ Higher-Order Components:
 
 ---
 
+
+## Typing connect() Factory Functions
+
+React-Redux's `connect()` accepts a **factory function** form of `mapStateToProps` and `mapDispatchToProps`. When you return a function instead of an object, React-Redux calls it once per component instance — enabling per-instance memoization with `reselect`.
+
+The challenge is typing the factory correctly. React-Redux exports `MapStateToPropsFactory` and `MapDispatchToPropsFactory` for exactly this purpose.
+
+### MapStateToPropsFactory
+
+```typescript
+import { connect, MapStateToPropsFactory } from 'react-redux';
+import { createSelector } from 'reselect';
+
+interface OwnProps {
+  userId: string;
+}
+
+interface StateProps {
+  username: string;
+  isActive: boolean;
+}
+
+interface RootState {
+  users: Record<string, { name: string; active: boolean }>;
+}
+
+// Factory: called once per component instance.
+// Returns the actual mapStateToProps for that instance.
+const makeMapStateToProps: MapStateToPropsFactory<StateProps, OwnProps, RootState> =
+  () => {
+    // Each instance gets its own memoized selector — no cross-instance cache invalidation.
+    const selectUser = createSelector(
+      (state: RootState) => state.users,
+      (_: RootState, ownProps: OwnProps) => ownProps.userId,
+      (users, id) => users[id],
+    );
+
+    return (state, ownProps) => {
+      const user = selectUser(state, ownProps);
+      return {
+        username: user?.name ?? 'Unknown',
+        isActive: user?.active ?? false,
+      };
+    };
+  };
+
+export default connect(makeMapStateToProps)(MyComponent);
+```
+
+### MapDispatchToPropsFactory
+
+```typescript
+import { Dispatch } from 'redux';
+import { MapDispatchToPropsFactory } from 'react-redux';
+import { updateUser, deleteUser } from './actions';
+
+interface OwnProps {
+  userId: string;
+}
+
+interface DispatchProps {
+  onUpdate: (name: string) => void;
+  onDelete: () => void;
+}
+
+const makeMapDispatchToProps: MapDispatchToPropsFactory<DispatchProps, OwnProps> =
+  () => (dispatch: Dispatch, ownProps: OwnProps) => ({
+    onUpdate: (name) => dispatch(updateUser({ id: ownProps.userId, name })),
+    onDelete: ()     => dispatch(deleteUser({ id: ownProps.userId })),
+  });
+
+export default connect(makeMapStateToProps, makeMapDispatchToProps)(MyComponent);
+```
+
+### Why Not Just Skip the Return Type?
+
+Omitting the return type annotation works at runtime but loses type safety:
+
+```typescript
+// ❌ Works, but TypeScript cannot check the factory's return type
+const makeMapState = () => (state: RootState, ownProps: OwnProps) => ({
+  username: state.users[ownProps.userId]?.name,
+  // typo: `usrname` would silently pass as `string | undefined` without return type
+});
+
+// ✅ Explicit return type — errors caught at the factory definition, not at use-site
+const makeMapState: MapStateToPropsFactory<StateProps, OwnProps, RootState> = () =>
+  (state, ownProps) => ({
+    username: state.users[ownProps.userId]?.name ?? 'Unknown',
+    isActive: state.users[ownProps.userId]?.active ?? false,
+  });
+```
+
+### Full Typed Component
+
+```typescript
+import React from 'react';
+import { Dispatch } from 'redux';
+import { connect, MapStateToPropsFactory } from 'react-redux';
+import { createSelector } from 'reselect';
+import { deleteUser } from './actions';
+
+interface RootState {
+  users: Record<string, { name: string; active: boolean }>;
+}
+
+// Own props passed to the component from outside
+interface OwnProps  { userId: string; }
+// Props injected by mapStateToProps
+interface StateProps { username: string; isActive: boolean; }
+// Props injected by mapDispatchToProps
+interface DispatchProps { onDelete: () => void; }
+
+type Props = OwnProps & StateProps & DispatchProps;
+
+const UserCard: React.FC<Props> = ({ username, isActive, onDelete }) => (
+  <div className={isActive ? 'active' : 'inactive'}>
+    <span>{username}</span>
+    <button onClick={onDelete}>Remove</button>
+  </div>
+);
+
+const makeMapState: MapStateToPropsFactory<StateProps, OwnProps, RootState> = () => {
+  const sel = createSelector(
+    (s: RootState) => s.users,
+    (_: RootState, p: OwnProps) => p.userId,
+    (users, id) => users[id],
+  );
+  return (state, ownProps) => {
+    const user = sel(state, ownProps);
+    return {
+      username: user?.name ?? 'Unknown',
+      isActive: user?.active ?? false,
+    };
+  };
+};
+
+const mapDispatch = (dispatch: Dispatch, { userId }: OwnProps): DispatchProps => ({
+  onDelete: () => dispatch(deleteUser({ id: userId })),
+});
+
+export default connect(makeMapState, mapDispatch)(UserCard);
+```
+
+### When to Use Factory Functions
+
+| Use case | Use factory? |
+|---|---|
+| Simple derived data, one instance on screen | No — plain `mapStateToProps` is fine |
+| Same component rendered in a list (multiple instances) | **Yes** — separate selector cache per item |
+| mapStateToProps that depends on `ownProps` in a selector | **Yes** — prevents cache thrashing |
+| `mapDispatchToProps` that binds `ownProps` into action creators | Yes, or use `bindActionCreators` |
+
 # Contributors
 
 Thanks goes to these wonderful people ([emoji key](https://github.com/kentcdodds/all-contributors#emoji-key)):
