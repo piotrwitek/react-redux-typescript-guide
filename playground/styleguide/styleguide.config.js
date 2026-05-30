@@ -1,13 +1,28 @@
 const path = require('path');
 const fs = require('fs');
-const { createConfig } = require('webpack-blocks');
-const typescript = require('@webpack-blocks/typescript');
-const webpackConfig = createConfig([typescript()]);
-webpackConfig.resolve.alias = { '@src': path.join(__dirname, 'src') };
+
+const webpackConfig = {
+  resolve: {
+    alias: { '@src': path.join(__dirname, 'src') },
+    extensions: ['.ts', '.tsx', '.js', '.jsx'],
+  },
+  module: {
+    rules: [
+      {
+        test: /\.tsx?$/,
+        exclude: /node_modules/,
+        use: {
+          loader: 'ts-loader',
+          options: { transpileOnly: true },
+        },
+      },
+    ],
+  },
+};
 
 module.exports = {
   showUsage: false,
-  styleguideDir: '../docs/',
+  styleguideDir: '../../docs/',
   title: 'React & Redux in TypeScript - Component Typing Patterns',
   ignore: ['**/*.usage.tsx'],
   sections: [
