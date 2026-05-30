@@ -9,7 +9,7 @@
   "main": "src/index.tsx",
   "scripts": {
     "styleguide": "styleguidist server",
-    "styleguide:build": "cd ../.. && npx --prefix playground/styleguide styleguidist build --config playground/styleguide/styleguide.config.js"
+    "styleguide:build": "cd ../.. && ./playground/styleguide/node_modules/.bin/styleguidist build --config playground/styleguide/styleguide.config.js"
   },
   "dependencies": {
     "react": "18.1.0",
