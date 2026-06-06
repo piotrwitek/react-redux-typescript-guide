@@ -111,6 +111,7 @@ I highly recommend to add a bounty to the issue that you're waiting for to incre
   - [Redux Connected Components](#redux-connected-components)
     - [- Redux connected counter](#--redux-connected-counter)
     - [- Redux connected counter with own props](#--redux-connected-counter-with-own-props)
+    - [- Redux connected counter with factory props](#--redux-connected-counter-with-factory-props)
     - [- Redux connected counter via hooks](#--redux-connected-counter-via-hooks)
     - [- Redux connected counter with `redux-thunk` integration](#--redux-connected-counter-with-redux-thunk-integration)
   - [Context](#context)
@@ -1056,6 +1057,84 @@ export default () => (
     label={'FCCounterConnectedOwnProps'}
     initialCount={10}
   />
+);
+
+```
+</p></details>
+
+[⇧ back to top](#table-of-contents)
+
+### - Redux connected counter with factory props
+
+```tsx
+import Types from 'MyTypes';
+import { connect, MapStateToPropsFactory } from 'react-redux';
+
+import { countersActions, countersSelectors } from '../features/counters';
+import { FCCounter } from '../components';
+
+type OwnProps = {
+  label: string;
+  initialCount?: number;
+};
+
+type StateProps = {
+  count: number;
+};
+
+const makeMapStateToProps: MapStateToPropsFactory<
+  StateProps,
+  OwnProps,
+  Types.RootState
+> = () => {
+  let previousCount: number | undefined;
+  let previousInitialCount: number | undefined;
+  let previousResult: StateProps | undefined;
+
+  return (state: Types.RootState, ownProps: OwnProps) => {
+    const count = countersSelectors.getReduxCounter(state.counters);
+    const initialCount = ownProps.initialCount || 0;
+
+    if (
+      previousResult &&
+      previousCount === count &&
+      previousInitialCount === initialCount
+    ) {
+      return previousResult;
+    }
+
+    previousCount = count;
+    previousInitialCount = initialCount;
+    previousResult = {
+      count: count + initialCount,
+    };
+
+    return previousResult;
+  };
+};
+
+const dispatchProps = {
+  onIncrement: countersActions.increment,
+};
+
+export const FCCounterConnectedFactory = connect(
+  makeMapStateToProps,
+  dispatchProps
+)(FCCounter);
+
+```
+<details><summary><i>Click to expand</i></summary><p>
+
+```tsx
+import * as React from 'react';
+
+import { FCCounterConnectedFactory } from './fc-counter-connected-factory';
+
+export default (
+  <div>
+    <FCCounterConnectedFactory label="Counter A" initialCount={10} />
+    <FCCounterConnectedFactory label="Counter B" initialCount={20} />
+  </div>
 );
 
 ```
