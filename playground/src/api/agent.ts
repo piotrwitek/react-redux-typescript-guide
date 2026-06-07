@@ -22,3 +22,6 @@ const agentInstance = axios.create({
   },
 });
 export default agentInstance;
+
+
+// Fix applied
