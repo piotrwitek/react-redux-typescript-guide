@@ -108,6 +108,7 @@ I highly recommend to add a bounty to the issue that you're waiting for to incre
     - [- HOC wrapping a component](#--hoc-wrapping-a-component)
     - [- HOC wrapping a component and injecting props](#--hoc-wrapping-a-component-and-injecting-props)
     - [- Nested HOC - wrapping a component, injecting props and connecting to redux 🌟](#--nested-hoc---wrapping-a-component-injecting-props-and-connecting-to-redux-)
+    - [- Recompose `withStateHandlers` HOC](#--recompose-withstatehandlers-hoc)
   - [Redux Connected Components](#redux-connected-components)
     - [- Redux connected counter](#--redux-connected-counter)
     - [- Redux connected counter with own props](#--redux-connected-counter-with-own-props)
@@ -967,6 +968,81 @@ const FCCounterWithConnectedCount = withConnectedCount(FCCounter);
 
 export default () => (
   <FCCounterWithConnectedCount overrideCount={5} label={'FCCounterWithState'} />
+);
+
+```
+</p></details>
+
+[⇧ back to top](#table-of-contents)
+
+
+### - Recompose `withStateHandlers` HOC
+
+Adds typed local state to a function component with Recompose. The example keeps the wrapped component props separate from the props injected by the enhancer, which is the key TypeScript pattern when composing Recompose HOCs.
+
+```tsx
+import React from 'react';
+import { withStateHandlers } from 'recompose';
+import { Diff } from 'utility-types';
+
+// These props will be injected into the base component by Recompose.
+interface InjectedProps {
+  count: number;
+  onIncrement: () => void;
+}
+
+interface EnhancerProps {
+  initialCount?: number;
+}
+
+type State = Readonly<{
+  count: number;
+}>;
+
+type Updaters = Readonly<{
+  onIncrement: () => State;
+}>;
+
+const createInitialState = ({ initialCount = 0 }: EnhancerProps): State => ({
+  count: initialCount,
+});
+
+const stateUpdaters = {
+  onIncrement: ({ count }: State) => () => ({ count: count + 1 }),
+};
+
+export const withRecomposeStateHandlers = <BaseProps extends InjectedProps>(
+  BaseComponent: React.ComponentType<BaseProps>
+) =>
+  withStateHandlers<
+    State,
+    Updaters,
+    Diff<BaseProps, InjectedProps> & EnhancerProps
+  >(
+    createInitialState,
+    stateUpdaters
+  )(
+    BaseComponent as React.ComponentType<
+      Diff<BaseProps, InjectedProps> & EnhancerProps & State & Updaters
+    >
+  );
+
+```
+<details><summary><i>Click to expand</i></summary><p>
+
+```tsx
+import * as React from 'react';
+
+import { FCCounter } from '../components';
+import { withRecomposeStateHandlers } from '../hoc';
+
+const FCCounterWithRecomposeStateHandlers = withRecomposeStateHandlers(FCCounter);
+
+export default () => (
+  <FCCounterWithRecomposeStateHandlers
+    label={'FCCounterWithRecomposeStateHandlers'}
+    initialCount={3}
+  />
 );
 
 ```
