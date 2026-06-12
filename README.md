@@ -125,6 +125,7 @@ I highly recommend to add a bounty to the issue that you're waiting for to incre
   - [Action Creators 🌟](#action-creators-)
   - [Reducers](#reducers)
     - [State with Type-level Immutability](#state-with-type-level-immutability)
+    - [Modelling async data with ADT](#modelling-async-data-with-adt)
     - [Typing reducer](#typing-reducer)
     - [Typing reducer with `typesafe-actions`](#typing-reducer-with-typesafe-actions)
     - [Testing reducer](#testing-reducer)
@@ -1487,6 +1488,94 @@ export type State = DeepReadonly<{
 state.containerObject = { innerValue: 1 }; // TS Error: cannot be mutated
 state.containerObject.innerValue = 1; // TS Error: cannot be mutated
 state.containerObject.numbers.push(1); // TS Error: cannot use mutator methods
+```
+
+[⇧ back to top](#table-of-contents)
+
+### Modelling async data with ADT
+
+Async reducer state is often written as several nullable fields and flags:
+
+```ts
+type TodosState = Readonly<{
+  isLoading: boolean,
+  error: string | null,
+  todos: ReadonlyArray<Todo> | null,
+}>;
+```
+
+That shape accepts impossible combinations, for example `isLoading: true` with
+both `error` and `todos` populated. A discriminated union makes every remote
+data case explicit and keeps those combinations out of the state type.
+
+```ts
+type RemoteData<T, E = string> =
+  | { readonly tag: 'notAsked' }
+  | { readonly tag: 'loading' }
+  | { readonly tag: 'failure'; readonly error: E }
+  | { readonly tag: 'success'; readonly data: T };
+
+type TodosState = Readonly<{
+  todos: RemoteData<ReadonlyArray<Todo>>,
+}>;
+
+const initialState: TodosState = {
+  todos: { tag: 'notAsked' },
+};
+```
+
+Reducer transitions then replace the whole remote data value instead of
+coordinating separate flags:
+
+```ts
+type TodosAction =
+  | { readonly type: 'FETCH_TODOS_REQUEST' }
+  | { readonly type: 'FETCH_TODOS_SUCCESS'; readonly payload: ReadonlyArray<Todo> }
+  | { readonly type: 'FETCH_TODOS_FAILURE'; readonly payload: string }
+  | { readonly type: 'FETCH_TODOS_RESET' };
+
+const todosReducer = (
+  state: TodosState = initialState,
+  action: TodosAction,
+): TodosState => {
+  switch (action.type) {
+    case 'FETCH_TODOS_REQUEST':
+      return { ...state, todos: { tag: 'loading' } };
+    case 'FETCH_TODOS_SUCCESS':
+      return { ...state, todos: { tag: 'success', data: action.payload } };
+    case 'FETCH_TODOS_FAILURE':
+      return { ...state, todos: { tag: 'failure', error: action.payload } };
+    case 'FETCH_TODOS_RESET':
+      return { ...state, todos: { tag: 'notAsked' } };
+    default:
+      return state;
+  }
+};
+```
+
+Connected components can render each case with the same discriminant. The
+`assertNever` branch turns a missing case into a type error when the union is
+extended later.
+
+```tsx
+const TodoListView: React.FC<{ todos: RemoteData<ReadonlyArray<Todo>> }> = ({ todos }) => {
+  switch (todos.tag) {
+    case 'notAsked':
+      return <span>Choose a filter to load todos.</span>;
+    case 'loading':
+      return <span>Loading todos...</span>;
+    case 'failure':
+      return <span>{todos.error}</span>;
+    case 'success':
+      return <TodoList todos={todos.data} />;
+    default:
+      return assertNever(todos);
+  }
+};
+
+function assertNever(value: never): never {
+  throw new Error(`Unhandled remote data case: ${JSON.stringify(value)}`);
+}
 ```
 
 [⇧ back to top](#table-of-contents)
