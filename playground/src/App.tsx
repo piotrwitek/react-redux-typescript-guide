@@ -1,34 +1,24 @@
 import React from 'react';
 import { Provider } from 'react-redux';
-import { createStore } from 'redux';
-import { rootReducer } from './rootReducer';
+import store from '../store';
 import { useSelector } from 'react-redux';
-import { CounterFeatureSelectors } from './features/counter/counterSelectors';
+import { Counter } from './features/counter/Counter';
+import { TodoList } from './features/todo/TodoList';
 
-const store = createStore(rootReducer);
+const App: React.FC = () => {
+  const counter = useSelector((state) => state.counter);
+  const todos = useSelector((state) => state.todo);
 
-function App() {
-  const counterValue = useSelector(CounterFeatureSelectors.selectCount);
-  const isCounterEnabled = useSelector(CounterFeatureSelectors.selectIsCounterEnabled);
-
-  return (
-    <div className="App">
-      <header className="App-header">
-        <p>
-          Counter value: {counterValue}
-        </p>
-        <p>
-          Counter enabled: {isCounterEnabled ? 'Yes' : 'No'}
-        </p>
-      </header>
-    </div>
-  );
-}
-
-export default function AppWrapper() {
   return (
     <Provider store={store}>
-      <App />
+      <div className="App">
+        <header className="App-header">
+          <Counter />
+          <TodoList />
+        </header>
+      </div>
     </Provider>
   );
-}
+};
+
+export default App;
