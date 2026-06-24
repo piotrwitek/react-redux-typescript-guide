@@ -1,32 +1,41 @@
-```ts
-// @ts-nocheck
-import React from 'react';
-import { connect } from 'react-redux';
-import { ConnectedComponentType } from 'react-redux';
+```typescript
+import React, { forwardRef, RefObject } from 'react';
+import { ConnectedComponentClass } from 'react-redux';
 
-interface ChildProps {}
-
-interface ChildState {}
-
-class Child extends React.Component<ChildProps, ChildState> {
-  foo(): void {}
+/**
+ * A pattern for using `createRef` and `forwardRef` with connected class components.
+ * This allows developers to safely access instance properties declared in a class component.
+ *
+ * @example
+ * ```tsx
+ * class Child extends React.Component {
+ *   foo() {}
+ * }
+ *
+ * export default connect()(Child);
+ *
+ * class Parent extends React.Component {
+ *   private childRef: RefObject<Child> = React.createRef()
+ *
+ *   bar() {
+ *     if (this.childRef.current) {
+ *       this.childRef.current.foo();
+ *     }
+ *   }
+ *
+ *   render() {
+ *     return (
+ *       <Child ref={this.childRef} />
+ *     );
+ *   }
+ * }
+ * ```
+ */
+function createConnectedRef<T>(ConnectedComponent: ConnectedComponentClass<T>) {
+  return forwardRef((props, ref) => (
+    <ConnectedComponent {...props} ref={ref} />
+  ));
 }
 
-const ConnectedChild: ConnectedComponentType<typeof Child, ChildProps> = connect()(Child);
-
-class Parent extends React.Component {
-  private childRef: React.RefObject<Child> = React.createRef();
-
-  bar(): void {
-    if (this.childRef.current) {
-      this.childRef.current.foo(); // This should no longer cause a TypeScript error
-    }
-  }
-
-  render(): JSX.Element {
-    return (
-      <Child ref={this.childRef} />
-    );
-  }
-}
+export { createConnectedRef };
 ```
