@@ -1,6 +1,6 @@
 ```typescript
 import React, { forwardRef, RefObject } from 'react';
-import { ConnectedComponentClass } from 'react-redux';
+import { connect } from 'react-redux';
 
 /**
  * A pattern for using `createRef` and `forwardRef` with connected class components.
@@ -12,7 +12,7 @@ import { ConnectedComponentClass } from 'react-redux';
  *   foo() {}
  * }
  *
- * export default connect()(Child);
+ * const ConnectedChild = connect(null, null, null, { forwardRef: true })(Child);
  *
  * class Parent extends React.Component {
  *   private childRef: RefObject<Child> = React.createRef()
@@ -25,13 +25,14 @@ import { ConnectedComponentClass } from 'react-redux';
  *
  *   render() {
  *     return (
- *       <Child ref={this.childRef} />
+ *       <ConnectedChild ref={this.childRef} />
  *     );
  *   }
  * }
  * ```
  */
-function createConnectedRef<T>(ConnectedComponent: ConnectedComponentClass<T>) {
+
+function createConnectedRef<T>(ConnectedComponent: React.ComponentType<T>) {
   return forwardRef((props, ref) => (
     <ConnectedComponent {...props} ref={ref} />
   ));
