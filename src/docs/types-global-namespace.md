@@ -1,75 +1,72 @@
 # Types Global Namespace
 =====================================
 
-In this section, we will discuss how to design a cross-cutting `Types` global project namespace to be easily reused across the project. This approach leverages the inversion of control principle to simplify extension, maintenance, and importation of types.
+## Introduction
 
-## Inversion of Control Principle
+In this section, we will discuss how to design a cross-cutting `Types` global project namespace to be easily reused across the project. This approach leverages the inversion of control principle, allowing modules to extend the `Types` namespace instead of defining all types in one place.
 
-The inversion of control principle states that instead of defining all the types in one place, we should define them in their respective modules and then extend the `Types` namespace. This approach has several benefits:
+## Benefits
 
-*   **Simplicity to extend**: Each module can easily extend the `Types` namespace without affecting other parts of the project.
-*   **Easy maintenance**: When a module is removed, its extension point is also deleted, reducing the risk of orphaned types.
-*   **Cleanly imported in type consumers**: Types are nicely and cleanly imported in type consumers, making it easier to understand the dependencies.
+The main benefits of this approach are:
+
+*   **Simplicity to extend**: Modules can easily extend the `Types` namespace without modifying the core types.
+*   **Easy maintenance**: When a module is removed, the extension point is also deleted, reducing maintenance overhead.
+*   **Clean imports**: Types are nicely and cleanly imported in type consumers, making it easier to understand the code.
 
 ## Designing the Types Global Namespace
 
 To design the `Types` global namespace, follow these steps:
 
-1.  Create a `Types` module that exports an empty namespace:
-    ```typescript
-// src/types/index.ts
+1.  Create a `Types` module that exports an empty namespace.
+2.  In each module, import the `Types` namespace and extend it with the module's specific types.
+3.  Use the extended `Types` namespace in type consumers.
+
+### Example
+
+```typescript
+// Types.ts
 export {};
-```
-2.  In each module, define the types and extend the `Types` namespace:
-    ```typescript
-// src/modules/module1/index.ts
-import { Types } from '../types';
 
-export interface Module1State {
-  // ...
-}
+// ModuleA.ts
+import { Types } from './Types';
 
-export type Module1Action = {
-  // ...
+export type ModuleAState = {
+    // ...
 };
 
-Types.Module1State = Module1State;
-Types.Module1Action = Module1Action;
-```
-3.  In the `Types` module, import and extend the types from each module:
-    ```typescript
-// src/types/index.ts
-import { Module1State, Module1Action } from './module1';
-
-export interface RootState {
-  // ...
-  module1: Module1State;
-}
-
-export type RootAction = {
-  // ...
-  module1: Module1Action;
+export type ModuleAAction = {
+    // ...
 };
+
+Types.ModuleA = {
+    State: ModuleAState,
+    Action: ModuleAAction,
+};
+
+// ModuleB.ts
+import { Types } from './Types';
+
+export type ModuleBState = {
+    // ...
+};
+
+export type ModuleBAction = {
+    // ...
+};
+
+Types.ModuleB = {
+    State: ModuleBState,
+    Action: ModuleBAction,
+};
+
+// TypeConsumer.ts
+import { Types } from './Types';
+
+// reducer(state: Types.ModuleA.State, action: Types.ModuleA.Action) => ...
+// mapDispatchToProps(dispatch: Dispatch<Types.ModuleA.Action>)
+// Epic<Types.ModuleA.Action, Types.ModuleA.State, Types.Services>
 ```
-4.  In type consumers, import the `Types` namespace and use the extended types:
-    ```typescript
-// src/reducers/rootReducer.ts
-import { Types } from '../types';
-
-export function rootReducer(state: Types.RootState, action: Types.RootAction) {
-  // ...
-}
-```
-By following these steps, you can design a cross-cutting `Types` global project namespace that is easily reusable across the project.
-
-## Benefits
-
-The `Types` global namespace provides several benefits:
-
-*   **Simplified extension**: Each module can easily extend the `Types` namespace without affecting other parts of the project.
-*   **Easy maintenance**: When a module is removed, its extension point is also deleted, reducing the risk of orphaned types.
-*   **Cleanly imported in type consumers**: Types are nicely and cleanly imported in type consumers, making it easier to understand the dependencies.
 
 ## Conclusion
 
-In this section, we discussed how to design a cross-cutting `Types` global project namespace to be easily reused across the project. By leveraging the inversion of control principle, we can simplify extension, maintenance, and importation of types. This approach provides several benefits, including simplified extension, easy maintenance, and cleanly imported types in type consumers.
+The `Types` global namespace is a powerful tool for designing a maintainable and scalable type system in your project. By leveraging the inversion of control principle, you can easily extend and maintain your types without modifying the core types.
