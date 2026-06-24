@@ -1,3 +1,4 @@
+```javascript
 const fs = require('fs');
 
 const ROOT_PATH = `${__dirname}/`;
@@ -8,7 +9,6 @@ const result = inputFiles
     .map(filePath => fs.readFileSync(filePath, 'utf8'))
     .map(injectCodeBlocks)
     .map(injectExpanders)
-    .map(updateReactStyleguidistWebsite)
     .toString();
 
 fs.writeFileSync(outputFile, result, 'utf8');
@@ -50,6 +50,20 @@ ${'```'}
   `.trim();
 }
 
-function updateReactStyleguidistWebsite(text) {
-    return text.replace(/react-styleguidist demo application/g, 'react-styleguidist demo application (updated)');
-}
+// Update dependencies
+const packageJson = require('./package.json');
+packageJson.dependencies['react-styleguidist'] = 'latest';
+fs.writeFileSync('./package.json', JSON.stringify(packageJson, null, 2));
+
+// Update demo application code
+const demoPath = `${ROOT_PATH}playground/.storybook/config.js`;
+const demoCode = fs.readFileSync(demoPath, 'utf8');
+const updatedDemoCode = demoCode.replace(/react-styleguidist demo application code/, 'updated react-styleguidist demo application code');
+fs.writeFileSync(demoPath, updatedDemoCode);
+
+// Update README.md file
+const readmePath = `${ROOT_PATH}README.md`;
+const readmeCode = fs.readFileSync(readmePath, 'utf8');
+const updatedReadmeCode = readmeCode.replace(/react-styleguidist demo application/, 'updated react-styleguidist demo application');
+fs.writeFileSync(readmePath, updatedReadmeCode);
+```
