@@ -8,6 +8,7 @@ const result = inputFiles
     .map(filePath => fs.readFileSync(filePath, 'utf8'))
     .map(injectCodeBlocks)
     .map(injectExpanders)
+    .map(updateReactStyleguidistWebsite)
     .toString();
 
 fs.writeFileSync(outputFile, result, 'utf8');
@@ -47,4 +48,8 @@ ${text}
 ${'```'}
 </p></details>
   `.trim();
+}
+
+function updateReactStyleguidistWebsite(text) {
+    return text.replace(/react-styleguidist demo application/g, 'react-styleguidist demo application (updated)');
 }
