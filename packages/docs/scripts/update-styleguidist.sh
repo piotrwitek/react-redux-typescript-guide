@@ -1,12 +1,23 @@
 #!/bin/bash
+set -e
+set -u
 
 # Update react-styleguidist website
 
-git add .
-
-git commit -m "fix: Update react-styleguidist demo application"
-git push origin main
+if [ -n "$(git status --porcelain)" ]; then
+  git add .
+  if ! git commit -m "fix: Update react-styleguidist demo application"; then
+    echo "Git commit failed, exiting"
+    exit 1
+  fi
+  if ! git push origin main; then
+    echo "Git push failed, exiting"
+    exit 1
+  fi
+fi
 
 npm run build
-
-npm run deploy
+if ! npm run deploy; then
+  echo "npm run deploy failed, exiting"
+  exit 1
+fi
