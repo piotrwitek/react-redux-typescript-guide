@@ -1,23 +1,34 @@
 import { MapStateToPropsFactory } from 'react-redux';
 
 /**
- * The type of the props returned by a connect factory function.
+ * The props returned by a connect factory function.
+ *
+ * @template StateProps
+ * @template OwnProps
+ * @template State
  */
-export type ConnectFactoryProps<S, P> = MapStateToPropsFactory<S, P> | ((state: S, ownProps: P) => MapStateToProps<S, P>);
+export interface ConnectFactoryProps<StateProps, OwnProps, State> {
+  /**
+   * The mapStateToProps function.
+   */
+  mapStateToProps: (state: State, ownProps: OwnProps) => StateProps;
+  /**
+   * The mapDispatchToProps function.
+   */
+  mapDispatchToProps: (dispatch: any, ownProps: OwnProps) => any;
+}
 
 /**
- * The type of a connect factory function.
+ * The connect factory function.
+ *
+ * @template StateProps
+ * @template OwnProps
+ * @template State
  */
-export type ConnectFactory<S, P> = (state: S, ownProps: P) => ConnectFactoryProps<S, P>;
+export type ConnectFactory<StateProps, OwnProps, State> = (
+  mapStateToProps: MapStateToPropsFactory<StateProps, OwnProps, State>
+) => (WrappedComponent: React.ComponentType<OwnProps>) => React.ComponentType<StateProps>;
 
-/**
- * The connect function with type definitions for the factory props.
- */
-export default function connect<S, P, M, O>(
-  mapStateToPropsFactory: ConnectFactory<S, P>,
-  mapDispatchToProps?: MapDispatchToProps<M, O> | ((dispatch: Dispatch<M>, ownProps: O) => MapDispatchToProps<M, O>),
-  mergeProps?: MergeProps<S, P, M, O>,
-  options?: Options,
-): Connect<S, P, M, O> {
+export function connect(mapStateToPropsFactory: ConnectFactoryProps<any, any, any>) {
   // implementation remains the same
 }
