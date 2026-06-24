@@ -1,34 +1,22 @@
 import React from 'react';
 import { Provider } from 'react-redux';
 import { createStore } from 'redux';
-import { rootReducer } from '../reducers';
+import { composeWithDevTools } from 'redux-devtools-extension';
+import { rootReducer } from './rootReducer';
 import { useSelector } from 'react-redux';
-import { CounterFeature } from '../features/counter/counterSlice';
-import { TodoFeature } from '../features/todo/todoSlice';
+import { CounterFeature } from './features/counter/counterSlice';
+import { TodoFeature } from './features/todo/todoSlice';
 
-const store = createStore(rootReducer);
+const store = createStore(rootReducer, composeWithDevTools());
 
 const Counter = () => {
-  const counter = useSelector((state) => state.counter);
-  return (
-    <div>
-      <h1>Counter: {counter.value}</h1>
-    </div>
-  );
+  const counterValue = useSelector((state) => state.counter.value);
+  return <div>Counter: {counterValue}</div>;
 };
 
-const TodoList = () => {
-  const todos = useSelector((state) => state.todo);
-  return (
-    <div>
-      <h1>Todo List:</h1>
-      <ul>
-        {todos.map((todo) => (
-          <li key={todo.id}>{todo.text}</li>
-        ))}
-      </ul>
-    </div>
-  );
+const Todo = () => {
+  const todoList = useSelector((state) => state.todo.list);
+  return <div>Todo List: {todoList.join(', ')}</div>;
 };
 
 const App = () => {
@@ -36,7 +24,7 @@ const App = () => {
     <Provider store={store}>
       <div>
         <Counter />
-        <TodoList />
+        <Todo />
       </div>
     </Provider>
   );
