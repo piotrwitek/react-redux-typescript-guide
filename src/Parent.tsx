@@ -2,27 +2,28 @@ import React from 'react';
 import { connect } from 'react-redux';
 import Child from './Child';
 
-class Child extends React.Component {
-  foo() {}
-}
+interface ChildProps {}
 
-const ConnectedChild = connect()(Child);
+const mapStateToProps = () => ({});
 
-class Parent extends React.Component {
-  private childRef: React.RefObject<Child> = React.createRef();
+const ConnectedChild = connect(mapStateToProps)(Child);
 
-  bar() {
-    if (this.childRef.current) {
-      // cast the current property to the original component type
-      (this.childRef.current as Child).foo();
+const Parent = () => {
+  const childRef: React.RefObject<Child> = React.createRef();
+
+  const bar = () => {
+    if (childRef.current) {
+      // safely access instance properties
+      (childRef.current as any).foo();
     }
-  }
+  };
 
-  render() {
-    return (
-      <Child ref={this.childRef} />
-    );
-  }
-}
+  return (
+    <div>
+      <ConnectedChild ref={childRef} />
+      <button onClick={bar}>Click me</button>
+    </div>
+  );
+};
 
 export default Parent;
