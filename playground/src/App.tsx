@@ -1,39 +1,32 @@
 ```typescript
 import React from 'react';
 import { Provider } from 'react-redux';
-import { createStore } from 'redux';
-import { combineReducers } from 'redux';
-import { configureStore } from '@reduxjs/toolkit';
-import { useSelector, useDispatch } from 'react-redux';
-import { Counter } from './features/counter/Counter';
-import { User } from './features/user/User';
-import counterReducer from './features/counter/counterSlice';
-import userReducer from './features/user/userSlice';
+import { createStore, applyMiddleware } from 'redux';
+import { composeWithDevTools } from 'redux-devtools-extension';
+import thunk from 'redux-thunk';
+import { rootReducer } from '../src/reducers';
+import { useSelector } from 'react-redux';
+import { CounterFeature } from '../src/features/counter';
 
-const rootReducer = combineReducers({
-  counter: counterReducer,
-  user: userReducer,
-});
+const store = createStore(rootReducer, composeWithDevTools(applyMiddleware(thunk)));
 
-const store = configureStore({
-  reducer: rootReducer,
-});
-
-const App: React.FC = () => {
+const Counter = () => {
   const count = useSelector((state) => state.counter.count);
-  const username = useSelector((state) => state.user.username);
-  const dispatch = useDispatch();
+  const isCounterVisible = useSelector((state) => state.counter.isVisible);
 
   return (
+    <div>
+      <h1>Counter</h1>
+      <p>Count: {count}</p>
+      <p>Is Counter Visible: {isCounterVisible.toString()}</p>
+    </div>
+  );
+};
+
+const App = () => {
+  return (
     <Provider store={store}>
-      <div className="App">
-        <header className="App-header">
-          <p>Count: {count}</p>
-          <p>Username: {username}</p>
-          <Counter />
-          <User />
-        </header>
-      </div>
+      <Counter />
     </Provider>
   );
 };
