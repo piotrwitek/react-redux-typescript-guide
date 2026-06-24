@@ -1,33 +1,34 @@
 import React from 'react';
 import { Provider } from 'react-redux';
 import { createStore } from 'redux';
-import { composeWithDevTools } from 'redux-devtools-extension';
 import { rootReducer } from './rootReducer';
 import { useSelector } from 'react-redux';
-import { CounterFeature } from './features/counter/counterSlice';
-import { TodoFeature } from './features/todo/todoSlice';
+import { CounterFeatureSelectors } from './features/counter/counterSelectors';
 
-const store = createStore(rootReducer, composeWithDevTools());
+const store = createStore(rootReducer);
 
-const Counter = () => {
-  const counterValue = useSelector((state) => state.counter.value);
-  return <div>Counter: {counterValue}</div>;
-};
+function App() {
+  const counterValue = useSelector(CounterFeatureSelectors.selectCount);
+  const isCounterEnabled = useSelector(CounterFeatureSelectors.selectIsCounterEnabled);
 
-const Todo = () => {
-  const todoList = useSelector((state) => state.todo.list);
-  return <div>Todo List: {todoList.join(', ')}</div>;
-};
+  return (
+    <div className="App">
+      <header className="App-header">
+        <p>
+          Counter value: {counterValue}
+        </p>
+        <p>
+          Counter enabled: {isCounterEnabled ? 'Yes' : 'No'}
+        </p>
+      </header>
+    </div>
+  );
+}
 
-const App = () => {
+export default function AppWrapper() {
   return (
     <Provider store={store}>
-      <div>
-        <Counter />
-        <Todo />
-      </div>
+      <App />
     </Provider>
   );
-};
-
-export default App;
+}
