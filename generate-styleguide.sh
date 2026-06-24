@@ -1,2 +1,3 @@
 #!/bin/bash
-cd playground && npm run styleguide:build
+cd "$(dirname "$0")"
+npm --prefix playground/styleguide run styleguide:build

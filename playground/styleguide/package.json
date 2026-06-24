@@ -8,13 +8,19 @@
   "license": "MIT",
   "main": "src/index.tsx",
   "scripts": {
-    "styleguide": "styleguidist server",
-    "styleguide:build": "styleguidist build"
+    "styleguide": "cd ../.. && styleguidist server --config playground/styleguide/styleguide.config.js",
+    "styleguide:build": "cd ../.. && styleguidist build --config playground/styleguide/styleguide.config.js"
   },
   "dependencies": {
-    "react-docgen-typescript": "1.12.3",
-    "react-styleguidist": "8.0.6",
-    "typescript": "3.1.6",
-    "webpack-blocks": "1.0.0"
+    "@types/react": "18.0.8",
+    "@types/react-dom": "18.0.3",
+    "cuid": "2.1.8",
+    "react": "18.1.0",
+    "react-docgen-typescript": "2.4.0",
+    "react-dom": "18.1.0",
+    "react-styleguidist": "13.1.4",
+    "ts-loader": "9.6.2",
+    "typescript": "4.6.4",
+    "webpack": "5.107.2"
   }
 }
