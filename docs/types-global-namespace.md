@@ -13,8 +13,6 @@ The main benefits of this approach are:
 ### Example
 
 ```typescript
-import Types from 'Types';
-
 // reducer(state: Types.RootState, action: Types.RootAction) => ...
 // mapDispatchToProps(dispatch: Dispatch<Types.RootAction>)
 // Epic<Types.RootAction, Types.RootState, Types.Services>
@@ -27,46 +25,47 @@ To design the `Types` global namespace, follow these steps:
 1. Create a new file `types.ts` in the root of your project.
 2. Define the core types in this file.
 3. Create a new file `types.d.ts` in each module that needs to extend the `Types` namespace.
-4. In each `types.d.ts` file, import the `Types` namespace and extend it with the module's specific types.
-5. In your type consumers, import the `Types` namespace and use it to type your code.
+4. In each `types.d.ts` file, declare or augment the `Types` module/namespace with the module's specific types.
+5. In your type consumers, use the global `Types` namespace directly without importing it.
 
 ### Example Module
 
 ```typescript
 // types.d.ts
-import type { Types } from '../types';
+declare module 'Types' {
+  export type ModuleState = {
+    // Module-specific state properties
+  };
 
-export type ModuleState = Types.RootState & {
-  // Module-specific state properties
-};
-
-export type ModuleAction = Types.RootAction & {
-  // Module-specific action properties
-};
+  export type ModuleAction = {
+    // Module-specific action properties
+  };
+}
 ```
 
 ### Type Consumers
 
 ```typescript
 // reducer.ts
-import type { ModuleState, ModuleAction } from './types';
+import { RootState, RootAction } from 'Types';
 
-const reducer = (state: ModuleState, action: ModuleAction) => {
+const reducer = (state: RootState, action: RootAction) => {
   // reducer implementation
 };
 
 // mapDispatchToProps.ts
-import type { Dispatch } from 'react-redux';
-import type { ModuleAction } from './types';
+import { Dispatch } from 'react-redux';
+import { RootAction } from 'Types';
 
-const mapDispatchToProps = (dispatch: Dispatch<ModuleAction>) => {
+const mapDispatchToProps = (dispatch: Dispatch<RootAction>) => {
   // mapDispatchToProps implementation
 };
 
 // epic.ts
-import type { Epic } from 'redux-observable';
-import type { ModuleAction, ModuleState, Services } from './types';
+import { Epic } from 'redux-observable';
+import { RootAction, RootState, Services } from 'Types';
 
-const epic: Epic<ModuleAction, ModuleState, Services> = {
+const epic: Epic<RootAction, RootState, Services> = {
   // epic implementation
 };
+```
