@@ -1,2 +1,2 @@
 #!/bin/bash
-cd playground && npm run styleguide:build
+node playground/styleguide/node_modules/react-styleguidist/lib/bin/styleguidist.js build --config playground/styleguide/styleguide.config.js

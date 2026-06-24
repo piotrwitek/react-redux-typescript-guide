@@ -1,13 +1,10 @@
 const path = require('path');
 const fs = require('fs');
-const { createConfig } = require('webpack-blocks');
-const typescript = require('@webpack-blocks/typescript');
-const webpackConfig = createConfig([typescript()]);
-webpackConfig.resolve.alias = { '@src': path.join(__dirname, 'src') };
+const sourceDir = path.join(__dirname, '../src');
 
 module.exports = {
-  showUsage: false,
-  styleguideDir: '../docs/',
+  usageMode: 'collapse',
+  styleguideDir: path.join(__dirname, '../../docs'),
   title: 'React & Redux in TypeScript - Component Typing Patterns',
   ignore: ['**/*.usage.tsx'],
   sections: [
@@ -18,26 +15,26 @@ module.exports = {
     {
       name: 'Function Components',
       components: () => [
-        './src/components/fc-counter.tsx',
-        './src/components/fc-spread-attributes.tsx',
+        path.join(sourceDir, 'components/fc-counter.tsx'),
+        path.join(sourceDir, 'components/fc-spread-attributes.tsx'),
       ],
     },
     {
       name: 'Class Components',
       components: () => [
-        './src/components/class-counter.tsx',
-        './src/components/class-counter-with-default-props.tsx',
+        path.join(sourceDir, 'components/class-counter.tsx'),
+        path.join(sourceDir, 'components/class-counter-with-default-props.tsx'),
       ],
     },
     {
       name: 'Generic Components',
-      components: () => ['./src/components/generic-list.tsx'],
+      components: () => [path.join(sourceDir, 'components/generic-list.tsx')],
     },
     {
       name: 'Render Props',
       components: () => [
-        './src/components/name-provider.tsx',
-        './src/components/mouse-provider.tsx',
+        path.join(sourceDir, 'components/name-provider.tsx'),
+        path.join(sourceDir, 'components/mouse-provider.tsx'),
       ],
     },
   ],
@@ -45,9 +42,39 @@ module.exports = {
     sidebarWidth: 300,
   },
   propsParser: require('react-docgen-typescript').parse,
-  webpackConfig: webpackConfig,
+  webpackConfig: {
+    resolve: {
+      extensions: ['.ts', '.tsx', '.js', '.jsx'],
+      alias: { '@src': sourceDir },
+      modules: [
+        path.join(__dirname, 'node_modules'),
+        path.join(__dirname, '../node_modules'),
+        'node_modules',
+      ],
+    },
+    module: {
+      rules: [
+        {
+          test: /\.tsx?$/,
+          include: sourceDir,
+          use: [
+            {
+              loader: require.resolve('ts-loader'),
+              options: {
+                configFile: path.join(__dirname, '../tsconfig.json'),
+                transpileOnly: true,
+                compilerOptions: {
+                  noEmit: false,
+                },
+              },
+            },
+          ],
+        },
+      ],
+    },
+  },
   updateExample: function(props, exampleFilePath) {
-    if (typeof props.settings.filePath === 'string') {
+    if (props.settings && typeof props.settings.filePath === 'string') {
       const {
         settings: { filePath },
       } = props;
