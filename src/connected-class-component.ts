@@ -1,28 +1,56 @@
-import React from 'react';
+import * as React from 'react';
 import { connect } from 'react-redux';
+import { ConnectedComponentClass, ConnectedComponentProps, ConnectedComponentState } from './connected-class-component';
 
-interface ChildProps {}
+type ConnectedComponentClass<T, P = {}> = React.ComponentClass<T> & {
+  new (props: P): ConnectedComponentClass<T, P>;
+};
 
-class Child extends React.Component<ChildProps> {
-  foo() {}
-}
+type ConnectedComponent<T, P = {}> = ConnectedComponentClass<T, P> & {
+  new (props: P): ConnectedComponentClass<T, P>;
+};
 
-const ConnectedChild = connect()(Child);
+function connect<T, P = {}>(
+  mapStateToProps: (state: any) => P,
+  mapDispatchToProps?: (dispatch: any) => any,
+): <T>(WrappedComponent: React.ComponentType<T>) => ConnectedComponent<T, P> {
+  return function (WrappedComponent: React.ComponentType<T>) {
+    class ConnectedComponentClass extends WrappedComponent {
+      static contextType = React.createContext();
 
-type ChildRefType = React.ComponentType<ChildProps>;
+      static getDerivedStateFromProps(props: P, state: ConnectedComponentState) {
+        return mapStateToProps(props);
+      }
 
-class Parent extends React.Component {
-  private childRef: React.RefObject<ChildRefType> = React.createRef();
+      constructor(props: P) {
+        super(props);
+        this.state = mapStateToProps(props);
+      }
 
-  bar() {
-    if (this.childRef.current) {
-      this.childRef.current.foo();
+      componentDidMount() {
+        this.context.dispatch(mapDispatchToProps);
+      }
+
+      render() {
+        return super.render();
+      }
     }
-  }
 
-  render() {
-    return (
-      <ConnectedChild ref={this.childRef} />
-    );
-  }
+    const ConnectedComponent = connect(mapStateToProps, mapDispatchToProps)(WrappedComponent);
+
+    return ConnectedComponent;
+  };
 }
+
+function createRef<T>(component: React.ComponentType<T>): React.RefObject<T> {
+  return React.createRef<T>();
+}
+
+function forwardRef<T>(WrappedComponent: React.ComponentType<T>): React.ComponentType<T> {
+  return function (props: any) {
+    const ref = createRef<T>(WrappedComponent);
+    return React.createElement(WrappedComponent, { ...props, ref });
+  };
+}
+
+export { connect, createRef, forwardRef };
