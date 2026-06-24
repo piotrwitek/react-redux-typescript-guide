@@ -1,4 +1,3 @@
-```javascript
 const fs = require('fs');
 
 const ROOT_PATH = `${__dirname}/`;
@@ -50,20 +49,14 @@ ${'```'}
   `.trim();
 }
 
-// Update dependencies
-const packageJson = require('./package.json');
-packageJson.dependencies['react-styleguidist'] = 'latest';
-fs.writeFileSync('./package.json', JSON.stringify(packageJson, null, 2));
+// Update the react-styleguidist demo application to the latest version
+const demoAppPath = `${ROOT_PATH}playground/.storybook/config.js`;
+const demoAppContent = fs.readFileSync(demoAppPath, 'utf8');
+const updatedDemoAppContent = demoAppContent.replace(/react-styleguidist\/demo/, 'react-styleguidist/demo@latest');
+fs.writeFileSync(demoAppPath, updatedDemoAppContent, 'utf8');
 
-// Update demo application code
-const demoPath = `${ROOT_PATH}playground/.storybook/config.js`;
-const demoCode = fs.readFileSync(demoPath, 'utf8');
-const updatedDemoCode = demoCode.replace(/react-styleguidist demo application code/, 'updated react-styleguidist demo application code');
-fs.writeFileSync(demoPath, updatedDemoCode);
-
-// Update README.md file
+// Update the README.md file to reflect the changes
 const readmePath = `${ROOT_PATH}README.md`;
-const readmeCode = fs.readFileSync(readmePath, 'utf8');
-const updatedReadmeCode = readmeCode.replace(/react-styleguidist demo application/, 'updated react-styleguidist demo application');
-fs.writeFileSync(readmePath, updatedReadmeCode);
-```
+const readmeContent = fs.readFileSync(readmePath, 'utf8');
+const updatedReadmeContent = readmeContent.replace(/Now updated to support TypeScript v4.6/, 'Now updated to support TypeScript v4.6 and react-styleguidist demo application vlatest');
+fs.writeFileSync(readmePath, updatedReadmeContent, 'utf8');
