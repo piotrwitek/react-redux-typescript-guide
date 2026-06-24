@@ -8,8 +8,8 @@
   "license": "MIT",
   "main": "src/index.tsx",
   "scripts": {
-    "styleguide": "cd ../.. && node playground/styleguide/node_modules/react-styleguidist/lib/bin/styleguidist.js server --config playground/styleguide/styleguide.config.js",
-    "styleguide:build": "cd ../.. && node playground/styleguide/node_modules/react-styleguidist/lib/bin/styleguidist.js build --config playground/styleguide/styleguide.config.js"
+    "styleguide": "cd ../.. && styleguidist server --config playground/styleguide/styleguide.config.js",
+    "styleguide:build": "cd ../.. && styleguidist build --config playground/styleguide/styleguide.config.js"
   },
   "dependencies": {
     "@types/react": "18.0.8",
