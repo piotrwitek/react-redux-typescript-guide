@@ -132,6 +132,7 @@ I highly recommend to add a bounty to the issue that you're waiting for to incre
     - [Typing epics](#typing-epics)
     - [Testing epics](#testing-epics)
   - [Selectors with `reselect`](#selectors-with-reselect)
+    - [Adapting `RootState` to feature state](#adapting-rootstate-to-feature-state)
   - [Connect with `react-redux`](#connect-with-react-redux)
     - [Typing connected component](#typing-connected-component)
     - [Typing `useSelector` and `useDispatch`](#typing-useselector-and-usedispatch)
@@ -1070,9 +1071,10 @@ import * as React from 'react';
 import { FCCounter } from '../components';
 import { increment } from '../features/counters/actions';
 import { useSelector, useDispatch } from '../store/hooks';
+import { getReduxCounter } from '../store/selectors';
 
 const FCCounterConnectedHooksUsage: React.FC = () => {
-  const counter = useSelector(state => state.counters.reduxCounter);
+  const counter = useSelector(getReduxCounter);
   const dispatch = useDispatch();
   return <FCCounter label="Use selector" count={counter} onIncrement={() => dispatch(increment())}/>;
 };
@@ -1762,6 +1764,51 @@ export const getFilteredTodos = createSelector(getTodos, getTodosFilter, (todos,
 
 ```
 
+### Adapting `RootState` to feature state
+
+Feature-module selectors receive **feature state** (e.g. `TodosState`, `CountersState`), not `RootState`. Reuse them by adapting the global state at the composition layer:
+
+```tsx
+import { RootState } from 'MyTypes';
+import { createSelector } from 'reselect';
+
+import { countersSelectors } from '../features/counters';
+import { todosSelectors } from '../features/todos';
+
+export const getCountersState = (state: RootState) => state.counters;
+export const getTodosState = (state: RootState) => state.todos;
+
+export const getReduxCounter = createSelector(
+  getCountersState,
+  countersSelectors.getReduxCounter
+);
+
+export const getFilteredTodos = createSelector(
+  getTodosState,
+  todosSelectors.getFilteredTodos
+);
+
+```
+
+Then pass the composed selector to typed `useSelector` (or `mapStateToProps`):
+
+```tsx
+import * as React from 'react';
+import { FCCounter } from '../components';
+import { increment } from '../features/counters/actions';
+import { useSelector, useDispatch } from '../store/hooks';
+import { getReduxCounter } from '../store/selectors';
+
+const FCCounterConnectedHooksUsage: React.FC = () => {
+  const counter = useSelector(getReduxCounter);
+  const dispatch = useDispatch();
+  return <FCCounter label="Use selector" count={counter} onIncrement={() => dispatch(increment())}/>;
+};
+
+export default FCCounterConnectedHooksUsage;
+
+```
+
 [⇧ back to top](#table-of-contents)
 
 ---
@@ -1834,6 +1881,28 @@ export const useSelector: TypedUseSelectorHook<RootState> = useGenericSelector;
 export const useDispatch: () => Dispatch<RootAction> = useGenericDispatch;
 
 ```
+
+<details><summary><i>Click to expand</i></summary><p>
+
+```tsx
+import * as React from 'react';
+import { FCCounter } from '../components';
+import { increment } from '../features/counters/actions';
+import { useSelector, useDispatch } from '../store/hooks';
+import { getReduxCounter } from '../store/selectors';
+
+const FCCounterConnectedHooksUsage: React.FC = () => {
+  const counter = useSelector(getReduxCounter);
+  const dispatch = useDispatch();
+  return <FCCounter label="Use selector" count={counter} onIncrement={() => dispatch(increment())}/>;
+};
+
+export default FCCounterConnectedHooksUsage;
+
+```
+</p></details>
+
+When a selector accepts feature state instead of root state, adapt it once at the composition layer (see [Adapting `RootState` to feature state](#adapting-rootstate-to-feature-state)).
 
 [⇧ back to top](#table-of-contents)
 
