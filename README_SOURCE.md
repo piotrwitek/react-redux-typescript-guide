@@ -132,6 +132,7 @@ I highly recommend to add a bounty to the issue that you're waiting for to incre
     - [Typing epics](#typing-epics)
     - [Testing epics](#testing-epics)
   - [Selectors with `reselect`](#selectors-with-reselect)
+    - [Adapting `RootState` to feature state](#adapting-rootstate-to-feature-state)
   - [Connect with `react-redux`](#connect-with-react-redux)
     - [Typing connected component](#typing-connected-component)
     - [Typing `useSelector` and `useDispatch`](#typing-useselector-and-usedispatch)
@@ -656,6 +657,16 @@ state.containerObject.numbers.push(1); // TS Error: cannot use mutator methods
 
 ::codeblock='playground/src/features/todos/selectors.ts'::
 
+### Adapting `RootState` to feature state
+
+Feature-module selectors receive **feature state** (e.g. `TodosState`, `CountersState`), not `RootState`. Reuse them by adapting the global state at the composition layer:
+
+::codeblock='playground/src/store/selectors.ts'::
+
+Then pass the composed selector to typed `useSelector` (or `mapStateToProps`):
+
+::codeblock='playground/src/hooks/react-redux-hooks.tsx'::
+
 [⇧ back to top](#table-of-contents)
 
 ---
@@ -715,6 +726,10 @@ const mapDispatchToProps = (dispatch: Dispatch<MyTypes.RootAction>) =>
 ### Typing `useSelector` and `useDispatch`
 
 ::codeblock='playground/src/store/hooks.ts'::
+
+::expander='playground/src/hooks/react-redux-hooks.tsx'::
+
+When a selector accepts feature state instead of root state, adapt it once at the composition layer (see [Adapting `RootState` to feature state](#adapting-rootstate-to-feature-state)).
 
 [⇧ back to top](#table-of-contents)
 
