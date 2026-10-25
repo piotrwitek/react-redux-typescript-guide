@@ -1,4 +1,6 @@
 export * from './error-message';
+export * from './forwarded-counter';
+export * from './forwarded-counter-imperative';
 export * from './generic-list';
 export * from './fc-counter';
 export * from './fc-counter-with-default-props';

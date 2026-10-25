@@ -104,6 +104,10 @@ I highly recommend to add a bounty to the issue that you're waiting for to incre
   - [Render Props](#render-props)
     - [- Name Provider Component](#--name-provider-component)
     - [- Mouse Provider Component](#--mouse-provider-component)
+  - [Refs - forwardRef](#refs---forwardref)
+    - [- `React.forwardRef` forwarding a DOM ref](#--reactforwardref-forwarding-a-dom-ref)
+    - [- `React.forwardRef` with a custom imperative handle](#--reactforwardref-with-a-custom-imperative-handle)
+    - [- Forwarding refs through a connected component](#--forwarding-refs-through-a-connected-component)
   - [Higher-Order Components](#higher-order-components)
     - [- HOC wrapping a component](#--hoc-wrapping-a-component)
     - [- HOC wrapping a component and injecting props](#--hoc-wrapping-a-component-and-injecting-props)
@@ -402,6 +406,39 @@ Simple component using children as a render prop
 ::codeblock='playground/src/components/mouse-provider.tsx'::
 
 [⟩⟩⟩ demo](https://piotrwitek.github.io/react-redux-typescript-guide/#mouseprovider)
+
+[⇧ back to top](#table-of-contents)
+
+---
+
+## Refs - forwardRef
+
+> <https://reactjs.org/docs/forward-refs.html>
+
+`React.forwardRef` lets a component pass a `ref` down to one of its children. In TypeScript the correct typing requires **two** type parameters: the ref's element/instance type and the component's props.
+
+> **Tip:** With modern `@types/react` you must NOT add `ref` to `React.FC<Props>` (it is no longer part of `FC`). Type the component with `React.forwardRef` directly.
+
+### - `React.forwardRef` forwarding a DOM ref
+
+Type the first generic with the DOM element you attach the ref to (`HTMLButtonElement`) and the second with the component props.
+
+::codeblock='playground/src/components/forwarded-counter.tsx'::
+::expander='playground/src/components/forwarded-counter.usage.tsx'::
+
+### - `React.forwardRef` with a custom imperative handle
+
+When you don't want to expose the raw DOM node, define your own handle interface and use `useImperativeHandle`.
+
+::codeblock='playground/src/components/forwarded-counter-imperative.tsx'::
+::expander='playground/src/components/forwarded-counter-imperative.usage.tsx'::
+
+### - Forwarding refs through a connected component
+
+`react-redux`'s `connect` accepts a `forwardRef: true` option so the `ref` you pass reaches the wrapped component.
+
+::codeblock='playground/src/connected/fc-counter-connected-forward-ref.tsx'::
+::expander='playground/src/connected/fc-counter-connected-forward-ref.usage.tsx'::
 
 [⇧ back to top](#table-of-contents)
 

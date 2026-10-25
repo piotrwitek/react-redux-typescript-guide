@@ -104,6 +104,10 @@ I highly recommend to add a bounty to the issue that you're waiting for to incre
   - [Render Props](#render-props)
     - [- Name Provider Component](#--name-provider-component)
     - [- Mouse Provider Component](#--mouse-provider-component)
+  - [Refs - forwardRef](#refs---forwardref)
+    - [- `React.forwardRef` forwarding a DOM ref](#--reactforwardref-forwarding-a-dom-ref)
+    - [- `React.forwardRef` with a custom imperative handle](#--reactforwardref-with-a-custom-imperative-handle)
+    - [- Forwarding refs through a connected component](#--forwarding-refs-through-a-connected-component)
   - [Higher-Order Components](#higher-order-components)
     - [- HOC wrapping a component](#--hoc-wrapping-a-component)
     - [- HOC wrapping a component and injecting props](#--hoc-wrapping-a-component-and-injecting-props)
@@ -709,6 +713,221 @@ export class MouseProvider extends React.Component<MouseProviderProps, MouseProv
 ```
 
 [⟩⟩⟩ demo](https://piotrwitek.github.io/react-redux-typescript-guide/#mouseprovider)
+
+[⇧ back to top](#table-of-contents)
+
+---
+
+## Refs - forwardRef
+
+> <https://reactjs.org/docs/forward-refs.html>
+
+`React.forwardRef` lets a component pass a `ref` down to one of its children. In TypeScript the correct typing requires **two** type parameters: the ref's element/instance type and the component's props.
+
+> **Tip:** With modern `@types/react` you must NOT add `ref` to `React.FC<Props>` (it is no longer part of `FC`). Type the component with `React.forwardRef` directly.
+
+### - `React.forwardRef` forwarding a DOM ref
+
+Type the first generic with the DOM element you attach the ref to (`HTMLButtonElement`) and the second with the component props.
+
+```tsx
+import * as React from 'react';
+
+type Props = {
+  label: string;
+  count: number;
+  onIncrement: () => void;
+};
+
+// The correct way to type a component that forwards a ref in TypeScript is to
+// pass TWO type parameters to `React.forwardRef`:
+//   1. the type of the element/instance the ref points to (`HTMLButtonElement`)
+//   2. the component's own props (`Props`)
+// NOTE: with modern `@types/react` you must NOT add `ref` to `React.FC<Props>`
+// (it is no longer part of `FC`). Use `React.forwardRef` directly instead.
+export const ForwardedCounter = React.forwardRef<HTMLButtonElement, Props>(
+  (props, ref) => {
+    const { label, count, onIncrement } = props;
+
+    return (
+      <div>
+        <span>
+          {label}: {count}
+        </span>
+        <button type="button" ref={ref} onClick={onIncrement}>
+          {`Increment`}
+        </button>
+      </div>
+    );
+  }
+);
+
+```
+<details><summary><i>Click to expand</i></summary><p>
+
+```tsx
+import * as React from 'react';
+
+import { ForwardedCounter } from '.';
+
+export default function ForwardedCounterUsage() {
+  const buttonRef = React.useRef<HTMLButtonElement>(null);
+  const [count, setCount] = React.useState(0);
+
+  React.useEffect(() => {
+    // `buttonRef` points to the underlying <button> DOM node
+    buttonRef.current?.focus();
+  }, []);
+
+  return (
+    <ForwardedCounter
+      label={'ForwardedCounter'}
+      count={count}
+      onIncrement={() => setCount(c => c + 1)}
+      ref={buttonRef}
+    />
+  );
+}
+
+```
+</p></details>
+
+### - `React.forwardRef` with a custom imperative handle
+
+When you don't want to expose the raw DOM node, define your own handle interface and use `useImperativeHandle`.
+
+```tsx
+import * as React from 'react';
+
+type Props = {
+  label: string;
+  count: number;
+  onIncrement: () => void;
+};
+
+// When you don't want to expose the raw DOM node, define your own imperative
+// handle interface and use `useImperativeHandle`. Type the first generic of
+// `React.forwardRef` with THAT interface instead of a DOM element.
+export interface CounterHandle {
+  focus: () => void;
+  increment: () => void;
+}
+
+export const ForwardedCounterImperative = React.forwardRef<
+  CounterHandle,
+  Props
+>((props, ref) => {
+  const { label, count, onIncrement } = props;
+  const buttonRef = React.useRef<HTMLButtonElement>(null);
+
+  React.useImperativeHandle(ref, () => ({
+    focus: () => buttonRef.current?.focus(),
+    increment: () => onIncrement(),
+  }));
+
+  return (
+    <div>
+      <span>
+        {label}: {count}
+      </span>
+      <button type="button" ref={buttonRef} onClick={onIncrement}>
+        {`Increment`}
+      </button>
+    </div>
+  );
+});
+
+```
+<details><summary><i>Click to expand</i></summary><p>
+
+```tsx
+import * as React from 'react';
+
+import { ForwardedCounterImperative, CounterHandle } from '.';
+
+export default function ForwardedCounterImperativeUsage() {
+  const counterRef = React.useRef<CounterHandle>(null);
+  const [count, setCount] = React.useState(0);
+
+  React.useEffect(() => {
+    counterRef.current?.focus();
+  }, []);
+
+  return (
+    <>
+      <ForwardedCounterImperative
+        label={'ForwardedCounterImperative'}
+        count={count}
+        onIncrement={() => setCount(c => c + 1)}
+        ref={counterRef}
+      />
+      <button type="button" onClick={() => counterRef.current?.increment()}>
+        {`Increment from outside`}
+      </button>
+    </>
+  );
+}
+
+```
+</p></details>
+
+### - Forwarding refs through a connected component
+
+`react-redux`'s `connect` accepts a `forwardRef: true` option so the `ref` you pass reaches the wrapped component.
+
+```tsx
+import Types from 'MyTypes';
+import { connect } from 'react-redux';
+
+import { countersActions, countersSelectors } from '../features/counters';
+import { ForwardedCounter } from '../components';
+
+const mapStateToProps = (state: Types.RootState) => ({
+  count: countersSelectors.getReduxCounter(state.counters),
+});
+
+const dispatchProps = {
+  onIncrement: countersActions.increment,
+};
+
+// `connect` accepts a `forwardRef: true` option so the `ref` you pass on the
+// rendered component is forwarded all the way down to the wrapped component.
+// Here the wrapped `ForwardedCounter` forwards its ref to a <button>, so the
+// connected component's `ref` is typed as `HTMLButtonElement`.
+export const FCCounterConnectedForwardRef = connect(
+  mapStateToProps,
+  dispatchProps,
+  null,
+  { forwardRef: true }
+)(ForwardedCounter);
+
+```
+<details><summary><i>Click to expand</i></summary><p>
+
+```tsx
+import * as React from 'react';
+
+import { FCCounterConnectedForwardRef } from '.';
+
+export default function FCCounterConnectedForwardRefUsage() {
+  const buttonRef = React.useRef<HTMLButtonElement>(null);
+
+  React.useEffect(() => {
+    buttonRef.current?.focus();
+  }, []);
+
+  // `label` is an own prop; `count` and `onIncrement` are injected by connect.
+  // `ref` is forwarded to the underlying <button> inside ForwardedCounter.
+  return (
+    <FCCounterConnectedForwardRef
+      label={'FCCounterConnectedForwardRef'}
+      ref={buttonRef}
+    />
+  );
+}
+
+```
+</p></details>
 
 [⇧ back to top](#table-of-contents)
 
