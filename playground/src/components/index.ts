@@ -7,3 +7,4 @@ export * from './class-counter';
 export * from './class-counter-with-default-props';
 export * from './name-provider';
 export * from './mouse-provider';
+export * from './jsx-children';
