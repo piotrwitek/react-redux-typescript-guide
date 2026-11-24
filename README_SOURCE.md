@@ -87,6 +87,7 @@ I highly recommend to add a bounty to the issue that you're waiting for to incre
     - [`React.XXXHTMLAttributes<HTMLXXXElement>`](#reactxxxhtmlattributeshtmlxxxelement)
     - [`React.ReactEventHandler<HTMLXXXElement>`](#reactreacteventhandlerhtmlxxxelement)
     - [`React.XXXEvent<HTMLXXXElement>`](#reactxxxeventhtmlxxxelement)
+    - [JSX children with strict component types](#jsx-children-with-strict-component-types)
 - [React](#react)
   - [Function Components - FC](#function-components---fc)
     - [- Counter Component](#--counter-component)
@@ -281,6 +282,16 @@ const handleChange = (ev: React.MouseEvent<HTMLDivElement>) => { ... }
 ```
 
 In code above `React.MouseEvent<HTMLDivElement>` is type of mouse event, and this event happened on `HTMLDivElement`
+
+### JSX children with strict component types
+
+Use `React.ComponentType<Props>` when a component should be supplied through a prop. Use `React.ReactElement<Props>` when children should be JSX elements whose props match a known interface.
+
+::codeblock='playground/src/components/jsx-children.tsx'::
+
+Runtime validation with `React.isValidElement` and `child.type` is still useful when only specific component identities should be accepted. TypeScript validates the props shape, but it cannot by itself distinguish every arbitrary JSX component type in a broad `ReactElement` union.
+
+::expander='playground/src/components/jsx-children.usage.tsx'::
 
 [⇧ back to top](#table-of-contents)
 

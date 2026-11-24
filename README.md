@@ -87,6 +87,7 @@ I highly recommend to add a bounty to the issue that you're waiting for to incre
     - [`React.XXXHTMLAttributes<HTMLXXXElement>`](#reactxxxhtmlattributeshtmlxxxelement)
     - [`React.ReactEventHandler<HTMLXXXElement>`](#reactreacteventhandlerhtmlxxxelement)
     - [`React.XXXEvent<HTMLXXXElement>`](#reactxxxeventhtmlxxxelement)
+    - [JSX children with strict component types](#jsx-children-with-strict-component-types)
 - [React](#react)
   - [Function Components - FC](#function-components---fc)
     - [- Counter Component](#--counter-component)
@@ -281,6 +282,86 @@ const handleChange = (ev: React.MouseEvent<HTMLDivElement>) => { ... }
 ```
 
 In code above `React.MouseEvent<HTMLDivElement>` is type of mouse event, and this event happened on `HTMLDivElement`
+
+### JSX children with strict component types
+
+Use `React.ComponentType<Props>` when a component should be supplied through a prop. Use `React.ReactElement<Props>` when children should be JSX elements whose props match a known interface.
+
+```tsx
+import * as React from 'react';
+
+interface AvatarProps {
+  name: string;
+  size?: number;
+}
+
+export const Avatar: React.FC<AvatarProps> = ({ name, size = 32 }) => (
+  <img alt={name} src={`/avatars/${name}.png`} width={size} height={size} />
+);
+
+export const WrongAvatar: React.FC<{ label: string }> = ({ label }) => <span>{label}</span>;
+
+// A component can be passed explicitly as a strongly typed component prop.
+interface LoginWithComponentProps {
+  Avatar: React.ComponentType<AvatarProps>;
+}
+
+export const LoginWithComponent: React.FC<LoginWithComponentProps> = ({ Avatar }) => (
+  <Avatar name="Ada" />
+);
+
+// JSX children can be constrained to elements whose props match AvatarProps.
+interface LoginWithChildrenProps {
+  children:
+    | React.ReactElement<AvatarProps>
+    | React.ReactElement<AvatarProps>[];
+}
+
+export const LoginWithChildren: React.FC<LoginWithChildrenProps> = ({ children }) => (
+  <>{React.Children.map(children, (child) => {
+    if (!React.isValidElement<AvatarProps>(child) || child.type !== Avatar) {
+      throw new Error('LoginWithChildren only accepts Avatar elements');
+    }
+
+    return child;
+  })}</>
+);
+
+```
+
+Runtime validation with `React.isValidElement` and `child.type` is still useful when only specific component identities should be accepted. TypeScript validates the props shape, but it cannot by itself distinguish every arbitrary JSX component type in a broad `ReactElement` union.
+
+<details><summary><i>Click to expand</i></summary><p>
+
+```tsx
+import * as React from 'react';
+
+import { Avatar, LoginWithChildren, LoginWithComponent, WrongAvatar } from '.';
+
+export const ValidExamples = () => (
+  <>
+    <LoginWithComponent Avatar={Avatar} />
+
+    <LoginWithChildren>
+      <Avatar name="Ada" size={48} />
+    </LoginWithChildren>
+
+    <LoginWithChildren>
+      <Avatar name="Ada" />
+      <Avatar name="Grace" />
+    </LoginWithChildren>
+  </>
+);
+
+export const InvalidExamples = () => (
+  <>
+    {/* @ts-expect-error WrongAvatar is not a valid Avatar component */}
+    <LoginWithComponent Avatar={WrongAvatar} />
+  </>
+);
+
+```
+</p></details>
 
 [⇧ back to top](#table-of-contents)
 
